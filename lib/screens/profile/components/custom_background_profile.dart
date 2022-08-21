@@ -12,10 +12,10 @@ class CustomPaintBackground extends CustomPainter {
       ..style = PaintingStyle.fill
       ..strokeWidth = 1.0;
     paint0.shader = ui.Gradient.linear(
-        Offset(size.width * 0.50, size.height * 0.77),
-        Offset(size.width * 0.50, size.height * 0.00),
-        [const Color.fromRGBO(246, 121, 82, 0), AppColors.scaffoldBackground],
-        [0.00, 1.0]);
+        Offset(size.width * 0, size.height * 0),
+        Offset(size.width * 1.00, size.height * 1.00),
+        [AppColors.secondary, AppColors.scaffoldBackground],
+        [1.00, 1.0]);
 
     Path path0 = Path();
     path0.moveTo(0, size.height * 0.6208333);

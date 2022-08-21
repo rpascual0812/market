@@ -25,15 +25,15 @@ class ProfilePage extends StatelessWidget {
             /// Profile Picture
             ProfilePictureSection(size: size),
 
-            Text(
-              'Raffier Lee',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const Text('raffier.lee@gmail.com'),
-            const SizedBox(height: 10),
+            // Text(
+            //   'Raffier Lee',
+            //   style: Theme.of(context)
+            //       .textTheme
+            //       .headline5
+            //       ?.copyWith(fontWeight: FontWeight.bold),
+            // ),
+            // const Text('raffier.lee@gmail.com'),
+            // const SizedBox(height: 10),
 
             /// Statuses
             const StatusesRow(),

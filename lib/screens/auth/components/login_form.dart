@@ -15,7 +15,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final emailController = TextEditingController(text: 'rpascual0812@gmail.com');
+  final emailController = TextEditingController(text: 'email@gmail.com');
   final passwordController = TextEditingController(text: 'password');
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   String errorMessage = '';
