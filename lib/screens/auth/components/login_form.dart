@@ -72,20 +72,6 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
 
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const LoginForm(),
-                    ),
-                  );
-                },
-                child: const Text('Log Out'),
-              ),
-            ),
-
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Center(

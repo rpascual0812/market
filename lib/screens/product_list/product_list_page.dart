@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:market/components/appbar.dart';
+import 'package:market/constants/app_colors.dart';
+import 'package:market/screens/future_crops/future_crops_page.dart';
+import 'package:market/screens/looking_for/looking_for_page.dart';
 
-import '../../components/product_tile_square.dart';
+import '../../components/product_list_widget_tile_square.dart';
 import '../product/product_page.dart';
 
 class ProductListPage extends StatelessWidget {
@@ -8,111 +12,40 @@ class ProductListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// We are putting this here just for the sake of simplicity, and this is
-    /// just for mockup..
-    /// You shouldn't use or write any logic or keep your data here,
-    /// this is bad for your app if you fetch or put any data here
-    List<Widget> _favouriteItem = [
-      ProductTileSquare(
-        title: 'Long Sleeve Shirt',
-        price: 165,
-        imageLink: 'https://i.imgur.com/sjDVeNV.png',
-        hasFavourite: true,
-        isFavourite: true,
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const ProductPage(
-                    coverImage: 'https://i.imgur.com/sjDVeNV.png',
-                  )));
-        },
-      ),
-      ProductTileSquare(
-        title: 'Casual Henley Shirts',
-        price: 175,
-        imageLink: 'https://i.imgur.com/PFBRThN.png',
-        hasFavourite: true,
-        isFavourite: true,
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const ProductPage(
-                    coverImage: 'https://i.imgur.com/PFBRThN.png',
-                  )));
-        },
-      ),
-      ProductTileSquare(
-        title: 'Curved Hum Shirts',
-        price: 100,
-        imageLink: 'https://i.imgur.com/8dNDjHk.png',
-        hasFavourite: true,
-        isFavourite: true,
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const ProductPage(
-                    coverImage: 'https://i.imgur.com/8dNDjHk.png',
-                  )));
-        },
-      ),
-      ProductTileSquare(
-        title: 'Casual Nolin',
-        price: 100,
-        imageLink: 'https://i.imgur.com/1phVInw.png',
-        hasFavourite: true,
-        isFavourite: true,
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const ProductPage(
-                    coverImage: 'https://i.imgur.com/1phVInw.png',
-                  )));
-        },
-      ),
-      ProductTileSquare(
-        title: 'Casual Hem Shirts',
-        price: 150,
-        imageLink: 'https://i.imgur.com/QVroKWd.png',
-        hasFavourite: true,
-        isFavourite: true,
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const ProductPage(
-                    coverImage: 'https://i.imgur.com/QVroKWd.png',
-                  )));
-        },
-      ),
-      ProductTileSquare(
-        title: 'Casual Nolin',
-        price: 150,
-        imageLink: 'https://i.imgur.com/y8oqJX3.png',
-        hasFavourite: true,
-        isFavourite: true,
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const ProductPage(
-                    coverImage: 'https://i.imgur.com/y8oqJX3.png',
-                  )));
-        },
-      ),
-    ];
-
-    return Column(
-      children: [
-        AppBar(
-          leading: const SizedBox(),
-          title: const Text('Products'),
-        ),
-        Expanded(
-          child: GridView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: _favouriteItem.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisExtent: 290,
+    return Scaffold(
+      appBar: Appbar(module: 'products'),
+      body: DefaultTabController(
+        length: 2,
+        child: Column(
+          children: const [
+            TabBar(
+              labelColor: AppColors.primary,
+              indicatorColor: AppColors.primary,
+              unselectedLabelColor: Colors.grey,
+              tabs: [
+                Tab(
+                  text: 'Looking for',
+                ),
+                Tab(
+                  text: 'Future Crops',
+                ),
+              ],
             ),
-            itemBuilder: (context, index) {
-              return _favouriteItem[index];
-            },
-          ),
-        )
-      ],
+            Expanded(
+              child: TabBarView(
+                children: [
+                  Scaffold(
+                    body: LookingForPage(),
+                  ),
+                  Scaffold(
+                    body: FutureCropsPage(),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

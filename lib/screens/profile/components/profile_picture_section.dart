@@ -18,15 +18,15 @@ class ProfilePictureSection extends StatelessWidget {
       children: [
         CustomPaint(
           size: Size(size.width, (size.width * 0.5625).toDouble()),
-          painter: CustomPaintBackground(),
+          // painter: CustomPaintBackground(),
         ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: CircleAvatar(
-              backgroundImage:
-                  const CachedNetworkImageProvider(AppImages.userAvatar),
+              backgroundImage: const CachedNetworkImageProvider(
+                  'https://i.imgur.com/8G2bg5J.jpeg'),
               radius: size.height * 0.1,
             ),
           ),

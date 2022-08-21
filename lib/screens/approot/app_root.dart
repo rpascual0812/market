@@ -1,10 +1,9 @@
+// import 'dart:html';
+
 import 'package:animations/animations.dart';
 import 'package:market/screens/home/home_page.dart';
-import 'package:market/screens/order_list/order_list_page.dart';
+import 'package:market/screens/notifications/notification_page.dart';
 import 'package:market/screens/product_list/product_list_page.dart';
-import 'package:market/screens/qr_scan/qr_scan_page.dart';
-
-import 'package:market/screens/report/report_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 
@@ -29,7 +28,7 @@ class _AppRootState extends State<AppRoot> {
   void initState() {
     super.initState();
     _allScreen = [
-      const OrderListPage(),
+      const NotificationPage(),
       const ProductListPage(),
       const HomePage(),
       const ProfilePage(),

@@ -15,17 +15,22 @@ class SignupPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const Spacer(),
-            Image.asset(
-              AppImages.logo,
-              height: 100,
-            ),
-            const SizedBox(height: AppDefaults.margin * 2),
+            // const Spacer(),
+            // Image.asset(
+            //   AppImages.logo,
+            //   height: 100,
+            // ),
+            // const SizedBox(height: AppDefaults.margin * 2),
             // Header
-            Text(
-              "Sign Up",
-              style: Theme.of(context).textTheme.headline6,
+            const SizedBox(height: AppDefaults.margin * 1),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                "   Registration",
+                style: Theme.of(context).textTheme.headline6,
+              ),
             ),
+
             const SizedBox(height: AppDefaults.margin * 2),
 
             /// Sign up forms

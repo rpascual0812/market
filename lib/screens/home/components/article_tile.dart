@@ -18,51 +18,54 @@ class ArticleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppDefaults.margin / 2),
-        child: Column(
-          children: [
-            Material(
-              color: Colors.white,
-              // borderRadius: AppDefaults.borderRadius,
-              shape: RoundedRectangleBorder(
-                side: const BorderSide(width: 0.01),
-                borderRadius: AppDefaults.borderRadius,
-              ),
-              child: InkWell(
-                onTap: onTap,
-                borderRadius: AppDefaults.borderRadius,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: 110,
-                        height: 200,
-                        child: AspectRatio(
-                          aspectRatio: 1 / 1,
-                          child: NetworkImageWithLoader(
-                            coverImage,
-                            fit: BoxFit.cover,
-                          ),
+      padding: const EdgeInsets.symmetric(horizontal: AppDefaults.margin / 2),
+      child: Column(
+        children: [
+          Material(
+            color: Colors.white,
+            // borderRadius: AppDefaults.borderRadius,
+            shape: RoundedRectangleBorder(
+              side: const BorderSide(width: 0.01),
+              borderRadius: AppDefaults.borderRadius,
+            ),
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: AppDefaults.borderRadius,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 0,
+                  vertical: 0,
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 110,
+                      height: 200,
+                      child: AspectRatio(
+                        aspectRatio: 1 / 1,
+                        child: NetworkImageWithLoader(
+                          coverImage,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      // const SizedBox(height: 10),
-                    ],
-                  ),
+                    ),
+                    // const SizedBox(height: 10),
+                  ],
                 ),
               ),
             ),
-            const SizedBox(height: AppDefaults.margin / 2),
-            Text(
-              name,
-              style: const TextStyle(
-                fontSize: 9,
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
-              ),
+          ),
+          const SizedBox(height: AppDefaults.margin / 2),
+          Text(
+            name,
+            style: const TextStyle(
+              fontSize: 9,
+              color: AppColors.primary,
+              fontWeight: FontWeight.bold,
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -26,13 +26,13 @@ class ProfilePage extends StatelessWidget {
             ProfilePictureSection(size: size),
 
             Text(
-              'Alex Nikiforov',
+              'Raffier Lee',
               style: Theme.of(context)
                   .textTheme
                   .headline5
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
-            const Text('alex@msn.com'),
+            const Text('raffier.lee@gmail.com'),
             const SizedBox(height: 10),
 
             /// Statuses
