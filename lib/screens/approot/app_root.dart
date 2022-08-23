@@ -23,19 +23,21 @@ class AppRoot extends StatefulWidget {
 
 class _AppRootState extends State<AppRoot> {
   late List<Widget> _allScreen = [];
+  static const IconData chat =
+      IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
   @override
   void initState() {
     super.initState();
     _allScreen = [
-      const NotificationPage(),
-      const ProductListPage(),
       const HomePage(),
+      const ProductListPage(),
+      const NotificationPage(),
       const ProfilePage(),
     ];
   }
 
-  int _currentIndex = 2;
+  int _currentIndex = 0;
 
   void updateMenu(int index) {
     setState(() {
@@ -75,9 +77,7 @@ class _AppRootState extends State<AppRoot> {
         items: [
           BottomNavigationBarItem(
             label: "",
-            icon: Icon(_currentIndex == 0
-                ? IconlyBold.notification
-                : IconlyLight.notification),
+            icon: Icon(_currentIndex == 2 ? IconlyBold.home : IconlyLight.home),
           ),
           BottomNavigationBarItem(
             label: "",
@@ -85,9 +85,15 @@ class _AppRootState extends State<AppRoot> {
                 ? IconlyBold.document
                 : IconlyLight.document),
           ),
+          // BottomNavigationBarItem(
+          //   label: "",
+          //   icon: Icon(_currentIndex == 0
+          //       ? IconlyBold.notification
+          //       : IconlyLight.notification),
+          // ),
           BottomNavigationBarItem(
             label: "",
-            icon: Icon(_currentIndex == 2 ? IconlyBold.home : IconlyLight.home),
+            icon: Icon(_currentIndex == 0 ? chat : chat),
           ),
           BottomNavigationBarItem(
             label: "",

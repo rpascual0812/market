@@ -40,7 +40,7 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
             Visibility(
               visible: showHide(),
               child: const Icon(
-                Icons.chat_rounded,
+                Icons.notifications,
                 color: Colors.white,
               ),
             ),

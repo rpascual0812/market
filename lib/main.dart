@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Hippos',
       theme: AppTheme(context).lightTheme,
-      home: const OnboardingPage(),
+      home: const AppRoot(),
     );
   }
 }
