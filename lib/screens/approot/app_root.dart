@@ -1,8 +1,8 @@
 // import 'dart:html';
 
 import 'package:animations/animations.dart';
+import 'package:market/screens/chat/chat_page.dart';
 import 'package:market/screens/home/home_page.dart';
-import 'package:market/screens/notifications/notification_page.dart';
 import 'package:market/screens/product_list/product_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
@@ -32,7 +32,7 @@ class _AppRootState extends State<AppRoot> {
     _allScreen = [
       const HomePage(),
       const ProductListPage(),
-      const NotificationPage(),
+      const ChatPage(),
       const ProfilePage(),
     ];
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:market/screens/notifications/notification_page.dart';
 
 class Appbar extends StatelessWidget with PreferredSizeWidget {
   Appbar({Key? key, this.module = 'home'}) : super(key: key);
@@ -39,9 +40,19 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
             const SizedBox(width: 10),
             Visibility(
               visible: showHide(),
-              child: const Icon(
-                Icons.notifications,
+              child: IconButton(
+                icon: const Icon(Icons.notifications),
                 color: Colors.white,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const NotificationPage();
+                      },
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(width: 10),

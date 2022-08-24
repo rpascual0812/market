@@ -21,9 +21,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Hippos',
+      title: 'Samdhana Community Market',
       theme: AppTheme(context).lightTheme,
-      home: const AppRoot(),
+      home: const OnboardingPage(),
     );
   }
 }
