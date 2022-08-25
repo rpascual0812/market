@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:market/constants/app_defaults.dart';
+import 'package:market/screens/profile/components/following_list.dart';
 import '../../../size_config.dart';
 
 import '../../../constants/app_images.dart';
@@ -51,10 +52,16 @@ class ProfilePictureSection extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 0.0, vertical: 5.0),
+                    horizontal: 0.0,
+                    vertical: 5.0,
+                  ),
                   child: Material(
                     // color: Colors.green,
                     child: InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context, builder: (_) => FollowingList());
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(AppDefaults.padding),
                         width: MediaQuery.of(context).size.width * 0.21,
@@ -72,7 +79,7 @@ class ProfilePictureSection extends StatelessWidget {
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 5),
-                            Text(
+                            const Text(
                               'Following',
                               style: TextStyle(fontSize: 10),
                             )
@@ -84,10 +91,15 @@ class ProfilePictureSection extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 0.0, vertical: 5.0),
+                    horizontal: 0.0,
+                    vertical: 5.0,
+                  ),
                   child: Material(
                     // color: Colors.blue,
                     child: InkWell(
+                      onTap: () {
+                        print("tapped on container");
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(AppDefaults.padding),
                         width: MediaQuery.of(context).size.width * 0.21,
