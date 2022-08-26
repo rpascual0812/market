@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:market/constants/app_defaults.dart';
+import 'package:market/screens/profile/components/follower_list.dart';
 import 'package:market/screens/profile/components/following_list.dart';
 import '../../../size_config.dart';
 
@@ -98,7 +99,8 @@ class ProfilePictureSection extends StatelessWidget {
                     // color: Colors.blue,
                     child: InkWell(
                       onTap: () {
-                        print("tapped on container");
+                        showDialog(
+                            context: context, builder: (_) => FollowerList());
                       },
                       child: Container(
                         padding: const EdgeInsets.all(AppDefaults.padding),

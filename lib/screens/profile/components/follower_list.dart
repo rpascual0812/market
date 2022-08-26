@@ -1,60 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:market/constants/app_colors.dart';
-import 'package:market/models/following.dart';
-import 'package:market/screens/profile/components/following_list_tile.dart';
+import 'package:market/screens/auth/login_page.dart';
+import 'package:market/models/notification.dart';
+import 'package:market/screens/notifications/notification_page_tile.dart';
 
-class FollowingList extends StatefulWidget {
+class FollowerList extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => FollowingListState();
+  State<StatefulWidget> createState() => FollowerListState();
 }
 
-class FollowingListState extends State<FollowingList>
+class FollowerListState extends State<FollowerList>
     with SingleTickerProviderStateMixin {
   static const IconData close = IconData(0xe16a, fontFamily: 'MaterialIcons');
   AnimationController? controller;
   Animation<double>? scaleAnimation;
-  List<Following> followings = [
-    Following(
-      pk: 1,
-      firstName: 'Babylyn',
-      lastName: 'Beanay',
-      imageURL: "https://i.imgur.com/vavfJqu.gif",
-      following: true,
+  List<Notifications> notifications = [
+    Notifications(
+      title: 'Title 1',
+      description: 'Test notifications 1',
+      read: false,
     ),
-    Following(
-      pk: 2,
-      firstName: 'Mia',
-      lastName: 'Sue',
-      imageURL: "https://i.imgur.com/jG0jrjW.gif",
-      following: true,
+    Notifications(
+      title: 'Title 2',
+      description: 'Test notifications 2',
+      read: false,
     ),
-    Following(
-      pk: 3,
-      firstName: 'Jonathan',
-      lastName: 'Bernardo',
-      imageURL: "https://i.imgur.com/VocmKXJ.gif",
-      following: true,
+    Notifications(
+      title: 'Title 3',
+      description: 'Test notifications 3',
+      read: false,
     ),
-    Following(
-      pk: 4,
-      firstName: 'Babylyn',
-      lastName: 'Beanay',
-      imageURL: "https://i.imgur.com/F1oP4Zh.gif",
-      following: true,
+    Notifications(
+      title: 'Title 4',
+      description: 'Test notifications 4',
+      read: true,
     ),
-    Following(
-      pk: 5,
-      firstName: 'Jay',
-      lastName: 'Boni',
-      imageURL: "https://i.imgur.com/D8hOYEu.gif",
-      following: true,
+    Notifications(
+      title: 'Title 4',
+      description: 'Test notifications 4',
+      read: true,
     ),
-    Following(
-      pk: 6,
-      firstName: 'Maria',
-      lastName: 'Clare',
-      imageURL: "https://i.imgur.com/BLz5n08.gif",
-      following: true,
+    Notifications(
+      title: 'Title 4',
+      description: 'Test notifications 4',
+      read: true,
+    ),
+    Notifications(
+      title: 'Title 4',
+      description: 'Test notifications 4',
+      read: true,
+    ),
+    Notifications(
+      title: 'Title 4',
+      description: 'Test notifications 4',
+      read: true,
+    ),
+    Notifications(
+      title: 'Title 4',
+      description: 'Test notifications 4',
+      read: true,
+    ),
+    Notifications(
+      title: 'Title 4',
+      description: 'Test notifications 4',
+      read: true,
+    ),
+    Notifications(
+      title: 'Title 4',
+      description: 'Test notifications 4',
+      read: true,
+    ),
+    Notifications(
+      title: 'Title 4',
+      description: 'Test notifications 4',
+      read: true,
     ),
   ];
 
@@ -110,7 +129,7 @@ class FollowingListState extends State<FollowingList>
                   clipBehavior: Clip.hardEdge,
                   children: <Widget>[
                     const Text(
-                      'Following',
+                      'Followers',
                       style: TextStyle(fontSize: 17, color: Colors.white),
                     ),
                     Positioned(
@@ -146,17 +165,15 @@ class FollowingListState extends State<FollowingList>
                   child: Column(
                     children: <Widget>[
                       ListView.builder(
-                        itemCount: followings.length,
+                        itemCount: notifications.length,
                         shrinkWrap: true,
                         padding: const EdgeInsets.only(top: 16),
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return FollowingListTile(
-                            pk: followings[index].pk,
-                            first_name: followings[index].firstName,
-                            last_name: followings[index].lastName,
-                            image: followings[index].imageURL,
-                            following: followings[index].following,
+                          return NotificationPageTile(
+                            title: notifications[index].title,
+                            description: notifications[index].description,
+                            read: notifications[index].read,
                           );
                         },
                       ),
