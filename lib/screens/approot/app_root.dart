@@ -57,10 +57,10 @@ class _AppRootState extends State<AppRoot> {
         duration: const Duration(milliseconds: 300),
         transitionBuilder: (child, animation, secondAnimation) {
           return SharedAxisTransition(
-            child: child,
             animation: animation,
             secondaryAnimation: secondAnimation,
             transitionType: SharedAxisTransitionType.horizontal,
+            child: child,
           );
         },
         child: _allScreen[_currentIndex],
@@ -77,7 +77,7 @@ class _AppRootState extends State<AppRoot> {
         items: [
           BottomNavigationBarItem(
             label: "",
-            icon: Icon(_currentIndex == 2 ? IconlyBold.home : IconlyLight.home),
+            icon: Icon(_currentIndex == 0 ? IconlyBold.home : IconlyLight.home),
           ),
           BottomNavigationBarItem(
             label: "",
@@ -93,7 +93,7 @@ class _AppRootState extends State<AppRoot> {
           // ),
           BottomNavigationBarItem(
             label: "",
-            icon: Icon(_currentIndex == 0 ? chat : chat),
+            icon: Icon(_currentIndex == 2 ? chat : chat),
           ),
           BottomNavigationBarItem(
             label: "",

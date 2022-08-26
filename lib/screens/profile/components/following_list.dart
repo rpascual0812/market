@@ -126,19 +126,6 @@ class FollowingListState extends State<FollowingList>
                     ),
                   ],
                 ),
-                // child: Row(
-                //   children: [
-                //     Container(
-                //       child: Align(
-                //         alignment: Alignment.topRight,
-                //         child: Text(
-                //           'Following',
-                //           style: TextStyle(fontSize: 17, color: Colors.white),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
               ),
               SizedBox(
                 height: 615,

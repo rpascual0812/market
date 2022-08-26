@@ -1,22 +1,20 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 
 import '../../../constants/index.dart';
 import '../../../components/network_image.dart';
 
-class FollowingListTile extends StatelessWidget {
+class FollowerListTile extends StatelessWidget {
   static const IconData chat =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
-  const FollowingListTile({
+  const FollowerListTile({
     Key? key,
     required this.pk,
     required this.first_name,
     required this.last_name,
     required this.image,
-    required this.following,
     this.onTap,
   }) : super(key: key);
 
@@ -24,7 +22,6 @@ class FollowingListTile extends StatelessWidget {
   final String first_name;
   final String last_name;
   final String image;
-  final bool following;
   final void Function()? onTap;
 
   @override
@@ -111,11 +108,9 @@ class FollowingListTile extends StatelessWidget {
                                                       width: 2,
                                                       color: Colors.grey),
                                                 ),
-                                                child: Text(
-                                                  following
-                                                      ? 'Following'
-                                                      : 'Follow',
-                                                  style: const TextStyle(
+                                                child: const Text(
+                                                  'View',
+                                                  style: TextStyle(
                                                     color: Colors.grey,
                                                   ),
                                                 ),
