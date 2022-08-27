@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:market/components/future_crops_page_tile.dart';
+import 'package:market/constants/app_colors.dart';
+import 'package:market/constants/app_defaults.dart';
 
 import 'package:market/models/order.dart';
 
@@ -14,17 +16,23 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
   late List<Order> orders = [];
   bool isLoading = false;
 
+  static const IconData left_arrow =
+      IconData(0xe801, fontFamily: 'Custom', fontPackage: null);
+  static const IconData right_arrow =
+      IconData(0xe803, fontFamily: 'Custom', fontPackage: null);
+
+  TextEditingController yearController = TextEditingController(text: '2022');
+
   @override
   void initState() {
     super.initState();
-
     refreshOrders();
   }
 
   @override
   void dispose() {
     // MarketDatabase.instance.close();
-
+    // yearController.dispose();
     super.dispose();
   }
 
@@ -40,11 +48,27 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
     return Column(
       children: [
         /// Use List View Here
+        // Padding(ldOrders() => ListView(
+        //   padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        //   child: Material(
+        //     color: Colors.white,
+        //     borderRadius: AppDefaults.borderRadius,
+        //     child: Container(
+        //       width: MediaQuery.of(context).size.width,
+        //       // padding: const EdgeInsets.all(AppDefaults.padding),
+        //       padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+        //       child: const Center(
+        //         child: Text('asdfadsf'),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+
         Expanded(
           child: Center(
             child: isLoading
                 ? const CircularProgressIndicator()
-                : !orders.isEmpty
+                : orders.isNotEmpty
                     ? const Text(
                         'No data found',
                         style: TextStyle(color: Colors.black, fontSize: 24),
@@ -60,6 +84,416 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
         // shrinkWrap: true,
         padding: EdgeInsets.zero,
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Material(
+              color: Colors.white,
+              borderRadius: AppDefaults.borderRadius,
+              child: InkWell(
+                onTap: () {},
+                borderRadius: AppDefaults.borderRadius,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 210,
+                  // padding: const EdgeInsets.all(AppDefaults.padding),
+                  padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  child: Center(
+                    child: Stack(
+                      children: [
+                        Column(
+                          // mainAxisSize: MainAxisSize.min,
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              padding:
+                                  const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: const Offset(
+                                        0, 0), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 50,
+                                        child: IconButton(
+                                          icon: const Icon(left_arrow),
+                                          onPressed: () {
+                                            yearController.text = (int.parse(
+                                                        yearController.text) -
+                                                    1)
+                                                .toString();
+                                          },
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          color: Colors.white10,
+                                          child: TextField(
+                                            controller: yearController,
+                                            autocorrect: true,
+                                            keyboardType: TextInputType.number,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              color: AppColors.primary,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 50,
+                                        child: IconButton(
+                                          icon: const Icon(right_arrow),
+                                          onPressed: () {
+                                            yearController.text = (int.parse(
+                                                        yearController.text) +
+                                                    1)
+                                                .toString();
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  // const SizedBox(height: AppDefaults.margin),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'Jan',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'Feb',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'Mar',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'Apr',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'May',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'Jun',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'Jul',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'Aug',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'Sep',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'Oct',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'Nov',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(1),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.29,
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            style: TextButton.styleFrom(
+                                              minimumSize:
+                                                  Size.zero, // Set this
+                                              padding:
+                                                  EdgeInsets.zero, // and this
+                                            ),
+                                            child: const Text(
+                                              'Dec',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
           FutureCropsPageTile(
             name: 'Juan Dela Cruz',
             profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',

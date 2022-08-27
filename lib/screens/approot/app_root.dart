@@ -24,7 +24,9 @@ class AppRoot extends StatefulWidget {
 class _AppRootState extends State<AppRoot> {
   late List<Widget> _allScreen = [];
   static const IconData chat =
-      IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
+      IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
+  static const IconData chat_bold =
+      IconData(0xe805, fontFamily: 'Custom', fontPackage: null);
 
   @override
   void initState() {
@@ -93,7 +95,7 @@ class _AppRootState extends State<AppRoot> {
           // ),
           BottomNavigationBarItem(
             label: "",
-            icon: Icon(_currentIndex == 2 ? chat : chat),
+            icon: Icon(_currentIndex == 2 ? chat_bold : chat),
           ),
           BottomNavigationBarItem(
             label: "",

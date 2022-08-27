@@ -64,6 +64,9 @@ class _ChatPageState extends State<ChatPage> {
     ),
   ];
 
+  var filterValue = 'Show All';
+  var filters = ['Show All', 'Show only unread', 'Mark all as read'];
+
   late List<Order> orders = [];
   bool isLoading = false;
 
@@ -96,35 +99,50 @@ class _ChatPageState extends State<ChatPage> {
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: 8, right: 8, top: 2, bottom: 2),
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: AppColors.primary,
-                      ),
-                      child: Row(
-                        children: const <Widget>[
-                          Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 2,
-                          ),
-                          Text(
-                            "Add New",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                    DropdownButton(
+                      value: filterValue,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: filters.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          filterValue = newValue!;
+                        });
+                      },
+                    ),
+                    // Container(
+                    //   padding: const EdgeInsets.only(
+                    //       left: 8, right: 8, top: 2, bottom: 2),
+                    //   height: 30,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(30),
+                    //     color: AppColors.primary,
+                    //   ),
+                    //   child: Row(
+                    //     children: const <Widget>[
+                    //       Icon(
+                    //         Icons.add,
+                    //         color: Colors.white,
+                    //         size: 20,
+                    //       ),
+                    //       SizedBox(
+                    //         width: 2,
+                    //       ),
+                    //       Text(
+                    //         "Add New",
+                    //         style: TextStyle(
+                    //           fontSize: 14,
+                    //           fontWeight: FontWeight.bold,
+                    //           color: Colors.white,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // )
                   ],
                 ),
               ),

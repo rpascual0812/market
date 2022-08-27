@@ -6,6 +6,8 @@ import '../../components/network_image.dart';
 
 class ProductListPageTile extends StatelessWidget {
   static const IconData chat =
+      IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
+  static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
   const ProductListPageTile({
@@ -81,7 +83,7 @@ class ProductListPageTile extends StatelessWidget {
                                     child: Stack(
                                       children: [
                                         SizedBox(
-                                          height: 40,
+                                          height: 45,
                                           child: AspectRatio(
                                             aspectRatio: 1 / 1,
                                             child: Hero(
@@ -94,31 +96,78 @@ class ProductListPageTile extends StatelessWidget {
                                         ),
                                         Positioned(
                                           top: 5,
-                                          left: 55,
+                                          left: 50,
                                           child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                name,
-                                                style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: AppColors.defaultBlack,
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                                child: Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  width: 150,
+                                                  height: 20,
+                                                  child: Text(
+                                                    name,
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 10),
+                                                  ),
                                                 ),
                                               ),
-                                              Text(
-                                                location,
-                                                style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: AppColors.defaultBlack,
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                                child: Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  width: 150,
+                                                  height: 20,
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(
+                                                        pin,
+                                                        size: 15,
+                                                      ),
+                                                      Text(
+                                                        location,
+                                                        style: const TextStyle(
+                                                          fontSize: 10,
+                                                          color: AppColors
+                                                              .defaultBlack,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                        const Positioned(
+                                        Positioned(
                                           right: 0,
-                                          child: Icon(
-                                            chat,
-                                            color: AppColors.primary,
+                                          child: Container(
+                                            width: 35.0,
+                                            height: 35.0,
+                                            padding: EdgeInsets.zero,
+                                            child: OutlinedButton(
+                                              onPressed: () {},
+                                              style: OutlinedButton.styleFrom(
+                                                side: const BorderSide(
+                                                  width: 1,
+                                                  color: AppColors.primary,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                              ),
+                                              child: const Icon(
+                                                chat,
+                                                color: AppColors.primary,
+                                                size: 15,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -132,7 +181,7 @@ class ProductListPageTile extends StatelessWidget {
                                 child: Text(
                                   product,
                                   style: const TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 25,
                                     color: AppColors.primary,
                                     fontWeight: FontWeight.bold,
                                   ),

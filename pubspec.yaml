@@ -53,6 +53,7 @@ dependencies:
   intl: ^0.17.0
   flutter_rating_bar: ^4.0.1
   accordion: ^2.5.1
+  settings_ui: ^2.0.2
 
 dev_dependencies:
   flutter_test:
@@ -117,7 +118,7 @@ flutter:
         - asset: assets/fonts/Gordita_Thin.otf
     - family: Custom
       fonts:
-        - asset: assets/fonts/ChatIcon.ttf
+        - asset: assets/fonts/CustomIcons.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

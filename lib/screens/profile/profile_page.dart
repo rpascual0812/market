@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/screens/auth/components/login_form.dart';
 import 'package:market/screens/onboarding/onboarding_page.dart';
+import 'package:market/screens/profile/components/profile_settings.dart';
 import 'package:provider/provider.dart';
 
 import 'components/peronal_informations.dart';
@@ -40,7 +41,7 @@ class ProfilePage extends StatelessWidget {
             const SizedBox(height: 10),
 
             /// Personal Information
-            const PeronalInformations(),
+            ProfileSettings(),
 
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.5,

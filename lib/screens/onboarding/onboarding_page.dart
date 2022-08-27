@@ -89,7 +89,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
         actions: [
           TextButton(
             onPressed: _goToLoginPage,
-            child: const Text('Skip'),
+            child: const Text(
+              'Skip',
+              style: TextStyle(color: Colors.grey),
+            ),
           ),
         ],
       ),

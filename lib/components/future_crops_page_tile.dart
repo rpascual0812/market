@@ -8,6 +8,8 @@ import '../../components/network_image.dart';
 
 class FutureCropsPageTile extends StatelessWidget {
   static const IconData chat =
+      IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
+  static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
   const FutureCropsPageTile({
@@ -51,14 +53,12 @@ class FutureCropsPageTile extends StatelessWidget {
           borderRadius: AppDefaults.borderRadius,
           child: Container(
             width: MediaQuery.of(context).size.width,
-            // padding: const EdgeInsets.all(AppDefaults.padding),
+            height: 310,
             padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
             child: Center(
               child: Stack(
                 children: [
                   Column(
-                    // mainAxisSize: MainAxisSize.min,
-                    // mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Container(
                         decoration: BoxDecoration(
@@ -87,7 +87,7 @@ class FutureCropsPageTile extends StatelessWidget {
                                     child: Stack(
                                       children: [
                                         SizedBox(
-                                          height: 40,
+                                          height: 45,
                                           child: AspectRatio(
                                             aspectRatio: 1 / 1,
                                             child: Hero(
@@ -100,39 +100,110 @@ class FutureCropsPageTile extends StatelessWidget {
                                         ),
                                         Positioned(
                                           top: 5,
-                                          left: 55,
+                                          left: 50,
                                           child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                name,
-                                                style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: AppColors.defaultBlack,
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                                child: Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  width: 150,
+                                                  height: 20,
+                                                  child: Text(
+                                                    name,
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 10),
+                                                  ),
                                                 ),
                                               ),
-                                              Text(
-                                                location,
-                                                style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: AppColors.defaultBlack,
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                                child: Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  width: 150,
+                                                  height: 20,
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(
+                                                        pin,
+                                                        size: 15,
+                                                      ),
+                                                      Text(
+                                                        location,
+                                                        style: const TextStyle(
+                                                          fontSize: 10,
+                                                          color: AppColors
+                                                              .defaultBlack,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
                                         Positioned(
+                                          top: 0,
                                           right: 0,
                                           child: Row(
                                             children: [
-                                              const Icon(
-                                                chat,
-                                                color: AppColors.primary,
+                                              Container(
+                                                width: 35.0,
+                                                height: 35.0,
+                                                padding: EdgeInsets.zero,
+                                                child: OutlinedButton(
+                                                  onPressed: () {},
+                                                  style:
+                                                      OutlinedButton.styleFrom(
+                                                    side: const BorderSide(
+                                                      width: 1,
+                                                      color: AppColors.primary,
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(0),
+                                                  ),
+                                                  child: const Icon(
+                                                    chat,
+                                                    color: AppColors.primary,
+                                                    size: 15,
+                                                  ),
+                                                ),
                                               ),
-                                              const VerticalDivider(),
-                                              TextButton(
+
+                                              // const VerticalDivider(),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              OutlinedButton(
                                                 onPressed: () {},
-                                                child: const Text('View Shop'),
-                                              )
+                                                style: OutlinedButton.styleFrom(
+                                                  side: const BorderSide(
+                                                    width: 1,
+                                                    color: AppColors.primary,
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(0),
+                                                ),
+                                                child: const Text(
+                                                  'View Shop',
+                                                  style: TextStyle(
+                                                    color: AppColors.primary,
+                                                    fontSize: 10,
+                                                  ),
+                                                ),
+                                              ),
+                                              // TextButton(
+                                              //   onPressed: () {},
+                                              //   child: const Text('View Shop'),
+                                              // )
                                             ],
                                           ),
                                         ),

@@ -8,7 +8,7 @@ import '../../../components/network_image.dart';
 
 class FollowingListTile extends StatelessWidget {
   static const IconData chat =
-      IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
+      IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
 
   const FollowingListTile({
     Key? key,
