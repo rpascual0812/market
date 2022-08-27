@@ -11,62 +11,60 @@ class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white70,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: Column(
-          children: [
-            // const Spacer(),
-            // Image.asset(
-            //   AppImages.logo,
-            //   height: 100,
-            // ),
-            // const SizedBox(height: AppDefaults.margin * 2),
-            // Header
-            const SizedBox(height: AppDefaults.margin * 1),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "   Registration",
-                style: Theme.of(context).textTheme.headline6,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                color: Colors.white,
+                child: Column(
+                  children: const [
+                    SizedBox(height: AppDefaults.margin * 1),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "   Registration",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                        // style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ),
+                    SizedBox(height: AppDefaults.margin * 1),
+                  ],
+                ),
               ),
-            ),
-
-            const SizedBox(height: AppDefaults.margin * 2),
-
-            /// Sign up forms
-            const SignUpForm(),
-            const Spacer(),
-
-            /// OR
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                HorizontalLine(width: 100),
-                Text('Or'),
-                HorizontalLine(width: 100),
-              ],
-            ),
-            const Spacer(),
-
-            /// Social Logins
-            // const SocialLogins(),
-            const Spacer(),
-
-            /// Already have an account
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Already have an account?'),
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => LoginPage()));
-                    },
-                    child: const Text('Login'))
-              ],
-            ),
-            const Spacer(),
-          ],
+              const SignUpForm(),
+              Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: const [
+                        HorizontalLine(width: 100),
+                        Text('Or'),
+                        HorizontalLine(width: 100),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Already have an account?'),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const LoginPage()));
+                            },
+                            child: const Text('Login'))
+                      ],
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
