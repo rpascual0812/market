@@ -28,7 +28,7 @@ class _ConversationListState extends State<ConversationList> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return Bubble();
+              return const Bubble();
             },
           ),
         );

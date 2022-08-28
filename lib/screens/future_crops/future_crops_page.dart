@@ -495,6 +495,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
             ),
           ),
           FutureCropsPageTile(
+            pk: 1,
             name: 'Juan Dela Cruz',
             profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Almonds',
@@ -506,6 +507,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
             onTap: () {},
           ),
           FutureCropsPageTile(
+            pk: 2,
             name: 'Juan Dela Cruz',
             profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Banana Supplier',
@@ -517,6 +519,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
             onTap: () {},
           ),
           FutureCropsPageTile(
+            pk: 3,
             name: 'Juan Dela Cruz',
             profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Almonds',
@@ -528,6 +531,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
             onTap: () {},
           ),
           FutureCropsPageTile(
+            pk: 4,
             name: 'Juan Dela Cruz',
             profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Banana Supplier',
@@ -539,6 +543,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
             onTap: () {},
           ),
           FutureCropsPageTile(
+            pk: 5,
             name: 'Juan Dela Cruz',
             profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Almonds',
@@ -550,6 +555,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
             onTap: () {},
           ),
           FutureCropsPageTile(
+            pk: 6,
             name: 'Juan Dela Cruz',
             profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Banana Supplier',

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:market/screens/chat/bubble.dart';
 
 import '../../constants/index.dart';
 import '../../components/network_image.dart';
@@ -14,6 +15,7 @@ class FutureCropsPageTile extends StatelessWidget {
 
   const FutureCropsPageTile({
     Key? key,
+    required this.pk,
     required this.profile_photo,
     required this.name,
     required this.product,
@@ -28,6 +30,7 @@ class FutureCropsPageTile extends StatelessWidget {
     this.onFavouriteClicked,
   }) : super(key: key);
 
+  final int pk;
   final String profile_photo;
   final String name;
   final String product;
@@ -91,7 +94,7 @@ class FutureCropsPageTile extends StatelessWidget {
                                           child: AspectRatio(
                                             aspectRatio: 1 / 1,
                                             child: Hero(
-                                              tag: profile_photo,
+                                              tag: pk,
                                               child: NetworkImageWithLoader(
                                                 profile_photo,
                                               ),
@@ -160,7 +163,13 @@ class FutureCropsPageTile extends StatelessWidget {
                                                 height: 35.0,
                                                 padding: EdgeInsets.zero,
                                                 child: OutlinedButton(
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const Bubble()));
+                                                  },
                                                   style:
                                                       OutlinedButton.styleFrom(
                                                     side: const BorderSide(

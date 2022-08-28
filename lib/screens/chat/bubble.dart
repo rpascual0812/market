@@ -3,6 +3,8 @@ import 'package:market/constants/app_colors.dart';
 import 'package:market/models/chat_message.dart';
 
 class Bubble extends StatefulWidget {
+  const Bubble({Key? key}) : super(key: key);
+
   @override
   _BubbleState createState() => _BubbleState();
 }
@@ -11,14 +13,19 @@ class _BubbleState extends State<Bubble> {
   TextEditingController messageController = TextEditingController();
 
   List<ChatMessage> messages = [
-    ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
+    ChatMessage(pk: 1, messageContent: "Hello, Will", messageType: "receiver"),
     ChatMessage(
+        pk: 2, messageContent: "How have you been?", messageType: "receiver"),
+    ChatMessage(
+        pk: 3,
         messageContent: "Hey Kriss, I am doing fine dude. wbu?",
         messageType: "sender"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
     ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
+        pk: 4, messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    ChatMessage(
+        pk: 5,
+        messageContent: "Is there any thing wrong?",
+        messageType: "sender"),
   ];
 
   void sendChat() {
@@ -26,6 +33,7 @@ class _BubbleState extends State<Bubble> {
       messages.insert(
           messages.length,
           ChatMessage(
+            pk: messages.length + 1,
             messageContent: messageController.text,
             messageType: "sender",
           ));
@@ -173,17 +181,17 @@ class _BubbleState extends State<Bubble> {
                     width: 15,
                   ),
                   FloatingActionButton(
+                    heroTag: null,
                     onPressed: () {
-                      print(1);
                       sendChat();
                     },
-                    child: Icon(
+                    backgroundColor: Colors.blue,
+                    elevation: 0,
+                    child: const Icon(
                       Icons.send,
                       color: Colors.white,
                       size: 18,
                     ),
-                    backgroundColor: Colors.blue,
-                    elevation: 0,
                   ),
                 ],
               ),

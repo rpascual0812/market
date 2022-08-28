@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:market/components/product_list_page_tile.dart';
 
-import 'package:market/models/order.dart';
+import 'package:market/models/product.dart';
+import 'package:market/screens/looking_for/looking_for_page_tile.dart';
 
 class LookingForPage extends StatefulWidget {
   const LookingForPage({Key? key}) : super(key: key);
@@ -11,14 +11,140 @@ class LookingForPage extends StatefulWidget {
 }
 
 class _LookingForPageState extends State<LookingForPage> {
-  late List<Order> orders = [];
+  List<Products> products = [
+    Products(
+      pk: 1,
+      uuid: '5118a0b2-2679-11ed-a261-0242ac120002',
+      title: 'Looking for Almonds',
+      quantity: 103,
+      unit: 'kg',
+      description: 'Lorem ipsum dolor sit amet',
+      location: 'Palatiw, Pasig City',
+      type: 'looking',
+      createdBy: 1,
+      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
+      userName: 'Raffier Lee',
+      dateCreated: DateTime(2022, 08, 12, 13, 25),
+    ),
+    Products(
+      pk: 2,
+      uuid: 'a21a82a0-7225-4c3c-b5f3-52ad16f68ca5',
+      title: 'Looking for Banana Supplier',
+      quantity: 103,
+      unit: 'kg',
+      description: 'Lorem ipsum dolor sit amet',
+      location: 'Pinagbuhatan, Pasig City',
+      type: 'looking',
+      createdBy: 2,
+      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
+      userName: 'Juan Dela Cruz',
+      dateCreated: DateTime(2022, 08, 12, 13, 25),
+    ),
+    Products(
+      pk: 3,
+      uuid: '40221260-267a-11ed-a261-0242ac120002',
+      title: 'Looking for Almonds Supplier',
+      quantity: 103,
+      unit: 'kg',
+      description: 'Lorem ipsum dolor sit amet',
+      location: 'Sagad, Pasig City',
+      type: 'looking',
+      createdBy: 3,
+      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
+      userName: 'Juan Dela Cruz',
+      dateCreated: DateTime(2022, 08, 12, 13, 25),
+    ),
+    Products(
+      pk: 4,
+      uuid: '5118a0b2-2679-11ed-a261-0242ac120002',
+      title: 'Looking for Almonds',
+      quantity: 103,
+      unit: 'kg',
+      description: 'Lorem ipsum dolor sit amet',
+      location: 'Palatiw, Pasig City',
+      type: 'looking',
+      createdBy: 1,
+      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
+      userName: 'Juan Dela Cruz',
+      dateCreated: DateTime(2022, 08, 12, 13, 25),
+    ),
+    Products(
+      pk: 5,
+      uuid: 'a21a82a0-7225-4c3c-b5f3-52ad16f68ca5',
+      title: 'Looking for Banana Supplier',
+      quantity: 103,
+      unit: 'kg',
+      description: 'Lorem ipsum dolor sit amet',
+      location: 'Pinagbuhatan, Pasig City',
+      type: 'looking',
+      createdBy: 2,
+      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
+      userName: 'Juan Dela Cruz',
+      dateCreated: DateTime(2022, 08, 12, 13, 25),
+    ),
+    Products(
+      pk: 6,
+      uuid: '40221260-267a-11ed-a261-0242ac120002',
+      title: 'Looking for Almonds Supplier',
+      quantity: 103,
+      unit: 'kg',
+      description: 'Lorem ipsum dolor sit amet',
+      location: 'Sagad, Pasig City',
+      type: 'looking',
+      createdBy: 3,
+      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
+      userName: 'Juan Dela Cruz',
+      dateCreated: DateTime(2022, 08, 12, 13, 25),
+    ),
+    Products(
+      pk: 7,
+      uuid: '5118a0b2-2679-11ed-a261-0242ac120002',
+      title: 'Looking for Almonds',
+      quantity: 103,
+      unit: 'kg',
+      description: 'Lorem ipsum dolor sit amet',
+      location: 'Palatiw, Pasig City',
+      type: 'looking',
+      createdBy: 1,
+      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
+      userName: 'Juan Dela Cruz',
+      dateCreated: DateTime(2022, 08, 12, 13, 25),
+    ),
+    Products(
+      pk: 8,
+      uuid: 'a21a82a0-7225-4c3c-b5f3-52ad16f68ca5',
+      title: 'Looking for Banana Supplier',
+      quantity: 103,
+      unit: 'kg',
+      description: 'Lorem ipsum dolor sit amet',
+      location: 'Pinagbuhatan, Pasig City',
+      type: 'looking',
+      createdBy: 2,
+      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
+      userName: 'Juan Dela Cruz',
+      dateCreated: DateTime(2022, 08, 12, 13, 25),
+    ),
+    Products(
+      pk: 9,
+      uuid: '40221260-267a-11ed-a261-0242ac120002',
+      title: 'Looking for Almonds Supplier',
+      quantity: 103,
+      unit: 'kg',
+      description: 'Lorem ipsum dolor sit amet',
+      location: 'Sagad, Pasig City',
+      type: 'looking',
+      createdBy: 3,
+      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
+      userName: 'Juan Dela Cruz',
+      dateCreated: DateTime(2022, 08, 12, 13, 25),
+    ),
+  ];
+
   bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-
-    refreshOrders();
   }
 
   @override
@@ -37,83 +163,37 @@ class _LookingForPageState extends State<LookingForPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        /// Use List View Here
-        Expanded(
-          child: Center(
-            child: isLoading
-                ? const CircularProgressIndicator()
-                : !orders.isEmpty
-                    ? const Text(
-                        'No Orders found',
-                        style: TextStyle(color: Colors.black, fontSize: 24),
-                      )
-                    : buildOrders(),
-          ),
+    return Scaffold(
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ListView.builder(
+              itemCount: products.length,
+              shrinkWrap: true,
+              padding: const EdgeInsets.only(top: 16),
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return LookingForPageTile(
+                  pk: products[index].pk,
+                  uuid: products[index].uuid,
+                  title: products[index].title,
+                  quantity: products[index].quantity,
+                  unit: products[index].unit,
+                  description: products[index].description,
+                  location: products[index].location,
+                  type: products[index].type,
+                  createdBy: products[index].createdBy,
+                  userImage: products[index].userImage,
+                  userName: products[index].userName,
+                  dateCreated: products[index].dateCreated,
+                );
+              },
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
-
-  Widget buildOrders() => ListView(
-        // shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        children: [
-          ProductListPageTile(
-            name: 'Juan Dela Cruz',
-            imageLink: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Looking for Almonds',
-            quantity: '103 kg',
-            description: 'Lorem ipsum dolor sit amet',
-            location: 'Davao',
-            onTap: () {},
-          ),
-          ProductListPageTile(
-            name: 'Juan Dela Cruz',
-            imageLink: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Looking for Banana Supplier',
-            quantity: '103 kg',
-            description: 'Lorem ipsum dolor sit amet',
-            location: 'Davao',
-            onTap: () {},
-          ),
-          ProductListPageTile(
-            name: 'Juan Dela Cruz',
-            imageLink: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Looking for Almonds',
-            quantity: '103 kg',
-            description: 'Lorem ipsum dolor sit amet',
-            location: 'Davao',
-            onTap: () {},
-          ),
-          ProductListPageTile(
-            name: 'Juan Dela Cruz',
-            imageLink: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Looking for Banana Supplier',
-            quantity: '103 kg',
-            description: 'Lorem ipsum dolor sit amet',
-            location: 'Davao',
-            onTap: () {},
-          ),
-          ProductListPageTile(
-            name: 'Juan Dela Cruz',
-            imageLink: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Looking for Almonds',
-            quantity: '103 kg',
-            description: 'Lorem ipsum dolor sit amet',
-            location: 'Davao',
-            onTap: () {},
-          ),
-          ProductListPageTile(
-            name: 'Juan Dela Cruz',
-            imageLink: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Looking for Banana Supplier',
-            quantity: '103 kg',
-            description: 'Lorem ipsum dolor sit amet',
-            location: 'Davao',
-            onTap: () {},
-          ),
-        ],
-      );
 }
