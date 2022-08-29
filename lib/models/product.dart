@@ -6,6 +6,7 @@ class Products {
   int pk;
   String uuid;
   String title;
+  String productImage;
   double quantity;
   String unit;
   String description;
@@ -20,6 +21,7 @@ class Products {
     required this.pk,
     required this.uuid,
     required this.title,
+    required this.productImage,
     required this.quantity,
     required this.unit,
     required this.description,

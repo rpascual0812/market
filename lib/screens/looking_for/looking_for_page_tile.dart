@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
-import 'package:market/screens/auth/login_page.dart';
 
 import '../../constants/index.dart';
 import '../../components/network_image.dart';
@@ -17,6 +15,7 @@ class LookingForPageTile extends StatefulWidget {
     required this.pk,
     required this.uuid,
     required this.title,
+    required this.productImage,
     required this.quantity,
     required this.unit,
     required this.description,
@@ -32,6 +31,7 @@ class LookingForPageTile extends StatefulWidget {
   final int pk;
   final String uuid;
   final String title;
+  final String productImage;
   final double quantity;
   final String unit;
   final String description;

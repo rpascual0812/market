@@ -6,6 +6,10 @@ class AppColors {
   // static const Color secondary = Color.fromARGB(255, 88, 184, 72);
   static const Color secondary = Color(0xFF40bb50);
   static const Color third = Color.fromRGBO(43, 163, 73, 1);
+  static const Color fourth = Color(0xFFf5f5f5);
+
+  static const Color danger = Color.fromARGB(255, 209, 45, 24);
+
   static const Color defaultBackground = Color.fromARGB(255, 10, 80, 40);
   static const Color defaultBlack = Color(0xFF200E32);
   static const Color scaffoldBackground = Color(0xFFFBFBFD);

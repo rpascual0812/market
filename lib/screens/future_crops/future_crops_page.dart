@@ -23,6 +23,21 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
 
   TextEditingController yearController = TextEditingController(text: '2022');
 
+  final List<bool> _isSelected = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -41,6 +56,20 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
 
     // orders = await HipposDatabase.instance.getAllOrders();
     setState(() => isLoading = false);
+  }
+
+  Widget getTabWidget(String title, double padding, bool isTabSelected) {
+    return isTabSelected
+        ? Text(title)
+        : Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: AppColors.primary,
+            child: Center(
+                child: Text(
+              title,
+              style: const TextStyle(color: Colors.white),
+            )));
   }
 
   @override
@@ -177,8 +206,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[0] =
+                                                    !_isSelected[0];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[0]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:
@@ -202,8 +239,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[1] =
+                                                    !_isSelected[1];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[1]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:
@@ -227,8 +272,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[2] =
+                                                    !_isSelected[2];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[2]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:
@@ -256,8 +309,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[3] =
+                                                    !_isSelected[3];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[3]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:
@@ -281,8 +342,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[4] =
+                                                    !_isSelected[4];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[4]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:
@@ -306,8 +375,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[5] =
+                                                    !_isSelected[5];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[5]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:
@@ -335,8 +412,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[6] =
+                                                    !_isSelected[6];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[6]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:
@@ -360,8 +445,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[7] =
+                                                    !_isSelected[7];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[7]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:
@@ -385,8 +478,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[8] =
+                                                    !_isSelected[8];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[8]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:
@@ -414,8 +515,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[9] =
+                                                    !_isSelected[9];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[9]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:
@@ -439,8 +548,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[10] =
+                                                    !_isSelected[10];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[10]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:
@@ -464,8 +581,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               0.29,
                                           height: 30,
                                           child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                _isSelected[11] =
+                                                    !_isSelected[11];
+                                              });
+                                            },
                                             style: TextButton.styleFrom(
+                                              backgroundColor: _isSelected[11]
+                                                  ? AppColors.secondary
+                                                  : AppColors.primary,
                                               minimumSize:
                                                   Size.zero, // Set this
                                               padding:

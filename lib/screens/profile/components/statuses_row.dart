@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:market/screens/orders/order_page.dart';
 import 'package:market/screens/profile/components/profile_card.dart';
 
 import '../../../constants/index.dart';
@@ -25,7 +26,16 @@ class StatusesRow extends StatelessWidget {
             iconColor: AppColors.primary,
             statusName: 'My Products',
             status: '10+',
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const OrderPage(type: 'products');
+                  },
+                ),
+              );
+            },
           ),
           ProfileCard(
             iconData: cart,
@@ -33,7 +43,16 @@ class StatusesRow extends StatelessWidget {
             iconColor: Colors.blue,
             statusName: 'My Orders',
             status: '5',
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const OrderPage(type: 'orders');
+                  },
+                ),
+              );
+            },
           ),
           // ProfileCard(
           //   iconData: Icons.star,
