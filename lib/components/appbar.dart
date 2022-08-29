@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:market/screens/notifications/notification_page.dart';
+import 'package:market/screens/search/search_page.dart';
 
 class Appbar extends StatelessWidget with PreferredSizeWidget {
   Appbar({Key? key, this.module = 'home'}) : super(key: key);
@@ -32,15 +33,27 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
           children: [
             Visibility(
               visible: showHide(),
-              child: const Icon(
-                Icons.search,
+              child: IconButton(
+                padding: const EdgeInsets.all(0),
+                icon: const Icon(Icons.search),
                 color: Colors.white,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const SearchPage();
+                      },
+                    ),
+                  );
+                },
               ),
             ),
-            const SizedBox(width: 10),
+            // const SizedBox(width: 0),
             Visibility(
               visible: showHide(),
               child: IconButton(
+                padding: const EdgeInsets.all(0),
                 icon: const Icon(Icons.notifications),
                 color: Colors.white,
                 onPressed: () {
@@ -55,7 +68,7 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
                 },
               ),
             ),
-            const SizedBox(width: 10),
+            // const SizedBox(width: 10),
           ],
         )
       ],

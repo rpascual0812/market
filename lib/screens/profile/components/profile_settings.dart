@@ -1,9 +1,8 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:settings_ui/settings_ui.dart';
+import 'package:market/screens/approot/app_root.dart';
 import '../../../constants/index.dart';
-import 'info_row.dart';
 
 class ProfileSettings extends StatelessWidget {
   ProfileSettings({
@@ -26,105 +25,182 @@ class ProfileSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 600,
+      height: 620,
       child: Padding(
         padding: const EdgeInsets.all(AppDefaults.padding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            ListTile(
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.black, width: 1),
-                borderRadius: BorderRadius.only(),
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              // height: 580,
+              child: Column(
+                children: <Widget>[
+                  Card(
+                    child: ListTile(
+                      // leading: FlutterLogo(),
+                      title: const Text(
+                        'Post an Item You are Looking For',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppRoot(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      // leading: FlutterLogo(),
+                      title: const Text(
+                        'Register as Producer',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppRoot(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      // leading: FlutterLogo(),
+                      title: const Text(
+                        'Recently Viewed',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppRoot(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      // leading: FlutterLogo(),
+                      title: const Text(
+                        'Frequently Asked Questions',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppRoot(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      // leading: FlutterLogo(),
+                      title: const Text(
+                        'Chat with Moderator',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppRoot(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      // leading: FlutterLogo(),
+                      title: const Text(
+                        'Give Us Feedback',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppRoot(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      // leading: FlutterLogo(),
+                      title: const Text(
+                        'File a Complaint',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppRoot(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      // leading: FlutterLogo(),
+                      title: const Text(
+                        'Documentation',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppRoot(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Card(
+                    color: AppColors.danger,
+                    child: ListTile(
+                      // leading: FlutterLogo(),
+                      title: const Text(
+                        'Delete my Account permanently',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppRoot(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-              // leading: Icon(Icons.wb_sunny),
-              title: Text(
-                'Post an Item You are Looking For',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              // leading: Icon(Icons.wb_sunny),
-              title: Text(
-                'Register as Producer',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              // leading: Icon(Icons.wb_sunny),
-              title: Text(
-                'Recently Viewed',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              // leading: Icon(Icons.wb_sunny),
-              title: Text(
-                'Frequently Asked Questions',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              // leading: Icon(Icons.wb_sunny),
-              title: Text(
-                'Chat with Moderator',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              // leading: Icon(Icons.wb_sunny),
-              title: Text(
-                'Give Us Feedback',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              // leading: Icon(Icons.wb_sunny),
-              title: Text(
-                'File a Complaint',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              // leading: Icon(Icons.wb_sunny),
-              title: Text(
-                'Documentation',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              // leading: Icon(Icons.wb_sunny),
-              title: Text(
-                'Delete my Account permanently',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
             ),
           ],
         ),

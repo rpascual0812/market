@@ -54,6 +54,7 @@ class _NotificationPageState extends State<NotificationPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Appbar(),
             ListView.builder(
               itemCount: notifications.length,
               shrinkWrap: true,
