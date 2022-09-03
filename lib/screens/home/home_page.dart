@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:market/components/cards/big/big_card_image.dart';
 import 'package:market/components/cards/big/big_card_image_slide.dart';
-import 'package:market/demoData.dart';
-import 'package:market/screens/future_crops/future_crops_page.dart';
+import 'package:market/demo_data.dart';
 import 'package:market/screens/future_crops/future_crops_widget.dart';
 import 'package:market/screens/home/components/article_list.dart';
 import 'package:market/screens/home/components/home_header.dart';
@@ -42,10 +41,10 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: AppDefaults.margin / 2),
             const ArticleList(),
             const SizedBox(height: AppDefaults.margin / 2),
-            // const FutureCropsWidget(),
-            // const SizedBox(height: AppDefaults.margin / 2),
-            const LookingForWidget(),
+            const FutureCropsWidget(),
             const SizedBox(height: AppDefaults.margin / 2),
+            const LookingForWidget(),
+            // const SizedBox(height: AppDefaults.margin / 2),
             const ProductListWidget(),
             const SizedBox(height: AppDefaults.margin / 2),
           ],

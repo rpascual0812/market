@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:market/models/product.dart';
 import 'package:market/screens/orders/components/my_order_tile.dart';
-import 'package:market/screens/orders/components/my_product_tile.dart';
 
 class MyOrders extends StatefulWidget {
   const MyOrders({

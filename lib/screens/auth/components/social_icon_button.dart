@@ -31,8 +31,8 @@ class SocialIconButton extends StatelessWidget {
           ],
         ),
         child: CircleAvatar(
-          child: NetworkImageWithLoader(logoLink),
           backgroundColor: Colors.white,
+          child: NetworkImageWithLoader(logoLink),
         ),
       ),
     );

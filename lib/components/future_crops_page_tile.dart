@@ -16,14 +16,14 @@ class FutureCropsPageTile extends StatelessWidget {
   const FutureCropsPageTile({
     Key? key,
     required this.pk,
-    required this.profile_photo,
+    required this.profilePhoto,
     required this.name,
     required this.product,
     required this.quantity,
     required this.date,
     required this.price,
     required this.location,
-    required this.product_photo,
+    required this.productPhoto,
     this.onTap,
     this.hasFavourite = false,
     this.isFavourite = false,
@@ -31,14 +31,14 @@ class FutureCropsPageTile extends StatelessWidget {
   }) : super(key: key);
 
   final int pk;
-  final String profile_photo;
+  final String profilePhoto;
   final String name;
   final String product;
   final String quantity;
   final String date;
   final String price;
   final String location;
-  final String product_photo;
+  final String productPhoto;
   final void Function()? onTap;
   final bool hasFavourite;
   final bool isFavourite;
@@ -96,7 +96,7 @@ class FutureCropsPageTile extends StatelessWidget {
                                             child: Hero(
                                               tag: pk,
                                               child: NetworkImageWithLoader(
-                                                profile_photo,
+                                                profilePhoto,
                                               ),
                                             ),
                                           ),
@@ -273,9 +273,9 @@ class FutureCropsPageTile extends StatelessWidget {
                                 child: AspectRatio(
                                   aspectRatio: 1 / 1,
                                   child: Hero(
-                                    tag: product_photo,
+                                    tag: productPhoto,
                                     child: NetworkImageWithLoader(
-                                      product_photo,
+                                      productPhoto,
                                     ),
                                   ),
                                 ),

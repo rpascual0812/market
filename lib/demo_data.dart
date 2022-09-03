@@ -1,12 +1,3 @@
-// It contains all our demo data that we used
-
-// List<String> demoBigImages = [
-//   "assets/images/saskatchewan-lentils.jpg",
-//   "assets/images/corn_V8.jpg",
-//   "assets/images/Ipomoea_aquatica.jpg",
-//   "assets/images/wheat.jpg",
-// ];
-
 List<String> demoBigImages = [
   "assets/images/big_1.png",
   "assets/images/big_2.png",

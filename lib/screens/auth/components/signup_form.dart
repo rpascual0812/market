@@ -1,15 +1,11 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:intl/intl.dart';
-import 'package:market/screens/auth/components/login_form.dart';
 import 'package:market/screens/auth/login_page.dart';
 import 'package:market/screens/terms/terms_page.dart';
 
-import '../../../components/icon_with_background.dart';
 import '../../../constants/index.dart';
-import '../../approot/app_root.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({
@@ -134,12 +130,12 @@ class _SignUpFormState extends State<SignUpForm> {
                         );
 
                         if (pickedDate != null) {
-                          print(
-                              pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                          // print(
+                          //     pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
                           String formattedDate =
                               DateFormat('yyyy-MM-dd').format(pickedDate);
-                          print(
-                              formattedDate); //formatted date output using intl package =>  2021-03-16
+                          // print(
+                          //     formattedDate); //formatted date output using intl package =>  2021-03-16
                           //you can implement different kind of Date Format here according to your requirement
 
                           setState(() {
@@ -147,7 +143,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                 formattedDate; //set output date to TextField value.
                           });
                         } else {
-                          print("Date is not selected");
+                          // print("Date is not selected");
                         }
                       },
                       decoration: const InputDecoration(

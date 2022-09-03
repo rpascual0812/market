@@ -38,7 +38,7 @@ class ProductTileCart extends StatelessWidget {
             flex: 2,
             child: InkWell(
               onTap: () {
-                print('hello 2');
+                // print('hello 2');
               },
               child: SizedBox(
                 height: 80,
@@ -54,7 +54,7 @@ class ProductTileCart extends StatelessWidget {
             flex: 4,
             child: InkWell(
               onTap: () {
-                print('hello 1');
+                // print('hello 1');
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 16),

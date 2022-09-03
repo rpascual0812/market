@@ -32,7 +32,7 @@ class LoginPage extends StatelessWidget {
             const Spacer(),
 
             // Login Form
-            LoginForm(),
+            const LoginForm(),
 
             const Spacer(),
 

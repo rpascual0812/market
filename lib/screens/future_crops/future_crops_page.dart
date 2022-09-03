@@ -16,9 +16,9 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
   late List<Order> orders = [];
   bool isLoading = false;
 
-  static const IconData left_arrow =
+  static const IconData leftArrow =
       IconData(0xe801, fontFamily: 'Custom', fontPackage: null);
-  static const IconData right_arrow =
+  static const IconData rightArrow =
       IconData(0xe803, fontFamily: 'Custom', fontPackage: null);
 
   TextEditingController yearController = TextEditingController(text: '2022');
@@ -156,7 +156,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                       SizedBox(
                                         width: 50,
                                         child: IconButton(
-                                          icon: const Icon(left_arrow),
+                                          icon: const Icon(leftArrow),
                                           onPressed: () {
                                             yearController.text = (int.parse(
                                                         yearController.text) -
@@ -183,7 +183,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                       SizedBox(
                                         width: 50,
                                         child: IconButton(
-                                          icon: const Icon(right_arrow),
+                                          icon: const Icon(rightArrow),
                                           onPressed: () {
                                             yearController.text = (int.parse(
                                                         yearController.text) +
@@ -622,72 +622,72 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
           FutureCropsPageTile(
             pk: 1,
             name: 'Juan Dela Cruz',
-            profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
+            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Almonds',
             quantity: '103 kg',
             date: 'April 2022',
             price: 'P 200 per kilo',
             location: 'Davao',
-            product_photo: 'https://i.imgur.com/zdLsFZ0.jpeg',
+            productPhoto: 'https://i.imgur.com/zdLsFZ0.jpeg',
             onTap: () {},
           ),
           FutureCropsPageTile(
             pk: 2,
             name: 'Juan Dela Cruz',
-            profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
+            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Banana Supplier',
             quantity: '103 kg',
             date: 'April 2022',
             price: 'P 200 per kilo',
             location: 'Davao',
-            product_photo: 'https://i.imgur.com/R3Cpn1T.jpeg',
+            productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
             onTap: () {},
           ),
           FutureCropsPageTile(
             pk: 3,
             name: 'Juan Dela Cruz',
-            profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
+            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Almonds',
             quantity: '103 kg',
             date: 'April 2022',
             price: 'P 200 per kilo',
-            product_photo: 'https://i.imgur.com/zdLsFZ0.jpeg',
+            productPhoto: 'https://i.imgur.com/zdLsFZ0.jpeg',
             location: 'Davao',
             onTap: () {},
           ),
           FutureCropsPageTile(
             pk: 4,
             name: 'Juan Dela Cruz',
-            profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
+            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Banana Supplier',
             quantity: '103 kg',
             date: 'April 2022',
             price: 'P 200 per kilo',
-            product_photo: 'https://i.imgur.com/R3Cpn1T.jpeg',
+            productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
             location: 'Davao',
             onTap: () {},
           ),
           FutureCropsPageTile(
             pk: 5,
             name: 'Juan Dela Cruz',
-            profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
+            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Almonds',
             quantity: '103 kg',
             date: 'April 2022',
             price: 'P 200 per kilo',
-            product_photo: 'https://i.imgur.com/zdLsFZ0.jpeg',
+            productPhoto: 'https://i.imgur.com/zdLsFZ0.jpeg',
             location: 'Davao',
             onTap: () {},
           ),
           FutureCropsPageTile(
             pk: 6,
             name: 'Juan Dela Cruz',
-            profile_photo: 'https://i.imgur.com/8G2bg5J.jpeg',
+            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
             product: 'Banana Supplier',
             quantity: '103 kg',
             date: 'April 2022',
             price: 'P 200 per kilo',
-            product_photo: 'https://i.imgur.com/R3Cpn1T.jpeg',
+            productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
             location: 'Davao',
             onTap: () {},
           ),

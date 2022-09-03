@@ -21,19 +21,31 @@ class SectionDividerTitle extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headline6,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
           ),
-          TextButton(
-              onPressed: onTap,
-              child: Text(
-                buttonTitle ?? 'See All',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    ?.copyWith(color: Colors.grey),
-              ))
+          // TextButton(
+          //   onPressed: onTap,
+          //   child: Text(
+          //     buttonTitle ?? 'See All',
+          //     style: Theme.of(context)
+          //         .textTheme
+          //         .bodyText1
+          //         ?.copyWith(color: Colors.grey),
+          //   ),
+          // )
         ],
       ),
     );

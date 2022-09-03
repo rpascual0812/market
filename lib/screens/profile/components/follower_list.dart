@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/models/follower.dart';
-import 'package:market/screens/auth/login_page.dart';
-import 'package:market/models/notification.dart';
-import 'package:market/screens/notifications/notification_page_tile.dart';
 import 'package:market/screens/profile/components/follower_list_tile.dart';
 
 class FollowerList extends StatefulWidget {
+  const FollowerList({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => FollowerListState();
 }
@@ -137,8 +136,8 @@ class FollowerListState extends State<FollowerList>
                         itemBuilder: (context, index) {
                           return FollowerListTile(
                             pk: followers[index].pk,
-                            first_name: followers[index].firstName,
-                            last_name: followers[index].lastName,
+                            firstName: followers[index].firstName,
+                            lastName: followers[index].lastName,
                             image: followers[index].imageURL,
                           );
                         },

@@ -6,7 +6,7 @@ class Bubble extends StatefulWidget {
   const Bubble({Key? key}) : super(key: key);
 
   @override
-  _BubbleState createState() => _BubbleState();
+  State<Bubble> createState() => _BubbleState();
 }
 
 class _BubbleState extends State<Bubble> {

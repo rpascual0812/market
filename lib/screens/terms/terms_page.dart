@@ -2,14 +2,9 @@
 
 import 'package:animations/animations.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/screens/home/home_page.dart';
-import 'package:market/screens/notifications/notification_page.dart';
-import 'package:market/screens/product_list/product_list_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 
 import '../../constants/app_colors.dart';
-import '../profile/profile_page.dart';
 
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
@@ -22,14 +17,14 @@ class TermsPage extends StatefulWidget {
 
   // final Widget? backButton;
   @override
-  _TermsPageState createState() => _TermsPageState();
+  State<TermsPage> createState() => _TermsPageState();
 }
 
 class _TermsPageState extends State<TermsPage> {
   final _headerStyle = const TextStyle(
       color: Color(0xffffffff), fontSize: 15, fontWeight: FontWeight.bold);
-  final _contentStyleHeader = const TextStyle(
-      color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.w700);
+  // final _contentStyleHeader = const TextStyle(
+  //     color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.w700);
   final _contentStyle = const TextStyle(
       color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.normal);
   final _loremIpsum =
@@ -51,10 +46,10 @@ class _TermsPageState extends State<TermsPage> {
         duration: const Duration(milliseconds: 300),
         transitionBuilder: (child, animation, secondAnimation) {
           return SharedAxisTransition(
-            child: child,
             animation: animation,
             secondaryAnimation: secondAnimation,
             transitionType: SharedAxisTransitionType.horizontal,
+            child: child,
           );
         },
         child: SafeArea(

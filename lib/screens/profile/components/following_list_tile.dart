@@ -1,10 +1,8 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 
 import '../../../constants/index.dart';
-import '../../../components/network_image.dart';
 
 class FollowingListTile extends StatelessWidget {
   static const IconData chat =
@@ -13,16 +11,16 @@ class FollowingListTile extends StatelessWidget {
   const FollowingListTile({
     Key? key,
     required this.pk,
-    required this.first_name,
-    required this.last_name,
+    required this.firstName,
+    required this.lastName,
     required this.image,
     required this.following,
     this.onTap,
   }) : super(key: key);
 
   final int pk;
-  final String first_name;
-  final String last_name;
+  final String firstName;
+  final String lastName;
   final String image;
   final bool following;
   final void Function()? onTap;
@@ -84,7 +82,7 @@ class FollowingListTile extends StatelessWidget {
                                           child: Row(
                                             children: [
                                               Text(
-                                                '$first_name $last_name',
+                                                '$firstName $lastName',
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   color: AppColors.defaultBlack,

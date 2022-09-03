@@ -56,6 +56,7 @@ class FutureCropsWidget extends StatelessWidget {
                       quantity: '103 kg',
                       description: 'Lorem ipsum dolor sit amet',
                       location: 'Davao',
+                      date: DateTime(2023, 08, 12, 13, 25),
                       onTap: () {},
                     ),
                     FutureCropsWidgetTile(
@@ -65,6 +66,7 @@ class FutureCropsWidget extends StatelessWidget {
                       quantity: '103 kg',
                       description: 'Lorem ipsum dolor sit amet',
                       location: 'Davao',
+                      date: DateTime(2023, 08, 12, 13, 25),
                       onTap: () {},
                     ),
                     FutureCropsWidgetTile(
@@ -74,6 +76,7 @@ class FutureCropsWidget extends StatelessWidget {
                       quantity: '103 kg',
                       description: 'Lorem ipsum dolor sit amet',
                       location: 'Naga',
+                      date: DateTime(2023, 08, 12, 13, 25),
                       onTap: () {},
                     ),
                     FutureCropsWidgetTile(
@@ -83,6 +86,7 @@ class FutureCropsWidget extends StatelessWidget {
                       quantity: '103 kg',
                       description: 'Lorem ipsum dolor sit amet',
                       location: 'Baguio',
+                      date: DateTime(2023, 08, 12, 13, 25),
                       onTap: () {},
                     ),
                     FutureCropsWidgetTile(
@@ -92,6 +96,7 @@ class FutureCropsWidget extends StatelessWidget {
                       quantity: '103 kg',
                       description: 'Lorem ipsum dolor sit amet',
                       location: 'Ilocos',
+                      date: DateTime(2023, 08, 12, 13, 25),
                       onTap: () {},
                     ),
                     FutureCropsWidgetTile(
@@ -101,6 +106,7 @@ class FutureCropsWidget extends StatelessWidget {
                       quantity: '103 kg',
                       description: 'Lorem ipsum dolor sit amet',
                       location: 'Panay',
+                      date: DateTime(2023, 08, 12, 13, 25),
                       onTap: () {
                         // Navigator.of(context).push(MaterialPageRoute(
                         //     builder: (context) => const ProductPage(

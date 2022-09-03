@@ -9,7 +9,7 @@ class ProfileSettings extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  List<String> settings = [
+  final List<String> settings = [
     'Post an Item You are Looking For',
     'Register as Producer',
     'Recently Viewed',

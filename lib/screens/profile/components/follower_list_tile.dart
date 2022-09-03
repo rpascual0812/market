@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/index.dart';
-import '../../../components/network_image.dart';
 
 class FollowerListTile extends StatelessWidget {
   static const IconData chat =
@@ -12,15 +11,15 @@ class FollowerListTile extends StatelessWidget {
   const FollowerListTile({
     Key? key,
     required this.pk,
-    required this.first_name,
-    required this.last_name,
+    required this.firstName,
+    required this.lastName,
     required this.image,
     this.onTap,
   }) : super(key: key);
 
   final int pk;
-  final String first_name;
-  final String last_name;
+  final String firstName;
+  final String lastName;
   final String image;
   final void Function()? onTap;
 
@@ -81,7 +80,7 @@ class FollowerListTile extends StatelessWidget {
                                           child: Row(
                                             children: [
                                               Text(
-                                                '$first_name $last_name',
+                                                '$firstName $lastName',
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   color: AppColors.defaultBlack,

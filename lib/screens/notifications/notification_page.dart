@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/models/notification.dart';
 
-import 'package:market/models/order.dart';
 import 'package:market/screens/notifications/notification_page_tile.dart';
 
 class NotificationPage extends StatefulWidget {

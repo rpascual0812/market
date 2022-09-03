@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/screens/auth/components/login_form.dart';
 import 'package:market/screens/onboarding/onboarding_page.dart';
 import 'package:market/screens/profile/components/profile_settings.dart';
-import 'package:provider/provider.dart';
 
-import 'components/peronal_informations.dart';
 import 'components/profile_picture_section.dart';
 import 'components/statuses_row.dart';
 

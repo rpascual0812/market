@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:market/components/appbar.dart';
 
 class HomeHeader extends StatelessWidget {

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:market/components/section_divider_title.dart';
-import 'package:market/screens/looking_for/info_header.dart';
 
 import '../../constants/index.dart';
-import 'info_row.dart';
+// import 'info_row.dart';
 
 class LookingForWidget extends StatelessWidget {
   const LookingForWidget({

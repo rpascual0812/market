@@ -1,10 +1,8 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 
 import '../../constants/index.dart';
-import '../../components/network_image.dart';
 
 class NotificationPageTile extends StatelessWidget {
   static const IconData chat =

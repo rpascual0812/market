@@ -158,7 +158,7 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                                       children: [
                                                         const Icon(
                                                           pin,
-                                                          size: 15,
+                                                          size: 12,
                                                         ),
                                                         Text(
                                                           widget.location,
@@ -220,7 +220,7 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                   child: Text(
                                     widget.title,
                                     style: const TextStyle(
-                                      fontSize: 25,
+                                      fontSize: 18,
                                       color: AppColors.primary,
                                       fontWeight: FontWeight.bold,
                                     ),

@@ -1,9 +1,7 @@
 class AppErrors {
   String code = '';
 
-  AppErrors(String code) {
-    this.code = code;
-  }
+  AppErrors(this.code);
 
   static getFirebaseError(code) {
     switch (code) {
@@ -24,8 +22,8 @@ class AppErrors {
       case "operation-not-allowed":
         return "Too many requests to log into this account.";
       case "ERROR_OPERATION_NOT_ALLOWED":
-      case "operation-not-allowed":
-        return "Server error, please try again later.";
+      // case "operation-not-allowed":
+      //   return "Server error, please try again later.";
       case "ERROR_INVALID_EMAIL":
       case "invalid-email":
         return "Email address is invalid.";

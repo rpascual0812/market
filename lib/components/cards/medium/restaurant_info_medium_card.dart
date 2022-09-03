@@ -4,7 +4,7 @@ import 'package:market/constants/app_imports.dart';
 // import '../../../constants.dart';
 import '../../../size_config.dart';
 // import '../../rating.dart';
-import '../../small_dot.dart';
+// import '../../small_dot.dart';
 
 class RestaurantInfoMediumCard extends StatelessWidget {
   const RestaurantInfoMediumCard({

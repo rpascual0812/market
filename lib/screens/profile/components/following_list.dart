@@ -4,6 +4,8 @@ import 'package:market/models/following.dart';
 import 'package:market/screens/profile/components/following_list_tile.dart';
 
 class FollowingList extends StatefulWidget {
+  const FollowingList({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => FollowingListState();
 }
@@ -140,8 +142,8 @@ class FollowingListState extends State<FollowingList>
                         itemBuilder: (context, index) {
                           return FollowingListTile(
                             pk: followings[index].pk,
-                            first_name: followings[index].firstName,
-                            last_name: followings[index].lastName,
+                            firstName: followings[index].firstName,
+                            lastName: followings[index].lastName,
                             image: followings[index].imageURL,
                             following: followings[index].following,
                           );

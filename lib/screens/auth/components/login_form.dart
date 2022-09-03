@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:market/screens/approot/app_root.dart';
 // import 'package:market/screens/approot/app_root.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 import '../../../components/icon_with_background.dart';
 import '../../../constants/index.dart';

@@ -4,9 +4,6 @@ import 'package:market/constants/app_colors.dart';
 import 'package:market/screens/future_crops/future_crops_page.dart';
 import 'package:market/screens/looking_for/looking_for_page.dart';
 
-import '../../components/product_list_widget_tile_square.dart';
-import '../product/product_page.dart';
-
 class ProductListPage extends StatelessWidget {
   const ProductListPage({Key? key}) : super(key: key);
 

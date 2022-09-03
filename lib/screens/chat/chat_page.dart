@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:market/screens/chat/conversation_list.dart';
-import 'package:market/constants/app_colors.dart';
 import 'package:market/models/chat_user.dart';
 
 import 'package:market/models/order.dart';

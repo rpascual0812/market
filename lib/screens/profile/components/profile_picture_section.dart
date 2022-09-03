@@ -4,10 +4,6 @@ import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
 import 'package:market/screens/profile/components/follower_list.dart';
 import 'package:market/screens/profile/components/following_list.dart';
-import '../../../size_config.dart';
-
-import '../../../constants/app_images.dart';
-import 'custom_background_profile.dart';
 
 class ProfilePictureSection extends StatelessWidget {
   const ProfilePictureSection({
@@ -89,7 +85,7 @@ class ProfilePictureSection extends StatelessWidget {
                                   onTap: () {
                                     showDialog(
                                         context: context,
-                                        builder: (_) => FollowingList());
+                                        builder: (_) => const FollowingList());
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.all(0),
@@ -129,7 +125,7 @@ class ProfilePictureSection extends StatelessWidget {
                                   onTap: () {
                                     showDialog(
                                         context: context,
-                                        builder: (_) => FollowerList());
+                                        builder: (_) => const FollowerList());
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
