@@ -109,8 +109,7 @@ class _MyProductTileState extends State<MyProductTile> {
                                               child: Hero(
                                                 tag: widget.pk,
                                                 child: NetworkImageWithLoader(
-                                                  widget.productImage,
-                                                ),
+                                                    widget.productImage, true),
                                               ),
                                             ),
                                           ),

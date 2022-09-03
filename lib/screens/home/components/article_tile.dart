@@ -45,6 +45,7 @@ class ArticleTile extends StatelessWidget {
                         aspectRatio: 1 / 1,
                         child: NetworkImageWithLoader(
                           coverImage,
+                          true,
                           fit: BoxFit.cover,
                         ),
                       ),

@@ -26,10 +26,11 @@ class NewArrivalSection extends StatelessWidget {
                 imageLink: 'https://i.imgur.com/QVroKWd.png',
                 price: 165,
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ProductPage(
-                            coverImage: 'https://i.imgur.com/QVroKWd.png',
-                          )));
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (context) => const ProductPage(
+                  //           pk: 1,
+                  //           coverImage: 'https://i.imgur.com/QVroKWd.png',
+                  //         )));
                 },
               ),
               ProductTileSquare(
@@ -37,10 +38,11 @@ class NewArrivalSection extends StatelessWidget {
                 imageLink: 'https://i.imgur.com/PFBRThN.png',
                 price: 275,
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ProductPage(
-                            coverImage: 'https://i.imgur.com/PFBRThN.png',
-                          )));
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (context) => const ProductPage(
+                  //           pk: 2,
+                  //           coverImage: 'https://i.imgur.com/PFBRThN.png',
+                  //         )));
                 },
               ),
             ],

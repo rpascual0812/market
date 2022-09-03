@@ -145,8 +145,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                               child: Hero(
                                                 tag: widget.pk,
                                                 child: NetworkImageWithLoader(
-                                                  widget.productImage,
-                                                ),
+                                                    widget.productImage, true),
                                               ),
                                             ),
                                           ),

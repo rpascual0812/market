@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:market/components/product_list_widget_tile_square.dart';
+// import 'package:market/constants/app_colors.dart';
+// import 'package:market/components/product_list_widget_tile_square.dart';
 import 'package:market/models/product.dart';
+
+import '../../components/product_list_widget_tile_square.dart';
 // import 'package:market/constants/app_defaults.dart';
 
 // import '../../product/product_page.dart';
@@ -13,12 +16,12 @@ class ProductListWidget extends StatefulWidget {
 }
 
 class _ProductListWidgetState extends State<ProductListWidget> {
-  List<Products> products = [
+  final List<Products> products = [
     Products(
       pk: 1,
       uuid: '5118a0b2-2679-11ed-a261-0242ac120002',
-      title: 'Looking for Almonds',
-      productImage: '',
+      title: 'Almonds',
+      productImage: 'https://i.imgur.com/zdLsFZ0.jpeg',
       quantity: 103,
       unit: 'kg',
       description: 'Lorem ipsum dolor sit amet',
@@ -32,8 +35,8 @@ class _ProductListWidgetState extends State<ProductListWidget> {
     Products(
       pk: 2,
       uuid: 'a21a82a0-7225-4c3c-b5f3-52ad16f68ca5',
-      title: 'Looking for Banana Supplier',
-      productImage: '',
+      title: 'Banana',
+      productImage: 'https://i.imgur.com/R3Cpn1T.jpeg',
       quantity: 103,
       unit: 'kg',
       description: 'Lorem ipsum dolor sit amet',
@@ -47,8 +50,8 @@ class _ProductListWidgetState extends State<ProductListWidget> {
     Products(
       pk: 3,
       uuid: '40221260-267a-11ed-a261-0242ac120002',
-      title: 'Looking for Almonds Supplier',
-      productImage: '',
+      title: 'Mango',
+      productImage: 'https://i.imgur.com/IKDMrufb.jpg',
       quantity: 103,
       unit: 'kg',
       description: 'Lorem ipsum dolor sit amet',
@@ -62,8 +65,8 @@ class _ProductListWidgetState extends State<ProductListWidget> {
     Products(
       pk: 4,
       uuid: '5118a0b2-2679-11ed-a261-0242ac120002',
-      title: 'Looking for Almonds',
-      productImage: '',
+      title: 'Rice',
+      productImage: 'https://i.imgur.com/3P3UxGeb.jpg',
       quantity: 103,
       unit: 'kg',
       description: 'Lorem ipsum dolor sit amet',
@@ -77,8 +80,8 @@ class _ProductListWidgetState extends State<ProductListWidget> {
     Products(
       pk: 5,
       uuid: 'a21a82a0-7225-4c3c-b5f3-52ad16f68ca5',
-      title: 'Looking for Banana Supplier',
-      productImage: '',
+      title: 'Tomato',
+      productImage: 'https://i.imgur.com/J0EgsIWb.jpg',
       quantity: 103,
       unit: 'kg',
       description: 'Lorem ipsum dolor sit amet',
@@ -93,7 +96,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
       pk: 6,
       uuid: '40221260-267a-11ed-a261-0242ac120002',
       title: 'Looking for Almonds Supplier',
-      productImage: '',
+      productImage: 'https://i.imgur.com/R3Cpn1T.jpeg',
       quantity: 103,
       unit: 'kg',
       description: 'Lorem ipsum dolor sit amet',
@@ -108,7 +111,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
       pk: 7,
       uuid: '5118a0b2-2679-11ed-a261-0242ac120002',
       title: 'Looking for Almonds',
-      productImage: '',
+      productImage: 'https://i.imgur.com/zdLsFZ0.jpeg',
       quantity: 103,
       unit: 'kg',
       description: 'Lorem ipsum dolor sit amet',
@@ -123,7 +126,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
       pk: 8,
       uuid: 'a21a82a0-7225-4c3c-b5f3-52ad16f68ca5',
       title: 'Looking for Banana Supplier',
-      productImage: '',
+      productImage: 'https://i.imgur.com/R3Cpn1T.jpeg',
       quantity: 103,
       unit: 'kg',
       description: 'Lorem ipsum dolor sit amet',
@@ -138,7 +141,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
       pk: 9,
       uuid: '40221260-267a-11ed-a261-0242ac120002',
       title: 'Looking for Almonds Supplier',
-      productImage: '',
+      productImage: 'https://i.imgur.com/zdLsFZ0.jpeg',
       quantity: 103,
       unit: 'kg',
       description: 'Lorem ipsum dolor sit amet',
@@ -166,188 +169,35 @@ class _ProductListWidgetState extends State<ProductListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: products.length,
-      shrinkWrap: true,
-      padding: const EdgeInsets.only(top: 16),
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return ProductListWidgetTileSquare(
-          pk: products[index].pk,
-          title: 'Banana',
-          price: 165,
-          imageLink: 'https://i.imgur.com/R3Cpn1T.jpeg',
-          hasFavourite: true,
-          isFavourite: true,
-          ratings: 3.5,
-          onTap: () {},
-        );
-      },
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        children: [
+          GridView.builder(
+            physics: const ScrollPhysics(),
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 0.68,
+              crossAxisCount: 2,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
+            ),
+            itemCount: products.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ProductListWidgetTileSquare(
+                pk: products[index].pk,
+                title: products[index].title,
+                price: 165,
+                productImage: products[index].productImage,
+                hasFavourite: true,
+                isFavourite: true,
+                ratings: 3.5,
+                onTap: () {},
+              );
+            },
+          ),
+        ],
+      ),
     );
-    // return ListView(
-    //   shrinkWrap: true,
-    //   physics: const ScrollPhysics(),
-    //   children: <Widget>[
-    //     Padding(
-    //       padding: const EdgeInsets.symmetric(horizontal: AppDefaults.margin),
-    //       child: Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //         children: [
-    //           Row(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: const [
-    //               Padding(
-    //                 padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-    //                 child: Text(
-    //                   'Product Post',
-    //                   style: TextStyle(
-    //                       color: AppColors.primary,
-    //                       fontSize: 18,
-    //                       fontWeight: FontWeight.bold),
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //           TextButton(
-    //             onPressed: () {},
-    //             child: Container(
-    //               height: 25,
-    //               padding:
-    //                   const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-    //               decoration: const BoxDecoration(
-    //                 color: AppColors.secondary,
-    //                 // borderRadius: BorderRadius.circular(10),
-    //               ),
-    //               child: DropdownButton(
-    //                 style: const TextStyle(color: Colors.white, fontSize: 10),
-    //                 value: filterValue,
-    //                 icon: const Icon(
-    //                   Icons.keyboard_arrow_down,
-    //                   size: 12,
-    //                   color: Colors.white,
-    //                 ),
-    //                 underline: const SizedBox(),
-    //                 items: filters.map((String items) {
-    //                   return DropdownMenuItem(
-    //                     value: items,
-    //                     child: Text(
-    //                       items,
-    //                       style: const TextStyle(color: AppColors.secondary),
-    //                     ),
-    //                   );
-    //                 }).toList(),
-    //                 onChanged: (String? newValue) {
-    //                   setState(() {
-    //                     filterValue = newValue!;
-    //                   });
-    //                 },
-    //                 selectedItemBuilder: (BuildContext ctxt) {
-    //                   return filters.map<Widget>((item) {
-    //                     return DropdownMenuItem(
-    //                       value: item,
-    //                       child: Text(
-    //                         item,
-    //                         style: const TextStyle(color: Colors.white),
-    //                       ),
-    //                     );
-    //                   }).toList();
-    //                 },
-    //               ),
-    //             ),
-    //           )
-    //         ],
-    //       ),
-    //     ),
-    //     // const SizedBox(height: 20.0),
-    //     ListView.builder(
-    //       shrinkWrap: true,
-    //       itemCount: (products.length / 2).ceil(),
-    //       physics: const ScrollPhysics(),
-    //       itemBuilder: (context, index) {
-    //         return Column(
-    //           children: <Widget>[
-    //             SizedBox(
-    //               height: 297.0,
-    //               child: ListView.builder(
-    //                 shrinkWrap: true,
-    //                 scrollDirection: Axis.horizontal,
-    //                 itemCount: 2,
-    //                 itemBuilder: (context, verticalIndex) {
-    //                   return ProductListWidgetTileSquare(
-    //                     pk: products[index].pk,
-    //                     title: products[index].title,
-    //                     price: 165,
-    //                     imageLink: 'https://i.imgur.com/R3Cpn1T.jpeg',
-    //                     hasFavourite: true,
-    //                     isFavourite: true,
-    //                     ratings: 3.5,
-    //                     onTap: () {},
-    //                   );
-    //                 },
-    //               ),
-    //             ),
-    //             // const SizedBox(height: 20.0),
-    //           ],
-    //         );
-    //       },
-    //     ),
-    //   ],
-    // );
-
-    // return Column(
-    //   children: [
-    //     SectionDividerTitle(
-    //       title: 'Product Post',
-    //       onTap: () {},
-    //     ),
-    //     SingleChildScrollView(
-    //       scrollDirection: Axis.horizontal,
-    //       child: Row(
-    //         children: [
-    //           ProductListWidgetTileSquare(
-    //             pk: 1,
-    //             title: 'Banana',
-    //             price: 165,
-    //             imageLink: 'https://i.imgur.com/R3Cpn1T.jpeg',
-    //             hasFavourite: true,
-    //             isFavourite: true,
-    //             ratings: 3.5,
-    //             onTap: () {},
-    //           ),
-    //           ProductListWidgetTileSquare(
-    //             pk: 2,
-    //             title: 'Tomato',
-    //             price: 165,
-    //             imageLink: 'https://i.imgur.com/fFrzEcg.jpeg',
-    //             hasFavourite: true,
-    //             isFavourite: true,
-    //             ratings: 5,
-    //             onTap: () {},
-    //           ),
-    //           ProductListWidgetTileSquare(
-    //             pk: 3,
-    //             title: 'Banana',
-    //             price: 165,
-    //             imageLink: 'https://i.imgur.com/R3Cpn1T.jpeg',
-    //             hasFavourite: true,
-    //             isFavourite: false,
-    //             ratings: 3.5,
-    //             onTap: () {},
-    //           ),
-    //           ProductListWidgetTileSquare(
-    //             pk: 4,
-    //             title: 'Tomato',
-    //             price: 165,
-    //             imageLink: 'https://i.imgur.com/fFrzEcg.jpeg',
-    //             hasFavourite: true,
-    //             isFavourite: false,
-    //             ratings: 5,
-    //             onTap: () {},
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   ],
-    // );
   }
 }

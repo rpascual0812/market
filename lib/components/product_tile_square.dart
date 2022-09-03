@@ -50,9 +50,7 @@ class ProductTileSquare extends StatelessWidget {
                           aspectRatio: 1 / 1,
                           child: Hero(
                             tag: imageLink,
-                            child: NetworkImageWithLoader(
-                              imageLink,
-                            ),
+                            child: NetworkImageWithLoader(imageLink, true),
                           ),
                         ),
                       ),

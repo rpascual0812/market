@@ -118,8 +118,7 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                               child: Hero(
                                                 tag: widget.pk,
                                                 child: NetworkImageWithLoader(
-                                                  widget.userImage,
-                                                ),
+                                                    widget.userImage, true),
                                               ),
                                             ),
                                           ),

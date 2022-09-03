@@ -45,6 +45,7 @@ class ProductTileCart extends StatelessWidget {
                 width: 80,
                 child: NetworkImageWithLoader(
                   coverImage,
+                  true,
                   fit: BoxFit.contain,
                 ),
               ),

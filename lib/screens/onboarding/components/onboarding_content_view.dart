@@ -28,6 +28,7 @@ class OnboardingContentView extends StatelessWidget {
             aspectRatio: 1 / 1,
             child: NetworkImageWithLoader(
               board.imageLink,
+              true,
               fit: BoxFit.cover,
             ),
           ),

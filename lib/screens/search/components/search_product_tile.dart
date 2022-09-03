@@ -101,8 +101,7 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                               child: Hero(
                                                 tag: widget.pk,
                                                 child: NetworkImageWithLoader(
-                                                  widget.productImage,
-                                                ),
+                                                    widget.productImage, true),
                                               ),
                                             ),
                                           ),

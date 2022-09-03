@@ -96,8 +96,7 @@ class FutureCropsPageTile extends StatelessWidget {
                                             child: Hero(
                                               tag: pk,
                                               child: NetworkImageWithLoader(
-                                                profilePhoto,
-                                              ),
+                                                  profilePhoto, true),
                                             ),
                                           ),
                                         ),
@@ -275,8 +274,7 @@ class FutureCropsPageTile extends StatelessWidget {
                                   child: Hero(
                                     tag: productPhoto,
                                     child: NetworkImageWithLoader(
-                                      productPhoto,
-                                    ),
+                                        productPhoto, true),
                                   ),
                                 ),
                               ),

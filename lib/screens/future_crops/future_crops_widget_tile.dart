@@ -112,8 +112,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                           child: Hero(
                                             tag: widget.imageLink,
                                             child: NetworkImageWithLoader(
-                                              widget.imageLink,
-                                            ),
+                                                widget.imageLink, true),
                                           ),
                                         ),
                                       ),

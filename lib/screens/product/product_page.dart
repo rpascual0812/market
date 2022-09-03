@@ -1,128 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
+// import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:market/components/appbar.dart';
+import 'package:market/components/cards/big/big_card_image_slide.dart';
+import 'package:market/screens/product/components/product_page_details.dart';
+import 'package:market/screens/product/product_page_copy.dart';
 
 import '../../components/network_image.dart';
 import '../../constants/app_defaults.dart';
 import 'components/color_picker.dart';
+import 'package:market/demo_data.dart';
 
 class ProductPage extends StatelessWidget {
   const ProductPage({
     Key? key,
     this.isFavourite = false,
-    required this.coverImage,
+    required this.pk,
+    required this.uuid,
+    required this.title,
+    required this.productImage,
+    required this.quantity,
+    required this.unit,
+    required this.description,
+    required this.location,
+    required this.type,
+    required this.createdBy,
+    required this.userImage,
+    required this.userName,
+    required this.dateCreated,
   }) : super(key: key);
 
   final bool isFavourite;
-  final String coverImage;
+
+  final int pk;
+  final String uuid;
+  final String title;
+  final String productImage;
+  final double quantity;
+  final String unit;
+  final String description;
+  final String location;
+  final String type;
+  final int createdBy;
+  final String userImage;
+  final String userName;
+  final DateTime dateCreated;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              isFavourite ? IconlyBold.heart : IconlyLight.heart,
-              color: Colors.red,
-            ),
-          ),
-        ],
-      ),
+      appBar: Appbar(),
       body: SafeArea(
         top: false,
         child: Column(
           children: [
-            ProductImage(imageLink: coverImage),
-            const ProductDescription(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              child: BigCardImageSlide(images: demoBigImages),
+            ),
+            ProductPageDetails(
+              pk: pk,
+              uuid: uuid,
+              title: title,
+              productImage: productImage,
+              quantity: quantity,
+              unit: unit,
+              description: description,
+              location: location,
+              type: type,
+              createdBy: createdBy,
+              userImage: userImage,
+              userName: userName,
+              dateCreated: dateCreated,
+            ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class ProductDescription extends StatelessWidget {
-  const ProductDescription({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(AppDefaults.radius),
-          topRight: Radius.circular(AppDefaults.radius),
-        ),
-      ),
-      child: Column(
-        children: [
-          const SizedBox(height: 16),
-          // Title And Pricing
-          Padding(
-            padding: const EdgeInsets.all(AppDefaults.padding),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Casual Henley Shirts',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                Text(
-                  '\$175',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ],
-            ),
-          ),
-          // Description
-          Padding(
-            padding: const EdgeInsets.all(AppDefaults.padding),
-            child: Text(
-              "A Henley shirt is a collarless pullover shirt, by a round neckline and a placket about 3 to 5 inches (8 to 13 cm) long and usually having 2-5 buttons.",
-              style: Theme.of(context).textTheme.caption,
-            ),
-          ),
-          // Color Choosers
-          const ColorPicker(),
-          const Spacer(),
-
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: ElevatedButton(
-              onPressed: () {},
-              child: const Text('Add To Cart'),
-            ),
-          )
-        ],
-      ),
-    ));
-  }
-}
-
-class ProductImage extends StatelessWidget {
-  const ProductImage({
-    Key? key,
-    required this.imageLink,
-  }) : super(key: key);
-  final String imageLink;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: AspectRatio(
-        aspectRatio: 1 / 1,
-        child: Hero(
-          tag: imageLink,
-          child: NetworkImageWithLoader(
-            imageLink,
-            fit: BoxFit.contain,
-          ),
         ),
       ),
     );
