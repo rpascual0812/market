@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:market/screens/approot/app_root.dart';
+import 'package:market/screens/post/post_looking_for.dart';
 import '../../../constants/index.dart';
 
 class ProfileSettings extends StatelessWidget {
@@ -48,7 +49,7 @@ class ProfileSettings extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const AppRoot(),
+                            builder: (context) => const PostLookingFor(),
                           ),
                         );
                       },

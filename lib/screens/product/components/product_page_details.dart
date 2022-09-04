@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:market/components/network_image.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/screens/chat/bubble.dart';
+import 'package:market/screens/producer/producer_page/producer_page.dart';
 import 'package:market/screens/product/components/rate_product_page.dart';
 import 'package:market/screens/product/components/ratings_page.dart';
 
@@ -274,14 +275,14 @@ class ProductPageDetails extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(
                         onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) {
-                          //       return const Bubble();
-                          //     },
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const Bubble();
+                              },
+                            ),
+                          );
                         },
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(
@@ -308,7 +309,7 @@ class ProductPageDetails extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return const Bubble();
+                                return const ProducerPage();
                               },
                             ),
                           );
