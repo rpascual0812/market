@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/components/cards/big/big_card_image_slide.dart';
 import 'package:market/screens/product/components/product_page_details.dart';
-import 'package:market/screens/product/product_page_copy.dart';
+// import 'package:market/screens/product/product_page_copy.dart';
 
-import '../../components/network_image.dart';
-import '../../constants/app_defaults.dart';
-import 'components/color_picker.dart';
+// import '../../components/network_image.dart';
+// import '../../constants/app_defaults.dart';
+// import 'components/color_picker.dart';
 import 'package:market/demo_data.dart';
 
 class ProductPage extends StatelessWidget {

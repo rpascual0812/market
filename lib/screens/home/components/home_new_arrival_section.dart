@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../components/product_tile_square.dart';
 import '../../../components/section_divider_title.dart';
-import '../../product/product_page.dart';
+// import '../../product/product_page.dart';
 
 class NewArrivalSection extends StatelessWidget {
   const NewArrivalSection({

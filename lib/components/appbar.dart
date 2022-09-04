@@ -77,17 +77,13 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
 
   showHide() {
     switch (module) {
-      case 'home':
-        {
-          return true;
-        }
       case 'signin':
         {
           return false;
         }
       default:
         {
-          return false;
+          return true;
         }
     }
   }

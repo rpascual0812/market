@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
 // import 'package:market/components/cards/big/big_card_image.dart';
 import 'package:market/components/cards/big/big_card_image_slide.dart';
+import 'package:market/components/select_dropdown.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/demo_data.dart';
 import 'package:market/models/product.dart';
@@ -223,53 +224,7 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: Container(
-                    height: 25,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: const BoxDecoration(
-                      color: AppColors.secondary,
-                      // borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: DropdownButton(
-                      style: const TextStyle(color: Colors.white, fontSize: 10),
-                      value: filterValue,
-                      icon: const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 12,
-                        color: Colors.white,
-                      ),
-                      underline: const SizedBox(),
-                      items: filters.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(
-                            items,
-                            style: const TextStyle(color: AppColors.secondary),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          filterValue = newValue!;
-                        });
-                      },
-                      selectedItemBuilder: (BuildContext ctxt) {
-                        return filters.map<Widget>((item) {
-                          return DropdownMenuItem(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          );
-                        }).toList();
-                      },
-                    ),
-                  ),
-                ),
+                SelectDropdown(options: filters, defaultValue: filterValue),
               ],
             ),
             GridView.builder(

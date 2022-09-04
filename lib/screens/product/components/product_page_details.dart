@@ -137,7 +137,7 @@ class ProductPageDetails extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.only(left: 10),
               child: Text(
-                '\₱175',
+                '₱175',
                 style: TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.bold,
