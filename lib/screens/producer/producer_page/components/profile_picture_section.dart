@@ -9,14 +9,12 @@ class ProfilePictureSection extends StatelessWidget {
   const ProfilePictureSection({
     Key? key,
     required this.size,
-    required this.self,
   }) : super(key: key);
 
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
   final Size size;
-  final bool self;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +26,7 @@ class ProfilePictureSection extends StatelessWidget {
         // ),
         Container(
           width: MediaQuery.of(context).size.width,
-          height: 320,
+          height: 305,
           color: AppColors.secondary,
           child: Column(
             children: [
@@ -55,42 +53,9 @@ class ProfilePictureSection extends StatelessWidget {
                               padding:
                                   const EdgeInsets.all(AppDefaults.padding),
                               width: MediaQuery.of(context).size.width * 0.43,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Raffier Lee',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  Visibility(
-                                    visible: self ? false : true,
-                                    maintainSize: true, //NEW
-                                    maintainAnimation: true, //NEW
-                                    maintainState: true, //NEW
-                                    child: Container(
-                                      width: 90.0,
-                                      height: 25.0,
-                                      padding: EdgeInsets.zero,
-                                      child: OutlinedButton(
-                                        onPressed: () {},
-                                        style: OutlinedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(18.0),
-                                          ),
-                                          side: const BorderSide(
-                                              width: 2, color: Colors.white),
-                                        ),
-                                        child: const Text(
-                                          '+ Follow',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              child: const Text(
+                                'Raffier Lee',
+                                style: TextStyle(color: Colors.white),
                               ),
                             ),
                           ),

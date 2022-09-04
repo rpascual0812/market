@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/components/cards/big/big_card_image_slide.dart';
+import 'package:market/screens/product/components/other_products.dart';
 import 'package:market/screens/product/components/product_page_details.dart';
 // import 'package:market/screens/product/product_page_copy.dart';
 
@@ -48,32 +49,36 @@ class ProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: Appbar(),
-      body: SafeArea(
-        top: false,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0),
-              child: BigCardImageSlide(images: demoBigImages),
-            ),
-            ProductPageDetails(
-              pk: pk,
-              uuid: uuid,
-              title: title,
-              productImage: productImage,
-              quantity: quantity,
-              unit: unit,
-              description: description,
-              location: location,
-              type: type,
-              createdBy: createdBy,
-              userImage: userImage,
-              userName: userName,
-              dateCreated: dateCreated,
-            ),
-          ],
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0),
+                child: BigCardImageSlide(images: demoBigImages),
+              ),
+              ProductPageDetails(
+                pk: pk,
+                uuid: uuid,
+                title: title,
+                productImage: productImage,
+                quantity: quantity,
+                unit: unit,
+                description: description,
+                location: location,
+                type: type,
+                createdBy: createdBy,
+                userImage: userImage,
+                userName: userName,
+                dateCreated: dateCreated,
+              ),
+              OtherProducts(title: 'Products from the shop', theme: 'white'),
+              OtherProducts(title: 'Similar Products', theme: 'primary'),
+            ],
+          ),
         ),
       ),
     );

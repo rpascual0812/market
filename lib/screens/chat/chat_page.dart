@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:market/components/appbar.dart';
 import 'package:market/components/select_dropdown.dart';
 import 'package:market/screens/chat/conversation_list.dart';
 import 'package:market/models/chat_user.dart';
@@ -83,6 +84,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: Appbar(),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(

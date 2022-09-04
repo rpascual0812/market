@@ -6,22 +6,30 @@ import 'package:market/screens/profile/components/profile_settings.dart';
 import 'components/profile_picture_section.dart';
 import 'components/statuses_row.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return SafeArea(
-      child: SingleChildScrollView(
+    return Scaffold(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             /// Header
             Appbar(),
 
             /// Profile Picture
-            ProfilePictureSection(size: size),
+            ProfilePictureSection(
+              size: size,
+              self: true,
+            ),
 
             // Text(
             //   'Raffier Lee',

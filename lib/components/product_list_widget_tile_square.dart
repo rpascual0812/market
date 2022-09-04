@@ -62,10 +62,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
                 height: 150,
                 child: AspectRatio(
                   aspectRatio: 1 / 1,
-                  child: Hero(
-                    tag: pk,
-                    child: NetworkImageWithLoader(productImage, false),
-                  ),
+                  child: NetworkImageWithLoader(productImage, false),
                 ),
               ),
               // const SizedBox(height: 8),

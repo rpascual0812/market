@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/models/chat_message.dart';
+import 'package:market/screens/producer/producer_profile/producer_profile.dart';
+import 'package:market/screens/producer/producer_page/producer_page.dart';
 
 class Bubble extends StatefulWidget {
   const Bubble({Key? key}) : super(key: key);
@@ -49,8 +51,10 @@ class _BubbleState extends State<Bubble> {
         backgroundColor: Colors.white,
         flexibleSpace: SafeArea(
           child: Container(
+            color: AppColors.third,
             padding: const EdgeInsets.only(right: 16),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 IconButton(
                   onPressed: () {
@@ -58,41 +62,96 @@ class _BubbleState extends State<Bubble> {
                   },
                   icon: const Icon(
                     Icons.arrow_back,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
-                const SizedBox(
-                  width: 2,
+                const Text(
+                  "Kriss Benwat",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
                 ),
-                const CircleAvatar(
-                  backgroundImage:
-                      NetworkImage("https://i.imgur.com/vavfJqu.gif"),
-                  maxRadius: 20,
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const Text(
-                        "Kriss Benwat",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.storefront,
+                        color: Colors.white,
                       ),
-                      const SizedBox(
-                        height: 6,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const ProducerPage();
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    // const VerticalDivider(),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const ProducerProfile();
+                            },
+                          ),
+                        );
+                      },
+                      child: const CircleAvatar(
+                        backgroundImage:
+                            NetworkImage("https://i.imgur.com/vavfJqu.gif"),
+                        maxRadius: 20,
+                        size: 25,
                       ),
-                      Text(
-                        "Online",
-                        style: TextStyle(
-                            color: Colors.grey.shade600, fontSize: 13),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+                // IconButton(
+                //   onPressed: () {
+                //     Navigator.pop(context);
+                //   },
+                //   icon: const Icon(
+                //     Icons.arrow_back,
+                //     color: Colors.black,
+                //   ),
+                // ),
+                // const SizedBox(
+                //   width: 2,
+                // ),
+                // const CircleAvatar(
+                //   backgroundImage:
+                //       NetworkImage("https://i.imgur.com/vavfJqu.gif"),
+                //   maxRadius: 20,
+                // ),
+                // const SizedBox(
+                //   width: 12,
+                // ),
+                // Expanded(
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: <Widget>[
+                //       const Text(
+                //         "Kriss Benwat",
+                //         style: TextStyle(
+                //             fontSize: 16, fontWeight: FontWeight.w600),
+                //       ),
+                //       const SizedBox(
+                //         height: 6,
+                //       ),
+                //       Text(
+                //         "Online",
+                //         style: TextStyle(
+                //             color: Colors.grey.shade600, fontSize: 13),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -122,7 +181,7 @@ class _BubbleState extends State<Bubble> {
                       borderRadius: BorderRadius.circular(20),
                       color: (messages[index].messageType == "receiver"
                           ? Colors.grey.shade200
-                          : AppColors.primary),
+                          : AppColors.third),
                     ),
                     padding: const EdgeInsets.all(16),
                     child: Text(
@@ -148,22 +207,22 @@ class _BubbleState extends State<Bubble> {
               color: Colors.white,
               child: Row(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlue,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     height: 30,
+                  //     width: 30,
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.lightBlue,
+                  //       borderRadius: BorderRadius.circular(30),
+                  //     ),
+                  //     child: const Icon(
+                  //       Icons.add,
+                  //       color: Colors.white,
+                  //       size: 20,
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(
                     width: 15,
                   ),

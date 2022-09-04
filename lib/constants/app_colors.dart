@@ -12,6 +12,8 @@ class AppColors {
 
   static const Color defaultBackground = Color.fromARGB(255, 10, 80, 40);
   static const Color defaultBlack = Color(0xFF200E32);
+  static const Color grey1 = Color(0xFFf5f5f5);
+  static const Color grey2 = Color.fromARGB(255, 224, 223, 223);
   static const Color scaffoldBackground = Color(0xFFFBFBFD);
   static const Color defaultBodyTextColor = Color(0xFF868686);
 }
