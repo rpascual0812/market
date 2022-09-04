@@ -6,6 +6,7 @@ import 'package:market/screens/chat/bubble.dart';
 
 import '../../constants/index.dart';
 import '../../components/network_image.dart';
+import '../screens/producer/producer_page/producer_page.dart';
 
 class FutureCropsPageTile extends StatelessWidget {
   static const IconData chat =
@@ -191,7 +192,16 @@ class FutureCropsPageTile extends StatelessWidget {
                                                 width: 5,
                                               ),
                                               OutlinedButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return const ProducerPage();
+                                                      },
+                                                    ),
+                                                  );
+                                                },
                                                 style: OutlinedButton.styleFrom(
                                                   side: const BorderSide(
                                                     width: 1,
@@ -271,11 +281,8 @@ class FutureCropsPageTile extends StatelessWidget {
                                 height: 150,
                                 child: AspectRatio(
                                   aspectRatio: 1 / 1,
-                                  child: Hero(
-                                    tag: productPhoto,
-                                    child: NetworkImageWithLoader(
-                                        productPhoto, true),
-                                  ),
+                                  child: NetworkImageWithLoader(
+                                      productPhoto, true),
                                 ),
                               ),
                             ],

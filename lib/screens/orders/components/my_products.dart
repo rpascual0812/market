@@ -45,6 +45,21 @@ class _MyProductsState extends State<MyProducts> {
       userName: 'Raffier Lee',
       dateCreated: DateTime(2022, 08, 12, 13, 25),
     ),
+    Products(
+      pk: 3,
+      uuid: '5118a0b2-2679-11ed-a261-0242ac120002',
+      title: 'Mango',
+      productImage: 'https://i.imgur.com/fFrzEcg.jpeg',
+      quantity: 103,
+      unit: 'kg',
+      description: 'Lorem ipsum dolor sit amet',
+      location: 'Palatiw, Pasig City',
+      type: 'looking',
+      createdBy: 1,
+      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
+      userName: 'Raffier Lee',
+      dateCreated: DateTime(2022, 08, 12, 13, 25),
+    ),
   ];
 
   @override

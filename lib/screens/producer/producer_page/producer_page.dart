@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
+import 'package:market/constants/app_colors.dart';
+import 'package:market/screens/producer/producer_page/components/products_tab.dart';
 import 'package:market/screens/profile/components/profile_picture_section.dart';
 
 class ProducerPage extends StatefulWidget {
@@ -32,6 +34,41 @@ class _ProducerPageState extends State<ProducerPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ProfilePictureSection(size: size, self: false),
+            SizedBox(
+              height: 1500,
+              child: DefaultTabController(
+                length: 2,
+                child: Column(
+                  children: const [
+                    TabBar(
+                      labelColor: AppColors.primary,
+                      indicatorColor: AppColors.primary,
+                      unselectedLabelColor: Colors.grey,
+                      tabs: [
+                        Tab(
+                          text: 'Products',
+                        ),
+                        Tab(
+                          text: 'Future Crops',
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          Scaffold(
+                            body: ProductsTab(),
+                          ),
+                          Scaffold(
+                            body: ProductsTab(),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
