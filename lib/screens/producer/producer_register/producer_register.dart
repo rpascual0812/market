@@ -6,14 +6,14 @@ import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
 import 'package:market/models/ratings.dart';
 
-class PostLookingFor extends StatefulWidget {
-  const PostLookingFor({Key? key}) : super(key: key);
+class ProducerRegister extends StatefulWidget {
+  const ProducerRegister({Key? key}) : super(key: key);
 
   @override
-  State<PostLookingFor> createState() => _PostLookingForState();
+  State<ProducerRegister> createState() => _ProducerRegisterState();
 }
 
-class _PostLookingForState extends State<PostLookingFor> {
+class _ProducerRegisterState extends State<ProducerRegister> {
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
