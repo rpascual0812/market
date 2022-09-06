@@ -130,7 +130,10 @@ class _RateProductPageState extends State<RateProductPage> {
                             padding: const EdgeInsets.all(10),
                             child: Row(
                               children: const [
-                                Text('Add 50 characters'),
+                                Text(
+                                  'Add 50 characters',
+                                  style: TextStyle(fontSize: 10),
+                                ),
                               ],
                             ),
                           ),
