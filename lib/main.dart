@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Samdhana Community Market',
       theme: AppTheme(context).lightTheme,
+      // home: const OnboardingPage(),
       home: const AppRoot(),
     );
   }
