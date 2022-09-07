@@ -2,9 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:market/screens/approot/app_root.dart';
+import 'package:market/screens/chat/moderator.dart';
 import 'package:market/screens/post/post_looking_for.dart';
 import 'package:market/screens/producer/my_producer_page/my_producer_page.dart';
 import 'package:market/screens/producer/producer_register/producer_register.dart';
+import 'package:market/screens/profile/components/complaint.dart';
+import 'package:market/screens/profile/components/faq_page.dart';
+import 'package:market/screens/profile/components/give_us_feedback.dart';
+import 'package:market/screens/profile/components/recently_viewed_page.dart';
+import 'package:market/screens/terms/terms_page.dart';
 import '../../../constants/index.dart';
 
 class ProfileSettings extends StatelessWidget {
@@ -105,7 +111,7 @@ class ProfileSettings extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const AppRoot(),
+                            builder: (context) => const RecentlyViewedPage(),
                           ),
                         );
                       },
@@ -123,7 +129,7 @@ class ProfileSettings extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const AppRoot(),
+                            builder: (context) => const FaqPage(),
                           ),
                         );
                       },
@@ -141,7 +147,7 @@ class ProfileSettings extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const AppRoot(),
+                            builder: (context) => const Moderator(),
                           ),
                         );
                       },
@@ -156,12 +162,9 @@ class ProfileSettings extends StatelessWidget {
                       ),
                       trailing: const Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AppRoot(),
-                          ),
-                        );
+                        showDialog(
+                            context: context,
+                            builder: (_) => const GiveUsFeedback());
                       },
                     ),
                   ),
@@ -174,12 +177,9 @@ class ProfileSettings extends StatelessWidget {
                       ),
                       trailing: const Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AppRoot(),
-                          ),
-                        );
+                        showDialog(
+                            context: context,
+                            builder: (_) => const Complaint());
                       },
                     ),
                   ),
@@ -195,7 +195,7 @@ class ProfileSettings extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const AppRoot(),
+                            builder: (context) => const TermsPage(),
                           ),
                         );
                       },
