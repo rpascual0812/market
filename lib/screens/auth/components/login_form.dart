@@ -7,6 +7,16 @@ import 'package:market/screens/approot/app_root.dart';
 import '../../../components/icon_with_background.dart';
 import '../../../constants/index.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+const storage = FlutterSecureStorage();
+
+Future<void> main() async {
+  await dotenv.load();
+}
+
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
 
@@ -15,11 +25,25 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final emailController = TextEditingController(text: 'email@gmail.com');
+  final usernameController = TextEditingController(text: 'email@gmail.com');
   final passwordController = TextEditingController(text: 'password');
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   String errorMessage = '';
   bool isLoading = false;
+
+  Future attemptLogIn(String username, String password) async {
+    var res = await http.post(Uri.parse('${dotenv.get('API')}/login'),
+        body: {"username": username, "password": password});
+    if (res.statusCode == 200) return res.body;
+    return null;
+  }
+
+  void displayDialog(BuildContext context, String title, String text) =>
+      showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +54,7 @@ class _LoginFormState extends State<LoginForm> {
         child: Column(
           children: [
             TextFormField(
-              controller: emailController,
+              controller: usernameController,
               validator: validateEmail,
               decoration: const InputDecoration(
                 prefixIcon: IconWithBackground(iconData: IconlyBold.message),
@@ -61,12 +85,27 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.5,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const AppRoot(),
-                    ),
-                  );
+                onPressed: () async {
+                  var username = usernameController.text;
+                  var password = passwordController.text;
+                  var jwt = await attemptLogIn(username, password);
+                  if (jwt != null) {
+                    storage.write(key: "jwt", value: jwt);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AppRoot(),
+                        ));
+                  } else {
+                    displayDialog(context, "An Error Occurred",
+                        "No account was found matching that username and password");
+                  }
+
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const AppRoot(),
+                  //   ),
+                  // );
                 },
                 child: const Text('Log In'),
               ),
