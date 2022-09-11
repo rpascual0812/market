@@ -154,7 +154,7 @@ class _BubbleState extends State<Bubble> {
                         backgroundImage:
                             NetworkImage("https://i.imgur.com/vavfJqu.gif"),
                         maxRadius: 20,
-                        size: 25,
+                        // size: 25,
                       ),
                     ),
                   ],

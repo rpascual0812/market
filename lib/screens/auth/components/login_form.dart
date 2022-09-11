@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:market/screens/approot/app_root.dart';
@@ -32,10 +34,15 @@ class _LoginFormState extends State<LoginForm> {
   bool isLoading = false;
 
   Future attemptLogIn(String username, String password) async {
-    var res = await http.post(Uri.parse('${dotenv.get('API')}/login'),
-        body: {"username": username, "password": password});
-    if (res.statusCode == 200) return res.body;
-    return null;
+    try {
+      print(dotenv.get('API'));
+      var res = await http.post(Uri.parse('${dotenv.get('API')}/login'),
+          body: {"username": username, "password": password});
+      if (res.statusCode == 200) return res.body;
+      return null;
+    } on Exception {
+      return null;
+    }
   }
 
   void displayDialog(BuildContext context, String title, String text) =>
