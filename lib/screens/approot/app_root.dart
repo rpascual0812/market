@@ -11,11 +11,12 @@ import '../../constants/app_colors.dart';
 import '../profile/profile_page.dart';
 
 class AppRoot extends StatefulWidget {
-  const AppRoot({
-    Key? key,
-    // this.backButton,
-  }) : super(key: key);
+  const AppRoot({Key? key, required this.jwt
+      // this.backButton,
+      })
+      : super(key: key);
 
+  final String jwt;
   // final Widget? backButton;
   @override
   State<AppRoot> createState() => _AppRootState();
@@ -86,6 +87,8 @@ class _AppRootState extends State<AppRoot> {
 
   @override
   Widget build(BuildContext context) {
+    print('approot');
+    print(widget.jwt);
     // final Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () => _onWillPop(context),

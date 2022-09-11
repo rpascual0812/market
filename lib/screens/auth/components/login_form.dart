@@ -92,10 +92,11 @@ class _LoginFormState extends State<LoginForm> {
                   if (jwt != null) {
                     storage.write(key: "jwt", value: jwt);
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AppRoot(),
-                        ));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AppRoot(jwt: jwt),
+                      ),
+                    );
                   } else {
                     displayDialog(context, "An Error Occurred",
                         "No account was found matching that username and password");

@@ -207,16 +207,16 @@ class ProfileSettings extends StatelessWidget {
                       // leading: FlutterLogo(),
                       title: const Text(
                         'Delete my Account permanently',
-                        style: TextStyle(fontSize: 12),
+                        style: TextStyle(fontSize: 12, color: Colors.white),
                       ),
                       trailing: const Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AppRoot(),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const AppRoot(),
+                        //   ),
+                        // );
                       },
                     ),
                   ),
