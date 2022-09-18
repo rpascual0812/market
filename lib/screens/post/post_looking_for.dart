@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -23,12 +24,7 @@ class _PostLookingForState extends State<PostLookingFor> {
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
-  var quantityMeasurements = [
-    'Gram (g)',
-    'Kilogram (kg)',
-    'Pound (lb)',
-    'Piece (pc)',
-  ];
+  var quantityMeasurements = [];
 
   final nameController = TextEditingController(text: '');
   final quantityController = TextEditingController(text: '');
@@ -42,6 +38,7 @@ class _PostLookingForState extends State<PostLookingFor> {
     super.initState();
 
     readStorage();
+    // Timer(const Duration(seconds: 2), () => getMeasurements());
   }
 
   Future<void> readStorage() async {
@@ -49,27 +46,57 @@ class _PostLookingForState extends State<PostLookingFor> {
 
     setState(() {
       token = all!;
+
+      if (token != '') {
+        getMeasurements();
+      }
     });
   }
 
-  Future submit() async {
-    print('JWT: $token');
-    final url = Uri.parse('${dotenv.get('API')}/products');
-    final headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
+  Future getMeasurements() async {
+    try {
+      var body = json.decode(token);
 
-    var res = await http.post(url, headers: headers, body: {
-      "name": nameController.text,
-      "quantity": quantityController.text,
-      "measurement": quantityMeasurementController,
-      'price_from': priceRangeValuesController.start.round().toString(),
-      'price_to': priceRangeValuesController.end.round().toString()
-    });
-    print(res.statusCode);
-    if (res.statusCode == 200) return res.body;
-    return null;
+      final url = Uri.parse('${dotenv.get('API')}/measurements');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${body['user']['access_token']}',
+      };
+
+      var res = await http.get(url, headers: headers);
+
+      if (res.statusCode == 200) return res.body;
+      return null;
+    } on Exception {
+      return null;
+    }
+  }
+
+  Future submit() async {
+    try {
+      var body = json.decode(token);
+
+      final url = Uri.parse('${dotenv.get('API')}/products');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${body['user']['access_token']}',
+      };
+
+      var res = await http.post(url, headers: headers, body: {
+        "type": "looking_for",
+        "name": nameController.text,
+        "quantity": quantityController.text,
+        "measurement": quantityMeasurementController,
+        'price_from': priceRangeValuesController.start.round().toString(),
+        'price_to': priceRangeValuesController.end.round().toString(),
+        'currency': 'php'
+      });
+
+      if (res.statusCode == 200) return res.body;
+      return null;
+    } on Exception {
+      return null;
+    }
   }
 
   @override
