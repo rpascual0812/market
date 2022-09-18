@@ -53,23 +53,30 @@ class _PostLookingForState extends State<PostLookingFor> {
   }
 
   Future submit() async {
-    print('JWT: $token');
-    final url = Uri.parse('${dotenv.get('API')}/products');
-    final headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
+    try {
+      var body = json.decode(token);
 
-    var res = await http.post(url, headers: headers, body: {
-      "name": nameController.text,
-      "quantity": quantityController.text,
-      "measurement": quantityMeasurementController,
-      'price_from': priceRangeValuesController.start.round().toString(),
-      'price_to': priceRangeValuesController.end.round().toString()
-    });
-    print(res.statusCode);
-    if (res.statusCode == 200) return res.body;
-    return null;
+      final url = Uri.parse('${dotenv.get('API')}/products');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${body['user']['access_token']}',
+      };
+
+      var res = await http.post(url, headers: headers, body: {
+        "type": "looking_for",
+        "name": nameController.text,
+        "quantity": quantityController.text,
+        "measurement": quantityMeasurementController,
+        'price_from': priceRangeValuesController.start.round().toString(),
+        'price_to': priceRangeValuesController.end.round().toString(),
+        'currency': 'php'
+      });
+
+      if (res.statusCode == 200) return res.body;
+      return null;
+    } on Exception {
+      return null;
+    }
   }
 
   @override
