@@ -38,13 +38,6 @@ class _LoginFormState extends State<LoginForm> {
     return null;
   }
 
-  void displayDialog(BuildContext context, String title, String text) =>
-      showDialog(
-        context: context,
-        builder: (context) =>
-            AlertDialog(title: Text(title), content: Text(text)),
-      );
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -98,7 +91,7 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                     );
                   } else {
-                    displayDialog(context, "An Error Occurred",
+                    AppDefaults.displayDialog(context, "An Error Occurred",
                         "No account was found matching that username and password");
                   }
 

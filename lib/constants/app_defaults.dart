@@ -15,4 +15,11 @@ class AppDefaults {
       color: const Color(0x0ff33333).withOpacity(0.05),
     )
   ];
+
+  static displayDialog(BuildContext context, String title, String text) =>
+      showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
 }
