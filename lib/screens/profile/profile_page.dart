@@ -51,6 +51,9 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.5,
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: const StadiumBorder(),
+                ),
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(

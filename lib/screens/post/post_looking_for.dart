@@ -24,11 +24,11 @@ class _PostLookingForState extends State<PostLookingFor> {
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
-  var quantityMeasurements = [];
-
   final nameController = TextEditingController(text: '');
   final quantityController = TextEditingController(text: '');
-  String quantityMeasurementController = 'Kilogram (kg)';
+
+  List measurements = [];
+  String quantityMeasurementController = '1';
   RangeValues priceRangeValuesController = const RangeValues(100, 500);
   // final priceController = TextEditingController(text: '');
   String token = '';
@@ -64,8 +64,13 @@ class _PostLookingForState extends State<PostLookingFor> {
       };
 
       var res = await http.get(url, headers: headers);
-
-      if (res.statusCode == 200) return res.body;
+      if (res.statusCode == 200) {
+        final result = json.decode(res.body);
+        setState(() {
+          measurements = result;
+        });
+      }
+      // if (res.statusCode == 200) return res.body;
       return null;
     } on Exception {
       return null;
@@ -331,12 +336,13 @@ class _PostLookingForState extends State<PostLookingFor> {
                                               value!;
                                         });
                                       },
-                                      items: quantityMeasurements
+                                      items: measurements
                                           .map<DropdownMenuItem<String>>(
-                                              (String value) {
+                                              (value) {
                                         return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
+                                          value: value['pk'].toString(),
+                                          child: Text(
+                                              '${value['name']} (${value['symbol']})'),
                                         );
                                       }).toList(),
                                     ),

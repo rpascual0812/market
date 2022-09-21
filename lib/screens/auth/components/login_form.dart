@@ -1,17 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
-import 'package:market/screens/approot/app_root.dart';
 // import 'package:market/screens/approot/app_root.dart';
 // import 'package:provider/provider.dart';
 
-import '../../../components/icon_with_background.dart';
 import '../../../constants/index.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import '../../approot/app_root.dart';
 
 const storage = FlutterSecureStorage();
 
@@ -53,64 +50,191 @@ class _LoginFormState extends State<LoginForm> {
         key: _key,
         child: Column(
           children: [
-            TextFormField(
-              controller: usernameController,
-              validator: validateEmail,
-              decoration: const InputDecoration(
-                prefixIcon: IconWithBackground(iconData: IconlyBold.message),
-                labelText: 'Email',
-                hintText: 'email@gmail.com',
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Email Address',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: AppDefaults.fontSize,
+                ),
               ),
             ),
-            const SizedBox(height: AppDefaults.margin),
-            TextFormField(
-              controller: passwordController,
-              // validator: validatePassword,
-              decoration: const InputDecoration(
-                prefixIcon: IconWithBackground(iconData: IconlyBold.lock),
-                labelText: 'Password',
-                hintText: '*********',
+            const SizedBox(
+              height: AppDefaults.margin / 2,
+            ),
+            SizedBox(
+              height: AppDefaults.height,
+              // padding: EdgeInsets.zero,
+              child: TextFormField(
+                controller: usernameController,
+                validator: validateEmail,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDefaults.radius),
+                    borderSide: const BorderSide(width: 1.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDefaults.radius),
+                    borderSide: const BorderSide(width: 1.0),
+                  ),
+                ),
+                style: const TextStyle(
+                    fontSize: AppDefaults.fontSize), // <-- SEE HERE
               ),
-            ), // Forgot Password Button
+            ),
+            // TextFormField(
+            //   controller: usernameController,
+            //   validator: validateEmail,
+            //   decoration: const InputDecoration(
+            //     prefixIcon: IconWithBackground(iconData: IconlyBold.message),
+            //     labelText: 'Email',
+            //     hintText: 'email@gmail.com',
+            //   ),
+            // ),
+            const SizedBox(height: AppDefaults.margin),
+
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Password',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: AppDefaults.fontSize,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: AppDefaults.margin / 2,
+            ),
+            SizedBox(
+              height: 40,
+              // padding: EdgeInsets.zero,
+              child: TextFormField(
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                controller: passwordController,
+                validator: validatePassword,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDefaults.radius),
+                    borderSide: const BorderSide(width: 1.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDefaults.radius),
+                    borderSide: const BorderSide(width: 1.0),
+                  ),
+                ),
+                style: const TextStyle(fontSize: 14), // <-- SEE HERE
+              ),
+            ),
+            // TextFormField(
+            //   controller: passwordController,
+            //   // validator: validatePassword,
+            //   decoration: const InputDecoration(
+            //     prefixIcon: IconWithBackground(iconData: IconlyBold.lock),
+            //     labelText: 'Password',
+            //     hintText: '*********',
+            //   ),
+            // ),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
                   onPressed: () {},
                   child: const Text(
                     'Forgot Password?',
+                    style: TextStyle(
+                      fontSize: AppDefaults.fontSize,
+                    ),
                   )),
             ),
 
             /// Login Button
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: ElevatedButton(
-                onPressed: () async {
-                  var username = usernameController.text;
-                  var password = passwordController.text;
-                  var jwt = await attemptLogIn(username, password);
-                  if (jwt != null) {
-                    storage.write(key: "jwt", value: jwt);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AppRoot(jwt: jwt),
-                      ),
-                    );
-                  } else {
-                    AppDefaults.displayDialog(context, "An Error Occurred",
-                        "No account was found matching that username and password");
-                  }
-
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const AppRoot(),
-                  //   ),
-                  // );
-                },
-                child: const Text('Log In'),
+              width: MediaQuery.of(context).size.width * 0.4,
+              height: AppDefaults.height,
+              child: Padding(
+                padding: const EdgeInsets.all(1),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    var username = usernameController.text;
+                    var password = passwordController.text;
+                    var jwt = await attemptLogIn(username, password);
+                    if (jwt != null) {
+                      storage.write(key: "jwt", value: jwt);
+                      if (!mounted) return;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppRoot(jwt: jwt),
+                        ),
+                      );
+                    } else {
+                      if (!mounted) return;
+                      AppDefaults.displayDialog(context, "An Error Occurred",
+                          "No account was found matching that username and password");
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppDefaults.radius),
+                    ),
+                  ),
+                  child: const Text('Log In'),
+                ),
               ),
             ),
+            // SizedBox(
+            //   height: AppDefaults.height,
+            //   width: MediaQuery.of(context).size.width * 0.4,
+            //   child: ElevatedButton(
+            //     onPressed: () async {
+            //       var username = usernameController.text;
+            //       var password = passwordController.text;
+            //       var jwt = await attemptLogIn(username, password);
+            //       if (jwt != null) {
+            //         storage.write(key: "jwt", value: jwt);
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //             builder: (context) => AppRoot(jwt: jwt),
+            //           ),
+            //         );
+            //       } else {
+            //         AppDefaults.displayDialog(context, "An Error Occurred",
+            //             "No account was found matching that username and password");
+            //       }
+
+            //       // Navigator.of(context).push(
+            //       //   MaterialPageRoute(
+            //       //     builder: (context) => const AppRoot(),
+            //       //   ),
+            //       // );
+            //     },
+            //     style: ButtonStyle(
+            //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            //         RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(AppDefaults.radius),
+            //         ),
+            //       ),
+            //     ),
+            //     child: const Padding(
+            //       padding: EdgeInsets.only(left: 10, right: 10),
+            //       child: Text(
+            //         'Log In',
+            //         style: TextStyle(fontSize: AppDefaults.fontSize),
+            //       ),
+            //     ),
+            //     // child: const Text(
+            //     //   'Log In',
+            //     //   style: TextStyle(fontSize: AppDefaults.fontSize),
+            //     // ),
+            //   ),
+            // ),
 
             Padding(
               padding: const EdgeInsets.all(12.0),

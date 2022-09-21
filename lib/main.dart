@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/auth/login_page.dart';
-import 'package:market/screens/onboarding/onboarding_page.dart';
 import 'theme.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -21,6 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // showPerformanceOverlay: true,
       title: 'Samdhana Community Market',
       theme: AppTheme(context).lightTheme,
       // home: const OnboardingPage(),

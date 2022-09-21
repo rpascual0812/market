@@ -56,7 +56,10 @@ class LoginPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Don\'t have an account?'),
+                // const Text(
+                //   'Don\'t have an account?',
+                //   style: TextStyle(fontSize: AppDefaults.fontSize),
+                // ),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
@@ -65,7 +68,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('Sign Up'),
+                  child: const Text('Not yet a member?'),
                 )
               ],
             )
