@@ -4,8 +4,17 @@ class AppDefaults {
   static const double radius = 12.00;
   static const double margin = 16.00;
   static const double padding = 16.00;
+  static const double height = 45.00;
+
   static const double fontSize = 12.00;
-  static const double height = 40.00;
+
+  static const double h1 = 50.00;
+  static const double h2 = 45.00;
+  static const double h3 = 40.00;
+  static const double h4 = 35.00;
+  static const double h5 = 30.00;
+  static const double h6 = 25.00;
+  static const double h7 = 20.00;
 
   static BorderRadius borderRadius = BorderRadius.circular(radius);
 

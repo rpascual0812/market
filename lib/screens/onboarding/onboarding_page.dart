@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:market/screens/approot/app_root.dart';
 import 'package:market/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../auth/login_page.dart';
 import 'components/onboarding_content_view.dart';
 import 'data/onboarding_data.dart';
 
@@ -37,7 +37,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     setSkipOnboarding();
 
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const LoginPage()));
+        .push(MaterialPageRoute(builder: (context) => const AppRoot(jwt: '')));
   }
 
   @override

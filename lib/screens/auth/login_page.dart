@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../components/horizontal_line.dart';
 import '../../constants/app_defaults.dart';
 import '../../constants/app_images.dart';
 import 'components/login_form.dart';
@@ -37,20 +36,24 @@ class LoginPage extends StatelessWidget {
             const Spacer(),
 
             /// Or Section
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                HorizontalLine(width: 100),
-                Text('Or'),
-                HorizontalLine(width: 100),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: const [
+            //     HorizontalLine(width: 100),
+            //     Text('Or'),
+            //     HorizontalLine(width: 100),
+            //   ],
+            // ),
+            // const Spacer(),
+
+            const Spacer(),
+            const Spacer(),
             const Spacer(),
 
             /// Social Login
-            const SocialLogins(),
+            // const SocialLogins(),
 
-            const Spacer(),
+            // const Spacer(),
 
             /// Don't have an account
             Row(

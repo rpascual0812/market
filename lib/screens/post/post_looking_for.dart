@@ -134,12 +134,14 @@ class _PostLookingForState extends State<PostLookingFor> {
                               'Back',
                               style: TextStyle(
                                 color: Colors.black54,
+                                fontSize: AppDefaults.fontSize,
                               ),
                             ),
                           ),
                           TextButton(
                             onPressed: () async {
                               var result = await submit();
+                              if (!mounted) return;
                               if (result != null) {
                                 Navigator.pop(context);
                               } else {
@@ -159,6 +161,7 @@ class _PostLookingForState extends State<PostLookingFor> {
                               'Submit',
                               style: TextStyle(
                                 color: Colors.black54,
+                                fontSize: AppDefaults.fontSize,
                               ),
                             ),
                           ),
@@ -166,35 +169,23 @@ class _PostLookingForState extends State<PostLookingFor> {
                       ),
                       const SizedBox(height: 10),
                       Row(
-                        children: [
-                          const Text(
-                            'Ratings',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Container(
-                            width: 10,
-                            height: 20,
-                            decoration: const BoxDecoration(
-                              border: Border(
-                                right:
-                                    BorderSide(color: AppColors.defaultBlack),
-                              ),
+                        children: const [
+                          Text(
+                            'Create Looking For Post',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: AppDefaults.fontSize + 2,
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            'Baguio Beans',
-                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: AppDefaults.margin / 2),
                     ],
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.only(left: 10),
                 child: Row(
                   children: [
                     const SizedBox(
@@ -259,17 +250,32 @@ class _PostLookingForState extends State<PostLookingFor> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'What are you looking for?',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDefaults.fontSize,
+                          ),
                         ),
                       ),
-                      TextField(
-                        controller: nameController,
-                        onTap: () async {},
-                        decoration: const InputDecoration(
-                          // prefixIcon: IconWithBackground(iconData: IconlyBold.calendar),
-                          // labelText: 'Birthday',
-                          border: OutlineInputBorder(),
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                      const SizedBox(height: AppDefaults.margin / 2),
+                      SizedBox(
+                        height: AppDefaults.height,
+                        // padding: EdgeInsets.zero,
+                        child: TextFormField(
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(AppDefaults.radius),
+                              borderSide: const BorderSide(width: 1.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(AppDefaults.radius),
+                              borderSide: const BorderSide(width: 1.0),
+                            ),
+                          ),
+                          style: const TextStyle(fontSize: 14), // <-- SEE HERE
                         ),
                       ),
                       const SizedBox(height: AppDefaults.margin),
@@ -286,17 +292,38 @@ class _PostLookingForState extends State<PostLookingFor> {
                                     child: Text(
                                       'Quantity',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: AppDefaults.fontSize,
+                                      ),
                                     ),
                                   ),
-                                  TextField(
-                                    controller: quantityController,
-                                    keyboardType: TextInputType.number,
-                                    decoration: const InputDecoration(
-                                      floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
-                                      // labelText: 'First Name',
-                                      border: OutlineInputBorder(),
+                                  const SizedBox(
+                                      height: AppDefaults.margin / 2),
+                                  SizedBox(
+                                    height: AppDefaults.height,
+                                    // padding: EdgeInsets.zero,
+                                    child: TextFormField(
+                                      obscureText: true,
+                                      enableSuggestions: false,
+                                      autocorrect: false,
+                                      controller: quantityController,
+                                      decoration: InputDecoration(
+                                        // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              AppDefaults.radius),
+                                          borderSide:
+                                              const BorderSide(width: 1.0),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              AppDefaults.radius),
+                                          borderSide:
+                                              const BorderSide(width: 1.0),
+                                        ),
+                                      ),
+                                      style: const TextStyle(
+                                          fontSize: 14), // <-- SEE HERE
                                     ),
                                   ),
                                 ],
@@ -316,9 +343,11 @@ class _PostLookingForState extends State<PostLookingFor> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.zero,
-                                    margin: const EdgeInsets.all(0),
+                                  const SizedBox(
+                                      height: AppDefaults.margin / 2),
+                                  SizedBox(
+                                    height: AppDefaults.height,
+                                    // padding: EdgeInsets.zero,
                                     child: DropdownButtonFormField<String>(
                                       isDense: true,
                                       value: quantityMeasurementController,
@@ -327,8 +356,15 @@ class _PostLookingForState extends State<PostLookingFor> {
                                       // elevation: 16,
                                       style:
                                           const TextStyle(color: Colors.black),
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              AppDefaults.radius),
+                                          borderSide:
+                                              const BorderSide(width: 1.0),
+                                        ),
                                       ),
                                       onChanged: (String? value) {
                                         setState(() {
@@ -367,13 +403,17 @@ class _PostLookingForState extends State<PostLookingFor> {
                                       child: Text(
                                         'Price Range',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: AppDefaults.fontSize,
+                                        ),
                                       ),
                                     ),
                                     RangeSlider(
+                                      activeColor: AppColors.primary,
+                                      inactiveColor: AppColors.third,
                                       values: priceRangeValuesController,
                                       max: 10000,
-                                      divisions: 5,
+                                      divisions: 20,
                                       labels: RangeLabels(
                                         priceRangeValuesController.start
                                             .round()
@@ -398,16 +438,40 @@ class _PostLookingForState extends State<PostLookingFor> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Attach Display Photo',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDefaults.fontSize,
+                          ),
                         ),
+                      ),
+                      const SizedBox(
+                        height: AppDefaults.margin / 2,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('+ Add Photo'),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: AppDefaults.height,
+                            child: Padding(
+                              padding: const EdgeInsets.all(1),
+                              child: ElevatedButton(
+                                onPressed: () async {},
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        AppDefaults.radius),
+                                  ),
+                                ),
+                                child: const Text('+ Add Photo'),
+                              ),
+                            ),
                           ),
+                          // ElevatedButton(
+                          //   onPressed: () {},
+                          //   child: const Text('+ Add Photo'),
+                          // ),
                         ],
                       ),
                     ],

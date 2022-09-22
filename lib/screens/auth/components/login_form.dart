@@ -32,7 +32,6 @@ class _LoginFormState extends State<LoginForm> {
 
   Future attemptLogIn(String username, String password) async {
     try {
-      print(dotenv.get('API'));
       var res = await http.post(Uri.parse('${dotenv.get('API')}/login'),
           body: {"username": username, "password": password});
       if (res.statusCode == 200) return res.body;
@@ -60,9 +59,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: AppDefaults.margin / 2,
-            ),
+            const SizedBox(height: AppDefaults.margin / 2),
             SizedBox(
               height: AppDefaults.height,
               // padding: EdgeInsets.zero,
@@ -70,7 +67,7 @@ class _LoginFormState extends State<LoginForm> {
                 controller: usernameController,
                 validator: validateEmail,
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                  // contentPadding: const EdgeInsets.only(left: 10, right: 10),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDefaults.radius),
                     borderSide: const BorderSide(width: 1.0),
@@ -105,11 +102,9 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: AppDefaults.margin / 2,
-            ),
+            const SizedBox(height: AppDefaults.margin / 2),
             SizedBox(
-              height: 40,
+              height: AppDefaults.height,
               // padding: EdgeInsets.zero,
               child: TextFormField(
                 obscureText: true,
@@ -118,7 +113,7 @@ class _LoginFormState extends State<LoginForm> {
                 controller: passwordController,
                 validator: validatePassword,
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                  // contentPadding: const EdgeInsets.only(left: 10, right: 10),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDefaults.radius),
                     borderSide: const BorderSide(width: 1.0),
