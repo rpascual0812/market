@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/screens/auth/login_page.dart';
+import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/profile/components/profile_settings.dart';
 
 import 'components/profile_picture_section.dart';
@@ -57,7 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
+                      builder: (context) => const AppRoot(jwt: ''),
                     ),
                   );
                 },

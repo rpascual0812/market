@@ -1,6 +1,7 @@
 // import 'dart:html';
 
 import 'package:animations/animations.dart';
+import 'package:market/screens/auth/login_page.dart';
 import 'package:market/screens/chat/chat_page.dart';
 import 'package:market/screens/home/home_page.dart';
 import 'package:market/screens/product_list/product_list_page.dart';
@@ -36,7 +37,7 @@ class _AppRootState extends State<AppRoot> {
       const HomePage(),
       const ProductListPage(),
       const ChatPage(),
-      const ProfilePage(),
+      widget.jwt != '' ? const ProfilePage() : const LoginPage(),
     ];
   }
 

@@ -5,6 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/onboarding_content_view.dart';
 import 'data/onboarding_data.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+const storage = FlutterSecureStorage();
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -34,6 +37,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   void _goToLoginPage() {
+    storage.write(key: "welcome", value: 'true');
     setSkipOnboarding();
 
     Navigator.of(context)

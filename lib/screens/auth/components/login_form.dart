@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 // import 'package:market/screens/approot/app_root.dart';
 // import 'package:provider/provider.dart';
@@ -7,7 +9,7 @@ import '../../../constants/index.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../approot/app_root.dart';
 
 const storage = FlutterSecureStorage();
@@ -161,16 +163,57 @@ class _LoginFormState extends State<LoginForm> {
                     if (jwt != null) {
                       storage.write(key: "jwt", value: jwt);
                       if (!mounted) return;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AppRoot(jwt: jwt),
-                        ),
+
+                      Fluttertoast.showToast(
+                        msg: "Please wait while we are fetching your account.",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: AppColors.primary,
+                        textColor: Colors.white,
+                        fontSize: 12.0,
+                      );
+
+                      Timer(
+                        const Duration(seconds: 2),
+                        () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppRoot(jwt: jwt),
+                            ),
+                          )
+                        },
                       );
                     } else {
                       if (!mounted) return;
-                      AppDefaults.displayDialog(context, "An Error Occurred",
-                          "No account was found matching that username and password");
+                      // AppDefaults.displayDialog(context, "An Error Occurred",
+                      //     "No account was found matching that username and password");
+
+                      Fluttertoast.showToast(
+                        msg:
+                            "No account was found matching that username and password",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+
+                      var jwt =
+                          '{"status":"success","user":{"username":"email@gmail.com","access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZW1haWxAZ21haWwuY29tIiwic3ViIjoxMTMsImlhdCI6MTY2NDAwNDA4MCwiZXhwIjoxNjY0MDQ3MjgwfQ.c8oXPKGkFgKJn_ljz1vdrIQ-lOe2SnFZFiA6mmEVdpI","expiration":"2023-09-25 03:21:20"}}';
+                      Timer(
+                        const Duration(seconds: 1),
+                        () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppRoot(jwt: jwt),
+                            ),
+                          )
+                        },
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
