@@ -1,9 +1,9 @@
-class AppErrors {
+class AppMessage {
   String code = '';
 
-  AppErrors(this.code);
+  AppMessage(this.code);
 
-  static getFirebaseError(code) {
+  static getError(code) {
     switch (code) {
       case "ERROR_EMAIL_ALREADY_IN_USE":
       case "account-exists-with-different-credential":
@@ -14,7 +14,7 @@ class AppErrors {
         return "Invalid email or password.";
       case "ERROR_USER_NOT_FOUND":
       case "user-not-found":
-        return "No user found with this email.";
+        return "No account was found matching the username and password";
       case "ERROR_USER_DISABLED":
       case "user-disabled":
         return "User disabled.";
@@ -29,6 +29,19 @@ class AppErrors {
         return "Email address is invalid.";
       default:
         return "Login failed. Please try again.";
+    }
+  }
+
+  static getSuccess(code) {
+    switch (code) {
+      case "LOGIN_SUCCESS":
+        return "Please wait while we are fetching your account.";
+      case "LOGOUT_SUCCESS":
+        return "You have been successfully logged out.";
+      case "PRODUCT_LOOKING_SAVED":
+        return "The product you are looking for has been posted.";
+      default:
+        return "SUCCESS!";
     }
   }
 }

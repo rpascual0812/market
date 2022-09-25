@@ -1,6 +1,8 @@
 // import 'dart:html';
 
 import 'package:animations/animations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:market/constants/app_defaults.dart';
 import 'package:market/screens/auth/login_page.dart';
 import 'package:market/screens/chat/chat_page.dart';
 import 'package:market/screens/home/home_page.dart';
@@ -88,8 +90,8 @@ class _AppRootState extends State<AppRoot> {
 
   @override
   Widget build(BuildContext context) {
-    print('approot');
-    print(widget.jwt);
+    // print('approot');
+    // print(widget.jwt);
     // final Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () => _onWillPop(context),
@@ -141,11 +143,18 @@ class _AppRootState extends State<AppRoot> {
               label: "",
               icon: Icon(_currentIndex == 2 ? chatBold : chat),
             ),
+
             BottomNavigationBarItem(
               label: "",
-              icon: Icon(_currentIndex == 3
-                  ? IconlyBold.profile
-                  : IconlyLight.profile),
+              icon: widget.jwt != ''
+                  ? const CircleAvatar(
+                      backgroundImage: CachedNetworkImageProvider(
+                          'https://i.imgur.com/8G2bg5J.jpeg'),
+                      radius: AppDefaults.radius,
+                    )
+                  : Icon(_currentIndex == 3
+                      ? IconlyBold.profile
+                      : IconlyLight.profile),
             ),
           ],
         ),

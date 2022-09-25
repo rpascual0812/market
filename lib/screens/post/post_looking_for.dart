@@ -3,13 +3,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/components/network_image.dart';
+import 'package:market/components/user_card.dart';
 import '../../../constants/index.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
+
+import 'package:range_slider_dialog/range_slider_dialog.dart';
 
 class PostLookingFor extends StatefulWidget {
   const PostLookingFor({Key? key}) : super(key: key);
@@ -21,17 +24,25 @@ class PostLookingFor extends StatefulWidget {
 class _PostLookingForState extends State<PostLookingFor> {
   final storage = const FlutterSecureStorage();
 
-  static const IconData pin =
-      IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
-
   final nameController = TextEditingController(text: '');
   final quantityController = TextEditingController(text: '');
+  var priceRangeController = TextEditingController(text: '');
 
   List measurements = [];
   String quantityMeasurementController = '1';
-  RangeValues priceRangeValuesController = const RangeValues(100, 500);
+  // RangeValues priceRangeValuesController = const RangeValues(100, 500);
   // final priceController = TextEditingController(text: '');
   String token = '';
+
+  final double _min = 1000;
+  final double _max = 10000;
+  final double _interval = 1500;
+  SfRangeValues priceRangeValuesController =
+      const SfRangeValues(1000.0, 5000.0);
+
+  final minPrice = 0;
+  final maxPrice = 10000;
+  RangeValues rangeValues = const RangeValues(100, 1000);
 
   @override
   void initState() {
@@ -104,6 +115,16 @@ class _PostLookingForState extends State<PostLookingFor> {
     }
   }
 
+  Future clear() async {
+    setState(() {
+      nameController.text = '';
+      quantityController.text = '';
+      quantityMeasurementController = '1';
+      priceRangeValuesController = const SfRangeValues(1000.0, 1500.0);
+      // priceRangeValuesController = const RangeValues(100, 500);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,7 +155,7 @@ class _PostLookingForState extends State<PostLookingFor> {
                               'Back',
                               style: TextStyle(
                                 color: Colors.black54,
-                                fontSize: AppDefaults.fontSize,
+                                fontSize: AppDefaults.fontSize + 1,
                               ),
                             ),
                           ),
@@ -143,7 +164,12 @@ class _PostLookingForState extends State<PostLookingFor> {
                               var result = await submit();
                               if (!mounted) return;
                               if (result != null) {
-                                Navigator.pop(context);
+                                AppDefaults.toastSuccess(
+                                    context,
+                                    AppMessage.getSuccess(
+                                        'PRODUCT_LOOKING_SAVED'));
+                                clear();
+                                // Navigator.pop(context);
                               } else {
                                 AppDefaults.displayDialog(
                                   context,
@@ -160,8 +186,8 @@ class _PostLookingForState extends State<PostLookingFor> {
                             child: const Text(
                               'Submit',
                               style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: AppDefaults.fontSize,
+                                color: Colors.black,
+                                fontSize: AppDefaults.fontSize + 1,
                               ),
                             ),
                           ),
@@ -184,59 +210,12 @@ class _PostLookingForState extends State<PostLookingFor> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  children: [
-                    const SizedBox(
-                      height: 45,
-                      child: AspectRatio(
-                        aspectRatio: 1 / 1,
-                        child: NetworkImageWithLoader(
-                            'https://i.imgur.com/8G2bg5J.jpeg', true),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            width: 150,
-                            height: 20,
-                            child: const Text(
-                              'Kennet Egino',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 10),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            width: 150,
-                            height: 20,
-                            child: Row(
-                              children: const [
-                                Icon(
-                                  pin,
-                                  size: 12,
-                                ),
-                                Text(
-                                  'San Vicente, Manila',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: AppColors.defaultBlack,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+              const Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: UserCard(
+                  firstName: 'Kennet',
+                  lastName: 'Egino',
+                  address: 'San Vicente, Manila',
                 ),
               ),
               Padding(
@@ -262,17 +241,20 @@ class _PostLookingForState extends State<PostLookingFor> {
                         // padding: EdgeInsets.zero,
                         child: TextFormField(
                           controller: nameController,
+                          validator: validateName,
                           decoration: InputDecoration(
                             // contentPadding: const EdgeInsets.only(left: 10, right: 10),
                             focusedBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.circular(AppDefaults.radius),
-                              borderSide: const BorderSide(width: 1.0),
+                              borderSide: const BorderSide(
+                                  width: 1.0, color: Colors.grey),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.circular(AppDefaults.radius),
-                              borderSide: const BorderSide(width: 1.0),
+                              borderSide: const BorderSide(
+                                  width: 1.0, color: Colors.grey),
                             ),
                           ),
                           style: const TextStyle(fontSize: 14), // <-- SEE HERE
@@ -303,27 +285,26 @@ class _PostLookingForState extends State<PostLookingFor> {
                                     height: AppDefaults.height,
                                     // padding: EdgeInsets.zero,
                                     child: TextFormField(
-                                      obscureText: true,
-                                      enableSuggestions: false,
-                                      autocorrect: false,
+                                      keyboardType: TextInputType.number,
                                       controller: quantityController,
                                       decoration: InputDecoration(
                                         // contentPadding: const EdgeInsets.only(left: 10, right: 10),
                                         focusedBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
                                               AppDefaults.radius),
-                                          borderSide:
-                                              const BorderSide(width: 1.0),
+                                          borderSide: const BorderSide(
+                                              width: 1.0, color: Colors.grey),
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
                                               AppDefaults.radius),
-                                          borderSide:
-                                              const BorderSide(width: 1.0),
+                                          borderSide: const BorderSide(
+                                              width: 1.0, color: Colors.grey),
                                         ),
                                       ),
                                       style: const TextStyle(
-                                          fontSize: 14), // <-- SEE HERE
+                                          fontSize: AppDefaults
+                                              .fontSize), // <-- SEE HERE
                                     ),
                                   ),
                                 ],
@@ -359,11 +340,17 @@ class _PostLookingForState extends State<PostLookingFor> {
                                       decoration: InputDecoration(
                                         contentPadding: const EdgeInsets.only(
                                             left: 10, right: 10),
-                                        border: OutlineInputBorder(
+                                        enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
                                               AppDefaults.radius),
-                                          borderSide:
-                                              const BorderSide(width: 1.0),
+                                          borderSide: const BorderSide(
+                                              color: Colors.grey, width: 1),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              AppDefaults.radius),
+                                          borderSide: const BorderSide(
+                                              color: Colors.grey, width: 1),
                                         ),
                                       ),
                                       onChanged: (String? value) {
@@ -408,32 +395,108 @@ class _PostLookingForState extends State<PostLookingFor> {
                                         ),
                                       ),
                                     ),
-                                    RangeSlider(
-                                      activeColor: AppColors.primary,
-                                      inactiveColor: AppColors.third,
-                                      values: priceRangeValuesController,
-                                      max: 10000,
-                                      divisions: 20,
-                                      labels: RangeLabels(
-                                        priceRangeValuesController.start
-                                            .round()
-                                            .toString(),
-                                        priceRangeValuesController.end
-                                            .round()
-                                            .toString(),
+                                    // SfRangeSlider(
+                                    //   dragMode: SliderDragMode.both,
+                                    //   min: _min,
+                                    //   max: _max,
+                                    //   values: priceRangeValuesController,
+                                    //   interval: _interval,
+                                    //   showTicks: true,
+                                    //   showLabels: true,
+                                    //   enableTooltip: true,
+                                    //   onChanged: (SfRangeValues value) {
+                                    //     setState(() {
+                                    //       print(value.start);
+                                    //       print(value.end);
+                                    //       priceRangeValuesController = value;
+                                    //     });
+                                    //   },
+                                    // ),
+                                    const SizedBox(height: AppDefaults.margin),
+                                    SizedBox(
+                                      height: AppDefaults.height,
+                                      // padding: EdgeInsets.zero,
+                                      child: TextFormField(
+                                        controller: priceRangeController,
+                                        showCursor: true,
+                                        readOnly: true,
+                                        onTap: () async {
+                                          await RangeSliderDialog.display<int>(
+                                            context,
+                                            minValue: minPrice,
+                                            maxValue: maxPrice,
+                                            acceptButtonText: 'Accept',
+                                            cancelButtonText: 'Cancel',
+                                            headerText: 'Select Price Range',
+                                            selectedRangeValues: rangeValues,
+                                            onApplyButtonClick: (value) {
+                                              print('SHOW PEOPLE DIALOG');
+                                              print(value);
+
+                                              setState(() {
+                                                priceRangeController =
+                                                    TextEditingController(
+                                                        text:
+                                                            '${value?.start.round().toString()} - ${value?.end.round().toString()}');
+                                              });
+
+                                              if (value != null) {
+                                                rangeValues = RangeValues(
+                                                    value.start, value.end);
+                                              }
+
+                                              // callback(value);
+                                              Navigator.pop(context);
+                                            },
+                                          );
+                                        },
+                                        decoration: InputDecoration(
+                                          // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                AppDefaults.radius),
+                                            borderSide: const BorderSide(
+                                                width: 1.0, color: Colors.grey),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                AppDefaults.radius),
+                                            borderSide: const BorderSide(
+                                                width: 1.0, color: Colors.grey),
+                                          ),
+                                        ),
+                                        style: const TextStyle(
+                                            fontSize: AppDefaults
+                                                .fontSize), // <-- SEE HERE
                                       ),
-                                      onChanged: (RangeValues values) {
-                                        setState(() {
-                                          priceRangeValuesController = values;
-                                        });
-                                      },
                                     ),
+
+                                    // RangeSlider(
+                                    //   activeColor: AppColors.primary,
+                                    //   inactiveColor: AppColors.third,
+                                    //   values: priceRangeValuesController,
+                                    //   max: 10000,
+                                    //   divisions: 20,
+                                    //   labels: RangeLabels(
+                                    //     priceRangeValuesController.start
+                                    //         .round()
+                                    //         .toString(),
+                                    //     priceRangeValuesController.end
+                                    //         .round()
+                                    //         .toString(),
+                                    //   ),
+                                    //   onChanged: (RangeValues values) {
+                                    //     setState(() {
+                                    //       priceRangeValuesController = values;
+                                    //     });
+                                    //   },
+                                    // ),
                                   ],
                                 ),
                               ),
                             ),
                           ]),
-                      const SizedBox(height: AppDefaults.margin),
+                      const SizedBox(height: AppDefaults.margin * 2),
                       const Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -484,4 +547,12 @@ class _PostLookingForState extends State<PostLookingFor> {
       ),
     );
   }
+}
+
+String? validateName(String? name) {
+  if (name == null || name.isEmpty) {
+    return 'Password is required.';
+  }
+
+  return null;
 }

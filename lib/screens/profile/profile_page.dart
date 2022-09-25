@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
+import 'package:market/constants/index.dart';
 import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/profile/components/profile_settings.dart';
 
@@ -55,11 +58,25 @@ class _ProfilePageState extends State<ProfilePage> {
                   shape: const StadiumBorder(),
                 ),
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const AppRoot(jwt: ''),
-                    ),
+                  AppDefaults.toastSuccess(
+                      context, AppMessage.getSuccess('LOGOUT_SUCCESS'));
+
+                  Timer(
+                    const Duration(seconds: 1),
+                    () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AppRoot(jwt: ''),
+                        ),
+                      )
+                    },
                   );
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const AppRoot(jwt: ''),
+                  //   ),
+                  // );
                 },
                 child: const Text('Log Out'),
               ),

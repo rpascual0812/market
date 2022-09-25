@@ -195,6 +195,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  flutter_range_slider:
+    dependency: "direct main"
+    description:
+      name: flutter_range_slider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.5.0"
+  flutter_range_slider_ns:
+    dependency: "direct main"
+    description:
+      name: flutter_range_slider_ns
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   flutter_rating_bar:
     dependency: "direct main"
     description:
@@ -513,6 +527,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  range_slider_dialog:
+    dependency: "direct main"
+    description:
+      name: range_slider_dialog
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   rxdart:
     dependency: transitive
     description:
@@ -644,6 +665,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.2.50"
+  syncfusion_flutter_sliders:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_sliders
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.2.50"
   synchronized:
     dependency: transitive
     description:

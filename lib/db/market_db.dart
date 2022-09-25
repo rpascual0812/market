@@ -3,7 +3,7 @@
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:market/models/order.dart';
+import 'package:market/models/local.dart';
 
 class MarketDatabase {
   static final MarketDatabase instance = MarketDatabase._init();
@@ -15,7 +15,7 @@ class MarketDatabase {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('market.db');
+    _database = await _initDB('samdhana_market.db');
     return _database!;
   }
 
@@ -33,62 +33,60 @@ class MarketDatabase {
 
   Future _createDB(Database db, int version) async {
     await db.execute('''
-CREATE TABLE $tableOrders (
-  ${OrderFields.pk} INTEGER PRIMARY KEY AUTOINCREMENT,
-  ${OrderFields.productPk} INTEGER NOT NULL,
-  ${OrderFields.uuid} TEXT NOT NULL,
-  ${OrderFields.paid} BOOLEAN DEFAULT FALSE,
-  ${OrderFields.notes} TEXT,
-  ${OrderFields.dateCreated} TEXT NOT NULL,
-  ${OrderFields.synced} BOOLEAN DEFAULT FALSE
+CREATE TABLE $tableLocal (
+  ${LocalFields.pk} INTEGER PRIMARY KEY AUTOINCREMENT,
+  ${LocalFields.uuid} TEXT NOT NULL,
+  ${LocalFields.name} TEXT NOT NULL,
+  ${LocalFields.notes} TEXT,
+  ${LocalFields.dateCreated} TEXT NOT NULL,
   )
 ''');
   }
 
-  Future<Order> create(Order order) async {
+  Future<Local> create(Local local) async {
     final db = await instance.database;
 
     // raw insert
-    // final columns = '${OrderFields.productPk}, ...';
-    // final values = '${json[OrderFields.productPk', ...]';
+    // final columns = '${LocalFields.productPk}, ...';
+    // final values = '${json[LocalFields.productPk', ...]';
     // final pk =
-    //     await db.rawInsert('insert into orders($columns) values ($values)');
+    //     await db.rawInsert('insert into local($columns) values ($values)');
 
-    final pk = await db.insert(tableOrders, order.toJson());
-    return order.copy(pk: pk);
+    final pk = await db.insert(tableLocal, local.toJson());
+    return local.copy(pk: pk);
   }
 
-  Future<Order?> getOrder(int pk) async {
+  Future<Local?> getLocal(String name) async {
     final db = await instance.database;
     final maps = await db.query(
-      tableOrders,
-      columns: OrderFields.values,
-      where: '${OrderFields.pk} = ?',
-      whereArgs: [pk],
+      tableLocal,
+      columns: LocalFields.values,
+      where: '${LocalFields.pk} = ?',
+      whereArgs: [name],
     );
 
     if (maps.isNotEmpty) {
-      return Order.fromJson(maps.first);
+      return Local.fromJson(maps.first);
     } else {
       return null;
     }
   }
 
-  Future<List<Order>> getAllOrders() async {
+  Future<List<Local>> getAllLocals() async {
     final db = await instance.database;
     final result =
-        await db.query(tableOrders, orderBy: '${OrderFields.pk} DESC');
-    return result.map((json) => Order.fromJson(json)).toList();
+        await db.query(tableLocal, orderBy: '${LocalFields.pk} DESC');
+    return result.map((json) => Local.fromJson(json)).toList();
   }
 
-  Future<int> update(Order order) async {
+  Future<int> update(Local local) async {
     final db = await instance.database;
 
     return db.update(
-      tableOrders,
-      order.toJson(),
-      where: '${OrderFields.pk} = ?',
-      whereArgs: [order.pk],
+      tableLocal,
+      local.toJson(),
+      where: '${LocalFields.pk} = ?',
+      whereArgs: [local.pk],
     );
   }
 
@@ -96,8 +94,8 @@ CREATE TABLE $tableOrders (
     final db = await instance.database;
 
     return await db.delete(
-      tableOrders,
-      where: '${OrderFields.pk} = ?',
+      tableLocal,
+      where: '${LocalFields.pk} = ?',
       whereArgs: [pk],
     );
   }

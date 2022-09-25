@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:market/constants/app_colors.dart';
 
 class AppDefaults {
   static const double radius = 12.00;
+  static const double circular = 25.00;
   static const double margin = 16.00;
   static const double padding = 16.00;
   static const double height = 45.00;
@@ -32,5 +35,27 @@ class AppDefaults {
         context: context,
         builder: (context) =>
             AlertDialog(title: Text(title), content: Text(text)),
+      );
+
+  static toastSuccess(BuildContext context, String message) =>
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: AppColors.primary,
+        textColor: Colors.white,
+        fontSize: AppDefaults.fontSize,
+      );
+
+  static toastError(BuildContext context, String message) =>
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: AppColors.danger,
+        textColor: Colors.white,
+        fontSize: AppDefaults.fontSize,
       );
 }

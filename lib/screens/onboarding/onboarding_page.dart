@@ -37,7 +37,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   void _goToLoginPage() {
-    storage.write(key: "welcome", value: 'true');
     setSkipOnboarding();
 
     Navigator.of(context)
@@ -57,6 +56,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   Future setSkipOnboarding() async {
+    storage.write(key: "welcome", value: 'true');
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setInt('hideOnboarding', 1);
     // int? hideOnboarding = preferences.getInt('hideOnboarding');

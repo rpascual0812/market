@@ -40,6 +40,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    readStorage();
+
     return MaterialApp(
       // showPerformanceOverlay: true,
       title: 'Samdhana Community Market',
