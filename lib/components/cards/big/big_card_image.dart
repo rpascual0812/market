@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:market/constants/index.dart';
 
 class BigCardImage extends StatelessWidget {
   const BigCardImage({
@@ -28,20 +29,41 @@ class BigCardImage extends StatelessWidget {
           bottom: 0,
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 120,
+            // height: 120,
+            height: 325,
             decoration: const BoxDecoration(
               color: Colors.black45,
             ),
             child: Column(
-              children: const [
+              children: [
+                const SizedBox(
+                  height: 20.0,
+                  child: Text(
+                    ' ',
+                    style: TextStyle(color: Colors.white, fontSize: 45),
+                  ),
+                ),
+                const SizedBox(height: AppDefaults.margin),
                 SizedBox(
+                  height: 120.0,
+                  child: SizedBox(
+                    child: Image.asset(
+                      'assets/images/farmer.png',
+                      width: 120,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppDefaults.margin),
+                const SizedBox(
                   height: 35.0,
                   child: Text(
                     'Welcome',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
+                    style: TextStyle(color: Colors.white, fontSize: 35),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(height: AppDefaults.margin),
+                const SizedBox(
                   height: 85.0,
                   width: 360,
                   child: Text(

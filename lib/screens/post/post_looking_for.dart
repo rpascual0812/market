@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
+import 'package:market/components/back_submit.dart';
 import 'package:market/components/user_card.dart';
 import '../../../constants/index.dart';
 
@@ -65,9 +66,11 @@ class _PostLookingForState extends State<PostLookingFor> {
   }
 
   Future getMeasurements() async {
+    print('fetching measurements');
     try {
+      print('TRY');
       var body = json.decode(token);
-
+      print('${dotenv.get('API')}/measurements');
       final url = Uri.parse('${dotenv.get('API')}/measurements');
       final headers = {
         'Accept': 'application/json',
@@ -84,6 +87,7 @@ class _PostLookingForState extends State<PostLookingFor> {
       // if (res.statusCode == 200) return res.body;
       return null;
     } on Exception {
+      print('ERROR');
       return null;
     }
   }
@@ -141,58 +145,77 @@ class _PostLookingForState extends State<PostLookingFor> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: const Size(50, 30),
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                alignment: Alignment.centerLeft),
-                            child: const Text(
-                              'Back',
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: AppDefaults.fontSize + 1,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              var result = await submit();
-                              if (!mounted) return;
-                              if (result != null) {
-                                AppDefaults.toastSuccess(
-                                    context,
-                                    AppMessage.getSuccess(
-                                        'PRODUCT_LOOKING_SAVED'));
-                                clear();
-                                // Navigator.pop(context);
-                              } else {
-                                AppDefaults.displayDialog(
-                                  context,
-                                  "An Error Occurred",
-                                  "An error occurred while saving product.",
-                                );
-                              }
-                            },
-                            style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: const Size(50, 30),
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                alignment: Alignment.centerLeft),
-                            child: const Text(
-                              'Submit',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: AppDefaults.fontSize + 1,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      BackSubmit(submit: () async {
+                        var result = await submit();
+                        if (!mounted) return;
+                        if (result != null) {
+                          AppDefaults.toastSuccess(context,
+                              AppMessage.getSuccess('PRODUCT_LOOKING_SAVED'));
+                          clear();
+                          // Navigator.pop(context);
+                        } else {
+                          AppDefaults.displayDialog(
+                            context,
+                            "An Error Occurred",
+                            "An error occurred while saving product.",
+                          );
+                        }
+                      }, back: () {
+                        Navigator.pop(context);
+                      }),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     TextButton(
+                      //       onPressed: () => Navigator.pop(context),
+                      //       style: TextButton.styleFrom(
+                      //           padding: EdgeInsets.zero,
+                      //           minimumSize: const Size(50, 30),
+                      //           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      //           alignment: Alignment.centerLeft),
+                      //       child: const Text(
+                      //         'Back',
+                      //         style: TextStyle(
+                      //           color: Colors.black54,
+                      //           fontSize: AppDefaults.fontSize + 1,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     TextButton(
+                      //       onPressed: () async {
+                      //         var result = await submit();
+                      //         if (!mounted) return;
+                      //         if (result != null) {
+                      //           AppDefaults.toastSuccess(
+                      //               context,
+                      //               AppMessage.getSuccess(
+                      //                   'PRODUCT_LOOKING_SAVED'));
+                      //           clear();
+                      //           // Navigator.pop(context);
+                      //         } else {
+                      //           AppDefaults.displayDialog(
+                      //             context,
+                      //             "An Error Occurred",
+                      //             "An error occurred while saving product.",
+                      //           );
+                      //         }
+                      //       },
+                      //       style: TextButton.styleFrom(
+                      //           padding: EdgeInsets.zero,
+                      //           minimumSize: const Size(50, 30),
+                      //           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      //           alignment: Alignment.centerLeft),
+                      //       child: const Text(
+                      //         'Submit',
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontSize: AppDefaults.fontSize + 1,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+
                       const SizedBox(height: 10),
                       Row(
                         children: const [
@@ -257,7 +280,8 @@ class _PostLookingForState extends State<PostLookingFor> {
                                   width: 1.0, color: Colors.grey),
                             ),
                           ),
-                          style: const TextStyle(fontSize: 14), // <-- SEE HERE
+                          style: const TextStyle(
+                              fontSize: AppDefaults.fontSize), // <-- SEE HERE
                         ),
                       ),
                       const SizedBox(height: AppDefaults.margin),

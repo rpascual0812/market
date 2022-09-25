@@ -24,33 +24,66 @@ class ArticleTile extends StatelessWidget {
           Material(
             color: Colors.white,
             // borderRadius: AppDefaults.borderRadius,
-            shape: RoundedRectangleBorder(
-              side: const BorderSide(width: 0.01),
-              borderRadius: AppDefaults.borderRadius,
-            ),
+            // shape: RoundedRectangleBorder(
+            //   // side: const BorderSide(width: 1),
+            //   borderRadius: AppDefaults.borderRadius,
+            // ),
             child: InkWell(
               onTap: onTap,
-              borderRadius: AppDefaults.borderRadius,
+              // borderRadius: AppDefaults.borderRadius,
               child: Container(
+                decoration: const BoxDecoration(
+                  // borderRadius: AppDefaults.borderRadius,
+                  color: Colors.white,
+                ),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 0,
                   vertical: 0,
                 ),
-                child: Column(
+                child: Stack(
                   children: [
-                    SizedBox(
-                      width: 110,
-                      height: 200,
-                      child: AspectRatio(
-                        aspectRatio: 1 / 1,
-                        child: NetworkImageWithLoader(
-                          coverImage,
-                          true,
-                          fit: BoxFit.cover,
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: 130,
+                          height: 220,
+                          child: AspectRatio(
+                            aspectRatio: 1 / 1,
+                            child: NetworkImageWithLoader(
+                              coverImage,
+                              true,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        // const SizedBox(height: 10),
+                      ],
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: Container(
+                        width: 130,
+                        height: 25,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(25),
+                            bottomRight: Radius.circular(25),
+                          ),
+                          color: Colors.black45,
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 5, bottom: 5),
+                          child: const Text(
+                            'Read Article',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: AppDefaults.fontSize,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    // const SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -60,7 +93,7 @@ class ArticleTile extends StatelessWidget {
           Text(
             name,
             style: const TextStyle(
-              fontSize: 9,
+              fontSize: AppDefaults.fontSize,
               color: AppColors.primary,
               fontWeight: FontWeight.bold,
             ),

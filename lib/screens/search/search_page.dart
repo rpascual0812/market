@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
+import 'package:market/constants/index.dart';
 import 'package:market/models/product.dart';
-import 'package:market/constants/app_colors.dart';
 
 import 'package:market/models/order.dart';
 import 'package:market/screens/search/components/search_product_tile.dart';
@@ -113,7 +113,7 @@ class _SearchPageState extends State<SearchPage> {
                           hintText: "Search...",
                           hintStyle: TextStyle(
                             color: Colors.grey.shade600,
-                            fontSize: 13,
+                            fontSize: AppDefaults.fontSize,
                           ),
                           prefixIcon: Icon(
                             Icons.search,

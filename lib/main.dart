@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
     final jwtStorage = await storage.read(key: 'jwt');
 
     setState(() {
-      welcome = welcomeStorage!;
+      welcome = welcomeStorage ?? '';
       jwt = jwtStorage!;
     });
   }
