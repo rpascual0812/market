@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/index.dart';
 import 'package:market/screens/approot/app_root.dart';
@@ -8,6 +10,9 @@ import 'package:market/screens/profile/components/profile_settings.dart';
 
 import 'components/profile_picture_section.dart';
 import 'components/statuses_row.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -17,6 +22,46 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final storage = const FlutterSecureStorage();
+  String token = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    readStorage();
+  }
+
+  Future<void> readStorage() async {
+    final all = await storage.read(key: 'jwt');
+
+    setState(() {
+      token = all!;
+    });
+  }
+
+  Future attemptLogOut() async {
+    try {
+      var body = json.decode(token);
+      final url = Uri.parse('${dotenv.get('API')}/logout');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${body['user']['access_token']}',
+      };
+      print('${dotenv.get('API')}/logout');
+      print(body['user']['access_token']);
+      var res = await http.post(url, headers: headers);
+      if (res.statusCode == 200) {
+        final result = json.decode(res.body);
+        print(result);
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -52,33 +97,37 @@ class _ProfilePageState extends State<ProfilePage> {
             ProfileSettings(),
 
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: const StadiumBorder(),
-                ),
-                onPressed: () {
-                  AppDefaults.toastSuccess(
-                      context, AppMessage.getSuccess('LOGOUT_SUCCESS'));
+              width: MediaQuery.of(context).size.width * 0.4,
+              height: AppDefaults.height,
+              child: Padding(
+                padding: const EdgeInsets.all(1),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    var result = await attemptLogOut();
 
-                  Timer(
-                    const Duration(seconds: 1),
-                    () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AppRoot(jwt: ''),
-                        ),
-                      )
-                    },
-                  );
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const AppRoot(jwt: ''),
-                  //   ),
-                  // );
-                },
-                child: const Text('Log Out'),
+                    AppDefaults.toastSuccess(
+                        context, AppMessage.getSuccess('LOGOUT_SUCCESS'));
+
+                    Timer(
+                      const Duration(seconds: 1),
+                      () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppRoot(jwt: ''),
+                          ),
+                        )
+                      },
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppDefaults.radius),
+                    ),
+                  ),
+                  child: const Text('Log Out'),
+                ),
               ),
             ),
 

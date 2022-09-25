@@ -27,7 +27,8 @@ class SignupPage extends StatelessWidget {
                       child: Text(
                         "   Registration",
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: AppDefaults.h7,
+                            fontWeight: FontWeight.bold),
                         // style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
@@ -44,20 +45,29 @@ class SignupPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: const [
                         HorizontalLine(width: 100),
-                        Text('Or'),
+                        Text(
+                          'Or',
+                          style: TextStyle(fontSize: AppDefaults.fontSize),
+                        ),
                         HorizontalLine(width: 100),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text('Already have an account?'),
+                        const Text(
+                          'Already have an account?',
+                          style: TextStyle(fontSize: AppDefaults.fontSize),
+                        ),
                         TextButton(
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => const LoginPage()));
                             },
-                            child: const Text('Login'))
+                            child: const Text(
+                              'Login',
+                              style: TextStyle(fontSize: AppDefaults.fontSize),
+                            ))
                       ],
                     ),
                   ],

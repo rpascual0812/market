@@ -71,11 +71,13 @@ class _LoginFormState extends State<LoginForm> {
                   // contentPadding: const EdgeInsets.only(left: 10, right: 10),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDefaults.radius),
-                    borderSide: const BorderSide(width: 1.0),
+                    borderSide:
+                        const BorderSide(width: 1.0, color: Colors.grey),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDefaults.radius),
-                    borderSide: const BorderSide(width: 1.0),
+                    borderSide:
+                        const BorderSide(width: 1.0, color: Colors.grey),
                   ),
                 ),
                 style: const TextStyle(
@@ -117,11 +119,13 @@ class _LoginFormState extends State<LoginForm> {
                   // contentPadding: const EdgeInsets.only(left: 10, right: 10),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDefaults.radius),
-                    borderSide: const BorderSide(width: 1.0),
+                    borderSide:
+                        const BorderSide(width: 1.0, color: Colors.grey),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDefaults.radius),
-                    borderSide: const BorderSide(width: 1.0),
+                    borderSide:
+                        const BorderSide(width: 1.0, color: Colors.grey),
                   ),
                 ),
                 style: const TextStyle(fontSize: 14), // <-- SEE HERE

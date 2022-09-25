@@ -66,11 +66,8 @@ class _PostLookingForState extends State<PostLookingFor> {
   }
 
   Future getMeasurements() async {
-    print('fetching measurements');
     try {
-      print('TRY');
       var body = json.decode(token);
-      print('${dotenv.get('API')}/measurements');
       final url = Uri.parse('${dotenv.get('API')}/measurements');
       final headers = {
         'Accept': 'application/json',
@@ -87,7 +84,6 @@ class _PostLookingForState extends State<PostLookingFor> {
       // if (res.statusCode == 200) return res.body;
       return null;
     } on Exception {
-      print('ERROR');
       return null;
     }
   }
@@ -449,7 +445,7 @@ class _PostLookingForState extends State<PostLookingFor> {
                                             context,
                                             minValue: minPrice,
                                             maxValue: maxPrice,
-                                            acceptButtonText: 'Accept',
+                                            acceptButtonText: 'Save',
                                             cancelButtonText: 'Cancel',
                                             headerText: 'Select Price Range',
                                             selectedRangeValues: rangeValues,

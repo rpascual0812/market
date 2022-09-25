@@ -71,7 +71,10 @@ class LoginPage extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('Not yet a member?'),
+                  child: const Text(
+                    'Not yet a member?',
+                    style: TextStyle(fontSize: AppDefaults.fontSize),
+                  ),
                 )
               ],
             )
