@@ -91,9 +91,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
             /// Statuses
             const StatusesRow(),
-            const SizedBox(height: 10),
+            const SizedBox(height: AppDefaults.margin),
 
-            /// Personal Information
             ProfileSettings(),
 
             SizedBox(
