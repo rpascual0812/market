@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+// import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/components/network_image.dart';
+// import 'package:market/components/network_image.dart';
 import 'package:market/components/select_dropdown_full.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
-import 'package:market/models/ratings.dart';
+// import 'package:market/models/ratings.dart';
 
 class MyProducerAddProduct extends StatefulWidget {
   const MyProducerAddProduct({Key? key}) : super(key: key);

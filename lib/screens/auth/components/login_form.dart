@@ -25,9 +25,9 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final usernameController = TextEditingController(text: 'email@gmail.com');
   final passwordController = TextEditingController(text: 'password');
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
   String errorMessage = '';
   bool isLoading = false;
 
@@ -94,7 +94,6 @@ class _LoginFormState extends State<LoginForm> {
             //   ),
             // ),
             const SizedBox(height: AppDefaults.margin),
-
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(

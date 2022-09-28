@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:market/constants/app_colors.dart';
+import 'package:market/constants/index.dart';
 import 'package:market/models/chat_message.dart';
 import 'package:market/screens/producer/producer_profile/producer_profile.dart';
 import 'package:market/screens/producer/producer_page/producer_page.dart';
-import 'package:market/screens/producer/producer_profile/producer_profile_rate.dart';
 
 class Bubble extends StatefulWidget {
   const Bubble({Key? key}) : super(key: key);
@@ -15,10 +14,23 @@ class Bubble extends StatefulWidget {
 class _BubbleState extends State<Bubble> {
   TextEditingController messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  bool _firstAutoscrollExecuted = false;
-  bool _shouldAutoscroll = false;
+  // bool _firstAutoscrollExecuted = false;
+  // bool _shouldAutoscroll = false;
 
   List<ChatMessage> messages = [
+    ChatMessage(pk: 1, messageContent: "Hello, Will", messageType: "receiver"),
+    ChatMessage(
+        pk: 2, messageContent: "How have you been?", messageType: "receiver"),
+    ChatMessage(
+        pk: 3,
+        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
+        messageType: "sender"),
+    ChatMessage(
+        pk: 4, messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    ChatMessage(
+        pk: 5,
+        messageContent: "Is there any thing wrong?",
+        messageType: "sender"),
     ChatMessage(pk: 1, messageContent: "Hello, Will", messageType: "receiver"),
     ChatMessage(
         pk: 2, messageContent: "How have you been?", messageType: "receiver"),
@@ -44,15 +56,15 @@ class _BubbleState extends State<Bubble> {
   }
 
   void _scrollListener() {
-    _firstAutoscrollExecuted = true;
+    // _firstAutoscrollExecuted = true;
 
-    if (_scrollController.hasClients &&
-        _scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent) {
-      _shouldAutoscroll = true;
-    } else {
-      _shouldAutoscroll = false;
-    }
+    // if (_scrollController.hasClients &&
+    //     _scrollController.position.pixels ==
+    //         _scrollController.position.maxScrollExtent) {
+    //   _shouldAutoscroll = true;
+    // } else {
+    //   _shouldAutoscroll = false;
+    // }
   }
 
   @override
@@ -252,41 +264,42 @@ class _BubbleState extends State<Bubble> {
                 },
               ),
             ),
+            const SizedBox(height: AppDefaults.margin),
             Align(
               alignment: Alignment.bottomLeft,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    // decoration: const BoxDecoration(
-                    //   color: Color(0xFF0E3311),
-                    // ),
-                    padding: const EdgeInsets.all(0),
-                    margin: const EdgeInsets.all(0),
-                    // padding: const EdgeInsets.only(
-                    //     left: 100, top: 0, right: 100, bottom: 0),
-                    // color: Colors.transparent,
-                    width: 150,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const ProducerProfileRate(),
-                          ),
-                        );
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.zero),
-                      ),
-                      child: const Text(
-                        'Rate Producer',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
+                  // Container(
+                  //   // decoration: const BoxDecoration(
+                  //   //   color: Color(0xFF0E3311),
+                  //   // ),
+                  //   padding: const EdgeInsets.all(0),
+                  //   margin: const EdgeInsets.all(0),
+                  //   // padding: const EdgeInsets.only(
+                  //   //     left: 100, top: 0, right: 100, bottom: 0),
+                  //   // color: Colors.transparent,
+                  //   width: 150,
+                  //   height: 40,
+                  //   child: ElevatedButton(
+                  //     onPressed: () {
+                  //       Navigator.of(context).push(
+                  //         MaterialPageRoute(
+                  //           builder: (context) => const ProducerProfileRate(),
+                  //         ),
+                  //       );
+                  //     },
+                  //     style: ButtonStyle(
+                  //       padding: MaterialStateProperty.all<EdgeInsets>(
+                  //           EdgeInsets.zero),
+                  //     ),
+                  //     child: const Text(
+                  //       'Rate Producer',
+                  //       style: TextStyle(fontSize: 12),
+                  //     ),
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 5),
                   Container(
                     padding:
                         const EdgeInsets.only(left: 10, bottom: 10, top: 10),

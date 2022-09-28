@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/models/chat_message.dart';
-import 'package:market/screens/producer/producer_profile/producer_profile.dart';
-import 'package:market/screens/producer/producer_page/producer_page.dart';
-import 'package:market/screens/producer/producer_profile/producer_profile_rate.dart';
 
 class Moderator extends StatefulWidget {
   const Moderator({Key? key}) : super(key: key);
