@@ -9,7 +9,7 @@ class AppDefaults {
   static const double padding = 16.00;
   static const double height = 45.00;
 
-  static const double fontSize = 12.00;
+  static const double fontSize = 13.00;
 
   static const double h1 = 50.00;
   static const double h2 = 45.00;
@@ -20,6 +20,18 @@ class AppDefaults {
   static const double h7 = 20.00;
 
   static BorderRadius borderRadius = BorderRadius.circular(radius);
+  static EdgeInsets edgeInset =
+      const EdgeInsets.symmetric(vertical: 15, horizontal: 10.0);
+
+  static TextStyle formTextStyle = const TextStyle(fontSize: fontSize);
+  static OutlineInputBorder outlineInputBorderSuccess = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(AppDefaults.radius),
+    borderSide: const BorderSide(width: 1.0, color: Colors.grey),
+  );
+  static OutlineInputBorder outlineInputBorderError = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(AppDefaults.radius),
+    borderSide: const BorderSide(width: 1.0, color: Colors.redAccent),
+  );
 
   /// Many Parts of the UI uses this same box shadows
   static List<BoxShadow> boxShadows = [

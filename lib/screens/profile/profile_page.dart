@@ -33,10 +33,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> readStorage() async {
-    final all = await storage.read(key: 'jwt');
+    final welcomeStorage = await storage.read(key: 'jwt');
 
     setState(() {
-      token = all!;
+      token = welcomeStorage!;
     });
   }
 
@@ -48,12 +48,11 @@ class _ProfilePageState extends State<ProfilePage> {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${body['user']['access_token']}',
       };
-      print('${dotenv.get('API')}/logout');
-      print(body['user']['access_token']);
+
       var res = await http.post(url, headers: headers);
       if (res.statusCode == 200) {
         final result = json.decode(res.body);
-        print(result);
+        storage.write(key: "jwt", value: '');
       }
       return null;
     } on Exception catch (e) {

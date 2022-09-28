@@ -30,10 +30,11 @@ class _SignUpFormState extends State<SignUpForm> {
   bool accept = false;
 
   // Initial Selected Value
-  String provinceValue = 'Item 1';
+  String provinceValue = '';
 
   // List of items in our dropdown menu
   var provinces = [
+    '',
     'Item 1',
     'Item 2',
     'Item 3',
@@ -99,28 +100,31 @@ class _SignUpFormState extends State<SignUpForm> {
                                 ),
                                 const SizedBox(height: AppDefaults.margin / 2),
                                 SizedBox(
-                                  height: AppDefaults.height,
-                                  // padding: EdgeInsets.zero,
                                   child: TextFormField(
                                     controller: firstNameController,
+                                    validator: (value) {
+                                      if (value != null && value.isEmpty) {
+                                        return 'First Name is required';
+                                      }
+                                      return null;
+                                    },
                                     decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: AppDefaults.edgeInset,
+                                      prefixIconConstraints:
+                                          const BoxConstraints(
+                                              minWidth: 0, minHeight: 0),
                                       // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            AppDefaults.radius),
-                                        borderSide: const BorderSide(
-                                            width: 1.0, color: Colors.grey),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            AppDefaults.radius),
-                                        borderSide: const BorderSide(
-                                            width: 1.0, color: Colors.grey),
-                                      ),
+                                      focusedBorder:
+                                          AppDefaults.outlineInputBorderSuccess,
+                                      enabledBorder:
+                                          AppDefaults.outlineInputBorderSuccess,
+                                      focusedErrorBorder:
+                                          AppDefaults.outlineInputBorderError,
+                                      errorBorder:
+                                          AppDefaults.outlineInputBorderError,
                                     ),
-                                    style: const TextStyle(
-                                        fontSize: AppDefaults
-                                            .fontSize), // <-- SEE HERE
+                                    style: AppDefaults.formTextStyle,
                                   ),
                                 ),
                               ],
@@ -144,46 +148,33 @@ class _SignUpFormState extends State<SignUpForm> {
                                 ),
                                 const SizedBox(height: AppDefaults.margin / 2),
                                 SizedBox(
-                                  height: AppDefaults.height,
-                                  // padding: EdgeInsets.zero,
                                   child: TextFormField(
                                     controller: lastNameController,
+                                    validator: (value) {
+                                      if (value != null && value.isEmpty) {
+                                        return 'Last Name is required';
+                                      }
+                                      return null;
+                                    },
                                     decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: AppDefaults.edgeInset,
+                                      prefixIconConstraints:
+                                          const BoxConstraints(
+                                              minWidth: 0, minHeight: 0),
                                       // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            AppDefaults.radius),
-                                        borderSide: const BorderSide(
-                                            width: 1.0, color: Colors.grey),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            AppDefaults.radius),
-                                        borderSide: const BorderSide(
-                                            width: 1.0, color: Colors.grey),
-                                      ),
+                                      focusedBorder:
+                                          AppDefaults.outlineInputBorderSuccess,
+                                      enabledBorder:
+                                          AppDefaults.outlineInputBorderSuccess,
+                                      focusedErrorBorder:
+                                          AppDefaults.outlineInputBorderError,
+                                      errorBorder:
+                                          AppDefaults.outlineInputBorderError,
                                     ),
-                                    style: const TextStyle(
-                                        fontSize: AppDefaults
-                                            .fontSize), // <-- SEE HERE
+                                    style: AppDefaults.formTextStyle,
                                   ),
                                 ),
-                                // Align(
-                                //   alignment: Alignment.centerLeft,
-                                //   child: Text(
-                                //     'Last Name',
-                                //     style:
-                                //         TextStyle(fontWeight: FontWeight.bold),
-                                //   ),
-                                // ),
-                                // TextField(
-                                //   decoration: InputDecoration(
-                                //     floatingLabelBehavior:
-                                //         FloatingLabelBehavior.always,
-                                //     // labelText: 'Last Name',
-                                //     border: OutlineInputBorder(),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
@@ -203,11 +194,16 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                     const SizedBox(height: AppDefaults.margin / 2),
                     SizedBox(
-                      height: AppDefaults.height,
                       // padding: EdgeInsets.zero,
                       child: TextFormField(
                         readOnly: true,
                         controller: birthdayController,
+                        validator: (value) {
+                          if (value != null && value.isEmpty) {
+                            return 'Birthday is required';
+                          }
+                          return null;
+                        },
                         onTap: () async {
                           DateTime? pickedDate = await showDatePicker(
                             context: context,
@@ -228,22 +224,18 @@ class _SignUpFormState extends State<SignUpForm> {
                           }
                         },
                         decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: AppDefaults.edgeInset,
+                          prefixIconConstraints:
+                              const BoxConstraints(minWidth: 0, minHeight: 0),
                           // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
+                          focusedBorder: AppDefaults.outlineInputBorderSuccess,
+                          enabledBorder: AppDefaults.outlineInputBorderSuccess,
+                          focusedErrorBorder:
+                              AppDefaults.outlineInputBorderError,
+                          errorBorder: AppDefaults.outlineInputBorderError,
                         ),
-                        style: const TextStyle(
-                            fontSize: AppDefaults.fontSize), // <-- SEE HERE
+                        style: AppDefaults.formTextStyle,
                       ),
                     ),
                     const SizedBox(height: AppDefaults.margin),
@@ -267,36 +259,17 @@ class _SignUpFormState extends State<SignUpForm> {
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 18.0, horizontal: 10.0),
+                          contentPadding: AppDefaults.edgeInset,
+                          prefixIconConstraints:
+                              const BoxConstraints(minWidth: 0, minHeight: 0),
                           // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.redAccent),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.redAccent),
-                          ),
+                          focusedBorder: AppDefaults.outlineInputBorderSuccess,
+                          enabledBorder: AppDefaults.outlineInputBorderSuccess,
+                          focusedErrorBorder:
+                              AppDefaults.outlineInputBorderError,
+                          errorBorder: AppDefaults.outlineInputBorderError,
                         ),
-                        style: const TextStyle(
-                            fontSize: AppDefaults.fontSize), // <-- SEE HERE
+                        style: AppDefaults.formTextStyle,
                       ),
                     ),
                     const SizedBox(height: AppDefaults.margin),
@@ -312,25 +285,25 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                     const SizedBox(height: AppDefaults.margin / 2),
                     SizedBox(
-                      height: AppDefaults.height,
+                      // height: AppDefaults.height,
                       // padding: EdgeInsets.zero,
                       child: TextFormField(
                         controller: mobileController,
+                        validator: validateMobile,
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: AppDefaults.edgeInset,
+                          prefixIconConstraints:
+                              const BoxConstraints(minWidth: 0, minHeight: 0),
                           // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
+                          focusedBorder: AppDefaults.outlineInputBorderSuccess,
+                          enabledBorder: AppDefaults.outlineInputBorderSuccess,
+                          focusedErrorBorder:
+                              AppDefaults.outlineInputBorderError,
+                          errorBorder: AppDefaults.outlineInputBorderError,
+                          prefixIcon: const Padding(
+                              padding: EdgeInsets.all(10), child: Text('+63 ')),
                         ),
                         style: const TextStyle(
                             fontSize: AppDefaults.fontSize), // <-- SEE HERE
@@ -349,7 +322,6 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                     const SizedBox(height: AppDefaults.margin / 2),
                     SizedBox(
-                      height: AppDefaults.height,
                       // padding: EdgeInsets.zero,
                       child: TextFormField(
                         obscureText: true,
@@ -358,40 +330,26 @@ class _SignUpFormState extends State<SignUpForm> {
                         controller: passwordController,
                         validator: validatePassword,
                         decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: AppDefaults.edgeInset,
+                          prefixIconConstraints:
+                              const BoxConstraints(minWidth: 0, minHeight: 0),
                           // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.redAccent),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.redAccent),
-                          ),
+                          focusedBorder: AppDefaults.outlineInputBorderSuccess,
+                          enabledBorder: AppDefaults.outlineInputBorderSuccess,
+                          focusedErrorBorder:
+                              AppDefaults.outlineInputBorderError,
+                          errorBorder: AppDefaults.outlineInputBorderError,
                         ),
-                        style: const TextStyle(fontSize: 14), // <-- SEE HERE
+                        style: const TextStyle(
+                            fontSize: AppDefaults.fontSize), // <-- SEE HERE
                       ),
                     ),
                     const SizedBox(height: AppDefaults.margin),
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Repeat Password',
+                        'Confirm Password',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: AppDefaults.fontSize,
@@ -400,8 +358,6 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                     const SizedBox(height: AppDefaults.margin / 2),
                     SizedBox(
-                      height: AppDefaults.height,
-                      // padding: EdgeInsets.zero,
                       child: TextFormField(
                         obscureText: true,
                         enableSuggestions: false,
@@ -409,7 +365,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         controller: confirmPasswordController,
                         validator: (value) {
                           if (value != null && value.isEmpty) {
-                            return 'Conform password is required';
+                            return 'Confirm password is required';
                           }
                           if (value != passwordController.text) {
                             return 'Confirm password does not match';
@@ -417,21 +373,18 @@ class _SignUpFormState extends State<SignUpForm> {
                           return null;
                         },
                         decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: AppDefaults.edgeInset,
+                          prefixIconConstraints:
+                              const BoxConstraints(minWidth: 0, minHeight: 0),
                           // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
+                          focusedBorder: AppDefaults.outlineInputBorderSuccess,
+                          enabledBorder: AppDefaults.outlineInputBorderSuccess,
+                          focusedErrorBorder:
+                              AppDefaults.outlineInputBorderError,
+                          errorBorder: AppDefaults.outlineInputBorderError,
                         ),
-                        style: const TextStyle(fontSize: 14), // <-- SEE HERE
+                        style: const TextStyle(fontSize: AppDefaults.fontSize),
                       ),
                     ),
                     const SizedBox(height: AppDefaults.margin),
@@ -470,67 +423,51 @@ class _SignUpFormState extends State<SignUpForm> {
                                 ),
                                 const SizedBox(height: AppDefaults.margin / 2),
                                 SizedBox(
-                                  height: AppDefaults.height,
-                                  // padding: EdgeInsets.zero,
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            AppDefaults.radius),
-                                        borderSide: const BorderSide(
-                                            width: 1.0, color: Colors.grey),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButtonFormField<String>(
+                                      isExpanded: true,
+                                      value: provinceValue,
+                                      validator: (value) {
+                                        if (value != null && value.isEmpty) {
+                                          return 'Required';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        contentPadding: AppDefaults.edgeInset,
+                                        prefixIconConstraints:
+                                            const BoxConstraints(
+                                                minWidth: 0, minHeight: 0),
+                                        focusedBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        enabledBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        focusedErrorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                        errorBorder:
+                                            AppDefaults.outlineInputBorderError,
                                       ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            AppDefaults.radius),
-                                        borderSide: const BorderSide(
-                                            width: 1.0, color: Colors.grey),
-                                      ),
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                      items: provinces.map((String province) {
+                                        return DropdownMenuItem(
+                                          value: province,
+                                          child: Text(
+                                            province,
+                                            style: const TextStyle(
+                                                fontSize: AppDefaults.fontSize),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          provinceValue = newValue!;
+                                        });
+                                      },
                                     ),
-                                    style: const TextStyle(
-                                        fontSize: AppDefaults
-                                            .fontSize), // <-- SEE HERE
                                   ),
                                 ),
-                                // const Align(
-                                //   alignment: Alignment.centerLeft,
-                                //   child: Text(
-                                //     'Province',
-                                //     style:
-                                //         TextStyle(fontWeight: FontWeight.bold),
-                                //   ),
-                                // ),
-                                // Container(
-                                //   padding: const EdgeInsets.symmetric(
-                                //       horizontal: 1.0, vertical: 0),
-                                //   decoration: BoxDecoration(
-                                //     borderRadius: BorderRadius.circular(12.0),
-                                //     border: Border.all(
-                                //       color: Colors.black,
-                                //       style: BorderStyle.solid,
-                                //       width: 1,
-                                //     ),
-                                //   ),
-                                //   child: DropdownButtonHideUnderline(
-                                //     child: DropdownButtonFormField<String>(
-                                //       value: provinceValue,
-                                //       icon:
-                                //           const Icon(Icons.keyboard_arrow_down),
-                                //       items: provinces.map((String province) {
-                                //         return DropdownMenuItem(
-                                //           value: province,
-                                //           child: Text(province),
-                                //         );
-                                //       }).toList(),
-                                //       onChanged: (String? newValue) {
-                                //         setState(() {
-                                //           provinceValue = newValue!;
-                                //         });
-                                //       },
-                                //     ),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
@@ -551,68 +488,63 @@ class _SignUpFormState extends State<SignUpForm> {
                                   ),
                                 ),
                                 const SizedBox(height: AppDefaults.margin / 2),
-                                SizedBox(
-                                  height: AppDefaults.height,
-                                  // padding: EdgeInsets.zero,
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            AppDefaults.radius),
-                                        borderSide: const BorderSide(
-                                            width: 1.0, color: Colors.grey),
+                                Container(
+                                  // height: AppDefaults.height,
+                                  // padding: const EdgeInsets.only(left: 10),
+                                  // decoration: BoxDecoration(
+                                  //   border: Border.all(
+                                  //     color: Colors.grey,
+                                  //     width: 1,
+                                  //     style: BorderStyle.solid,
+                                  //   ),
+                                  //   borderRadius: BorderRadius.circular(
+                                  //       AppDefaults.radius),
+                                  // ),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButtonFormField<String>(
+                                      isExpanded: true,
+                                      value: provinceValue,
+                                      validator: (value) {
+                                        if (value != null && value.isEmpty) {
+                                          return 'Province is required';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        contentPadding: AppDefaults.edgeInset,
+                                        prefixIconConstraints:
+                                            const BoxConstraints(
+                                                minWidth: 0, minHeight: 0),
+                                        focusedBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        enabledBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        focusedErrorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                        errorBorder:
+                                            AppDefaults.outlineInputBorderError,
                                       ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            AppDefaults.radius),
-                                        borderSide: const BorderSide(
-                                            width: 1.0, color: Colors.grey),
-                                      ),
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                      items: provinces.map((String province) {
+                                        return DropdownMenuItem(
+                                          value: province,
+                                          child: Text(
+                                            province,
+                                            style: const TextStyle(
+                                                fontSize: AppDefaults.fontSize),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          provinceValue = newValue!;
+                                        });
+                                      },
                                     ),
-                                    style: const TextStyle(
-                                        fontSize: AppDefaults
-                                            .fontSize), // <-- SEE HERE
                                   ),
                                 ),
-                                // const Align(
-                                //   alignment: Alignment.centerLeft,
-                                //   child: Text(
-                                //     'City',
-                                //     style:
-                                //         TextStyle(fontWeight: FontWeight.bold),
-                                //   ),
-                                // ),
-                                // Container(
-                                //   padding: const EdgeInsets.symmetric(
-                                //       horizontal: 1.0, vertical: 0),
-                                //   decoration: BoxDecoration(
-                                //     borderRadius: BorderRadius.circular(12.0),
-                                //     border: Border.all(
-                                //       color: Colors.black,
-                                //       style: BorderStyle.solid,
-                                //       width: 1,
-                                //     ),
-                                //   ),
-                                //   child: DropdownButtonHideUnderline(
-                                //     child: DropdownButtonFormField<String>(
-                                //       value: provinceValue,
-                                //       icon:
-                                //           const Icon(Icons.keyboard_arrow_down),
-                                //       items: provinces.map((String province) {
-                                //         return DropdownMenuItem(
-                                //           value: province,
-                                //           child: Text(province),
-                                //         );
-                                //       }).toList(),
-                                //       onChanged: (String? newValue) {
-                                //         setState(() {
-                                //           provinceValue = newValue!;
-                                //         });
-                                //       },
-                                //     ),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
@@ -633,68 +565,63 @@ class _SignUpFormState extends State<SignUpForm> {
                                   ),
                                 ),
                                 const SizedBox(height: AppDefaults.margin / 2),
-                                SizedBox(
-                                  height: AppDefaults.height,
-                                  // padding: EdgeInsets.zero,
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            AppDefaults.radius),
-                                        borderSide: const BorderSide(
-                                            width: 1.0, color: Colors.grey),
+                                Container(
+                                  // height: AppDefaults.height,
+                                  // padding: const EdgeInsets.only(left: 10),
+                                  // decoration: BoxDecoration(
+                                  //   border: Border.all(
+                                  //     color: Colors.grey,
+                                  //     width: 1,
+                                  //     style: BorderStyle.solid,
+                                  //   ),
+                                  //   borderRadius: BorderRadius.circular(
+                                  //       AppDefaults.radius),
+                                  // ),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButtonFormField<String>(
+                                      isExpanded: true,
+                                      value: provinceValue,
+                                      validator: (value) {
+                                        if (value != null && value.isEmpty) {
+                                          return 'Province is required';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        contentPadding: AppDefaults.edgeInset,
+                                        prefixIconConstraints:
+                                            const BoxConstraints(
+                                                minWidth: 0, minHeight: 0),
+                                        focusedBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        enabledBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        focusedErrorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                        errorBorder:
+                                            AppDefaults.outlineInputBorderError,
                                       ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            AppDefaults.radius),
-                                        borderSide: const BorderSide(
-                                            width: 1.0, color: Colors.grey),
-                                      ),
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                      items: provinces.map((String province) {
+                                        return DropdownMenuItem(
+                                          value: province,
+                                          child: Text(
+                                            province,
+                                            style: const TextStyle(
+                                                fontSize: AppDefaults.fontSize),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          provinceValue = newValue!;
+                                        });
+                                      },
                                     ),
-                                    style: const TextStyle(
-                                        fontSize: AppDefaults
-                                            .fontSize), // <-- SEE HERE
                                   ),
                                 ),
-                                // const Align(
-                                //   alignment: Alignment.centerLeft,
-                                //   child: Text(
-                                //     'Area',
-                                //     style:
-                                //         TextStyle(fontWeight: FontWeight.bold),
-                                //   ),
-                                // ),
-                                // Container(
-                                //   padding: const EdgeInsets.symmetric(
-                                //       horizontal: 1.0, vertical: 0),
-                                //   decoration: BoxDecoration(
-                                //     borderRadius: BorderRadius.circular(12.0),
-                                //     border: Border.all(
-                                //       color: Colors.black,
-                                //       style: BorderStyle.solid,
-                                //       width: 1,
-                                //     ),
-                                //   ),
-                                //   child: DropdownButtonHideUnderline(
-                                //     child: DropdownButtonFormField<String>(
-                                //       value: provinceValue,
-                                //       icon:
-                                //           const Icon(Icons.keyboard_arrow_down),
-                                //       items: provinces.map((String province) {
-                                //         return DropdownMenuItem(
-                                //           value: province,
-                                //           child: Text(province),
-                                //         );
-                                //       }).toList(),
-                                //       onChanged: (String? newValue) {
-                                //         setState(() {
-                                //           provinceValue = newValue!;
-                                //         });
-                                //       },
-                                //     ),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
@@ -714,26 +641,27 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                     const SizedBox(height: AppDefaults.margin / 2),
                     SizedBox(
-                      height: AppDefaults.height,
-                      // padding: EdgeInsets.zero,
                       child: TextFormField(
+                        controller: mobileController,
+                        validator: (value) {
+                          if (value != null && value.isEmpty) {
+                            return 'Address Details is required';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: AppDefaults.edgeInset,
+                          prefixIconConstraints:
+                              const BoxConstraints(minWidth: 0, minHeight: 0),
                           // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
+                          focusedBorder: AppDefaults.outlineInputBorderSuccess,
+                          enabledBorder: AppDefaults.outlineInputBorderSuccess,
+                          focusedErrorBorder:
+                              AppDefaults.outlineInputBorderError,
+                          errorBorder: AppDefaults.outlineInputBorderError,
                         ),
-                        style: const TextStyle(
-                            fontSize: AppDefaults.fontSize), // <-- SEE HERE
+                        style: const TextStyle(fontSize: AppDefaults.fontSize),
                       ),
                     ),
                     // const Align(
@@ -1034,6 +962,20 @@ String? validatePassword(String? formPassword) {
       Password must be at least 8 characters,
       include an uppercase letter, number and symbol.
       ''';
+  }
+
+  return null;
+}
+
+String? validateMobile(String? formMobile) {
+  if (formMobile == null || formMobile.isEmpty) {
+    return 'Mobile Number is required.';
+  }
+
+  String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+  RegExp regex = RegExp(pattern);
+  if (!regex.hasMatch(formMobile)) {
+    return 'Mobile Number is invalid.';
   }
 
   return null;
