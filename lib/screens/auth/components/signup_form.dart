@@ -20,18 +20,26 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
+  TextEditingController firstNameController =
+      TextEditingController(text: 'Rafael');
+  TextEditingController lastNameController =
+      TextEditingController(text: 'Pascual');
   TextEditingController birthdayController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController mobileController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController emailController =
+      TextEditingController(text: 'rpascual0812@gmail.com.au');
+  TextEditingController mobileController =
+      TextEditingController(text: '9162052424');
+  TextEditingController passwordController =
+      TextEditingController(text: '1Loveyou\$\$');
+  TextEditingController confirmPasswordController =
+      TextEditingController(text: '1Loveyou\$\$');
+  String provinceValue = 'Item 1';
+  String cityValue = 'Item 1';
+  String areaValue = 'Item 1';
+  TextEditingController addressDetailsController =
+      TextEditingController(text: 'Pasig');
+
   bool accept = false;
-
-  // Initial Selected Value
-  String provinceValue = '';
-
   // List of items in our dropdown menu
   var provinces = [
     '',
@@ -48,11 +56,23 @@ class _SignUpFormState extends State<SignUpForm> {
     super.initState();
   }
 
-  Future signup() async {
+  Future save() async {
     if (_key.currentState!.validate()) {
       try {
-        var body = {};
-
+        var body = {
+          'first_name': firstNameController.text,
+          'last_name': lastNameController.text,
+          'birthday': birthdayController.text.toString(),
+          'email': emailController.text,
+          'mobile': mobileController.text.toString(),
+          'password': passwordController.text,
+          'province': provinceValue,
+          'city': cityValue,
+          'area': areaValue,
+          'addressDetails': addressDetailsController.text,
+          'accept': accept.toString()
+        };
+        print(Uri.parse('${dotenv.get('API')}/register'));
         var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
             body: body);
         if (res.statusCode == 200) return res.body;
@@ -429,13 +449,14 @@ class _SignUpFormState extends State<SignUpForm> {
                                       value: provinceValue,
                                       validator: (value) {
                                         if (value != null && value.isEmpty) {
-                                          return 'Required';
+                                          return '';
                                         }
                                         return null;
                                       },
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        contentPadding: AppDefaults.edgeInset,
+                                        contentPadding:
+                                            AppDefaults.edgeInsetDropdown,
                                         prefixIconConstraints:
                                             const BoxConstraints(
                                                 minWidth: 0, minHeight: 0),
@@ -488,7 +509,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                   ),
                                 ),
                                 const SizedBox(height: AppDefaults.margin / 2),
-                                Container(
+                                SizedBox(
                                   // height: AppDefaults.height,
                                   // padding: const EdgeInsets.only(left: 10),
                                   // decoration: BoxDecoration(
@@ -503,16 +524,17 @@ class _SignUpFormState extends State<SignUpForm> {
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButtonFormField<String>(
                                       isExpanded: true,
-                                      value: provinceValue,
+                                      value: cityValue,
                                       validator: (value) {
                                         if (value != null && value.isEmpty) {
-                                          return 'Province is required';
+                                          return '';
                                         }
                                         return null;
                                       },
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        contentPadding: AppDefaults.edgeInset,
+                                        contentPadding:
+                                            AppDefaults.edgeInsetDropdown,
                                         prefixIconConstraints:
                                             const BoxConstraints(
                                                 minWidth: 0, minHeight: 0),
@@ -527,11 +549,11 @@ class _SignUpFormState extends State<SignUpForm> {
                                       ),
                                       icon:
                                           const Icon(Icons.keyboard_arrow_down),
-                                      items: provinces.map((String province) {
+                                      items: provinces.map((String city) {
                                         return DropdownMenuItem(
-                                          value: province,
+                                          value: city,
                                           child: Text(
-                                            province,
+                                            city,
                                             style: const TextStyle(
                                                 fontSize: AppDefaults.fontSize),
                                           ),
@@ -539,7 +561,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                       }).toList(),
                                       onChanged: (String? newValue) {
                                         setState(() {
-                                          provinceValue = newValue!;
+                                          cityValue = newValue!;
                                         });
                                       },
                                     ),
@@ -565,7 +587,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                   ),
                                 ),
                                 const SizedBox(height: AppDefaults.margin / 2),
-                                Container(
+                                SizedBox(
                                   // height: AppDefaults.height,
                                   // padding: const EdgeInsets.only(left: 10),
                                   // decoration: BoxDecoration(
@@ -580,16 +602,17 @@ class _SignUpFormState extends State<SignUpForm> {
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButtonFormField<String>(
                                       isExpanded: true,
-                                      value: provinceValue,
+                                      value: areaValue,
                                       validator: (value) {
                                         if (value != null && value.isEmpty) {
-                                          return 'Province is required';
+                                          return '';
                                         }
                                         return null;
                                       },
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        contentPadding: AppDefaults.edgeInset,
+                                        contentPadding:
+                                            AppDefaults.edgeInsetDropdown,
                                         prefixIconConstraints:
                                             const BoxConstraints(
                                                 minWidth: 0, minHeight: 0),
@@ -604,11 +627,11 @@ class _SignUpFormState extends State<SignUpForm> {
                                       ),
                                       icon:
                                           const Icon(Icons.keyboard_arrow_down),
-                                      items: provinces.map((String province) {
+                                      items: provinces.map((String area) {
                                         return DropdownMenuItem(
-                                          value: province,
+                                          value: area,
                                           child: Text(
-                                            province,
+                                            area,
                                             style: const TextStyle(
                                                 fontSize: AppDefaults.fontSize),
                                           ),
@@ -616,7 +639,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                       }).toList(),
                                       onChanged: (String? newValue) {
                                         setState(() {
-                                          provinceValue = newValue!;
+                                          areaValue = newValue!;
                                         });
                                       },
                                     ),
@@ -642,7 +665,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     const SizedBox(height: AppDefaults.margin / 2),
                     SizedBox(
                       child: TextFormField(
-                        controller: mobileController,
+                        controller: addressDetailsController,
                         validator: (value) {
                           if (value != null && value.isEmpty) {
                             return 'Address Details is required';
@@ -893,11 +916,14 @@ class _SignUpFormState extends State<SignUpForm> {
                           child: Switch(
                             value: accept,
                             onChanged: (value) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const TermsPage(),
-                                ),
-                              );
+                              accept = !accept;
+                              if (accept) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => const TermsPage(),
+                                  ),
+                                );
+                              }
                             },
                           ),
                         ),
@@ -911,7 +937,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         padding: const EdgeInsets.all(1),
                         child: ElevatedButton(
                           onPressed: () async {
-                            var account = await signup();
+                            var account = await save();
                             if (account != null) {}
                           },
                           style: ElevatedButton.styleFrom(

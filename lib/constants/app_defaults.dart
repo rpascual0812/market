@@ -22,6 +22,8 @@ class AppDefaults {
   static BorderRadius borderRadius = BorderRadius.circular(radius);
   static EdgeInsets edgeInset =
       const EdgeInsets.symmetric(vertical: 15, horizontal: 10.0);
+  static EdgeInsets edgeInsetDropdown =
+      const EdgeInsets.symmetric(vertical: 8, horizontal: 10.0);
 
   static TextStyle formTextStyle = const TextStyle(fontSize: fontSize);
   static OutlineInputBorder outlineInputBorderSuccess = OutlineInputBorder(
