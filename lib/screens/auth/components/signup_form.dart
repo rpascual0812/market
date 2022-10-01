@@ -48,6 +48,21 @@ class _SignUpFormState extends State<SignUpForm> {
   File? idPhoto;
   String idPhotoNetwork = '';
 
+  var body = {
+    'first_name': '',
+    'last_name': '',
+    'birthday': '',
+    'email': '',
+    'mobile': '',
+    'password': '',
+    'province': '',
+    'city': '',
+    'area': '',
+    'address_details': '',
+    'accept': '',
+    'images': {'display': '', 'id': ''}
+  };
+
   // List of items in our dropdown menu
   var provinces = [
     '',
@@ -67,7 +82,7 @@ class _SignUpFormState extends State<SignUpForm> {
   Future save() async {
     if (_key.currentState!.validate()) {
       try {
-        var body = {
+        body = {
           'first_name': firstNameController.text,
           'last_name': lastNameController.text,
           'birthday': birthdayController.text.toString(),
@@ -79,8 +94,8 @@ class _SignUpFormState extends State<SignUpForm> {
           'area': areaValue,
           'address_details': addressDetailsController.text,
           'accept': accept.toString(),
-          'display_photo': displayPhotoNetwork,
-          'id_photo': idPhotoNetwork
+          'display_photo': displayPhotoNetwork.toString(),
+          'id_photo': idPhotoNetwork.toString(),
         };
         // print(Uri.parse('${dotenv.get('API')}/register'));
         var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
@@ -100,11 +115,11 @@ class _SignUpFormState extends State<SignUpForm> {
       if (image == null) return;
       final imageTemp = File(image.path);
       setState(() {
-        print('calling upload');
-        final path = upload('display', imageTemp);
-        print('1 ${path.toString()}');
+        // final path = upload('display', imageTemp);
+        upload('display', imageTemp);
         displayPhoto = imageTemp;
-        displayPhotoNetwork = path.toString();
+        // displayPhotoNetwork = path.toString();
+        print('displayPhotoNetwork $displayPhotoNetwork');
       });
     } on Exception {
       AppDefaults.toast(
@@ -150,9 +165,10 @@ class _SignUpFormState extends State<SignUpForm> {
     );
 
     var response = await request.send();
-    return await response.stream.bytesToString();
+    var result = await response.stream.bytesToString();
     // return result != '' ? '${dotenv.get('API')}/$result' : null;
-
+    body['${type}_photo'] =
+        result != '' ? '${dotenv.get('API')}/${result.toString()}' : '';
     // } on Exception {
     //   AppDefaults.toast(
     //       context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
