@@ -51,24 +51,14 @@ class AppDefaults {
             AlertDialog(title: Text(title), content: Text(text)),
       );
 
-  static toastSuccess(BuildContext context, String message) =>
+  static toast(BuildContext context, String type, String message) =>
       Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: AppColors.primary,
-        textColor: Colors.white,
-        fontSize: AppDefaults.fontSize,
-      );
-
-  static toastError(BuildContext context, String message) =>
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: AppColors.danger,
+        backgroundColor:
+            type == 'success' ? AppColors.primary : AppColors.danger,
         textColor: Colors.white,
         fontSize: AppDefaults.fontSize,
       );

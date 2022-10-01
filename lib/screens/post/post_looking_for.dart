@@ -145,7 +145,7 @@ class _PostLookingForState extends State<PostLookingFor> {
                         var result = await submit();
                         if (!mounted) return;
                         if (result != null) {
-                          AppDefaults.toastSuccess(context,
+                          AppDefaults.toast(context, 'success',
                               AppMessage.getSuccess('PRODUCT_LOOKING_SAVED'));
                           clear();
                           // Navigator.pop(context);

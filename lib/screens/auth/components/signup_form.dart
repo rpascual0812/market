@@ -1,12 +1,14 @@
-// import 'dart:html';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:market/screens/terms/terms_page.dart';
 
 import '../../../constants/index.dart';
 
+import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 
 class SignUpForm extends StatefulWidget {
@@ -40,6 +42,12 @@ class _SignUpFormState extends State<SignUpForm> {
       TextEditingController(text: 'Pasig');
 
   bool accept = false;
+
+  File? displayPhoto;
+  String displayPhotoNetwork = '';
+  File? idPhoto;
+  String idPhotoNetwork = '';
+
   // List of items in our dropdown menu
   var provinces = [
     '',
@@ -70,7 +78,7 @@ class _SignUpFormState extends State<SignUpForm> {
           'city': cityValue,
           'area': areaValue,
           'addressDetails': addressDetailsController.text,
-          'accept': accept.toString()
+          'accept': accept.toString(),
         };
         print(Uri.parse('${dotenv.get('API')}/register'));
         var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
@@ -81,6 +89,128 @@ class _SignUpFormState extends State<SignUpForm> {
         return null;
       }
     }
+  }
+
+  Future pickImage() async {
+    // displayPhoto = null;
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemp = File(image.path);
+      setState(() {
+        print('calling upload');
+        final path = upload('display', imageTemp);
+        displayPhoto = imageTemp;
+        displayPhotoNetwork = path.toString();
+      });
+    } on Exception {
+      AppDefaults.toast(
+          context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
+    }
+  }
+
+  Future openCamera() async {
+    // idPhoto = null;
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image == null) return;
+      final imageTemp = File(image.path);
+      setState(() {
+        print('calling upload');
+        idPhoto = imageTemp;
+        upload('id', imageTemp);
+      });
+    } on Exception {
+      AppDefaults.toast(
+          context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
+    }
+  }
+
+  Future upload(String type, File file) async {
+    // List<int> imageBytes = await file.readAsBytes();
+    // String base64Image = base64Encode(imageBytes);
+
+    Uri url = Uri.parse('${dotenv.get('API')}/upload');
+    http.MultipartRequest request = http.MultipartRequest('POST', url);
+
+    request.fields['test'] = 'test';
+
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'image',
+        file.path,
+        contentType: MediaType('image', 'jpg'),
+      ),
+    );
+
+    var response = await request.send();
+    final result = await response.stream.bytesToString();
+    print('${dotenv.get('API')}/$result');
+
+    return result != '' ? '${dotenv.get('API')}/$result' : '';
+    /////////////////////
+    // List<int> imageBytes = await file.readAsBytes();
+    // print(imageBytes);
+    // String base64Image = base64Encode(imageBytes);
+
+    // final url = Uri.parse('${dotenv.get('API')}/upload');
+    // var result = await http.post(url, headers: {}, body: {
+    //   'image': base64Image,
+    // });
+    // print(result);
+    /////////////////////////////////////////
+    // String fileName = file.path.split('/').last;
+    // print(file.path);
+    // FormData data = FormData.fromMap({
+    //   "file": await MultipartFile.fromFile(
+    //     file.path,
+    //     filename: fileName,
+    //   ),
+    // });
+    // print(data);
+    // Dio dio = Dio();
+
+    // dio
+    //     .post('${dotenv.get('API')}/upload', data: data)
+    //     .then((response) => print(response))
+    //     .catchError((error) => print(error));
+    /////////////////////////////////////////////////
+    // var dio = Dio();
+    // FormData formData = FormData();
+
+    // if (file.path.isNotEmpty) {
+    //   // Create a FormData
+    //   String fileName = basename(file.path);
+    //   print("File Name : $fileName");
+    //   print("File Size : ${file.lengthSync()}");
+    //   formData.add("image", UploadFileInfo(file, fileName));
+    // }
+
+    // var response = await dio.post('${dotenv.get('API')}/upload',
+    //     data: formData,
+    //     options: Options(
+    //         method: 'POST',
+    //         responseType: ResponseType.json // or ResponseType.JSON
+    //         ));
+    // print("Response status: ${response.statusCode}");
+    // print("Response data: ${response.data}");
+
+    // final url = Uri.parse('${dotenv.get('API')}/upload');
+
+    // var request = http.MultipartRequest("POST", url);
+
+    // //add text fields
+    // request.fields["type"] = type;
+    // //create multipart using filepath, string or bytes
+    // var pic = await http.MultipartFile.fromPath("image", file.path);
+    // //add multipart to request
+    // request.files.add(pic);
+    // var response = await request.send();
+
+    // //Get the response from the server
+    // var responseData = await response.stream.toBytes();
+    // var responseString = String.fromCharCodes(responseData);
+    // print(responseString);
   }
 
   @override
@@ -734,7 +864,9 @@ class _SignUpFormState extends State<SignUpForm> {
                           child: Padding(
                             padding: const EdgeInsets.all(1),
                             child: ElevatedButton(
-                              onPressed: () async {},
+                              onPressed: () async {
+                                pickImage();
+                              },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(0),
                                 shape: RoundedRectangleBorder(
@@ -746,6 +878,13 @@ class _SignUpFormState extends State<SignUpForm> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: AppDefaults.margin),
+                        displayPhoto != null
+                            ? Image.file(
+                                displayPhoto!,
+                                height: 160,
+                              )
+                            : const SizedBox(),
                       ],
                     ),
                     const SizedBox(height: AppDefaults.margin),
@@ -765,7 +904,9 @@ class _SignUpFormState extends State<SignUpForm> {
                           child: Padding(
                             padding: const EdgeInsets.all(1),
                             child: ElevatedButton(
-                              onPressed: () async {},
+                              onPressed: () async {
+                                openCamera();
+                              },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(0),
                                 shape: RoundedRectangleBorder(
@@ -777,6 +918,13 @@ class _SignUpFormState extends State<SignUpForm> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: AppDefaults.margin),
+                        idPhoto != null
+                            ? Image.file(
+                                idPhoto!,
+                                height: 160,
+                              )
+                            : const SizedBox(),
                       ],
                     ),
                     const SizedBox(height: AppDefaults.margin),

@@ -166,8 +166,8 @@ class _LoginFormState extends State<LoginForm> {
                       storage.write(key: "jwt", value: jwt);
                       if (!mounted) return;
 
-                      AppDefaults.toastSuccess(
-                          context, AppMessage.getSuccess('LOGIN_SUCCESS'));
+                      AppDefaults.toast(context, 'success',
+                          AppMessage.getSuccess('LOGIN_SUCCESS'));
 
                       // Fluttertoast.showToast(
                       //   msg: "Please wait while we are fetching your account.",
@@ -195,8 +195,8 @@ class _LoginFormState extends State<LoginForm> {
                       // AppDefaults.displayDialog(context, "An Error Occurred",
                       //     "No account was found matching that username and password");
 
-                      AppDefaults.toastError(
-                          context, AppMessage.getError('ERROR_USER_NOT_FOUND'));
+                      AppDefaults.toast(context, 'error',
+                          AppMessage.getError('ERROR_USER_NOT_FOUND'));
 
                       var jwt =
                           '{"status":"success","user":{"username":"email@gmail.com","access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZW1haWxAZ21haWwuY29tIiwic3ViIjoxMTMsImlhdCI6MTY2NDAwNDA4MCwiZXhwIjoxNjY0MDQ3MjgwfQ.c8oXPKGkFgKJn_ljz1vdrIQ-lOe2SnFZFiA6mmEVdpI","expiration":"2023-09-25 03:21:20"}}';
