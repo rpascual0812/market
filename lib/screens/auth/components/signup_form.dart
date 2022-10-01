@@ -77,10 +77,12 @@ class _SignUpFormState extends State<SignUpForm> {
           'province': provinceValue,
           'city': cityValue,
           'area': areaValue,
-          'addressDetails': addressDetailsController.text,
+          'address_details': addressDetailsController.text,
           'accept': accept.toString(),
+          'display_photo': displayPhotoNetwork,
+          'id_photo': idPhotoNetwork
         };
-        print(Uri.parse('${dotenv.get('API')}/register'));
+        // print(Uri.parse('${dotenv.get('API')}/register'));
         var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
             body: body);
         if (res.statusCode == 200) return res.body;
@@ -100,6 +102,7 @@ class _SignUpFormState extends State<SignUpForm> {
       setState(() {
         print('calling upload');
         final path = upload('display', imageTemp);
+        print('1 ${path.toString()}');
         displayPhoto = imageTemp;
         displayPhotoNetwork = path.toString();
       });
@@ -118,7 +121,9 @@ class _SignUpFormState extends State<SignUpForm> {
       setState(() {
         print('calling upload');
         idPhoto = imageTemp;
-        upload('id', imageTemp);
+        final path = upload('id', imageTemp);
+        idPhoto = imageTemp;
+        idPhotoNetwork = path.toString();
       });
     } on Exception {
       AppDefaults.toast(
@@ -127,6 +132,7 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future upload(String type, File file) async {
+    // try {
     // List<int> imageBytes = await file.readAsBytes();
     // String base64Image = base64Encode(imageBytes);
 
@@ -144,73 +150,14 @@ class _SignUpFormState extends State<SignUpForm> {
     );
 
     var response = await request.send();
-    final result = await response.stream.bytesToString();
-    print('${dotenv.get('API')}/$result');
+    return await response.stream.bytesToString();
+    // return result != '' ? '${dotenv.get('API')}/$result' : null;
 
-    return result != '' ? '${dotenv.get('API')}/$result' : '';
-    /////////////////////
-    // List<int> imageBytes = await file.readAsBytes();
-    // print(imageBytes);
-    // String base64Image = base64Encode(imageBytes);
-
-    // final url = Uri.parse('${dotenv.get('API')}/upload');
-    // var result = await http.post(url, headers: {}, body: {
-    //   'image': base64Image,
-    // });
-    // print(result);
-    /////////////////////////////////////////
-    // String fileName = file.path.split('/').last;
-    // print(file.path);
-    // FormData data = FormData.fromMap({
-    //   "file": await MultipartFile.fromFile(
-    //     file.path,
-    //     filename: fileName,
-    //   ),
-    // });
-    // print(data);
-    // Dio dio = Dio();
-
-    // dio
-    //     .post('${dotenv.get('API')}/upload', data: data)
-    //     .then((response) => print(response))
-    //     .catchError((error) => print(error));
-    /////////////////////////////////////////////////
-    // var dio = Dio();
-    // FormData formData = FormData();
-
-    // if (file.path.isNotEmpty) {
-    //   // Create a FormData
-    //   String fileName = basename(file.path);
-    //   print("File Name : $fileName");
-    //   print("File Size : ${file.lengthSync()}");
-    //   formData.add("image", UploadFileInfo(file, fileName));
+    // } on Exception {
+    //   AppDefaults.toast(
+    //       context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
+    //   return null;
     // }
-
-    // var response = await dio.post('${dotenv.get('API')}/upload',
-    //     data: formData,
-    //     options: Options(
-    //         method: 'POST',
-    //         responseType: ResponseType.json // or ResponseType.JSON
-    //         ));
-    // print("Response status: ${response.statusCode}");
-    // print("Response data: ${response.data}");
-
-    // final url = Uri.parse('${dotenv.get('API')}/upload');
-
-    // var request = http.MultipartRequest("POST", url);
-
-    // //add text fields
-    // request.fields["type"] = type;
-    // //create multipart using filepath, string or bytes
-    // var pic = await http.MultipartFile.fromPath("image", file.path);
-    // //add multipart to request
-    // request.files.add(pic);
-    // var response = await request.send();
-
-    // //Get the response from the server
-    // var responseData = await response.stream.toBytes();
-    // var responseString = String.fromCharCodes(responseData);
-    // print(responseString);
   }
 
   @override

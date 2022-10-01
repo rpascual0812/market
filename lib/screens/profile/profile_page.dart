@@ -102,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: ElevatedButton(
                   onPressed: () async {
                     var result = await attemptLogOut();
-                    if (result) {
+                    if (result != null) {
                       // ignore: use_build_context_synchronously
                       AppDefaults.toast(context, 'success',
                           AppMessage.getSuccess('LOGOUT_SUCCESS'));
