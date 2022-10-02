@@ -108,19 +108,20 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  Future pickImage() async {
-    // displayPhoto = null;
+  Future pickImage(String type, ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
       final imageTemp = File(image.path);
-      setState(() {
-        // final path = upload('display', imageTemp);
-        upload('display', imageTemp);
+
+      final path = await upload(type, imageTemp);
+      if (type == 'display') {
         displayPhoto = imageTemp;
-        // displayPhotoNetwork = path.toString();
-        print('displayPhotoNetwork $displayPhotoNetwork');
-      });
+        displayPhotoNetwork = path.toString();
+      } else if (type == 'id') {
+        idPhoto = imageTemp;
+        idPhotoNetwork = path.toString();
+      }
     } on Exception {
       AppDefaults.toast(
           context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
@@ -128,18 +129,15 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future openCamera() async {
-    // idPhoto = null;
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
       if (image == null) return;
       final imageTemp = File(image.path);
-      setState(() {
-        print('calling upload');
-        idPhoto = imageTemp;
-        final path = upload('id', imageTemp);
-        idPhoto = imageTemp;
-        idPhotoNetwork = path.toString();
-      });
+
+      idPhoto = imageTemp;
+      final path = await upload('id', imageTemp);
+      idPhoto = imageTemp;
+      idPhotoNetwork = path.toString();
     } on Exception {
       AppDefaults.toast(
           context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
@@ -828,7 +826,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             padding: const EdgeInsets.all(1),
                             child: ElevatedButton(
                               onPressed: () async {
-                                pickImage();
+                                pickImage('display', ImageSource.gallery);
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(0),
@@ -868,7 +866,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             padding: const EdgeInsets.all(1),
                             child: ElevatedButton(
                               onPressed: () async {
-                                openCamera();
+                                pickImage('id', ImageSource.gallery);
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(0),
