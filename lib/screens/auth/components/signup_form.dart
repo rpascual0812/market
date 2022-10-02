@@ -128,50 +128,50 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  Future openCamera() async {
-    try {
-      final image = await ImagePicker().pickImage(source: ImageSource.camera);
-      if (image == null) return;
-      final imageTemp = File(image.path);
+  // Future openCamera() async {
+  //   try {
+  //     final image = await ImagePicker().pickImage(source: ImageSource.camera);
+  //     if (image == null) return;
+  //     final imageTemp = File(image.path);
 
-      idPhoto = imageTemp;
-      final path = await upload('id', imageTemp);
-      idPhoto = imageTemp;
-      idPhotoNetwork = path.toString();
+  //     idPhoto = imageTemp;
+  //     final path = await upload('id', imageTemp);
+  //     idPhoto = imageTemp;
+  //     idPhotoNetwork = path.toString();
+  //   } on Exception {
+  //     AppDefaults.toast(
+  //         context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
+  //   }
+  // }
+
+  Future upload(String type, File file) async {
+    try {
+      // List<int> imageBytes = await file.readAsBytes();
+      // String base64Image = base64Encode(imageBytes);
+
+      Uri url = Uri.parse('${dotenv.get('API')}/upload');
+      http.MultipartRequest request = http.MultipartRequest('POST', url);
+
+      request.fields['test'] = 'test';
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          file.path,
+          contentType: MediaType('image', 'jpg'),
+        ),
+      );
+
+      var response = await request.send();
+      var result = await response.stream.bytesToString();
+
+      body['${type}_photo'] =
+          result != '' ? '${dotenv.get('API')}/${result.toString()}' : '';
     } on Exception {
       AppDefaults.toast(
           context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
+      return null;
     }
-  }
-
-  Future upload(String type, File file) async {
-    // try {
-    // List<int> imageBytes = await file.readAsBytes();
-    // String base64Image = base64Encode(imageBytes);
-
-    Uri url = Uri.parse('${dotenv.get('API')}/upload');
-    http.MultipartRequest request = http.MultipartRequest('POST', url);
-
-    request.fields['test'] = 'test';
-
-    request.files.add(
-      await http.MultipartFile.fromPath(
-        'image',
-        file.path,
-        contentType: MediaType('image', 'jpg'),
-      ),
-    );
-
-    var response = await request.send();
-    var result = await response.stream.bytesToString();
-    // return result != '' ? '${dotenv.get('API')}/$result' : null;
-    body['${type}_photo'] =
-        result != '' ? '${dotenv.get('API')}/${result.toString()}' : '';
-    // } on Exception {
-    //   AppDefaults.toast(
-    //       context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
-    //   return null;
-    // }
   }
 
   @override
@@ -866,7 +866,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             padding: const EdgeInsets.all(1),
                             child: ElevatedButton(
                               onPressed: () async {
-                                pickImage('id', ImageSource.gallery);
+                                pickImage('id', ImageSource.camera);
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(0),
