@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -44,9 +45,9 @@ class _SignUpFormState extends State<SignUpForm> {
   bool accept = false;
 
   File? displayPhoto;
-  String displayPhotoNetwork = '';
+  int displayPhotoPk = 0;
   File? idPhoto;
-  String idPhotoNetwork = '';
+  int idPhotoPk = 0;
 
   var body = {
     'first_name': '',
@@ -94,8 +95,8 @@ class _SignUpFormState extends State<SignUpForm> {
           'area': areaValue,
           'address_details': addressDetailsController.text,
           'accept': accept.toString(),
-          'display_photo': displayPhotoNetwork.toString(),
-          'id_photo': idPhotoNetwork.toString(),
+          'display_photo': displayPhotoPk.toString(),
+          'id_photo': idPhotoPk.toString(),
         };
         // print(Uri.parse('${dotenv.get('API')}/register'));
         var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
@@ -114,13 +115,15 @@ class _SignUpFormState extends State<SignUpForm> {
       if (image == null) return;
       final imageTemp = File(image.path);
 
-      final path = await upload(type, imageTemp);
+      final document = await upload(type, imageTemp);
+      Map<String, dynamic> json = jsonDecode(document);
+      print('document $document');
       if (type == 'display') {
         displayPhoto = imageTemp;
-        displayPhotoNetwork = path.toString();
+        displayPhotoPk = json['document']['pk'];
       } else if (type == 'id') {
         idPhoto = imageTemp;
-        idPhotoNetwork = path.toString();
+        idPhotoPk = json['document']['pk'];
       }
     } on Exception {
       AppDefaults.toast(
@@ -163,10 +166,15 @@ class _SignUpFormState extends State<SignUpForm> {
       );
 
       var response = await request.send();
-      var result = await response.stream.bytesToString();
+      return await response.stream.bytesToString();
+      // var result = await response.stream.bytesToString();
+      // print(result);
+      // Map<String, dynamic> res = jsonDecode(result);
 
-      body['${type}_photo'] =
-          result != '' ? '${dotenv.get('API')}/${result.toString()}' : '';
+      // print(res['document']['pk']);
+      // body['${type}_photo'] = result != ''
+      //     ? '${dotenv.get('API')}/${res['document']['path'].toString()}'
+      //     : '';
     } on Exception {
       AppDefaults.toast(
           context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
