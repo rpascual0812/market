@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
 // import 'package:market/components/cards/big/big_card_image.dart';
-import 'package:market/components/cards/big/big_card_image_slide.dart';
 import 'package:market/components/select_dropdown.dart';
+import 'package:market/components/sliders/home_slider.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/demo_data.dart';
 import 'package:market/models/product.dart';
@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> {
             HomeHeader(backButton: widget.backButton),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0),
-              child: BigCardImageSlide(images: demoBigImages),
+              child: HomeSlider(images: demoBigImages),
             ),
             const SizedBox(height: AppDefaults.margin / 2),
             // const TitleAndSubtitle(),

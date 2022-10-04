@@ -8,7 +8,7 @@ import 'package:market/constants/app_imports.dart';
 import '../../../size_config.dart';
 // import '../../price_range_and_food_type.dart';
 // import '../../rating_with_counter.dart';
-import '../../small_dot.dart';
+import '../../sliders/small_dot.dart';
 import 'big_card_image_slide.dart';
 
 class RestaurantInfoBigCard extends StatelessWidget {

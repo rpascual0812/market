@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:market/constants/index.dart';
-import '../components/small_dot.dart';
+import 'sliders/small_dot.dart';
 
 // import '../constants.dart';
 

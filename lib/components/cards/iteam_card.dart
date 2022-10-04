@@ -3,7 +3,7 @@ import 'package:market/constants/index.dart';
 
 // import '../../constants.dart';
 import '../../size_config.dart';
-import '../small_dot.dart';
+import '../sliders/small_dot.dart';
 
 class ItemCard extends StatelessWidget {
   const ItemCard({
