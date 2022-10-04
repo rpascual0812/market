@@ -27,12 +27,13 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final usernameController = TextEditingController(text: 'email@gmail.com');
-  final passwordController = TextEditingController(text: 'password');
+  final passwordController = TextEditingController(text: 'P@ssword1');
   String errorMessage = '';
   bool isLoading = false;
 
-  Future attemptLogIn(String username, String password) async {
+  Future submit(String username, String password) async {
     try {
+      print('$username $password');
       var res = await http.post(Uri.parse('${dotenv.get('API')}/login'),
           body: {"username": username, "password": password});
       if (res.statusCode == 200) return res.body;
@@ -161,7 +162,7 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: () async {
                     var username = usernameController.text;
                     var password = passwordController.text;
-                    var jwt = await attemptLogIn(username, password);
+                    var jwt = await submit(username, password);
                     if (jwt != null) {
                       storage.write(key: "jwt", value: jwt);
                       if (!mounted) return;
@@ -180,14 +181,15 @@ class _LoginFormState extends State<LoginForm> {
                       // );
 
                       Timer(
-                        const Duration(seconds: 2),
+                        const Duration(seconds: 1),
                         () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AppRoot(jwt: jwt),
-                            ),
-                          )
+                          AppDefaults.navigate(context, AppRoot(jwt: jwt))
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => AppRoot(jwt: jwt),
+                          //   ),
+                          // )
                         },
                       );
                     } else {
@@ -198,19 +200,19 @@ class _LoginFormState extends State<LoginForm> {
                       AppDefaults.toast(context, 'error',
                           AppMessage.getError('ERROR_USER_NOT_FOUND'));
 
-                      var jwt =
-                          '{"status":"success","user":{"username":"email@gmail.com","access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZW1haWxAZ21haWwuY29tIiwic3ViIjoxMTMsImlhdCI6MTY2NDAwNDA4MCwiZXhwIjoxNjY0MDQ3MjgwfQ.c8oXPKGkFgKJn_ljz1vdrIQ-lOe2SnFZFiA6mmEVdpI","expiration":"2023-09-25 03:21:20"}}';
-                      Timer(
-                        const Duration(seconds: 1),
-                        () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AppRoot(jwt: jwt),
-                            ),
-                          )
-                        },
-                      );
+                      // var jwt =
+                      //     '{"status":"success","user":{"username":"email@gmail.com","access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZW1haWxAZ21haWwuY29tIiwic3ViIjoxMTMsImlhdCI6MTY2NDAwNDA4MCwiZXhwIjoxNjY0MDQ3MjgwfQ.c8oXPKGkFgKJn_ljz1vdrIQ-lOe2SnFZFiA6mmEVdpI","expiration":"2023-09-25 03:21:20"}}';
+                      // Timer(
+                      //   const Duration(seconds: 1),
+                      //   () => {
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) => AppRoot(jwt: jwt),
+                      //       ),
+                      //     )
+                      //   },
+                      // );
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -230,7 +232,7 @@ class _LoginFormState extends State<LoginForm> {
             //     onPressed: () async {
             //       var username = usernameController.text;
             //       var password = passwordController.text;
-            //       var jwt = await attemptLogIn(username, password);
+            //       var jwt = await submit(username, password);
             //       if (jwt != null) {
             //         storage.write(key: "jwt", value: jwt);
             //         Navigator.push(

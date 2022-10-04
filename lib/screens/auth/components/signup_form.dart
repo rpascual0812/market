@@ -30,13 +30,13 @@ class _SignUpFormState extends State<SignUpForm> {
       TextEditingController(text: 'Pascual');
   TextEditingController birthdayController = TextEditingController();
   TextEditingController emailController =
-      TextEditingController(text: 'rpascual0812@gmail.com.au');
+      TextEditingController(text: 'email01@gmail.com');
   TextEditingController mobileController =
-      TextEditingController(text: '9162052424');
+      TextEditingController(text: '9172052424');
   TextEditingController passwordController =
-      TextEditingController(text: '1Loveyou\$\$');
+      TextEditingController(text: 'P@ssword1');
   TextEditingController confirmPasswordController =
-      TextEditingController(text: '1Loveyou\$\$');
+      TextEditingController(text: 'P@ssword1');
   String provinceValue = 'Item 1';
   String cityValue = 'Item 1';
   String areaValue = 'Item 1';
@@ -102,8 +102,11 @@ class _SignUpFormState extends State<SignUpForm> {
         // print(Uri.parse('${dotenv.get('API')}/register'));
         var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
             body: body);
+
+        print(res.statusCode);
         if (res.statusCode == 200) {
           if (!mounted) return;
+          print(AppMessage.getSuccess('REGISTER_SUCCESS'));
           AppDefaults.toast(
               context, 'success', AppMessage.getSuccess('REGISTER_SUCCESS'));
           AppDefaults.navigate(context, const LoginPage());
@@ -134,9 +137,9 @@ class _SignUpFormState extends State<SignUpForm> {
       final imageTemp = File(image.path);
 
       final document = await upload(type, imageTemp);
-      print(document);
+      // print(document);
       Map<String, dynamic> json = jsonDecode(document);
-      print('document $document');
+      // print('document $document');
       if (type == 'display') {
         displayPhoto = imageTemp;
         displayPhotoPk = json['document']['pk'];
