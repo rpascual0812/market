@@ -62,4 +62,12 @@ class AppDefaults {
         textColor: Colors.white,
         fontSize: AppDefaults.fontSize,
       );
+
+  static navigate(BuildContext context, Widget page) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => page,
+      ),
+    );
+  }
 }

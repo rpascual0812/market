@@ -31,6 +31,10 @@ class AppMessage {
         return "Failed to fetch your image.";
       case "UPLOAD_FAILED":
         return "An error occurred while uploading your photo.";
+      case "TERMS_REQUIRED":
+        return "Please agree to the terms first.";
+      case "FORM_INVALID":
+        return "Please complete the form to continue.";
       default:
         return "Login failed. Please try again.";
     }
@@ -42,6 +46,8 @@ class AppMessage {
         return "Please wait while we are fetching your account.";
       case "LOGOUT_SUCCESS":
         return "You have been successfully logged out.";
+      case "REGISTER_SUCCESS":
+        return "Your account has been created successfully.";
       case "PRODUCT_LOOKING_SAVED":
         return "The product you are looking for has been posted.";
       default:

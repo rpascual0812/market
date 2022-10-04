@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:market/screens/auth/login_page.dart';
 import 'package:market/screens/terms/terms_page.dart';
 
 import '../../../constants/index.dart';
@@ -101,11 +102,28 @@ class _SignUpFormState extends State<SignUpForm> {
         // print(Uri.parse('${dotenv.get('API')}/register'));
         var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
             body: body);
-        if (res.statusCode == 200) return res.body;
+        if (res.statusCode == 200) {
+          if (!mounted) return;
+          AppDefaults.toast(
+              context, 'success', AppMessage.getSuccess('REGISTER_SUCCESS'));
+          AppDefaults.navigate(context, const LoginPage());
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => const LoginPage(),
+          //   ),
+          // );
+          // return res.body;
+        }
         return null;
       } on Exception {
         return null;
       }
+    } else {
+      accept
+          ? AppDefaults.toast(
+              context, 'error', AppMessage.getError('FORM_INVALID'))
+          : AppDefaults.toast(
+              context, 'error', AppMessage.getError('TERMS_REQUIRED'));
     }
   }
 
@@ -116,6 +134,7 @@ class _SignUpFormState extends State<SignUpForm> {
       final imageTemp = File(image.path);
 
       final document = await upload(type, imageTemp);
+      print(document);
       Map<String, dynamic> json = jsonDecode(document);
       print('document $document');
       if (type == 'display') {
@@ -1030,17 +1049,29 @@ class _SignUpFormState extends State<SignUpForm> {
                         ),
                         Align(
                           alignment: Alignment.centerRight,
-                          child: Switch(
-                            value: accept,
-                            onChanged: (value) {
-                              accept = !accept;
-                              if (accept) {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => const TermsPage(),
-                                  ),
-                                );
+                          child: FormField(
+                            initialValue: false,
+                            validator: (value) {
+                              if (value == false) {
+                                return AppMessage.getError('TERMS_REQUIRED');
                               }
+                              return null;
+                            },
+                            builder: (FormFieldState<bool> field) {
+                              return Switch(
+                                value: accept,
+                                onChanged: (value) {
+                                  accept = !accept;
+                                  field.didChange(value);
+                                  if (accept) {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => const TermsPage(),
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
                             },
                           ),
                         ),
