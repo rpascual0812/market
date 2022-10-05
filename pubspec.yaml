@@ -64,6 +64,9 @@ dependencies:
   range_slider_dialog: ^0.0.3
   image_picker: ^0.8.5+3
   dio: ^4.0.6
+  json_annotation: ^4.7.0
+  
+  
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +79,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   flutter_launcher_icons: "^0.10.0"
+  json_serializable: ^6.4.1
+  build_runner: ^2.2.1
 
 flutter_icons:
   android: true

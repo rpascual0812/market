@@ -194,9 +194,9 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             HomeHeader(backButton: widget.backButton),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0),
-              child: HomeSlider(images: demoBigImages),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0),
+              child: HomeSlider(),
             ),
             const SizedBox(height: AppDefaults.margin / 2),
             // const TitleAndSubtitle(),

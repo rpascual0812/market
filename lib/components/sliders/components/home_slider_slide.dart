@@ -4,26 +4,37 @@ import 'package:market/constants/index.dart';
 class HomeSliderSlide extends StatelessWidget {
   const HomeSliderSlide({
     Key? key,
-    required this.image,
+    required this.pk,
+    required this.type,
+    required this.title,
+    required this.details,
+    required this.userPk,
+    required this.sliderDocument,
   }) : super(key: key);
 
-  final String image;
+  final int? pk;
+  final String type;
+  final String title;
+  final String details;
+  final int userPk;
+  final List sliderDocument;
 
   @override
   Widget build(BuildContext context) {
+    print('document ${sliderDocument[0]['document']}');
     return Stack(
       children: [
         Container(
           width: MediaQuery.of(context).size.width,
           height: 400,
-          decoration: BoxDecoration(
-            // borderRadius: const BorderRadius.all(Radius.circular(12)),
-            image: DecorationImage(
-              // for newtowk image use NetworkImage()
-              image: AssetImage(image),
-              fit: BoxFit.cover,
-            ),
-          ),
+          decoration: const BoxDecoration(
+              // borderRadius: const BorderRadius.all(Radius.circular(12)),
+              // image: DecorationImage(
+              //   // for newtowk image use NetworkImage()
+              //   image: AssetImage(slides),
+              //   fit: BoxFit.cover,
+              // ),
+              ),
         ),
         Positioned(
           bottom: 0,
@@ -55,20 +66,20 @@ class HomeSliderSlide extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: AppDefaults.margin),
-                const SizedBox(
+                SizedBox(
                   height: 35.0,
                   child: Text(
-                    'Welcome',
-                    style: TextStyle(color: Colors.white, fontSize: 35),
+                    title,
+                    style: const TextStyle(color: Colors.white, fontSize: 35),
                   ),
                 ),
                 const SizedBox(height: AppDefaults.margin),
-                const SizedBox(
+                SizedBox(
                   height: 85.0,
                   width: 360,
                   child: Text(
-                    'Samdhana Community Market sit amet, consectuta adipising elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud execitation ullamco laboris',
-                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    details,
+                    style: const TextStyle(color: Colors.white, fontSize: 12),
                     textAlign: TextAlign.justify,
                   ),
                 ),

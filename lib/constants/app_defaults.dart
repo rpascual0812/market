@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:market/constants/app_colors.dart';
+import 'package:market/constants/app_messages.dart';
+import 'package:market/screens/auth/login_page.dart';
 
 class AppDefaults {
   static const double radius = 12.00;
@@ -67,6 +69,15 @@ class AppDefaults {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => page,
+      ),
+    );
+  }
+
+  static logout(BuildContext context) {
+    toast(context, 'error', AppMessage.getError('SESSION_EXPIRED'));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(),
       ),
     );
   }

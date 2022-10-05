@@ -35,6 +35,8 @@ class AppMessage {
         return "Please agree to the terms first.";
       case "FORM_INVALID":
         return "Please complete the form to continue.";
+      case "SESSION_EXPIRED":
+        return "Your session has expired.";
       default:
         return "Login failed. Please try again.";
     }

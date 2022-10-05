@@ -1,27 +1,29 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:market/components/sliders/components/home_slider_slide.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:market/constants/app_defaults.dart';
+import 'package:market/models/slider.dart';
 
 import '../../../size_config.dart';
 import '../dot_indicators.dart';
+import 'components/home_slider_slide.dart';
 
 class HomeSlider extends StatefulWidget {
   const HomeSlider({
     Key? key,
-    required this.images,
   }) : super(key: key);
-
-  final List images;
 
   @override
   State<HomeSlider> createState() => _HomeSliderState();
 }
 
 class _HomeSliderState extends State<HomeSlider> {
+  List<Sliders> sliders = [];
+
+  Map<Object, dynamic> slides = {};
   int intialIndex = 0;
   final storage = const FlutterSecureStorage();
   String token = '';
@@ -39,12 +41,12 @@ class _HomeSliderState extends State<HomeSlider> {
       token = all!;
 
       if (token != '') {
-        getSliders();
+        getSlides();
       }
     });
   }
 
-  Future<void> getSliders() async {
+  Future<void> getSlides() async {
     try {
       var body = json.decode(token);
       final url = Uri.parse('${dotenv.get('API')}/sliders');
@@ -55,15 +57,33 @@ class _HomeSliderState extends State<HomeSlider> {
 
       var res = await http.get(url, headers: headers);
       if (res.statusCode == 200) {
-        final result = json.decode(res.body);
         setState(() {
-          print(result);
+          slides = jsonDecode(res.body);
+          for (var i = 0; i < slides['data'].length; i++) {
+            sliders.add(Sliders(
+              pk: slides['data'][i]['pk'],
+              type: slides['data'][i]['type'],
+              title: slides['data'][i]['title'],
+              details: slides['data'][i]['details'],
+              userPk: slides['data'][i]['user_pk'],
+              sliderDocument: slides['data'][i]['slider_document'],
+            ));
+            print(slides['data'][i]);
+          }
+          // print('count ${slides['data'].length}');
+          // print('slides ${slides['data']}');
+          // slides = jsonDecode(json['data']);
         });
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
       }
       // if (res.statusCode == 200) return res.body;
       return;
-    } on Exception {
-      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
     }
   }
 
@@ -74,21 +94,28 @@ class _HomeSliderState extends State<HomeSlider> {
       child: Stack(
         children: [
           PageView.builder(
-            onPageChanged: (value) {
-              setState(() {
-                intialIndex = value;
-              });
-            },
-            itemCount: widget.images.length,
-            itemBuilder: (context, index) =>
-                HomeSliderSlide(image: widget.images[index]),
-          ),
+              onPageChanged: (value) {
+                setState(() {
+                  intialIndex = value;
+                });
+              },
+              itemCount: slides['data'] != null ? slides['data'].length : 0,
+              itemBuilder: (context, index) {
+                return HomeSliderSlide(
+                  pk: sliders[index].pk,
+                  type: sliders[index].type,
+                  title: sliders[index].title,
+                  details: sliders[index].details,
+                  userPk: sliders[index].userPk,
+                  sliderDocument: sliders[index].sliderDocument,
+                );
+              }),
           Positioned(
             bottom: getProportionateScreenWidth(15),
             right: getProportionateScreenWidth(15),
             child: Row(
               children: List.generate(
-                widget.images.length,
+                slides['data'] != null ? slides['data'].length : 0,
                 (index) => DotIndicator(
                   isActive: intialIndex == index,
                   activeColor: Colors.white,
