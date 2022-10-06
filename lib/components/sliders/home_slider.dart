@@ -40,22 +40,24 @@ class _HomeSliderState extends State<HomeSlider> {
     setState(() {
       token = all!;
 
-      if (token != '') {
-        getSlides();
-      }
+      getSlides();
+      if (token != '') {}
     });
   }
 
   Future<void> getSlides() async {
     try {
-      var body = json.decode(token);
+      var body = token != '' ? json.decode(token) : '';
       final url = Uri.parse('${dotenv.get('API')}/sliders');
-      final headers = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${body['user']['access_token']}',
-      };
+      final headers = token != ''
+          ? {
+              'Accept': 'application/json',
+              'Authorization': 'Bearer ${body['user']['access_token']}',
+            }
+          : {};
 
-      var res = await http.get(url, headers: headers);
+      var res = await http.get(url);
+      // var res = await http.get(url, headers: headers);
       if (res.statusCode == 200) {
         setState(() {
           slides = jsonDecode(res.body);
@@ -68,6 +70,7 @@ class _HomeSliderState extends State<HomeSlider> {
               userPk: slides['data'][i]['user_pk'],
               sliderDocument: slides['data'][i]['slider_document'],
             ));
+            print(slides['data'][i]);
           }
           // print('count ${slides['data'].length}');
           // print('slides ${slides['data']}');
