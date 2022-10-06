@@ -68,7 +68,6 @@ class _HomeSliderState extends State<HomeSlider> {
               userPk: slides['data'][i]['user_pk'],
               sliderDocument: slides['data'][i]['slider_document'],
             ));
-            print(slides['data'][i]);
           }
           // print('count ${slides['data'].length}');
           // print('slides ${slides['data']}');

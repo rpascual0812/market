@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/constants/index.dart';
 
 class HomeSliderSlide extends StatelessWidget {
@@ -21,20 +22,25 @@ class HomeSliderSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('document ${sliderDocument[0]['document']}');
+    var background =
+        '${dotenv.get('API')}/${sliderDocument[0]['document']['path']}';
+    var icon = sliderDocument.asMap().containsKey(1)
+        ? '${dotenv.get('API')}/${sliderDocument[1]['document']['path']}'
+        : '';
+
+    // print('${dotenv.get('API')}/${sliderDocument[1]['path']}');
     return Stack(
       children: [
         Container(
           width: MediaQuery.of(context).size.width,
           height: 400,
-          decoration: const BoxDecoration(
-              // borderRadius: const BorderRadius.all(Radius.circular(12)),
-              // image: DecorationImage(
-              //   // for newtowk image use NetworkImage()
-              //   image: AssetImage(slides),
-              //   fit: BoxFit.cover,
-              // ),
-              ),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+            image: DecorationImage(
+              image: NetworkImage(background),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
         Positioned(
           bottom: 0,
@@ -55,16 +61,22 @@ class HomeSliderSlide extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: AppDefaults.margin),
-                SizedBox(
-                  height: 120.0,
+                Visibility(
+                  visible: sliderDocument.asMap().containsKey(1),
                   child: SizedBox(
-                    child: Image.asset(
-                      'assets/images/farmer.png',
-                      width: 120,
-                      fit: BoxFit.cover,
+                    height: 120.0,
+                    child: SizedBox(
+                      child: Image.network(
+                        icon,
+                        width: 120,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
+                Visibility(
+                    visible: !sliderDocument.asMap().containsKey(1),
+                    child: const SizedBox(height: 120)),
                 const SizedBox(height: AppDefaults.margin),
                 SizedBox(
                   height: 35.0,
