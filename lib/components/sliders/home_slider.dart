@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:market/constants/app_defaults.dart';
+import 'package:market/constants/index.dart';
 import 'package:market/models/slider.dart';
 
 import '../../../size_config.dart';
@@ -22,7 +20,6 @@ class HomeSlider extends StatefulWidget {
 
 class _HomeSliderState extends State<HomeSlider> {
   List<Sliders> sliders = [];
-
   Map<Object, dynamic> slides = {};
   int intialIndex = 0;
   final storage = const FlutterSecureStorage();
@@ -47,17 +44,7 @@ class _HomeSliderState extends State<HomeSlider> {
 
   Future<void> getSlides() async {
     try {
-      var body = token != '' ? json.decode(token) : '';
-      final url = Uri.parse('${dotenv.get('API')}/sliders');
-      final headers = token != ''
-          ? {
-              'Accept': 'application/json',
-              'Authorization': 'Bearer ${body['user']['access_token']}',
-            }
-          : {};
-
-      var res = await http.get(url);
-      // var res = await http.get(url, headers: headers);
+      var res = await Remote.get('sliders');
       if (res.statusCode == 200) {
         setState(() {
           slides = jsonDecode(res.body);

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:market/components/select_dropdown.dart';
 import 'package:market/components/sliders/home_slider.dart';
 import 'package:market/constants/app_colors.dart';
-import 'package:market/demo_data.dart';
+// import 'package:market/demo_data.dart';
 import 'package:market/models/product.dart';
 import 'package:market/screens/future_crops/future_crops_widget.dart';
 import 'package:market/screens/home/components/article_list.dart';

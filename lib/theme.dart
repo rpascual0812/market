@@ -7,7 +7,7 @@ class AppTheme {
   AppTheme(this.context);
 
   /// Default Font Family Name
-  final String _defaultFont = 'Grodita';
+  final String _defaultFont = 'Roboto';
 
   ThemeData get lightTheme {
     return ThemeData(
@@ -50,7 +50,7 @@ class AppTheme {
         titleTextStyle: Theme.of(context)
             .textTheme
             .headline6!
-            .copyWith(fontFamily: 'Avenir'),
+            .copyWith(fontFamily: 'Roboto'),
         iconTheme: const IconThemeData(color: AppColors.defaultBlack),
       ),
       buttonTheme: const ButtonThemeData(

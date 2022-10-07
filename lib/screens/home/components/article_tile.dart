@@ -95,7 +95,7 @@ class ArticleTile extends StatelessWidget {
             style: const TextStyle(
               fontSize: AppDefaults.fontSize,
               color: AppColors.primary,
-              fontWeight: FontWeight.bold,
+              // fontWeight: FontWeight.bold,
             ),
           ),
         ],

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/constants/index.dart';
@@ -35,9 +36,8 @@ class HomeSliderSlide extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           height: 400,
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
             image: DecorationImage(
-              image: NetworkImage(background),
+              image: CachedNetworkImageProvider(background),
               fit: BoxFit.cover,
             ),
           ),
