@@ -29,15 +29,14 @@ class _HomeSliderState extends State<HomeSlider> {
   void initState() {
     super.initState();
     readStorage();
+    getSlides();
   }
 
   Future<void> readStorage() async {
     final all = await storage.read(key: 'jwt');
 
     setState(() {
-      token = all!;
-
-      getSlides();
+      token = all ?? '';
       if (token != '') {}
     });
   }
@@ -57,7 +56,7 @@ class _HomeSliderState extends State<HomeSlider> {
               userPk: slides['data'][i]['user_pk'],
               sliderDocument: slides['data'][i]['slider_document'],
             ));
-            print(slides['data'][i]);
+            // print(slides['data'][i]);
           }
           // print('count ${slides['data'].length}');
           // print('slides ${slides['data']}');
@@ -83,22 +82,23 @@ class _HomeSliderState extends State<HomeSlider> {
       child: Stack(
         children: [
           PageView.builder(
-              onPageChanged: (value) {
-                setState(() {
-                  intialIndex = value;
-                });
-              },
-              itemCount: slides['data'] != null ? slides['data'].length : 0,
-              itemBuilder: (context, index) {
-                return HomeSliderSlide(
-                  pk: sliders[index].pk,
-                  type: sliders[index].type,
-                  title: sliders[index].title,
-                  details: sliders[index].details,
-                  userPk: sliders[index].userPk,
-                  sliderDocument: sliders[index].sliderDocument,
-                );
-              }),
+            onPageChanged: (value) {
+              setState(() {
+                intialIndex = value;
+              });
+            },
+            itemCount: slides['data'] != null ? slides['data'].length : 0,
+            itemBuilder: (context, index) {
+              return HomeSliderSlide(
+                pk: sliders[index].pk,
+                type: sliders[index].type,
+                title: sliders[index].title,
+                details: sliders[index].details,
+                userPk: sliders[index].userPk,
+                sliderDocument: sliders[index].sliderDocument,
+              );
+            },
+          ),
           Positioned(
             bottom: getProportionateScreenWidth(15),
             right: getProportionateScreenWidth(15),

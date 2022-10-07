@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
 
     setState(() {
       welcome = welcomeStorage ?? '';
-      jwt = jwtStorage!;
+      jwt = jwtStorage ?? '';
     });
   }
 
