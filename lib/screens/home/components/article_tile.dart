@@ -52,8 +52,8 @@ class ArticleTile extends StatelessWidget {
                     Column(
                       children: [
                         SizedBox(
-                          width: 130,
-                          height: 220,
+                          width: 110,
+                          height: 230,
                           child: AspectRatio(
                             aspectRatio: 1 / 1,
                             child: NetworkImageWithLoader(
@@ -67,9 +67,9 @@ class ArticleTile extends StatelessWidget {
                       ],
                     ),
                     Positioned(
-                      bottom: 0,
+                      bottom: 10,
                       child: Container(
-                        width: 130,
+                        width: 110,
                         height: 25,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
@@ -80,7 +80,7 @@ class ArticleTile extends StatelessWidget {
                         ),
                         child: Container(
                           padding: const EdgeInsets.only(
-                              left: 35, right: 10, top: 5, bottom: 5),
+                              left: 25, right: 10, top: 5, bottom: 5),
                           child: const Text(
                             'Read Article',
                             style: TextStyle(
@@ -96,7 +96,7 @@ class ArticleTile extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: AppDefaults.margin / 2),
+          const SizedBox(height: AppDefaults.margin / 4),
           Text(
             title,
             style: const TextStyle(

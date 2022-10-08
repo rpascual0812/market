@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage> {
             // const SearchBar(),
             const SizedBox(height: AppDefaults.margin / 2),
             const ArticleList(),
-            const SizedBox(height: AppDefaults.margin / 2),
+            const SizedBox(height: AppDefaults.margin),
             const FutureCropsWidget(),
             const SizedBox(height: AppDefaults.margin / 2),
             const LookingForWidget(),

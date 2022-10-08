@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:market/constants/app_defaults.dart';
-import 'package:market/screens/future_crops/future_crops_widget_tile.dart';
 
 import '../../components/section_divider_title.dart';
+import 'future_crops_widget_tile.dart';
 // import '../../product/product_page.dart';
 
 class FutureCropsWidget extends StatelessWidget {
@@ -48,8 +48,8 @@ class FutureCropsWidget extends StatelessWidget {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: [
-                    FutureCropsWidgetTile(
+                  children: List.generate(5, (index) {
+                    return FutureCropsWidgetTile(
                       name: 'Juan Dela Cruz',
                       imageLink: 'https://i.imgur.com/8G2bg5J.jpeg',
                       product: 'Almonds',
@@ -58,63 +58,75 @@ class FutureCropsWidget extends StatelessWidget {
                       location: 'Davao',
                       date: DateTime(2023, 08, 12, 13, 25),
                       onTap: () {},
-                    ),
-                    FutureCropsWidgetTile(
-                      name: 'Long Sleeve Shirts',
-                      imageLink: 'https://i.imgur.com/6AglEUF.jpeg',
-                      product: 'Petchay',
-                      quantity: '103 kg',
-                      description: 'Lorem ipsum dolor sit amet',
-                      location: 'Davao',
-                      date: DateTime(2023, 08, 12, 13, 25),
-                      onTap: () {},
-                    ),
-                    FutureCropsWidgetTile(
-                      name: 'Long Sleeve Shirts',
-                      imageLink: 'https://i.imgur.com/HU17L0b.png',
-                      product: 'Banana',
-                      quantity: '103 kg',
-                      description: 'Lorem ipsum dolor sit amet',
-                      location: 'Naga',
-                      date: DateTime(2023, 08, 12, 13, 25),
-                      onTap: () {},
-                    ),
-                    FutureCropsWidgetTile(
-                      name: 'Long Sleeve Shirts',
-                      imageLink: 'https://i.imgur.com/YzaqJlD.jpeg',
-                      product: 'Strawberry',
-                      quantity: '103 kg',
-                      description: 'Lorem ipsum dolor sit amet',
-                      location: 'Baguio',
-                      date: DateTime(2023, 08, 12, 13, 25),
-                      onTap: () {},
-                    ),
-                    FutureCropsWidgetTile(
-                      name: 'Long Sleeve Shirts',
-                      imageLink: 'https://i.imgur.com/l3gSyRn.jpeg',
-                      product: 'Coffee',
-                      quantity: '103 kg',
-                      description: 'Lorem ipsum dolor sit amet',
-                      location: 'Ilocos',
-                      date: DateTime(2023, 08, 12, 13, 25),
-                      onTap: () {},
-                    ),
-                    FutureCropsWidgetTile(
-                      name: 'Casual Henley Shirts',
-                      imageLink: 'https://i.imgur.com/pKgABuT.jpeg',
-                      product: 'Mango',
-                      quantity: '103 kg',
-                      description: 'Lorem ipsum dolor sit amet',
-                      location: 'Panay',
-                      date: DateTime(2023, 08, 12, 13, 25),
-                      onTap: () {
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //     builder: (context) => const ProductPage(
-                        //           coverImage: 'https://i.imgur.com/PFBRThN.png',
-                        //         )));
-                      },
-                    ),
-                  ],
+                    );
+                  }),
+                  // children: [
+                  //   FutureCropsWidgetTile(
+                  //     name: 'Juan Dela Cruz',
+                  //     imageLink: 'https://i.imgur.com/8G2bg5J.jpeg',
+                  //     product: 'Almonds',
+                  //     quantity: '103 kg',
+                  //     description: 'Lorem ipsum dolor sit amet',
+                  //     location: 'Davao',
+                  //     date: DateTime(2023, 08, 12, 13, 25),
+                  //     onTap: () {},
+                  //   ),
+                  //   FutureCropsWidgetTile(
+                  //     name: 'Long Sleeve Shirts',
+                  //     imageLink: 'https://i.imgur.com/6AglEUF.jpeg',
+                  //     product: 'Petchay',
+                  //     quantity: '103 kg',
+                  //     description: 'Lorem ipsum dolor sit amet',
+                  //     location: 'Davao',
+                  //     date: DateTime(2023, 08, 12, 13, 25),
+                  //     onTap: () {},
+                  //   ),
+                  //   FutureCropsWidgetTile(
+                  //     name: 'Long Sleeve Shirts',
+                  //     imageLink: 'https://i.imgur.com/HU17L0b.png',
+                  //     product: 'Banana',
+                  //     quantity: '103 kg',
+                  //     description: 'Lorem ipsum dolor sit amet',
+                  //     location: 'Naga',
+                  //     date: DateTime(2023, 08, 12, 13, 25),
+                  //     onTap: () {},
+                  //   ),
+                  //   FutureCropsWidgetTile(
+                  //     name: 'Long Sleeve Shirts',
+                  //     imageLink: 'https://i.imgur.com/YzaqJlD.jpeg',
+                  //     product: 'Strawberry',
+                  //     quantity: '103 kg',
+                  //     description: 'Lorem ipsum dolor sit amet',
+                  //     location: 'Baguio',
+                  //     date: DateTime(2023, 08, 12, 13, 25),
+                  //     onTap: () {},
+                  //   ),
+                  //   FutureCropsWidgetTile(
+                  //     name: 'Long Sleeve Shirts',
+                  //     imageLink: 'https://i.imgur.com/l3gSyRn.jpeg',
+                  //     product: 'Coffee',
+                  //     quantity: '103 kg',
+                  //     description: 'Lorem ipsum dolor sit amet',
+                  //     location: 'Ilocos',
+                  //     date: DateTime(2023, 08, 12, 13, 25),
+                  //     onTap: () {},
+                  //   ),
+                  //   FutureCropsWidgetTile(
+                  //     name: 'Casual Henley Shirts',
+                  //     imageLink: 'https://i.imgur.com/pKgABuT.jpeg',
+                  //     product: 'Mango',
+                  //     quantity: '103 kg',
+                  //     description: 'Lorem ipsum dolor sit amet',
+                  //     location: 'Panay',
+                  //     date: DateTime(2023, 08, 12, 13, 25),
+                  //     onTap: () {
+                  //       // Navigator.of(context).push(MaterialPageRoute(
+                  //       //     builder: (context) => const ProductPage(
+                  //       //           coverImage: 'https://i.imgur.com/PFBRThN.png',
+                  //       //         )));
+                  //     },
+                  //   ),
+                  // ],
                 ),
               ),
             ],
