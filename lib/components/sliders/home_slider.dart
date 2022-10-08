@@ -20,7 +20,7 @@ class HomeSlider extends StatefulWidget {
 
 class _HomeSliderState extends State<HomeSlider> {
   List<Sliders> sliders = [];
-  Map<Object, dynamic> slides = {};
+  Map<Object, dynamic> slidesJson = {};
   int intialIndex = 0;
   final storage = const FlutterSecureStorage();
   String token = '';
@@ -46,15 +46,15 @@ class _HomeSliderState extends State<HomeSlider> {
       var res = await Remote.get('sliders');
       if (res.statusCode == 200) {
         setState(() {
-          slides = jsonDecode(res.body);
-          for (var i = 0; i < slides['data'].length; i++) {
+          slidesJson = jsonDecode(res.body);
+          for (var i = 0; i < slidesJson['data'].length; i++) {
             sliders.add(Sliders(
-              pk: slides['data'][i]['pk'],
-              type: slides['data'][i]['type'],
-              title: slides['data'][i]['title'],
-              details: slides['data'][i]['details'],
-              userPk: slides['data'][i]['user_pk'],
-              sliderDocument: slides['data'][i]['slider_document'],
+              pk: slidesJson['data'][i]['pk'],
+              type: slidesJson['data'][i]['type'],
+              title: slidesJson['data'][i]['title'],
+              details: slidesJson['data'][i]['details'],
+              userPk: slidesJson['data'][i]['user_pk'],
+              sliderDocument: slidesJson['data'][i]['slider_document'],
             ));
             // print(slides['data'][i]);
           }
@@ -87,7 +87,8 @@ class _HomeSliderState extends State<HomeSlider> {
                 intialIndex = value;
               });
             },
-            itemCount: slides['data'] != null ? slides['data'].length : 0,
+            itemCount:
+                slidesJson['data'] != null ? slidesJson['data'].length : 0,
             itemBuilder: (context, index) {
               return HomeSliderSlide(
                 pk: sliders[index].pk,
@@ -104,7 +105,7 @@ class _HomeSliderState extends State<HomeSlider> {
             right: getProportionateScreenWidth(15),
             child: Row(
               children: List.generate(
-                slides['data'] != null ? slides['data'].length : 0,
+                slidesJson['data'] != null ? slidesJson['data'].length : 0,
                 (index) => DotIndicator(
                   isActive: intialIndex == index,
                   activeColor: Colors.white,

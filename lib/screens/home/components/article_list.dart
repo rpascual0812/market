@@ -16,8 +16,8 @@ class ArticleList extends StatefulWidget {
 }
 
 class _ArticleListState extends State<ArticleList> {
-  List<Articles> articleList = [];
-  Map<Object, dynamic> articles = {};
+  List<Articles> articles = [];
+  Map<Object, dynamic> articleJson = {};
   int intialIndex = 0;
 
   @override
@@ -32,14 +32,14 @@ class _ArticleListState extends State<ArticleList> {
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {
-          articles = jsonDecode(res.body);
-          for (var i = 0; i < articles['data'].length; i++) {
-            articleList.add(Articles(
-              pk: articles['data'][i]['pk'],
-              title: articles['data'][i]['title'],
-              description: articles['data'][i]['description'],
-              articleDocument: articles['data'][i]['article_document'],
-              userPk: articles['data'][i]['user_pk'],
+          articleJson = jsonDecode(res.body);
+          for (var i = 0; i < articleJson['data'].length; i++) {
+            articles.add(Articles(
+              pk: articleJson['data'][i]['pk'],
+              title: articleJson['data'][i]['title'],
+              description: articleJson['data'][i]['description'],
+              articleDocument: articleJson['data'][i]['article_document'],
+              userPk: articleJson['data'][i]['user_pk'],
             ));
             // print('articles $articles');
           }
@@ -66,54 +66,17 @@ class _ArticleListState extends State<ArticleList> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(
-              articles['data'] != null ? articles['data'].length : 0, (index) {
+              articleJson['data'] != null ? articleJson['data'].length : 0,
+              (index) {
             return ArticleTile(
-              title: articleList[index].title,
-              description: articleList[index].description,
-              articleDocument: articleList[index].articleDocument,
+              title: articles[index].title,
+              description: articles[index].description,
+              articleDocument: articles[index].articleDocument,
               onTap: () {},
             );
           }),
         ),
         // children: const [
-
-        //   // PageView.builder(
-        //   //   onPageChanged: (value) {
-        //   //     setState(() {
-        //   //       intialIndex = value;
-        //   //     });
-        //   //   },
-        //   //   itemCount: articles['data'] != null ? articles['data'].length : 0,
-        //   //   itemBuilder: (context, index) {
-        //   //     return ArticleTile(
-        //   //       name: 'World Food Technology',
-        //   //       coverImage: 'https://i.imgur.com/RY6EHiXl.jpg',
-        //   //       onTap: () {},
-        //   //     );
-        //   //   },
-        //   // ),
-        //   // ArticleTile(
-        //   //   name: 'World Food Technology',
-        //   //   coverImage: 'https://i.imgur.com/RY6EHiXl.jpg',
-        //   //   onTap: () {},
-        //   // ),
-        //   // ArticleTile(
-        //   //   name: 'Agriculture News',
-        //   //   coverImage: 'https://i.imgur.com/XeWg4Ny.jpg',
-        //   //   onTap: () {},
-        //   // ),
-        //   // ArticleTile(
-        //   //   name: 'Successful Farmin',
-        //   //   coverImage: 'https://i.imgur.com/9VtNpc9.jpg',
-        //   //   onTap: () {},
-        //   // ),
-        //   // ArticleTile(
-        //   //   name: 'Another Article',
-        //   //   coverImage: 'https://i.imgur.com/Uvt6wsC.jpg',
-        //   //   onTap: () {},
-        //   // ),
-        // ],
-        // ),
       ),
     );
   }
