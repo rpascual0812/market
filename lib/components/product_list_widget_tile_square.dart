@@ -40,9 +40,9 @@ class ProductListWidgetTileSquare extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var image =
-        '${dotenv.get('API')}/${productDocument[0]['document']['path']}';
-    print('aa $image');
+    var image = productDocument.isEmpty
+        ? '${dotenv.get('API')}/assets/images/no-image.jpg'
+        : '${dotenv.get('API')}/${productDocument[0]['document']['path']}';
 
     return InkWell(
       onTap: onTap,

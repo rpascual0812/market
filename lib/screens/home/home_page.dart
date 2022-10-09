@@ -50,7 +50,9 @@ class _HomePageState extends State<HomePage> {
       if (res.statusCode == 200) {
         setState(() {
           dataJson = jsonDecode(res.body);
+          print('dataJson $dataJson');
           for (var i = 0; i < dataJson['data'].length; i++) {
+            DateTime date = DateTime.parse(dataJson['data'][i]['date_created']);
             products.add(Products(
               pk: dataJson['data'][i]['pk'],
               uuid: dataJson['data'][i]['uuid'],
@@ -65,7 +67,7 @@ class _HomePageState extends State<HomePage> {
               country: dataJson['data'][i]['country'],
               userDocument: dataJson['data'][i]['user_document'],
               productDocument: dataJson['data'][i]['product_document'],
-              dateCreated: dataJson['data'][i]['date_created'],
+              dateCreated: date,
             ));
             // print('products $products');
           }

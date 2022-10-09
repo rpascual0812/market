@@ -58,7 +58,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
         '${dotenv.get('API')}/${widget.userDocument[0]['document']['path']}';
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.40,
+      width: MediaQuery.of(context).size.width * 0.31,
       height: 125,
       // decoration: const BoxDecoration(color: Colors.red),
       child: Padding(
@@ -85,6 +85,8 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                           height: 105,
                           decoration: BoxDecoration(
                             color: Colors.white,
+                            borderRadius:
+                                BorderRadius.circular(AppDefaults.radius),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.3),
@@ -102,14 +104,6 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                             ),
                             child: Column(
                               children: [
-                                // Stack(
-                                //   children: [
-                                //     Positioned(
-                                //       left: 0,
-                                //       child: Text('asdfasdf'),
-                                //     ),
-                                //   ],
-                                // ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -174,7 +168,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                       child: Text(
                                         widget.name,
                                         style: const TextStyle(
-                                          fontSize: 12,
+                                          fontSize: AppDefaults.fontSize,
                                           color: AppColors.primary,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -182,9 +176,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                     ),
                                   ],
                                 ),
-
                                 const SizedBox(height: AppDefaults.margin / 10),
-
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -194,7 +186,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                       child: Text(
                                         'Quantity: ${widget.quantity.toString()}',
                                         style: const TextStyle(
-                                          fontSize: 8,
+                                          fontSize: AppDefaults.fontSize - 2,
                                           color: AppColors.defaultBlack,
                                         ),
                                       ),
@@ -211,7 +203,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                       child: Text(
                                         'Forcasted date: ${DateFormat.yMMMd().format(widget.date)}',
                                         style: const TextStyle(
-                                          fontSize: 8,
+                                          fontSize: AppDefaults.fontSize - 4,
                                           color: AppColors.defaultBlack,
                                         ),
                                       ),
