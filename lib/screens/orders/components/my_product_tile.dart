@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 
 import '../../../constants/index.dart';
@@ -9,33 +10,29 @@ class MyProductTile extends StatefulWidget {
     Key? key,
     required this.pk,
     required this.uuid,
-    required this.title,
-    required this.productImage,
+    required this.name,
+    required this.user,
+    required this.productDocument,
+    required this.userDocument,
+    required this.measurement,
     required this.quantity,
-    required this.unit,
     required this.description,
     required this.location,
     required this.type,
-    this.imageURL = '',
-    required this.createdBy,
-    required this.userImage,
-    required this.userName,
     required this.dateCreated,
   }) : super(key: key);
 
   final int pk;
   final String uuid;
-  final String title;
-  final String productImage;
+  final String name;
+  final List user;
+  final List productDocument;
+  final List userDocument;
+  final List measurement;
   final double quantity;
-  final String unit;
   final String description;
   final String location;
   final String type; // looking for, future crop, already available
-  final String imageURL;
-  final int createdBy;
-  final String userImage;
-  final String userName;
   final DateTime dateCreated;
 
   @override
@@ -45,6 +42,10 @@ class MyProductTile extends StatefulWidget {
 class _MyProductTileState extends State<MyProductTile> {
   @override
   Widget build(BuildContext context) {
+    var userImage =
+        '${dotenv.get('API')}/${widget.userDocument[0]['document']['path']}';
+    print('aa $userImage');
+
     return GestureDetector(
       // no onTap event for now
       // onTap: () {
@@ -109,7 +110,7 @@ class _MyProductTileState extends State<MyProductTile> {
                                               child: Hero(
                                                 tag: widget.pk,
                                                 child: NetworkImageWithLoader(
-                                                    widget.productImage, false),
+                                                    userImage, false),
                                               ),
                                             ),
                                           ),
@@ -129,7 +130,7 @@ class _MyProductTileState extends State<MyProductTile> {
                                                     width: 150,
                                                     height: 25,
                                                     child: Text(
-                                                      widget.title,
+                                                      widget.name,
                                                       style: const TextStyle(
                                                         fontSize: 20,
                                                         fontWeight:

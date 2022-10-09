@@ -1,6 +1,7 @@
 // import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -11,9 +12,10 @@ class ProductListWidgetTileSquare extends StatelessWidget {
   const ProductListWidgetTileSquare({
     Key? key,
     required this.pk,
-    required this.title,
+    required this.name,
+    required this.description,
     required this.price,
-    required this.productImage,
+    required this.productDocument,
     required this.ratings,
     this.onTap,
     this.hasFavourite = false,
@@ -22,9 +24,10 @@ class ProductListWidgetTileSquare extends StatelessWidget {
   }) : super(key: key);
 
   final int pk;
-  final String title;
+  final String name;
+  final String description;
   final double price;
-  final String productImage;
+  final List productDocument;
   final double ratings;
   final void Function()? onTap;
   final bool hasFavourite;
@@ -33,6 +36,10 @@ class ProductListWidgetTileSquare extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var image =
+        '${dotenv.get('API')}/${productDocument[0]['document']['path']}';
+    print('aa $image');
+
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -62,7 +69,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
                 height: 150,
                 child: AspectRatio(
                   aspectRatio: 1 / 1,
-                  child: NetworkImageWithLoader(productImage, false),
+                  child: NetworkImageWithLoader(image, false),
                 ),
               ),
               // const SizedBox(height: 8),
@@ -74,7 +81,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        title,
+                        name,
                         style: Theme.of(context).textTheme.bodyText2,
                         maxLines: 2,
                       ),
@@ -149,7 +156,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
     //                       child: Hero(
     //                         tag: pk,
     //                         child: NetworkImageWithLoader(
-    //                           productImage,
+    //                           productDocument,
     //                         ),
     //                       ),
     //                     ),
@@ -161,7 +168,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
     //                       Align(
     //                         alignment: Alignment.centerLeft,
     //                         child: Text(
-    //                           title,
+    //                           name,
     //                           style: Theme.of(context).textTheme.bodyText2,
     //                           maxLines: 2,
     //                         ),

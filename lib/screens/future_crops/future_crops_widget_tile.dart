@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:intl/intl.dart';
 
@@ -8,26 +9,34 @@ import '../../components/network_image.dart';
 class FutureCropsWidgetTile extends StatefulWidget {
   const FutureCropsWidgetTile({
     Key? key,
+    required this.pk,
+    required this.uuid,
+    required this.user,
+    required this.userDocument,
+    required this.productDocument,
+    required this.measurement,
     required this.name,
-    required this.product,
-    required this.quantity,
     required this.description,
+    required this.quantity,
     required this.location,
     required this.date,
-    required this.imageLink,
     this.onTap,
     this.hasFavourite = false,
     this.isFavourite = false,
     this.onFavouriteClicked,
   }) : super(key: key);
 
+  final int pk;
+  final String uuid;
+  final List user;
+  final List userDocument;
+  final List productDocument;
+  final List measurement;
   final String name;
-  final String product;
-  final String quantity;
   final String description;
+  final double quantity;
   final String location;
   final DateTime date;
-  final String imageLink;
   final void Function()? onTap;
   final bool hasFavourite;
   final bool isFavourite;
@@ -45,6 +54,10 @@ class FutureCropsWidgetTile extends StatefulWidget {
 class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
   @override
   Widget build(BuildContext context) {
+    var userImage =
+        '${dotenv.get('API')}/${widget.userDocument[0]['document']['path']}';
+    print('aa $userImage');
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.40,
       height: 125,
@@ -110,9 +123,9 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                         child: AspectRatio(
                                           aspectRatio: 1 / 1,
                                           child: Hero(
-                                            tag: widget.imageLink,
+                                            tag: userImage,
                                             child: NetworkImageWithLoader(
-                                                widget.imageLink, true),
+                                                userImage, true),
                                           ),
                                         ),
                                       ),
@@ -160,7 +173,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                       padding:
                                           const EdgeInsets.fromLTRB(5, 5, 0, 0),
                                       child: Text(
-                                        widget.product,
+                                        widget.name,
                                         style: const TextStyle(
                                           fontSize: 12,
                                           color: AppColors.primary,

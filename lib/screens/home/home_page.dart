@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
 // import 'package:market/components/cards/big/big_card_image.dart';
@@ -11,12 +13,12 @@ import 'package:market/screens/home/components/article_list.dart';
 import 'package:market/screens/home/components/home_header.dart';
 import 'package:market/screens/looking_for/looking_for_widget.dart';
 // import 'package:market/screens/product_list/product_list_widget.dart';
-import 'package:market/components/product_list_widget_tile_square.dart';
-import 'package:market/screens/product/product_page.dart';
 // import 'package:market/screens/product_list/product_list_widget.dart';
 import 'package:market/size_config.dart';
 
+import '../../components/product_list_widget_tile_square.dart';
 import '../../constants/app_defaults.dart';
+import '../../constants/remote.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -31,143 +33,55 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Products> products = [
-    Products(
-      pk: 1,
-      uuid: '5118a0b2-2679-11ed-a261-0242ac120002',
-      title: 'Almonds',
-      productImage: 'https://i.imgur.com/zdLsFZ0.jpeg',
-      quantity: 103,
-      unit: 'kg',
-      description: 'Lorem ipsum dolor sit amet',
-      location: 'Palatiw, Pasig City',
-      type: 'looking',
-      createdBy: 1,
-      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
-      userName: 'Raffier Lee',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Products(
-      pk: 2,
-      uuid: 'a21a82a0-7225-4c3c-b5f3-52ad16f68ca5',
-      title: 'Banana',
-      productImage: 'https://i.imgur.com/R3Cpn1T.jpeg',
-      quantity: 103,
-      unit: 'kg',
-      description: 'Lorem ipsum dolor sit amet',
-      location: 'Pinagbuhatan, Pasig City',
-      type: 'looking',
-      createdBy: 2,
-      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
-      userName: 'Juan Dela Cruz',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Products(
-      pk: 3,
-      uuid: '40221260-267a-11ed-a261-0242ac120002',
-      title: 'Mango',
-      productImage: 'https://i.imgur.com/IKDMrufb.jpg',
-      quantity: 103,
-      unit: 'kg',
-      description: 'Lorem ipsum dolor sit amet',
-      location: 'Sagad, Pasig City',
-      type: 'looking',
-      createdBy: 3,
-      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
-      userName: 'Juan Dela Cruz',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Products(
-      pk: 4,
-      uuid: '5118a0b2-2679-11ed-a261-0242ac120002',
-      title: 'Rice',
-      productImage: 'https://i.imgur.com/3P3UxGeb.jpg',
-      quantity: 103,
-      unit: 'kg',
-      description: 'Lorem ipsum dolor sit amet',
-      location: 'Palatiw, Pasig City',
-      type: 'looking',
-      createdBy: 1,
-      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
-      userName: 'Juan Dela Cruz',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Products(
-      pk: 5,
-      uuid: 'a21a82a0-7225-4c3c-b5f3-52ad16f68ca5',
-      title: 'Tomato',
-      productImage: 'https://i.imgur.com/J0EgsIWb.jpg',
-      quantity: 103,
-      unit: 'kg',
-      description: 'Lorem ipsum dolor sit amet',
-      location: 'Pinagbuhatan, Pasig City',
-      type: 'looking',
-      createdBy: 2,
-      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
-      userName: 'Juan Dela Cruz',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Products(
-      pk: 6,
-      uuid: '40221260-267a-11ed-a261-0242ac120002',
-      title: 'Looking for Almonds Supplier',
-      productImage: 'https://i.imgur.com/R3Cpn1T.jpeg',
-      quantity: 103,
-      unit: 'kg',
-      description: 'Lorem ipsum dolor sit amet',
-      location: 'Sagad, Pasig City',
-      type: 'looking',
-      createdBy: 3,
-      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
-      userName: 'Juan Dela Cruz',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Products(
-      pk: 7,
-      uuid: '5118a0b2-2679-11ed-a261-0242ac120002',
-      title: 'Looking for Almonds',
-      productImage: 'https://i.imgur.com/zdLsFZ0.jpeg',
-      quantity: 103,
-      unit: 'kg',
-      description: 'Lorem ipsum dolor sit amet',
-      location: 'Palatiw, Pasig City',
-      type: 'looking',
-      createdBy: 1,
-      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
-      userName: 'Juan Dela Cruz',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Products(
-      pk: 8,
-      uuid: 'a21a82a0-7225-4c3c-b5f3-52ad16f68ca5',
-      title: 'Looking for Banana Supplier',
-      productImage: 'https://i.imgur.com/R3Cpn1T.jpeg',
-      quantity: 103,
-      unit: 'kg',
-      description: 'Lorem ipsum dolor sit amet',
-      location: 'Pinagbuhatan, Pasig City',
-      type: 'looking',
-      createdBy: 2,
-      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
-      userName: 'Juan Dela Cruz',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Products(
-      pk: 9,
-      uuid: '40221260-267a-11ed-a261-0242ac120002',
-      title: 'Looking for Almonds Supplier',
-      productImage: 'https://i.imgur.com/zdLsFZ0.jpeg',
-      quantity: 103,
-      unit: 'kg',
-      description: 'Lorem ipsum dolor sit amet',
-      location: 'Sagad, Pasig City',
-      type: 'looking',
-      createdBy: 3,
-      userImage: 'https://i.imgur.com/8G2bg5J.jpeg',
-      userName: 'Juan Dela Cruz',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-  ];
+  List<Products> products = [];
+  Map<Object, dynamic> dataJson = {};
+  int intialIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getProducts();
+  }
+
+  Future<void> getProducts() async {
+    try {
+      var res = await Remote.get('products');
+      // print('res $res');
+      if (res.statusCode == 200) {
+        setState(() {
+          dataJson = jsonDecode(res.body);
+          for (var i = 0; i < dataJson['data'].length; i++) {
+            products.add(Products(
+              pk: dataJson['data'][i]['pk'],
+              uuid: dataJson['data'][i]['uuid'],
+              type: dataJson['data'][i]['type'],
+              name: dataJson['data'][i]['name'],
+              description: dataJson['data'][i]['description'],
+              quantity: dataJson['data'][i]['quantity'],
+              priceFrom: dataJson['data'][i]['price_from'],
+              priceTo: dataJson['data'][i]['price_to'],
+              user: dataJson['data'][i]['user'],
+              measurement: dataJson['data'][i]['measurement'],
+              country: dataJson['data'][i]['country'],
+              userDocument: dataJson['data'][i]['user_document'],
+              productDocument: dataJson['data'][i]['product_document'],
+              dateCreated: dataJson['data'][i]['date_created'],
+            ));
+            // print('products $products');
+          }
+        });
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+      }
+      // if (res.statusCode == 200) return res.body;
+      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
 
   var filterValue = 'Lowest Price';
 
@@ -240,32 +154,33 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (BuildContext context, int index) {
                 return ProductListWidgetTileSquare(
                   pk: products[index].pk,
-                  title: products[index].title,
+                  name: products[index].name,
+                  description: products[index].description,
                   price: 165,
-                  productImage: products[index].productImage,
+                  productDocument: products[index].productDocument,
                   hasFavourite: true,
                   isFavourite: true,
                   ratings: 3.5,
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ProductPage(
-                          pk: products[index].pk,
-                          uuid: products[index].uuid,
-                          title: products[index].title,
-                          productImage: products[index].productImage,
-                          quantity: products[index].quantity,
-                          unit: products[index].unit,
-                          description: products[index].description,
-                          location: products[index].location,
-                          type: products[index].type,
-                          createdBy: products[index].createdBy,
-                          userImage: products[index].userImage,
-                          userName: products[index].userName,
-                          dateCreated: products[index].dateCreated,
-                        ),
-                      ),
-                    );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => ProductPage(
+                    //       pk: products[index].pk,
+                    //       uuid: products[index].uuid,
+                    //       title: products[index].title,
+                    //       productImage: products[index].productImage,
+                    //       quantity: products[index].quantity,
+                    //       unit: products[index].unit,
+                    //       description: products[index].description,
+                    //       location: products[index].location,
+                    //       type: products[index].type,
+                    //       createdBy: products[index].createdBy,
+                    //       userImage: products[index].userImage,
+                    //       userName: products[index].userName,
+                    //       dateCreated: products[index].dateCreated,
+                    //     ),
+                    //   ),
+                    // );
                   },
                 );
               },

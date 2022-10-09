@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 
 import '../../../constants/index.dart';
@@ -9,34 +10,28 @@ class MyOrderTile extends StatefulWidget {
     Key? key,
     required this.pk,
     required this.uuid,
-    required this.title,
-    required this.productImage,
+    required this.name,
+    required this.user,
+    required this.productDocument,
+    required this.userDocument,
     required this.quantity,
-    required this.unit,
     required this.description,
     required this.location,
     required this.type,
-    this.imageURL = '',
-    required this.createdBy,
-    required this.userImage,
-    required this.userName,
-    required this.dateCreated,
+    required this.date,
   }) : super(key: key);
 
   final int pk;
   final String uuid;
-  final String title;
-  final String productImage;
+  final String name;
+  final List user;
+  final List productDocument;
+  final List userDocument;
   final double quantity;
-  final String unit;
   final String description;
   final String location;
   final String type; // looking for, future crop, already available
-  final String imageURL;
-  final int createdBy;
-  final String userImage;
-  final String userName;
-  final DateTime dateCreated;
+  final DateTime date;
 
   @override
   State<MyOrderTile> createState() => _MyOrderTileState();
@@ -48,6 +43,10 @@ class _MyOrderTileState extends State<MyOrderTile> {
 
   @override
   Widget build(BuildContext context) {
+    var userImage =
+        '${dotenv.get('API')}/${widget.userDocument[0]['document']['path']}';
+    print('aa $userImage');
+
     return GestureDetector(
       // no onTap event for now
       // onTap: () {
@@ -107,7 +106,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                             Positioned(
                                               left: 15,
                                               child: Text(
-                                                widget.userName,
+                                                widget.user[0]['first_name'],
                                                 style: const TextStyle(
                                                   fontSize: 10,
                                                   color: AppColors.defaultBlack,
@@ -145,7 +144,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                               child: Hero(
                                                 tag: widget.pk,
                                                 child: NetworkImageWithLoader(
-                                                    widget.productImage, true),
+                                                    userImage, true),
                                               ),
                                             ),
                                           ),
@@ -167,7 +166,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                                     width: 150,
                                                     height: 18,
                                                     child: Text(
-                                                      widget.title,
+                                                      widget.name,
                                                       style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
@@ -264,7 +263,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                       Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          'Order created: ${DateFormat.yMMMd().format(widget.dateCreated)}',
+                                          'Order created: ${DateFormat.yMMMd().format(widget.date)}',
                                           style: const TextStyle(
                                             fontSize: 10,
                                             color: AppColors.defaultBlack,

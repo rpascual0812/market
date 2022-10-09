@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../constants/index.dart';
 import '../../components/network_image.dart';
@@ -14,34 +15,30 @@ class LookingForPageTile extends StatefulWidget {
     Key? key,
     required this.pk,
     required this.uuid,
-    required this.title,
-    required this.productImage,
+    required this.name,
+    required this.productDocument,
     required this.quantity,
-    required this.unit,
+    required this.measurement,
     required this.description,
     required this.location,
     required this.type,
     this.imageURL = '',
-    required this.createdBy,
-    required this.userImage,
-    required this.userName,
-    required this.dateCreated,
+    required this.user,
+    required this.userDocument,
   }) : super(key: key);
 
   final int pk;
   final String uuid;
-  final String title;
-  final String productImage;
+  final String name;
+  final List productDocument;
   final double quantity;
-  final String unit;
+  final List measurement;
   final String description;
   final String location;
   final String type; // looking for, future crop, already available
   final String imageURL;
-  final int createdBy;
-  final String userImage;
-  final String userName;
-  final DateTime dateCreated;
+  final List user;
+  final List userDocument;
 
   @override
   State<LookingForPageTile> createState() => _LookingForPageTileState();
@@ -55,6 +52,10 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
 
   @override
   Widget build(BuildContext context) {
+    var userImage =
+        '${dotenv.get('API')}/${widget.userDocument[0]['document']['path']}';
+    print('aa $userImage');
+
     return GestureDetector(
       // no onTap event for now
       // onTap: () {
@@ -118,7 +119,7 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                               child: Hero(
                                                 tag: widget.pk,
                                                 child: NetworkImageWithLoader(
-                                                    widget.userImage, true),
+                                                    userImage, true),
                                               ),
                                             ),
                                           ),
@@ -138,7 +139,7 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                                     width: 150,
                                                     height: 20,
                                                     child: Text(
-                                                      widget.userName,
+                                                      '${widget.user[0]['first_name']} ${widget.user[0]['last_name']}',
                                                       style: const TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 10),
@@ -217,7 +218,7 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    widget.title,
+                                    widget.name,
                                     style: const TextStyle(
                                       fontSize: 18,
                                       color: AppColors.primary,

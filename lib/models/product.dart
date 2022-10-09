@@ -5,32 +5,32 @@
 class Products {
   int pk;
   String uuid;
-  String title;
-  String productImage;
-  double quantity;
-  String unit;
-  String description;
-  String location;
   String type; // looking for, future crop, already available
-  String imageURL;
-  int createdBy;
-  String userImage;
-  String userName;
+  String name;
+  String description;
+  double quantity;
+  double priceFrom;
+  double priceTo;
+  List user;
+  List measurement;
+  List country;
+  List userDocument;
+  List productDocument;
   DateTime dateCreated;
   Products({
     required this.pk,
     required this.uuid,
-    required this.title,
-    required this.productImage,
-    required this.quantity,
-    required this.unit,
-    required this.description,
-    required this.location,
     required this.type,
-    this.imageURL = '',
-    required this.createdBy,
-    required this.userImage,
-    required this.userName,
+    required this.name,
+    required this.description,
+    required this.quantity,
+    required this.priceFrom,
+    required this.priceTo,
+    required this.user,
+    required this.measurement,
+    required this.country,
+    required this.userDocument,
+    required this.productDocument,
     required this.dateCreated,
   });
 }
