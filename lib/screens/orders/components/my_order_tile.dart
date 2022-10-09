@@ -24,10 +24,10 @@ class MyOrderTile extends StatefulWidget {
   final int pk;
   final String uuid;
   final String name;
-  final List user;
+  final Map<String, dynamic> user;
   final List productDocument;
   final List userDocument;
-  final double quantity;
+  final String quantity;
   final String description;
   final String location;
   final String type; // looking for, future crop, already available

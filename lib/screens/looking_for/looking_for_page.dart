@@ -242,6 +242,7 @@ class _LookingForPageState extends State<LookingForPage> {
                   type: products[index].type,
                   user: products[index].user,
                   userDocument: products[index].userDocument,
+                  dateCreated: products[index].dateCreated,
                 );
               },
             ),

@@ -25,20 +25,22 @@ class LookingForPageTile extends StatefulWidget {
     this.imageURL = '',
     required this.user,
     required this.userDocument,
+    required this.dateCreated,
   }) : super(key: key);
 
   final int pk;
   final String uuid;
   final String name;
   final List productDocument;
-  final double quantity;
-  final List measurement;
+  final String quantity;
+  final Map<String, dynamic> measurement;
   final String description;
   final String location;
   final String type; // looking for, future crop, already available
   final String imageURL;
-  final List user;
+  final Map<String, dynamic> user;
   final List userDocument;
+  final DateTime dateCreated;
 
   @override
   State<LookingForPageTile> createState() => _LookingForPageTileState();

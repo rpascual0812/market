@@ -27,6 +27,11 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
     getProducts();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future<void> getProducts() async {
     try {
       var res = await Remote.get('products');
@@ -35,13 +40,15 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
         setState(() {
           dataJson = jsonDecode(res.body);
           for (var i = 0; i < dataJson['data'].length; i++) {
+            // print('$i ${dataJson['data'][i]['quantity']}');
+            DateTime date = DateTime.parse(dataJson['data'][i]['date_created']);
             products.add(Products(
               pk: dataJson['data'][i]['pk'],
               uuid: dataJson['data'][i]['uuid'],
               type: dataJson['data'][i]['type'],
               name: dataJson['data'][i]['name'],
               description: dataJson['data'][i]['description'],
-              quantity: dataJson['data'][i]['quantity'],
+              quantity: dataJson['data'][i]['quantity'] ?? '0.00',
               priceFrom: dataJson['data'][i]['price_from'],
               priceTo: dataJson['data'][i]['price_to'],
               user: dataJson['data'][i]['user'],
@@ -49,7 +56,7 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
               country: dataJson['data'][i]['country'],
               userDocument: dataJson['data'][i]['user_document'],
               productDocument: dataJson['data'][i]['product_document'],
-              dateCreated: dataJson['data'][i]['date_created'],
+              dateCreated: date,
             ));
             // print('products $products');
           }
@@ -105,7 +112,10 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: List.generate(5, (index) {
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(
+                      dataJson['data'] != null ? dataJson['data'].length : 0,
+                      (index) {
                     return FutureCropsWidgetTile(
                       pk: products[index].pk,
                       uuid: products[index].uuid,
@@ -121,73 +131,6 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
                       onTap: () {},
                     );
                   }),
-                  // children: [
-                  //   FutureCropsWidgetTile(
-                  //     name: 'Juan Dela Cruz',
-                  //     imageLink: 'https://i.imgur.com/8G2bg5J.jpeg',
-                  //     product: 'Almonds',
-                  //     quantity: '103 kg',
-                  //     description: 'Lorem ipsum dolor sit amet',
-                  //     location: 'Davao',
-                  //     date: DateTime(2023, 08, 12, 13, 25),
-                  //     onTap: () {},
-                  //   ),
-                  //   FutureCropsWidgetTile(
-                  //     name: 'Long Sleeve Shirts',
-                  //     imageLink: 'https://i.imgur.com/6AglEUF.jpeg',
-                  //     product: 'Petchay',
-                  //     quantity: '103 kg',
-                  //     description: 'Lorem ipsum dolor sit amet',
-                  //     location: 'Davao',
-                  //     date: DateTime(2023, 08, 12, 13, 25),
-                  //     onTap: () {},
-                  //   ),
-                  //   FutureCropsWidgetTile(
-                  //     name: 'Long Sleeve Shirts',
-                  //     imageLink: 'https://i.imgur.com/HU17L0b.png',
-                  //     product: 'Banana',
-                  //     quantity: '103 kg',
-                  //     description: 'Lorem ipsum dolor sit amet',
-                  //     location: 'Naga',
-                  //     date: DateTime(2023, 08, 12, 13, 25),
-                  //     onTap: () {},
-                  //   ),
-                  //   FutureCropsWidgetTile(
-                  //     name: 'Long Sleeve Shirts',
-                  //     imageLink: 'https://i.imgur.com/YzaqJlD.jpeg',
-                  //     product: 'Strawberry',
-                  //     quantity: '103 kg',
-                  //     description: 'Lorem ipsum dolor sit amet',
-                  //     location: 'Baguio',
-                  //     date: DateTime(2023, 08, 12, 13, 25),
-                  //     onTap: () {},
-                  //   ),
-                  //   FutureCropsWidgetTile(
-                  //     name: 'Long Sleeve Shirts',
-                  //     imageLink: 'https://i.imgur.com/l3gSyRn.jpeg',
-                  //     product: 'Coffee',
-                  //     quantity: '103 kg',
-                  //     description: 'Lorem ipsum dolor sit amet',
-                  //     location: 'Ilocos',
-                  //     date: DateTime(2023, 08, 12, 13, 25),
-                  //     onTap: () {},
-                  //   ),
-                  //   FutureCropsWidgetTile(
-                  //     name: 'Casual Henley Shirts',
-                  //     imageLink: 'https://i.imgur.com/pKgABuT.jpeg',
-                  //     product: 'Mango',
-                  //     quantity: '103 kg',
-                  //     description: 'Lorem ipsum dolor sit amet',
-                  //     location: 'Panay',
-                  //     date: DateTime(2023, 08, 12, 13, 25),
-                  //     onTap: () {
-                  //       // Navigator.of(context).push(MaterialPageRoute(
-                  //       //     builder: (context) => const ProductPage(
-                  //       //           coverImage: 'https://i.imgur.com/PFBRThN.png',
-                  //       //         )));
-                  //     },
-                  //   ),
-                  // ],
                 ),
               ),
             ],

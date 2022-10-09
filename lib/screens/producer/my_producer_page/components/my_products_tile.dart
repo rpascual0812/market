@@ -25,11 +25,11 @@ class MyProductTile extends StatefulWidget {
   final int pk;
   final String uuid;
   final String name;
-  final List user;
+  final Map<String, dynamic> user;
   final List userDocument;
   final List productDocument;
-  final List measurement;
-  final double quantity;
+  final Map<String, dynamic> measurement;
+  final String quantity;
   final String description;
   final String location;
   final String type; // looking for, future crop, already available

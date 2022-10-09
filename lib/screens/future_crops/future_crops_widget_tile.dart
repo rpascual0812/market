@@ -28,13 +28,13 @@ class FutureCropsWidgetTile extends StatefulWidget {
 
   final int pk;
   final String uuid;
-  final List user;
+  final Map<String, dynamic> user;
   final List userDocument;
   final List productDocument;
-  final List measurement;
+  final Map<String, dynamic> measurement;
   final String name;
   final String description;
-  final double quantity;
+  final String quantity;
   final String location;
   final DateTime date;
   final void Function()? onTap;
@@ -56,7 +56,6 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
   Widget build(BuildContext context) {
     var userImage =
         '${dotenv.get('API')}/${widget.userDocument[0]['document']['path']}';
-    print('aa $userImage');
 
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.40,
@@ -193,7 +192,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                       padding:
                                           const EdgeInsets.fromLTRB(5, 0, 0, 0),
                                       child: Text(
-                                        'Quantity: ${widget.quantity}',
+                                        'Quantity: ${widget.quantity.toString()}',
                                         style: const TextStyle(
                                           fontSize: 8,
                                           color: AppColors.defaultBlack,

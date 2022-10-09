@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:intl/intl.dart';
 
 import '../../../constants/index.dart';
@@ -9,33 +10,25 @@ class SearchProductTile extends StatefulWidget {
     Key? key,
     required this.pk,
     required this.uuid,
-    required this.title,
-    required this.productImage,
-    required this.quantity,
-    required this.unit,
+    required this.name,
     required this.description,
+    required this.productDocument,
+    required this.quantity,
+    required this.measurement,
     required this.location,
     required this.type,
-    this.imageURL = '',
-    required this.createdBy,
-    required this.userImage,
-    required this.userName,
     required this.dateCreated,
   }) : super(key: key);
 
   final int pk;
   final String uuid;
-  final String title;
-  final String productImage;
-  final double quantity;
-  final String unit;
+  final String name;
+  final List productDocument;
+  final String quantity;
+  final Map<String, dynamic> measurement;
   final String description;
   final String location;
   final String type; // looking for, future crop, already available
-  final String imageURL;
-  final int createdBy;
-  final String userImage;
-  final String userName;
   final DateTime dateCreated;
 
   @override
@@ -48,6 +41,10 @@ class _SearchProductTileState extends State<SearchProductTile> {
 
   @override
   Widget build(BuildContext context) {
+    var productImage =
+        '${dotenv.get('API')}/${widget.productDocument[0]['document']['path']}';
+    print('aa $productImage');
+
     return GestureDetector(
       // no onTap event for now
       // onTap: () {
@@ -101,7 +98,7 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                               child: Hero(
                                                 tag: widget.pk,
                                                 child: NetworkImageWithLoader(
-                                                    widget.productImage, true),
+                                                    productImage, true),
                                               ),
                                             ),
                                           ),
@@ -123,7 +120,7 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                                     width: 150,
                                                     height: 18,
                                                     child: Text(
-                                                      widget.title,
+                                                      widget.name,
                                                       style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:

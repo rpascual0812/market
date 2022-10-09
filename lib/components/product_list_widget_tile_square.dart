@@ -12,9 +12,11 @@ class ProductListWidgetTileSquare extends StatelessWidget {
   const ProductListWidgetTileSquare({
     Key? key,
     required this.pk,
+    required this.uuid,
     required this.name,
     required this.description,
-    required this.price,
+    required this.priceFrom,
+    required this.priceTo,
     required this.productDocument,
     required this.ratings,
     this.onTap,
@@ -24,9 +26,11 @@ class ProductListWidgetTileSquare extends StatelessWidget {
   }) : super(key: key);
 
   final int pk;
+  final String uuid;
   final String name;
   final String description;
-  final double price;
+  final String priceFrom;
+  final String priceTo;
   final List productDocument;
   final double ratings;
   final void Function()? onTap;
@@ -90,7 +94,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '\$${price.toInt()}',
+                        '\$$priceFrom',
                         style: const TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold),

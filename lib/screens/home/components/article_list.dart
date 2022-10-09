@@ -17,7 +17,7 @@ class ArticleList extends StatefulWidget {
 
 class _ArticleListState extends State<ArticleList> {
   List<Articles> articles = [];
-  Map<Object, dynamic> articleJson = {};
+  Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
 
   @override
@@ -32,14 +32,14 @@ class _ArticleListState extends State<ArticleList> {
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {
-          articleJson = jsonDecode(res.body);
-          for (var i = 0; i < articleJson['data'].length; i++) {
+          dataJson = jsonDecode(res.body);
+          for (var i = 0; i < dataJson['data'].length; i++) {
             articles.add(Articles(
-              pk: articleJson['data'][i]['pk'],
-              title: articleJson['data'][i]['title'],
-              description: articleJson['data'][i]['description'],
-              articleDocument: articleJson['data'][i]['article_document'],
-              userPk: articleJson['data'][i]['user_pk'],
+              pk: dataJson['data'][i]['pk'],
+              title: dataJson['data'][i]['title'],
+              description: dataJson['data'][i]['description'],
+              articleDocument: dataJson['data'][i]['article_document'],
+              userPk: dataJson['data'][i]['user_pk'],
             ));
             // print('articles $articles');
           }
@@ -66,8 +66,7 @@ class _ArticleListState extends State<ArticleList> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(
-              articleJson['data'] != null ? articleJson['data'].length : 0,
-              (index) {
+              dataJson['data'] != null ? dataJson['data'].length : 0, (index) {
             return ArticleTile(
               title: articles[index].title,
               description: articles[index].description,

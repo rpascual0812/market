@@ -155,8 +155,10 @@ class _HomePageState extends State<HomePage> {
                 return ProductListWidgetTileSquare(
                   pk: products[index].pk,
                   name: products[index].name,
+                  uuid: products[index].uuid,
                   description: products[index].description,
-                  price: 165,
+                  priceFrom: products[index].priceFrom,
+                  priceTo: products[index].priceTo,
                   productDocument: products[index].productDocument,
                   hasFavourite: true,
                   isFavourite: true,

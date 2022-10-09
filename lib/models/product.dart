@@ -8,12 +8,12 @@ class Products {
   String type; // looking for, future crop, already available
   String name;
   String description;
-  double quantity;
-  double priceFrom;
-  double priceTo;
-  List user;
-  List measurement;
-  List country;
+  String quantity;
+  String priceFrom;
+  String priceTo;
+  Map<String, dynamic> user;
+  Map<String, dynamic> measurement;
+  Map<String, dynamic> country;
   List userDocument;
   List productDocument;
   DateTime dateCreated;
