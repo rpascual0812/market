@@ -1,13 +1,78 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:market/components/section_divider_title.dart';
 
 import '../../constants/index.dart';
+import '../../models/product.dart';
 // import 'info_row.dart';
 
-class LookingForWidget extends StatelessWidget {
+class LookingForWidget extends StatefulWidget {
   const LookingForWidget({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<LookingForWidget> createState() => _LookingForWidgetState();
+}
+
+class _LookingForWidgetState extends State<LookingForWidget> {
+  List<Products> products = [];
+  Map<Object, dynamic> dataJson = {};
+  int intialIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getProducts();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> getProducts() async {
+    try {
+      var res = await Remote.get('products');
+      // print('res $res');
+      if (res.statusCode == 200) {
+        setState(() {
+          dataJson = jsonDecode(res.body);
+          for (var i = 0; i < dataJson['data'].length; i++) {
+            // print('$i ${dataJson['data'][i]['quantity']}');
+            DateTime date = DateTime.parse(dataJson['data'][i]['date_created']);
+            products.add(Products(
+              pk: dataJson['data'][i]['pk'],
+              uuid: dataJson['data'][i]['uuid'],
+              type: dataJson['data'][i]['type'],
+              name: dataJson['data'][i]['name'],
+              description: dataJson['data'][i]['description'],
+              quantity: dataJson['data'][i]['quantity'] ?? '0.00',
+              priceFrom: dataJson['data'][i]['price_from'],
+              priceTo: dataJson['data'][i]['price_to'],
+              user: dataJson['data'][i]['user'],
+              measurement: dataJson['data'][i]['measurement'],
+              country: dataJson['data'][i]['country'],
+              userDocument: dataJson['data'][i]['user_document'],
+              productDocument: dataJson['data'][i]['product_document'],
+              dateCreated: date,
+            ));
+            // print('products $products');
+          }
+        });
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+      }
+      // if (res.statusCode == 200) return res.body;
+      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,34 +130,48 @@ class LookingForWidget extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 10, fontWeight: FontWeight.bold))),
                   ],
-                  rows: const [
-                    DataRow(cells: [
-                      DataCell(Text('1', style: TextStyle(fontSize: 10))),
-                      DataCell(Text('Stephen', style: TextStyle(fontSize: 10))),
-                      DataCell(Text('Actor', style: TextStyle(fontSize: 10))),
-                      DataCell(Text('Actor', style: TextStyle(fontSize: 10))),
-                    ]),
-                    DataRow(cells: [
-                      DataCell(Text('5', style: TextStyle(fontSize: 10))),
-                      DataCell(Text('John', style: TextStyle(fontSize: 10))),
-                      DataCell(Text('Student', style: TextStyle(fontSize: 10))),
-                      DataCell(Text('Student', style: TextStyle(fontSize: 10))),
-                    ]),
-                    DataRow(cells: [
-                      DataCell(Text('10', style: TextStyle(fontSize: 10))),
-                      DataCell(Text('Harry', style: TextStyle(fontSize: 10))),
-                      DataCell(Text('Leader', style: TextStyle(fontSize: 10))),
-                      DataCell(Text('Leader', style: TextStyle(fontSize: 10))),
-                    ]),
-                    DataRow(cells: [
-                      DataCell(Text('15', style: TextStyle(fontSize: 10))),
-                      DataCell(Text('Peter', style: TextStyle(fontSize: 10))),
-                      DataCell(
-                          Text('Scientist', style: TextStyle(fontSize: 10))),
-                      DataCell(
-                          Text('Scientist', style: TextStyle(fontSize: 10))),
-                    ]),
-                  ],
+                  rows: List.generate(
+                      dataJson['data'] != null ? dataJson['data'].length : 0,
+                      (index) {
+                    return DataRow(cells: [
+                      DataCell(Text(products[index].user['first_name'],
+                          style: const TextStyle(fontSize: 10))),
+                      DataCell(Text(products[index].name,
+                          style: const TextStyle(fontSize: 10))),
+                      DataCell(Text(products[index].quantity,
+                          style: const TextStyle(fontSize: 10))),
+                      DataCell(Text(products[index].dateCreated.toString(),
+                          style: const TextStyle(fontSize: 10))),
+                    ]);
+                  }),
+                  // rows: const [
+                  //   DataRow(cells: [
+                  //     DataCell(Text('1', style: TextStyle(fontSize: 10))),
+                  //     DataCell(Text('Stephen', style: TextStyle(fontSize: 10))),
+                  //     DataCell(Text('Actor', style: TextStyle(fontSize: 10))),
+                  //     DataCell(Text('Actor', style: TextStyle(fontSize: 10))),
+                  //   ]),
+                  //   DataRow(cells: [
+                  //     DataCell(Text('5', style: TextStyle(fontSize: 10))),
+                  //     DataCell(Text('John', style: TextStyle(fontSize: 10))),
+                  //     DataCell(Text('Student', style: TextStyle(fontSize: 10))),
+                  //     DataCell(Text('Student', style: TextStyle(fontSize: 10))),
+                  //   ]),
+                  //   DataRow(cells: [
+                  //     DataCell(Text('10', style: TextStyle(fontSize: 10))),
+                  //     DataCell(Text('Harry', style: TextStyle(fontSize: 10))),
+                  //     DataCell(Text('Leader', style: TextStyle(fontSize: 10))),
+                  //     DataCell(Text('Leader', style: TextStyle(fontSize: 10))),
+                  //   ]),
+                  //   DataRow(cells: [
+                  //     DataCell(Text('15', style: TextStyle(fontSize: 10))),
+                  //     DataCell(Text('Peter', style: TextStyle(fontSize: 10))),
+                  //     DataCell(
+                  //         Text('Scientist', style: TextStyle(fontSize: 10))),
+                  //     DataCell(
+                  //         Text('Scientist', style: TextStyle(fontSize: 10))),
+                  //   ]),
+                  // ],
                 ),
               ),
               const Divider(),
