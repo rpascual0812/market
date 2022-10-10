@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/components/cards/big/big_card_image_slide.dart';
-
-import 'package:market/demo_data.dart';
+import 'package:market/components/sliders/product_slider.dart';
 
 class ProductPage extends StatelessWidget {
   const ProductPage({
@@ -54,7 +52,7 @@ class ProductPage extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 0),
-                child: BigCardImageSlide(images: demoBigImages),
+                child: ProductSlider(documents: productDocument),
               ),
               // ProductPageDetails(
               //   pk: pk,
