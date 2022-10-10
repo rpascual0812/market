@@ -133,6 +133,9 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
                   }),
                 ),
               ),
+              const SizedBox(
+                height: AppDefaults.height / 4,
+              )
             ],
           ),
         ),

@@ -85,8 +85,8 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                           height: 105,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
+                            // borderRadius:
+                            //     BorderRadius.circular(AppDefaults.radius),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.3),
@@ -115,11 +115,8 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                         height: 30,
                                         child: AspectRatio(
                                           aspectRatio: 1 / 1,
-                                          child: Hero(
-                                            tag: userImage,
-                                            child: NetworkImageWithLoader(
-                                                userImage, true),
-                                          ),
+                                          child: NetworkImageWithLoader(
+                                              userImage, true),
                                         ),
                                       ),
                                     ),
@@ -133,7 +130,8 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                           Text(
                                             widget.name,
                                             style: const TextStyle(
-                                              fontSize: 7,
+                                              fontSize:
+                                                  AppDefaults.fontSize - 3,
                                               color: AppColors.defaultBlack,
                                             ),
                                           ),
@@ -141,13 +139,14 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                             children: [
                                               const Icon(
                                                 FutureCropsWidgetTile.pin,
-                                                size: 8,
+                                                size: AppDefaults.fontSize - 5,
                                                 // color: Colors.grey,
                                               ),
                                               Text(
                                                 widget.location,
                                                 style: const TextStyle(
-                                                  fontSize: 7,
+                                                  fontSize:
+                                                      AppDefaults.fontSize - 5,
                                                   color: AppColors.defaultBlack,
                                                 ),
                                               ),
@@ -201,7 +200,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                       padding:
                                           const EdgeInsets.fromLTRB(5, 0, 0, 0),
                                       child: Text(
-                                        'Forcasted date: ${DateFormat.yMMMd().format(widget.date)}',
+                                        'Estimated date: ${DateFormat.MMM().format(widget.date)} ${DateFormat.y().format(widget.date)}',
                                         style: const TextStyle(
                                           fontSize: AppDefaults.fontSize - 4,
                                           color: AppColors.defaultBlack,

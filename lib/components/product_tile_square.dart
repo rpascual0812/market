@@ -48,10 +48,7 @@ class ProductTileSquare extends StatelessWidget {
                         height: 180,
                         child: AspectRatio(
                           aspectRatio: 1 / 1,
-                          child: Hero(
-                            tag: imageLink,
-                            child: NetworkImageWithLoader(imageLink, true),
-                          ),
+                          child: NetworkImageWithLoader(imageLink, true),
                         ),
                       ),
                       const SizedBox(height: 8),

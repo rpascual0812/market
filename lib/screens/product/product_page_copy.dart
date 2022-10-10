@@ -117,13 +117,10 @@ class ProductImage extends StatelessWidget {
       flex: 1,
       child: AspectRatio(
         aspectRatio: 1 / 1,
-        child: Hero(
-          tag: imageLink,
-          child: NetworkImageWithLoader(
-            imageLink,
-            true,
-            fit: BoxFit.contain,
-          ),
+        child: NetworkImageWithLoader(
+          imageLink,
+          true,
+          fit: BoxFit.contain,
         ),
       ),
     );

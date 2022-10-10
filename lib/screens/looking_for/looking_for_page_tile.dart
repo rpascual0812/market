@@ -118,11 +118,8 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                             height: 45,
                                             child: AspectRatio(
                                               aspectRatio: 1 / 1,
-                                              child: Hero(
-                                                tag: widget.pk,
-                                                child: NetworkImageWithLoader(
-                                                    userImage, true),
-                                              ),
+                                              child: NetworkImageWithLoader(
+                                                  userImage, true),
                                             ),
                                           ),
                                           Positioned(

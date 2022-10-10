@@ -1,6 +1,8 @@
 // import 'dart:html';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import '../../constants/index.dart';
+import 'package:market/constants/app_colors.dart';
+import 'package:market/constants/app_defaults.dart';
 
 //ignore: must_be_immutable
 class SelectDropdown extends StatefulWidget {
@@ -22,49 +24,76 @@ class SelectDropdown extends StatefulWidget {
 class _SelectDropdownState extends State<SelectDropdown> {
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {},
-      child: Container(
-        height: 25,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: const BoxDecoration(
-          color: AppColors.secondary,
-          // borderRadius: BorderRadius.circular(10),
-        ),
-        child: DropdownButton(
-          style: const TextStyle(color: Colors.white, fontSize: 10),
-          value: widget.defaultValue,
-          icon: const Icon(
-            Icons.keyboard_arrow_down,
-            size: 12,
-            color: Colors.white,
-          ),
-          underline: const SizedBox(),
-          items: widget.options.map((String items) {
-            return DropdownMenuItem(
-              value: items,
-              child: Text(
-                items,
-                style: const TextStyle(color: AppColors.secondary),
-              ),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              widget.defaultValue = newValue!;
-            });
-          },
-          selectedItemBuilder: (BuildContext ctxt) {
-            return widget.options.map<Widget>((item) {
-              return DropdownMenuItem(
-                value: item,
-                child: Text(
-                  item,
-                  style: const TextStyle(color: Colors.white),
+    return SizedBox(
+      width: 160,
+      height: 55,
+      child: Center(
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton2(
+            isExpanded: true,
+            hint: Row(
+              children: [
+                const SizedBox(
+                  width: 4,
                 ),
-              );
-            }).toList();
-          },
+                Expanded(
+                  child: Text(
+                    widget.defaultValue,
+                    style: const TextStyle(
+                      fontSize: AppDefaults.fontSize,
+                      color: Colors.white,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            items: widget.options
+                .map((item) => DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(
+                        item,
+                        style: const TextStyle(
+                          fontSize: AppDefaults.fontSize,
+                          color: Colors.white,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ))
+                .toList(),
+            value: widget.defaultValue,
+            onChanged: (value) {
+              setState(() {
+                widget.defaultValue = value as String;
+              });
+            },
+            icon: const Icon(
+              Icons.keyboard_arrow_down,
+            ),
+            iconSize: 14,
+            iconEnabledColor: Colors.white,
+            iconDisabledColor: Colors.grey,
+            buttonHeight: 30,
+            buttonWidth: 150,
+            buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+            buttonDecoration: const BoxDecoration(
+              color: AppColors.third,
+            ),
+            buttonElevation: 2,
+            itemHeight: 30,
+            itemPadding: const EdgeInsets.only(left: 14, right: 14),
+            dropdownMaxHeight: 200,
+            dropdownWidth: 180,
+            dropdownPadding: null,
+            dropdownDecoration: const BoxDecoration(
+              color: AppColors.third,
+            ),
+            dropdownElevation: 8,
+            scrollbarRadius: const Radius.circular(40),
+            scrollbarThickness: 6,
+            scrollbarAlwaysShow: true,
+            offset: const Offset(-20, 0),
+          ),
         ),
       ),
     );

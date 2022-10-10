@@ -94,11 +94,8 @@ class FutureCropsPageTile extends StatelessWidget {
                                           height: 45,
                                           child: AspectRatio(
                                             aspectRatio: 1 / 1,
-                                            child: Hero(
-                                              tag: pk,
-                                              child: NetworkImageWithLoader(
-                                                  profilePhoto, true),
-                                            ),
+                                            child: NetworkImageWithLoader(
+                                                profilePhoto, true),
                                           ),
                                         ),
                                         Positioned(

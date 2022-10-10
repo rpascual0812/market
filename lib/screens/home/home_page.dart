@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 // import 'package:market/components/cards/big/big_card_image.dart';
 import 'package:market/components/select_dropdown.dart';
 import 'package:market/components/sliders/home_slider.dart';
-import 'package:market/constants/app_colors.dart';
 // import 'package:market/demo_data.dart';
 import 'package:market/models/product.dart';
 import 'package:market/screens/future_crops/future_crops_widget.dart';
@@ -17,8 +16,10 @@ import 'package:market/screens/looking_for/looking_for_widget.dart';
 import 'package:market/size_config.dart';
 
 import '../../components/product_list_widget_tile_square.dart';
+import '../../components/section_divider_title.dart';
 import '../../constants/app_defaults.dart';
 import '../../constants/remote.dart';
+import '../product/product_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -124,26 +125,22 @@ class _HomePageState extends State<HomePage> {
             const FutureCropsWidget(),
             const SizedBox(height: AppDefaults.margin / 2),
             const LookingForWidget(),
-            const SizedBox(height: AppDefaults.margin / 2),
+            const SizedBox(height: AppDefaults.margin),
             // const ProductListWidget(),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Padding(
-                  padding: EdgeInsets.fromLTRB(10, 15, 0, 0),
-                  child: Text(
-                    'Product Post',
-                    style: TextStyle(
-                        color: AppColors.primary,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+                  padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
+                  child: SectionDividerTitle(
+                    title: 'Product Post',
                   ),
                 ),
                 SelectDropdown(options: filters, defaultValue: filterValue),
               ],
             ),
             GridView.builder(
+              padding: const EdgeInsets.all(0),
               physics: const ScrollPhysics(),
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -166,48 +163,33 @@ class _HomePageState extends State<HomePage> {
                   isFavourite: true,
                   ratings: 3.5,
                   onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => ProductPage(
-                    //       pk: products[index].pk,
-                    //       uuid: products[index].uuid,
-                    //       title: products[index].title,
-                    //       productImage: products[index].productImage,
-                    //       quantity: products[index].quantity,
-                    //       unit: products[index].unit,
-                    //       description: products[index].description,
-                    //       location: products[index].location,
-                    //       type: products[index].type,
-                    //       createdBy: products[index].createdBy,
-                    //       userImage: products[index].userImage,
-                    //       userName: products[index].userName,
-                    //       dateCreated: products[index].dateCreated,
-                    //     ),
-                    //   ),
-                    // );
+                    DateTime date =
+                        DateTime.parse(products[index].dateCreated.toString());
+
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ProductPage(
+                          pk: products[index].pk,
+                          uuid: products[index].uuid,
+                          type: products[index].type,
+                          name: products[index].name,
+                          description: products[index].description,
+                          quantity: products[index].quantity,
+                          priceFrom: products[index].priceFrom,
+                          priceTo: products[index].priceTo,
+                          user: products[index].user,
+                          measurement: products[index].measurement,
+                          country: products[index].country,
+                          userDocument: products[index].userDocument,
+                          productDocument: products[index].productDocument,
+                          dateCreated: date,
+                        ),
+                      ),
+                    );
                   },
                 );
               },
             ),
-
-            // ListView.builder(
-            //   itemCount: products.length,
-            //   shrinkWrap: true,
-            //   padding: const EdgeInsets.only(top: 16),
-            //   physics: const NeverScrollableScrollPhysics(),
-            //   itemBuilder: (context, index) {
-            //     return ProductListWidgetTileSquare(
-            //       pk: products[index].pk,
-            //       title: 'Banana',
-            //       price: 165,
-            //       imageLink: 'https://i.imgur.com/R3Cpn1T.jpeg',
-            //       hasFavourite: true,
-            //       isFavourite: true,
-            //       ratings: 3.5,
-            //       onTap: () {},
-            //     );
-            //   },
-            // ),
             const SizedBox(height: AppDefaults.margin / 2),
           ],
         ),

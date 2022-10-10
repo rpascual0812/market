@@ -141,11 +141,8 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                             height: 65,
                                             child: AspectRatio(
                                               aspectRatio: 1 / 1,
-                                              child: Hero(
-                                                tag: widget.pk,
-                                                child: NetworkImageWithLoader(
-                                                    userImage, true),
-                                              ),
+                                              child: NetworkImageWithLoader(
+                                                  userImage, true),
                                             ),
                                           ),
                                           Positioned(

@@ -95,11 +95,8 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                             height: 65,
                                             child: AspectRatio(
                                               aspectRatio: 1 / 1,
-                                              child: Hero(
-                                                tag: widget.pk,
-                                                child: NetworkImageWithLoader(
-                                                    productImage, true),
-                                              ),
+                                              child: NetworkImageWithLoader(
+                                                  productImage, true),
                                             ),
                                           ),
                                           Positioned(

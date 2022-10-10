@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:market/components/section_divider_title.dart';
 
 import '../../constants/index.dart';
@@ -140,7 +141,9 @@ class _LookingForWidgetState extends State<LookingForWidget> {
                           style: const TextStyle(fontSize: 10))),
                       DataCell(Text(products[index].quantity,
                           style: const TextStyle(fontSize: 10))),
-                      DataCell(Text(products[index].dateCreated.toString(),
+                      DataCell(Text(
+                          DateFormat.yMMMd()
+                              .format(products[index].dateCreated),
                           style: const TextStyle(fontSize: 10))),
                     ]);
                   }),

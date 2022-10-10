@@ -107,11 +107,8 @@ class _MyProductTileState extends State<MyProductTile> {
                                             height: 65,
                                             child: AspectRatio(
                                               aspectRatio: 1 / 1,
-                                              child: Hero(
-                                                tag: widget.pk,
-                                                child: NetworkImageWithLoader(
-                                                    userImage, false),
-                                              ),
+                                              child: NetworkImageWithLoader(
+                                                  userImage, false),
                                             ),
                                           ),
                                           Positioned(

@@ -2,13 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/components/cards/big/big_card_image_slide.dart';
-import 'package:market/screens/product/components/other_products.dart';
-import 'package:market/screens/product/components/product_page_details.dart';
-// import 'package:market/screens/product/product_page_copy.dart';
 
-// import '../../components/network_image.dart';
-// import '../../constants/app_defaults.dart';
-// import 'components/color_picker.dart';
 import 'package:market/demo_data.dart';
 
 class ProductPage extends StatelessWidget {
@@ -17,16 +11,17 @@ class ProductPage extends StatelessWidget {
     this.isFavourite = false,
     required this.pk,
     required this.uuid,
-    required this.title,
-    required this.productImage,
-    required this.quantity,
-    required this.unit,
-    required this.description,
-    required this.location,
     required this.type,
-    required this.createdBy,
-    required this.userImage,
-    required this.userName,
+    required this.name,
+    required this.description,
+    required this.quantity,
+    required this.priceFrom,
+    required this.priceTo,
+    required this.user,
+    required this.measurement,
+    required this.country,
+    required this.userDocument,
+    required this.productDocument,
     required this.dateCreated,
   }) : super(key: key);
 
@@ -34,16 +29,17 @@ class ProductPage extends StatelessWidget {
 
   final int pk;
   final String uuid;
-  final String title;
-  final String productImage;
-  final double quantity;
-  final String unit;
+  final String type; // looking for, future crop, already available
+  final String name;
   final String description;
-  final String location;
-  final String type;
-  final int createdBy;
-  final String userImage;
-  final String userName;
+  final String quantity;
+  final String priceFrom;
+  final String priceTo;
+  final Map<String, dynamic> user;
+  final Map<String, dynamic> measurement;
+  final Map<String, dynamic> country;
+  final List userDocument;
+  final List productDocument;
   final DateTime dateCreated;
 
   @override
@@ -60,23 +56,24 @@ class ProductPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 0),
                 child: BigCardImageSlide(images: demoBigImages),
               ),
-              ProductPageDetails(
-                pk: pk,
-                uuid: uuid,
-                title: title,
-                productImage: productImage,
-                quantity: quantity,
-                unit: unit,
-                description: description,
-                location: location,
-                type: type,
-                createdBy: createdBy,
-                userImage: userImage,
-                userName: userName,
-                dateCreated: dateCreated,
-              ),
-              OtherProducts(title: 'Products from the shop', theme: 'white'),
-              OtherProducts(title: 'Similar Products', theme: 'primary'),
+              // ProductPageDetails(
+              //   pk: pk,
+              //   uuid: uuid,
+              //   title: name,
+              //   productImage: productImage,
+              //   quantity: quantity,
+              //   unit: unit,
+              //   description: description,
+              //   location: location,
+              //   type: type,
+              //   createdBy: createdBy,
+              //   userImage: userImage,
+              //   userName: userName,
+              //   dateCreated: dateCreated,
+              // ),
+              // const OtherProducts(
+              //     title: 'Products from the shop', theme: 'white'),
+              // const OtherProducts(title: 'Similar Products', theme: 'primary'),
             ],
           ),
         ),

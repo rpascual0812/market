@@ -219,10 +219,7 @@ class ProductPageDetails extends StatelessWidget {
                       height: 45,
                       child: AspectRatio(
                         aspectRatio: 1 / 1,
-                        child: Hero(
-                          tag: pk,
-                          child: NetworkImageWithLoader(userImage, true),
-                        ),
+                        child: NetworkImageWithLoader(userImage, true),
                       ),
                     ),
                     Column(
