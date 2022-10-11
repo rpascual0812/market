@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/components/sliders/product_slider.dart';
 
+import 'components/product_page_details.dart';
+
 class ProductPage extends StatelessWidget {
   const ProductPage({
     Key? key,
@@ -54,21 +56,22 @@ class ProductPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 0),
                 child: ProductSlider(documents: productDocument),
               ),
-              // ProductPageDetails(
-              //   pk: pk,
-              //   uuid: uuid,
-              //   title: name,
-              //   productImage: productImage,
-              //   quantity: quantity,
-              //   unit: unit,
-              //   description: description,
-              //   location: location,
-              //   type: type,
-              //   createdBy: createdBy,
-              //   userImage: userImage,
-              //   userName: userName,
-              //   dateCreated: dateCreated,
-              // ),
+              ProductPageDetails(
+                pk: pk,
+                uuid: uuid,
+                type: type,
+                name: name,
+                description: description,
+                quantity: quantity,
+                priceFrom: priceFrom,
+                priceTo: priceTo,
+                user: user,
+                measurement: measurement,
+                country: country,
+                userDocument: userDocument,
+                productDocument: productDocument,
+                dateCreated: dateCreated,
+              ),
               // const OtherProducts(
               //     title: 'Products from the shop', theme: 'white'),
               // const OtherProducts(title: 'Similar Products', theme: 'primary'),

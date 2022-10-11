@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:market/components/network_image.dart';
 import 'package:market/constants/app_colors.dart';
@@ -21,16 +22,17 @@ class ProductPageDetails extends StatelessWidget {
     this.isFavourite = false,
     required this.pk,
     required this.uuid,
-    required this.title,
-    required this.productImage,
-    required this.quantity,
-    required this.unit,
-    required this.description,
-    required this.location,
     required this.type,
-    required this.createdBy,
-    required this.userImage,
-    required this.userName,
+    required this.name,
+    required this.description,
+    required this.quantity,
+    required this.priceFrom,
+    required this.priceTo,
+    required this.user,
+    required this.measurement,
+    required this.country,
+    required this.userDocument,
+    required this.productDocument,
     required this.dateCreated,
   }) : super(key: key);
 
@@ -38,20 +40,25 @@ class ProductPageDetails extends StatelessWidget {
 
   final int pk;
   final String uuid;
-  final String title;
-  final String productImage;
-  final double quantity;
-  final String unit;
+  final String type; // looking for, future crop, already available
+  final String name;
   final String description;
-  final String location;
-  final String type;
-  final int createdBy;
-  final String userImage;
-  final String userName;
+  final String quantity;
+  final String priceFrom;
+  final String priceTo;
+  final Map<String, dynamic> user;
+  final Map<String, dynamic> measurement;
+  final Map<String, dynamic> country;
+  final List userDocument;
+  final List productDocument;
   final DateTime dateCreated;
 
   @override
   Widget build(BuildContext context) {
+    var userImage = userDocument.isEmpty
+        ? '${dotenv.get('API')}/assets/images/no-image.jpg'
+        : '${dotenv.get('API')}/${userDocument[0]['document']['path']}';
+
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -72,7 +79,7 @@ class ProductPageDetails extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  title,
+                  name,
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 Row(
@@ -148,11 +155,11 @@ class ProductPageDetails extends StatelessWidget {
             ),
           ),
 
-          const Padding(
-            padding: EdgeInsets.only(left: 10, right: 10),
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: Text(
-              '₱175',
-              style: TextStyle(
+              '₱${priceFrom.toString()}',
+              style: const TextStyle(
                 color: AppColors.primary,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -231,7 +238,7 @@ class ProductPageDetails extends StatelessWidget {
                             width: 150,
                             height: 20,
                             child: Text(
-                              userName,
+                              '${user['first_name']} ${user['last_name']}',
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 10),
                             ),
@@ -244,14 +251,14 @@ class ProductPageDetails extends StatelessWidget {
                             width: 150,
                             height: 20,
                             child: Row(
-                              children: [
-                                const Icon(
+                              children: const [
+                                Icon(
                                   pin,
                                   size: 12,
                                 ),
                                 Text(
-                                  location,
-                                  style: const TextStyle(
+                                  '',
+                                  style: TextStyle(
                                     fontSize: 10,
                                     color: AppColors.defaultBlack,
                                   ),
