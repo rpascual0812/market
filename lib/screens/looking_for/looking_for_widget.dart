@@ -34,7 +34,7 @@ class _LookingForWidgetState extends State<LookingForWidget> {
 
   Future<void> getProducts() async {
     try {
-      var res = await Remote.get('products');
+      var res = await Remote.get('products', {});
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {

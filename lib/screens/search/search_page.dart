@@ -34,7 +34,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> getProducts() async {
     try {
-      var res = await Remote.get('products');
+      var res = await Remote.get('products', {});
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {
@@ -51,6 +51,7 @@ class _SearchPageState extends State<SearchPage> {
               priceTo: dataJson['data'][i]['price_to'],
               user: dataJson['data'][i]['user'],
               measurement: dataJson['data'][i]['measurement'],
+              category: dataJson['data'][i]['category'],
               country: dataJson['data'][i]['country'],
               userDocument: dataJson['data'][i]['user_document'],
               productDocument: dataJson['data'][i]['product_document'],

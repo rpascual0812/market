@@ -10,12 +10,12 @@ class SelectDropdown extends StatefulWidget {
     Key? key,
     required this.options,
     required this.defaultValue,
-    this.onSelected,
+    this.onChanged,
   }) : super(key: key);
 
   final List<String> options;
   String defaultValue;
-  final void Function()? onSelected;
+  final void Function(String?)? onChanged;
 
   @override
   State<SelectDropdown> createState() => _SelectDropdownState();
@@ -64,7 +64,9 @@ class _SelectDropdownState extends State<SelectDropdown> {
             value: widget.defaultValue,
             onChanged: (value) {
               setState(() {
-                widget.defaultValue = value as String;
+                var option = value as String;
+                widget.defaultValue = option;
+                widget.onChanged!(option);
               });
             },
             icon: const Icon(

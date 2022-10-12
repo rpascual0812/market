@@ -45,7 +45,8 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> getProducts() async {
     try {
-      var res = await Remote.get('products');
+      products = [];
+      var res = await Remote.get('products', {'orderBy': filterValue});
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {
@@ -117,7 +118,16 @@ class _HomePageState extends State<HomePage> {
                     title: 'Product Post',
                   ),
                 ),
-                SelectDropdown(options: filters, defaultValue: filterValue),
+                SelectDropdown(
+                  options: filters,
+                  defaultValue: filterValue,
+                  onChanged: (option) {
+                    filterValue = option as String;
+                    setState(() {
+                      getProducts();
+                    });
+                  },
+                ),
               ],
             ),
             GridView.builder(

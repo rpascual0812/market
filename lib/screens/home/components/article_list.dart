@@ -28,7 +28,7 @@ class _ArticleListState extends State<ArticleList> {
 
   Future<void> getArticles() async {
     try {
-      var res = await Remote.get('articles');
+      var res = await Remote.get('articles', {});
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {

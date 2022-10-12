@@ -59,7 +59,7 @@ class _ProductSliderState extends State<ProductSlider> {
 
   Future<void> getSlides() async {
     try {
-      var res = await Remote.get('sliders');
+      var res = await Remote.get('sliders', {});
       print('sliders $res');
       if (res.statusCode == 200) {
         setState(() {

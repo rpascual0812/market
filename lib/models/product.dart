@@ -13,6 +13,7 @@ class Products {
   String priceTo;
   Map<String, dynamic> user;
   Map<String, dynamic> measurement;
+  Map<String, dynamic> category;
   Map<String, dynamic> country;
   List userDocument;
   List productDocument;
@@ -28,6 +29,7 @@ class Products {
     required this.priceTo,
     required this.user,
     required this.measurement,
+    required this.category,
     required this.country,
     required this.userDocument,
     required this.productDocument,
