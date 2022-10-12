@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:intl/intl.dart';
 
 import '../../constants/index.dart';
@@ -9,38 +8,12 @@ import '../../components/network_image.dart';
 class FutureCropsWidgetTile extends StatefulWidget {
   const FutureCropsWidgetTile({
     Key? key,
-    required this.pk,
-    required this.uuid,
-    required this.user,
-    required this.userDocument,
-    required this.productDocument,
-    required this.measurement,
-    required this.name,
-    required this.description,
-    required this.quantity,
-    required this.location,
-    required this.date,
+    required this.product,
     this.onTap,
-    this.hasFavourite = false,
-    this.isFavourite = false,
-    this.onFavouriteClicked,
   }) : super(key: key);
 
-  final int pk;
-  final String uuid;
-  final Map<String, dynamic> user;
-  final List userDocument;
-  final List productDocument;
-  final Map<String, dynamic> measurement;
-  final String name;
-  final String description;
-  final String quantity;
-  final String location;
-  final DateTime date;
+  final Map<String, dynamic> product;
   final void Function()? onTap;
-  final bool hasFavourite;
-  final bool isFavourite;
-  final void Function()? onFavouriteClicked;
 
   // String formattedDate = DateFormat('yyyy-MM-dd').format(date);
 
@@ -55,8 +28,9 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
   @override
   Widget build(BuildContext context) {
     var userImage =
-        '${dotenv.get('API')}/${widget.userDocument[0]['document']['path']}';
-
+        '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
+    DateTime date = DateTime.parse(widget.product['date_created'].toString());
+    print('111 ${widget.product['date_created']}');
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.31,
       height: 125,
@@ -128,7 +102,8 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            widget.name,
+                                            widget.product['user']
+                                                ['first_name'],
                                             style: const TextStyle(
                                               fontSize:
                                                   AppDefaults.fontSize - 3,
@@ -136,15 +111,15 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                             ),
                                           ),
                                           Row(
-                                            children: [
-                                              const Icon(
+                                            children: const [
+                                              Icon(
                                                 FutureCropsWidgetTile.pin,
                                                 size: AppDefaults.fontSize - 5,
                                                 // color: Colors.grey,
                                               ),
                                               Text(
-                                                widget.location,
-                                                style: const TextStyle(
+                                                '',
+                                                style: TextStyle(
                                                   fontSize:
                                                       AppDefaults.fontSize - 5,
                                                   color: AppColors.defaultBlack,
@@ -165,7 +140,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                       padding:
                                           const EdgeInsets.fromLTRB(5, 5, 0, 0),
                                       child: Text(
-                                        widget.name,
+                                        widget.product['name'],
                                         style: const TextStyle(
                                           fontSize: AppDefaults.fontSize,
                                           color: AppColors.primary,
@@ -183,7 +158,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                       padding:
                                           const EdgeInsets.fromLTRB(5, 0, 0, 0),
                                       child: Text(
-                                        'Quantity: ${widget.quantity.toString()}',
+                                        'Quantity: ${widget.product['quantity'].toString()}',
                                         style: const TextStyle(
                                           fontSize: AppDefaults.fontSize - 2,
                                           color: AppColors.defaultBlack,
@@ -200,7 +175,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                       padding:
                                           const EdgeInsets.fromLTRB(5, 0, 0, 0),
                                       child: Text(
-                                        'Estimated date: ${DateFormat.MMM().format(widget.date)} ${DateFormat.y().format(widget.date)}',
+                                        'Estimated date: ${DateFormat.MMM().format(date)} ${DateFormat.y().format(date)}',
                                         style: const TextStyle(
                                           fontSize: AppDefaults.fontSize - 4,
                                           color: AppColors.defaultBlack,
@@ -248,24 +223,24 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                     ),
 
                     /// This will show only when hasFavourite parameter is true
-                    if (widget.hasFavourite)
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                          ),
-                          child: Icon(
-                            widget.isFavourite
-                                ? IconlyBold.heart
-                                : IconlyLight.heart,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
+                    // if (widget.hasFavourite)
+                    //   Positioned(
+                    //     top: 8,
+                    //     right: 8,
+                    //     child: Container(
+                    //       padding: const EdgeInsets.all(8.0),
+                    //       decoration: const BoxDecoration(
+                    //         shape: BoxShape.circle,
+                    //         color: Colors.white,
+                    //       ),
+                    //       child: Icon(
+                    //         widget.isFavourite
+                    //             ? IconlyBold.heart
+                    //             : IconlyLight.heart,
+                    //         color: Colors.red,
+                    //       ),
+                    //     ),
+                    //   ),
                   ],
                 ),
               ),

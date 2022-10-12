@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:market/components/section_divider_title.dart';
 
 import '../../constants/index.dart';
-import '../../models/product.dart';
 // import 'info_row.dart';
 
 class LookingForWidget extends StatefulWidget {
@@ -18,7 +17,7 @@ class LookingForWidget extends StatefulWidget {
 }
 
 class _LookingForWidgetState extends State<LookingForWidget> {
-  List<Products> products = [];
+  List products = [];
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
 
@@ -41,25 +40,7 @@ class _LookingForWidgetState extends State<LookingForWidget> {
         setState(() {
           dataJson = jsonDecode(res.body);
           for (var i = 0; i < dataJson['data'].length; i++) {
-            // print('$i ${dataJson['data'][i]['quantity']}');
-            DateTime date = DateTime.parse(dataJson['data'][i]['date_created']);
-            products.add(Products(
-              pk: dataJson['data'][i]['pk'],
-              uuid: dataJson['data'][i]['uuid'],
-              type: dataJson['data'][i]['type'],
-              name: dataJson['data'][i]['name'],
-              description: dataJson['data'][i]['description'],
-              quantity: dataJson['data'][i]['quantity'] ?? '0.00',
-              priceFrom: dataJson['data'][i]['price_from'],
-              priceTo: dataJson['data'][i]['price_to'],
-              user: dataJson['data'][i]['user'],
-              measurement: dataJson['data'][i]['measurement'],
-              country: dataJson['data'][i]['country'],
-              userDocument: dataJson['data'][i]['user_document'],
-              productDocument: dataJson['data'][i]['product_document'],
-              dateCreated: date,
-            ));
-            // print('products $products');
+            products.add(dataJson['data'][i]);
           }
         });
       } else if (res.statusCode == 401) {
@@ -134,16 +115,16 @@ class _LookingForWidgetState extends State<LookingForWidget> {
                   rows: List.generate(
                       dataJson['data'] != null ? dataJson['data'].length : 0,
                       (index) {
+                    DateTime date = DateTime.parse(
+                        products[index]['date_created'].toString());
                     return DataRow(cells: [
-                      DataCell(Text(products[index].user['first_name'],
+                      DataCell(Text(products[index]['user']['first_name'],
                           style: const TextStyle(fontSize: 10))),
-                      DataCell(Text(products[index].name,
+                      DataCell(Text(products[index]['name'],
                           style: const TextStyle(fontSize: 10))),
-                      DataCell(Text(products[index].quantity,
+                      DataCell(Text(products[index]['quantity'],
                           style: const TextStyle(fontSize: 10))),
-                      DataCell(Text(
-                          DateFormat.yMMMd()
-                              .format(products[index].dateCreated),
+                      DataCell(Text(DateFormat.yMMMd().format(date),
                           style: const TextStyle(fontSize: 10))),
                     ]);
                   }),

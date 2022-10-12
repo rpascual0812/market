@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:market/components/select_dropdown.dart';
 import 'package:market/components/sliders/home_slider.dart';
 // import 'package:market/demo_data.dart';
-import 'package:market/models/product.dart';
 import 'package:market/screens/future_crops/future_crops_widget.dart';
 import 'package:market/screens/home/components/article_list.dart';
 import 'package:market/screens/home/components/home_header.dart';
@@ -34,7 +33,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Products> products = [];
+  List products = [];
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
 
@@ -51,26 +50,8 @@ class _HomePageState extends State<HomePage> {
       if (res.statusCode == 200) {
         setState(() {
           dataJson = jsonDecode(res.body);
-          print('dataJson $dataJson');
           for (var i = 0; i < dataJson['data'].length; i++) {
-            DateTime date = DateTime.parse(dataJson['data'][i]['date_created']);
-            products.add(Products(
-              pk: dataJson['data'][i]['pk'],
-              uuid: dataJson['data'][i]['uuid'],
-              type: dataJson['data'][i]['type'],
-              name: dataJson['data'][i]['name'],
-              description: dataJson['data'][i]['description'],
-              quantity: dataJson['data'][i]['quantity'],
-              priceFrom: dataJson['data'][i]['price_from'],
-              priceTo: dataJson['data'][i]['price_to'],
-              user: dataJson['data'][i]['user'],
-              measurement: dataJson['data'][i]['measurement'],
-              country: dataJson['data'][i]['country'],
-              userDocument: dataJson['data'][i]['user_document'],
-              productDocument: dataJson['data'][i]['product_document'],
-              dateCreated: date,
-            ));
-            // print('products $products');
+            products.add(dataJson['data'][i]);
           }
         });
       } else if (res.statusCode == 401) {
@@ -152,37 +133,14 @@ class _HomePageState extends State<HomePage> {
               itemCount: products.length,
               itemBuilder: (BuildContext context, int index) {
                 return ProductListWidgetTileSquare(
-                  pk: products[index].pk,
-                  name: products[index].name,
-                  uuid: products[index].uuid,
-                  description: products[index].description,
-                  priceFrom: products[index].priceFrom,
-                  priceTo: products[index].priceTo,
-                  productDocument: products[index].productDocument,
-                  hasFavourite: true,
-                  isFavourite: true,
-                  ratings: 3.5,
+                  product: products[index],
                   onTap: () {
-                    DateTime date =
-                        DateTime.parse(products[index].dateCreated.toString());
-
+                    // DateTime date =
+                    //     DateTime.parse(products[index].dateCreated.toString());
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => ProductPage(
-                          pk: products[index].pk,
-                          uuid: products[index].uuid,
-                          type: products[index].type,
-                          name: products[index].name,
-                          description: products[index].description,
-                          quantity: products[index].quantity,
-                          priceFrom: products[index].priceFrom,
-                          priceTo: products[index].priceTo,
-                          user: products[index].user,
-                          measurement: products[index].measurement,
-                          country: products[index].country,
-                          userDocument: products[index].userDocument,
-                          productDocument: products[index].productDocument,
-                          dateCreated: date,
+                          product: products[index],
                         ),
                       ),
                     );

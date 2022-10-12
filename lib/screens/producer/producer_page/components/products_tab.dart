@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:market/models/product.dart';
 
 import '../../../../components/product_list_widget_tile_square.dart';
 import '../../../../constants/index.dart';
@@ -18,7 +17,7 @@ class ProductsTab extends StatefulWidget {
 class _ProductsTabState extends State<ProductsTab> {
   bool includeFutureCrops = false;
 
-  List<Products> products = [];
+  List products = [];
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
 
@@ -36,22 +35,7 @@ class _ProductsTabState extends State<ProductsTab> {
         setState(() {
           dataJson = jsonDecode(res.body);
           for (var i = 0; i < dataJson['data'].length; i++) {
-            products.add(Products(
-              pk: dataJson['data'][i]['pk'],
-              uuid: dataJson['data'][i]['uuid'],
-              type: dataJson['data'][i]['type'],
-              name: dataJson['data'][i]['name'],
-              description: dataJson['data'][i]['description'],
-              quantity: dataJson['data'][i]['quantity'],
-              priceFrom: dataJson['data'][i]['price_from'],
-              priceTo: dataJson['data'][i]['price_to'],
-              user: dataJson['data'][i]['user'],
-              measurement: dataJson['data'][i]['measurement'],
-              country: dataJson['data'][i]['country'],
-              userDocument: dataJson['data'][i]['user_document'],
-              productDocument: dataJson['data'][i]['product_document'],
-              dateCreated: dataJson['data'][i]['date_created'],
-            ));
+            products.add(dataJson['data'][i]);
             // print('products $products');
           }
         });
@@ -90,16 +74,7 @@ class _ProductsTabState extends State<ProductsTab> {
                 itemCount: products.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ProductListWidgetTileSquare(
-                    pk: products[index].pk,
-                    uuid: products[index].uuid,
-                    name: products[index].name,
-                    description: products[index].description,
-                    priceFrom: products[index].priceFrom,
-                    priceTo: products[index].priceTo,
-                    productDocument: products[index].productDocument,
-                    hasFavourite: true,
-                    isFavourite: true,
-                    ratings: 3.5,
+                    product: products[index],
                     onTap: () {
                       // Navigator.of(context).push(
                       //   MaterialPageRoute(

@@ -19,45 +19,16 @@ class ProductPageDetails extends StatelessWidget {
 
   const ProductPageDetails({
     Key? key,
-    this.isFavourite = false,
-    required this.pk,
-    required this.uuid,
-    required this.type,
-    required this.name,
-    required this.description,
-    required this.quantity,
-    required this.priceFrom,
-    required this.priceTo,
-    required this.user,
-    required this.measurement,
-    required this.country,
-    required this.userDocument,
-    required this.productDocument,
-    required this.dateCreated,
+    required this.product,
   }) : super(key: key);
 
-  final bool isFavourite;
-
-  final int pk;
-  final String uuid;
-  final String type; // looking for, future crop, already available
-  final String name;
-  final String description;
-  final String quantity;
-  final String priceFrom;
-  final String priceTo;
-  final Map<String, dynamic> user;
-  final Map<String, dynamic> measurement;
-  final Map<String, dynamic> country;
-  final List userDocument;
-  final List productDocument;
-  final DateTime dateCreated;
+  final Map<String, dynamic> product;
 
   @override
   Widget build(BuildContext context) {
-    var userImage = userDocument.isEmpty
+    var userImage = product['user_document'] == null
         ? '${dotenv.get('API')}/assets/images/no-image.jpg'
-        : '${dotenv.get('API')}/${userDocument[0]['document']['path']}';
+        : '${dotenv.get('API')}/${product['user_document']['document']['path']}';
 
     return Container(
       decoration: const BoxDecoration(
@@ -79,7 +50,7 @@ class ProductPageDetails extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  name,
+                  product['name'],
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 Row(
@@ -158,7 +129,7 @@ class ProductPageDetails extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Text(
-              '₱${priceFrom.toString()}',
+              '₱${product['price_from'].toString()}',
               style: const TextStyle(
                 color: AppColors.primary,
                 fontWeight: FontWeight.bold,
@@ -192,7 +163,7 @@ class ProductPageDetails extends StatelessWidget {
                   Row(
                     children: [
                       RatingBarIndicator(
-                        rating: 4,
+                        rating: double.parse(product['total_rating']),
                         itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: Colors.amber,
@@ -200,9 +171,9 @@ class ProductPageDetails extends StatelessWidget {
                         itemCount: 5,
                         itemSize: 25.0,
                       ),
-                      const Text(
-                        '(265)',
-                        style: TextStyle(
+                      Text(
+                        '(${product['rating_count'].toString()})',
+                        style: const TextStyle(
                           fontSize: 14,
                           color: Colors.grey,
                         ),
@@ -238,7 +209,7 @@ class ProductPageDetails extends StatelessWidget {
                             width: 150,
                             height: 20,
                             child: Text(
-                              '${user['first_name']} ${user['last_name']}',
+                              '${product['user']['first_name']} ${product['user']['last_name']}',
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 10),
                             ),

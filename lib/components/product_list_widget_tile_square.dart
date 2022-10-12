@@ -11,38 +11,26 @@ import 'network_image.dart';
 class ProductListWidgetTileSquare extends StatelessWidget {
   const ProductListWidgetTileSquare({
     Key? key,
-    required this.pk,
-    required this.uuid,
-    required this.name,
-    required this.description,
-    required this.priceFrom,
-    required this.priceTo,
-    required this.productDocument,
-    required this.ratings,
+    required this.product,
     this.onTap,
-    this.hasFavourite = false,
-    this.isFavourite = false,
-    this.onFavouriteClicked,
   }) : super(key: key);
 
-  final int pk;
-  final String uuid;
-  final String name;
-  final String description;
-  final String priceFrom;
-  final String priceTo;
-  final List productDocument;
-  final double ratings;
+  final Map<String, dynamic> product;
   final void Function()? onTap;
-  final bool hasFavourite;
-  final bool isFavourite;
-  final void Function()? onFavouriteClicked;
 
   @override
   Widget build(BuildContext context) {
-    var image = productDocument.isEmpty
-        ? '${dotenv.get('API')}/assets/images/no-image.jpg'
-        : '${dotenv.get('API')}/${productDocument[0]['document']['path']}';
+    var image = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    for (var i = 0; i < product['product_document'].length; i++) {
+      if (product['product_document'][i]['default'] == true) {
+        image =
+            '${dotenv.get('API')}/${product['product_document'][i]['document']['path']}';
+      }
+    }
+
+    // var image = product['product_document'].isEmpty
+    //     ? '${dotenv.get('API')}/assets/images/no-image.jpg'
+    //     : '${dotenv.get('API')}/${product['product_document'][0]['document']['path']}';
 
     return InkWell(
       onTap: onTap,
@@ -85,7 +73,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        name,
+                        product['name'],
                         style: Theme.of(context).textTheme.bodyText2,
                         maxLines: 2,
                       ),
@@ -94,7 +82,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '\$$priceFrom',
+                        '\$${product['price_from']}',
                         style: const TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold),
@@ -105,7 +93,9 @@ class ProductListWidgetTileSquare extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: RatingBarIndicator(
-                        rating: ratings,
+                        rating: product['total_rating'] != null
+                            ? double.parse(product['total_rating'])
+                            : 0.00,
                         itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: Colors.amber,
