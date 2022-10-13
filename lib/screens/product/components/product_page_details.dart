@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:intl/intl.dart';
 import 'package:market/components/network_image.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/screens/chat/bubble.dart';
@@ -409,8 +410,8 @@ class ProductPageDetails extends StatelessWidget {
               padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Padding(
+                children: [
+                  const Padding(
                     padding: EdgeInsets.only(left: 10, right: 10),
                     child: SizedBox(
                       width: 130,
@@ -421,8 +422,9 @@ class ProductPageDetails extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'December 20, 2021',
-                    style: TextStyle(
+                    DateFormat('MMMM dd, yyyy')
+                        .format(DateTime.parse(product['date_created'])),
+                    style: const TextStyle(
                       fontSize: 12,
                     ),
                   ),

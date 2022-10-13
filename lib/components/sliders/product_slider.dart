@@ -1,10 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:market/constants/index.dart';
-import 'package:market/models/product_document.dart';
-import 'package:market/models/slider.dart';
 
 import '../../../size_config.dart';
 import '../dot_indicators.dart';
@@ -20,9 +15,7 @@ class ProductSlider extends StatefulWidget {
 }
 
 class _ProductSliderState extends State<ProductSlider> {
-  List<Sliders> sliders = [];
-  List<ProductDocuments> productDocuments = [];
-  Map<Object, dynamic> slidesJson = {};
+  List productDocuments = [];
   int intialIndex = 0;
   final storage = const FlutterSecureStorage();
   String token = '';
@@ -31,20 +24,13 @@ class _ProductSliderState extends State<ProductSlider> {
   void initState() {
     super.initState();
 
-    for (var i = 0; i < widget.documents.length; i++) {
-      productDocuments.add(ProductDocuments(
-        pk: widget.documents[i]['pk'],
-        userPk: widget.documents[i]['user_pk'],
-        productPk: widget.documents[i]['product_pk'],
-        type: widget.documents[i]['type'],
-        documentPk: widget.documents[i]['document_pk'],
-        dateCreated: DateTime.parse(widget.documents[i]['date_created']),
-        document: widget.documents[i]['document'],
-      ));
-      // print(slides['data'][i]);
+    if (widget.documents.isEmpty) {
+      print('empty');
+      widget.documents.add({
+        'document': {'path': 'assets/images/no-image.jpg'}
+      });
     }
 
-    getSlides();
     readStorage();
   }
 
@@ -55,41 +41,6 @@ class _ProductSliderState extends State<ProductSlider> {
       token = all ?? '';
       if (token != '') {}
     });
-  }
-
-  Future<void> getSlides() async {
-    try {
-      var res = await Remote.get('sliders', {});
-      print('sliders $res');
-      if (res.statusCode == 200) {
-        setState(() {
-          slidesJson = jsonDecode(res.body);
-          for (var i = 0; i < slidesJson['data'].length; i++) {
-            sliders.add(Sliders(
-              pk: slidesJson['data'][i]['pk'],
-              type: slidesJson['data'][i]['type'],
-              title: slidesJson['data'][i]['title'],
-              details: slidesJson['data'][i]['details'],
-              userPk: slidesJson['data'][i]['user_pk'],
-              sliderDocument: slidesJson['data'][i]['slider_document'],
-            ));
-            // print(slides['data'][i]);
-          }
-          // print('count ${slides['data'].length}');
-          // print('slides ${slides['data']}');
-          // slides = jsonDecode(json['data']);
-        });
-      } else if (res.statusCode == 401) {
-        if (!mounted) return;
-        AppDefaults.logout(context);
-      }
-      // if (res.statusCode == 200) return res.body;
-      return;
-    } on Exception catch (exception) {
-      print('exception $exception');
-    } catch (error) {
-      print('error $error');
-    }
   }
 
   @override
@@ -107,13 +58,7 @@ class _ProductSliderState extends State<ProductSlider> {
             itemCount: widget.documents.length,
             itemBuilder: (context, index) {
               return ProductSliderSlide(
-                pk: productDocuments[index].pk,
-                userPk: productDocuments[index].userPk,
-                productPk: productDocuments[index].productPk,
-                type: productDocuments[index].type,
-                documentPk: productDocuments[index].documentPk,
-                dateCreated: productDocuments[index].dateCreated,
-                document: productDocuments[index].document,
+                productDocuments: widget.documents[index],
               );
             },
           ),
