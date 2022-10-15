@@ -4,8 +4,8 @@ import 'package:market/screens/profile/components/profile_card.dart';
 
 import '../../../constants/index.dart';
 
-class StatusesRow extends StatelessWidget {
-  const StatusesRow({
+class ProfileProduct extends StatelessWidget {
+  const ProfileProduct({
     Key? key,
   }) : super(key: key);
 

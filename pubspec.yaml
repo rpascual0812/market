@@ -66,6 +66,9 @@ dependencies:
   dio: ^4.0.6
   json_annotation: ^4.7.0
   dropdown_button2: ^1.8.5
+  vector_math: ^2.1.0
+  flutter_sequence_animation: ^3.0.1
+  art_sweetalert: ^0.0.5
   
   
 

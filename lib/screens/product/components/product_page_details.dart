@@ -3,16 +3,17 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:market/components/network_image.dart';
-import 'package:market/constants/app_colors.dart';
 import 'package:market/screens/chat/bubble.dart';
 import 'package:market/screens/producer/producer_page/producer_page.dart';
 import 'package:market/screens/product/components/rate_product_page.dart';
 import 'package:market/screens/product/components/ratings_page.dart';
+import 'package:art_sweetalert/art_sweetalert.dart';
 
-import '../../../constants/app_defaults.dart';
+import '../../../constants/index.dart';
+import '../../orders/order_page.dart';
 // import 'color_picker.dart';
 
-class ProductPageDetails extends StatelessWidget {
+class ProductPageDetails extends StatefulWidget {
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
   static const IconData chat =
@@ -26,10 +27,15 @@ class ProductPageDetails extends StatelessWidget {
   final Map<String, dynamic> product;
 
   @override
+  State<ProductPageDetails> createState() => _ProductPageDetailsState();
+}
+
+class _ProductPageDetailsState extends State<ProductPageDetails> {
+  @override
   Widget build(BuildContext context) {
-    var userImage = product['user_document'] == null
+    var userImage = widget.product['user_document'] == null
         ? '${dotenv.get('API')}/assets/images/no-image.jpg'
-        : '${dotenv.get('API')}/${product['user_document']['document']['path']}';
+        : '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
 
     return Container(
       decoration: const BoxDecoration(
@@ -51,7 +57,7 @@ class ProductPageDetails extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  product['name'],
+                  widget.product['name'],
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 Row(
@@ -61,15 +67,34 @@ class ProductPageDetails extends StatelessWidget {
                       height: 30.0,
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(
-                        onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) {
-                          //       return const Bubble();
-                          //     },
-                          //   ),
-                          // );
+                        onPressed: () async {
+                          ArtDialogResponse response = await ArtSweetAlert.show(
+                            barrierDismissible: false,
+                            context: context,
+                            artDialogArgs: ArtDialogArgs(
+                              type: ArtSweetAlertType.success,
+                              denyButtonText: "Ok",
+                              denyButtonColor: Colors.grey,
+                              title: "Do you want to save the changes?",
+                              confirmButtonText: "Go to Cart",
+                            ),
+                          );
+
+                          if (response.isTapConfirmButton) {
+                            if (!mounted) return;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const OrderPage(type: 'orders');
+                                },
+                              ),
+                            );
+                          }
+
+                          if (response.isTapDenyButton) {
+                            return;
+                          }
                         },
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(
@@ -93,7 +118,34 @@ class ProductPageDetails extends StatelessWidget {
                       height: 30.0,
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          ArtDialogResponse response = await ArtSweetAlert.show(
+                              barrierDismissible: false,
+                              context: context,
+                              artDialogArgs: ArtDialogArgs(
+                                type: ArtSweetAlertType.success,
+                                denyButtonText: "Ok",
+                                denyButtonColor: Colors.grey,
+                                title: "Do you want to save the changes?",
+                                confirmButtonText: "Go to Cart",
+                              ));
+
+                          if (response == null) {
+                            return;
+                          }
+
+                          if (response.isTapConfirmButton) {
+                            ArtSweetAlert.show(
+                                context: context,
+                                artDialogArgs: ArtDialogArgs(
+                                    type: ArtSweetAlertType.success,
+                                    title: "Saved!"));
+                            return;
+                          }
+
+                          if (response.isTapDenyButton) {
+                            return;
+                          }
                           // Navigator.push(
                           //   context,
                           //   MaterialPageRoute(
@@ -130,7 +182,7 @@ class ProductPageDetails extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Text(
-              '₱${product['price_from'].toString()}',
+              '₱${widget.product['price_from'].toString()}',
               style: const TextStyle(
                 color: AppColors.primary,
                 fontWeight: FontWeight.bold,
@@ -164,7 +216,7 @@ class ProductPageDetails extends StatelessWidget {
                   Row(
                     children: [
                       RatingBarIndicator(
-                        rating: double.parse(product['total_rating']),
+                        rating: double.parse(widget.product['total_rating']),
                         itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: Colors.amber,
@@ -173,7 +225,7 @@ class ProductPageDetails extends StatelessWidget {
                         itemSize: 25.0,
                       ),
                       Text(
-                        '(${product['rating_count'].toString()})',
+                        '(${widget.product['rating_count'].toString()})',
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.grey,
@@ -210,7 +262,7 @@ class ProductPageDetails extends StatelessWidget {
                             width: 150,
                             height: 20,
                             child: Text(
-                              '${product['user']['first_name']} ${product['user']['last_name']}',
+                              '${widget.product['user']['first_name']} ${widget.product['user']['last_name']}',
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 10),
                             ),
@@ -225,7 +277,7 @@ class ProductPageDetails extends StatelessWidget {
                             child: Row(
                               children: const [
                                 Icon(
-                                  pin,
+                                  ProductPageDetails.pin,
                                   size: 12,
                                 ),
                                 Text(
@@ -268,7 +320,7 @@ class ProductPageDetails extends StatelessWidget {
                           padding: const EdgeInsets.all(5),
                         ),
                         child: const Icon(
-                          chat,
+                          ProductPageDetails.chat,
                           color: AppColors.primary,
                           size: 20,
                         ),
@@ -423,7 +475,7 @@ class ProductPageDetails extends StatelessWidget {
                   ),
                   Text(
                     DateFormat('MMMM dd, yyyy')
-                        .format(DateTime.parse(product['date_created'])),
+                        .format(DateTime.parse(widget.product['date_created'])),
                     style: const TextStyle(
                       fontSize: 12,
                     ),
@@ -467,7 +519,7 @@ class ProductPageDetails extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      product['description'],
+                      widget.product['description'],
                       style: const TextStyle(
                         fontSize: 13,
                       ),
