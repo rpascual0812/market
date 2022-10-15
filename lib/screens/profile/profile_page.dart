@@ -9,7 +9,7 @@ import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/profile/components/profile_settings.dart';
 
 import 'components/profile_picture_section.dart';
-import 'components/statuses_row.dart';
+import 'components/profile_product.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -89,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
             // const SizedBox(height: 10),
 
             /// Statuses
-            const StatusesRow(),
+            const ProfileProduct(),
             const SizedBox(height: AppDefaults.margin),
 
             ProfileSettings(),
