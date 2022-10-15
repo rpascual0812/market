@@ -464,11 +464,11 @@ class ProductPageDetails extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
+                children: [
                   Flexible(
                     child: Text(
-                      'PM me for more inquiries \nFresh from Baguio!\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco',
-                      style: TextStyle(
+                      product['description'],
+                      style: const TextStyle(
                         fontSize: 13,
                       ),
                     ),

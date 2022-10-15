@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:market/components/appbar.dart';
+import 'package:market/screens/product/components/other_products.dart';
 
 import '../../components/sliders/product_slider.dart';
 import 'components/product_page_details.dart';
@@ -30,9 +31,9 @@ class ProductPage extends StatelessWidget {
                     ProductSlider(documents: product['product_document'] ?? []),
               ),
               ProductPageDetails(product: product),
-              // const OtherProducts(
-              //     title: 'Products from the shop', theme: 'white'),
-              // const OtherProducts(title: 'Similar Products', theme: 'primary'),
+              const OtherProducts(
+                  title: 'Products from the shop', theme: 'white'),
+              const OtherProducts(title: 'Similar Products', theme: 'primary'),
             ],
           ),
         ),

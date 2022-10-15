@@ -61,7 +61,7 @@ class _OtherProductsState extends State<OtherProducts> {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       width: MediaQuery.of(context).size.width,
-      height: 360,
+      height: 370,
       color: widget.theme == 'primary' ? AppColors.primary : Colors.white,
       // decoration: BoxDecoration(color: AppColors.primary),
       child: Column(
@@ -80,7 +80,7 @@ class _OtherProductsState extends State<OtherProducts> {
                           ? AppColors.primary
                           : Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                      fontSize: AppDefaults.fontSize + 2,
                     ),
                   ),
                 ),
@@ -127,7 +127,7 @@ class _OtherProductsState extends State<OtherProducts> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: const [
               Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: EdgeInsets.only(left: 10, right: 10, top: 10),
                 child: SizedBox(
                   child: Text(
                     'View more',
