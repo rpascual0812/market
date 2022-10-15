@@ -6,7 +6,12 @@ import 'package:market/constants/app_colors.dart';
 // import 'package:market/models/ratings.dart';
 
 class RateProductPage extends StatefulWidget {
-  const RateProductPage({Key? key}) : super(key: key);
+  const RateProductPage({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
+
+  final Map<String, dynamic> product;
 
   @override
   State<RateProductPage> createState() => _RateProductPageState();

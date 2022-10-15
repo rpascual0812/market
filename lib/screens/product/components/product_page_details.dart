@@ -72,12 +72,12 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                             barrierDismissible: false,
                             context: context,
                             artDialogArgs: ArtDialogArgs(
-                              type: ArtSweetAlertType.success,
-                              denyButtonText: "Ok",
-                              denyButtonColor: Colors.grey,
-                              title: "Do you want to save the changes?",
-                              confirmButtonText: "Go to Cart",
-                            ),
+                                type: ArtSweetAlertType.success,
+                                denyButtonText: "Cancel",
+                                denyButtonColor: Colors.grey,
+                                title: "Are you sure you want to buy this?",
+                                confirmButtonText: "Confirm",
+                                confirmButtonColor: AppColors.primary),
                           );
 
                           if (response.isTapConfirmButton) {
@@ -126,7 +126,8 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                                 type: ArtSweetAlertType.success,
                                 denyButtonText: "Ok",
                                 denyButtonColor: Colors.grey,
-                                title: "Do you want to save the changes?",
+                                title:
+                                    "This product has been added to your cart",
                                 confirmButtonText: "Go to Cart",
                               ));
 
@@ -199,7 +200,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const RatingsPage(),
+                    builder: (context) => RatingsPage(product: widget.product),
                   ),
                 );
               },
@@ -384,7 +385,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const RateProductPage();
+                              return RateProductPage(product: widget.product);
                             },
                           ),
                         );
@@ -417,7 +418,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                 Text(
                   'Product Details',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: AppDefaults.fontSize + 2,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -469,7 +470,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       width: 130,
                       child: Text(
                         'Product Posted',
-                        style: TextStyle(fontSize: 12),
+                        style: TextStyle(fontSize: AppDefaults.fontSize),
                       ),
                     ),
                   ),
@@ -477,7 +478,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                     DateFormat('MMMM dd, yyyy')
                         .format(DateTime.parse(widget.product['date_created'])),
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: AppDefaults.fontSize,
                     ),
                   ),
                 ],
@@ -498,13 +499,16 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       width: 130,
                       child: Text(
                         'Ships From',
-                        style: TextStyle(color: Colors.white, fontSize: 12),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: AppDefaults.fontSize),
                       ),
                     ),
                   ),
                   Text(
                     'Baguio, Benguet',
-                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    style: TextStyle(
+                        color: Colors.white, fontSize: AppDefaults.fontSize),
                   ),
                 ],
               ),
@@ -513,7 +517,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(AppDefaults.margin),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -521,7 +525,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                     child: Text(
                       widget.product['description'],
                       style: const TextStyle(
-                        fontSize: 13,
+                        fontSize: AppDefaults.fontSize,
                       ),
                     ),
                   ),

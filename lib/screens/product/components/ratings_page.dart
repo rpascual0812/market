@@ -6,7 +6,12 @@ import 'package:market/constants/app_colors.dart';
 import 'package:market/models/ratings.dart';
 
 class RatingsPage extends StatefulWidget {
-  const RatingsPage({Key? key}) : super(key: key);
+  const RatingsPage({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
+
+  final Map<String, dynamic> product;
 
   @override
   State<RatingsPage> createState() => _RatingsPageState();
@@ -24,7 +29,7 @@ class _RatingsPageState extends State<RatingsPage> {
       userImage: 'https://i.imgur.com/vavfJqu.gif',
       rating: 4,
       comment:
-          'With the price I paid, it was worth it. What I ordered was perfect. Although delivery is late, ordered April 29th, received on the 3rd of May. Overall, I did not regret it.',
+          '111 With the price I paid, it was worth it. What I ordered was perfect. Although delivery is late, ordered April 29th, received on the 3rd of May. Overall, I did not regret it.',
       dateCreated: DateTime(2022, 08, 12, 13, 25),
     ),
     Ratings(
@@ -35,7 +40,7 @@ class _RatingsPageState extends State<RatingsPage> {
       userImage: 'https://i.imgur.com/jG0jrjW.gif',
       rating: 4,
       comment:
-          'Seller was super accomodating! Appreciate her help so much \'cause she answered all my questions. Hopefully, she sells more!',
+          '111 Seller was super accomodating! Appreciate her help so much \'cause she answered all my questions. Hopefully, she sells more!',
       dateCreated: DateTime(2022, 08, 12, 13, 25),
     ),
     Ratings(
@@ -46,13 +51,14 @@ class _RatingsPageState extends State<RatingsPage> {
       userImage: 'https://i.imgur.com/VocmKXJ.gif',
       rating: 4,
       comment:
-          'Supersatisfied with my order! The item was in great condition and I loved it. Thank you so much!',
+          '111 Supersatisfied with my order! The item was in great condition and I loved it. Thank you so much!',
       dateCreated: DateTime(2022, 08, 12, 13, 25),
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    print(widget.product['product_rating'].length);
     return Scaffold(
       appBar: Appbar(),
       body: Container(
@@ -97,9 +103,9 @@ class _RatingsPageState extends State<RatingsPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        const Text(
-                          'Baguio Beans',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Text(
+                          widget.product['name'],
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -108,64 +114,86 @@ class _RatingsPageState extends State<RatingsPage> {
                 ),
               ),
             ),
-            Container(
-              // color: Colors.white,
-              margin: const EdgeInsets.only(bottom: 10),
-              child: ListView.builder(
-                itemCount: ratings.length,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  // return Text('asdf');
-                  return Container(
-                    padding: const EdgeInsets.all(10),
-                    color: Colors.white,
-                    margin: const EdgeInsets.only(bottom: 5),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 45,
-                          child: AspectRatio(
-                            aspectRatio: 1 / 1,
-                            child: NetworkImageWithLoader(
-                                ratings[index].userImage, true),
+            Visibility(
+              visible:
+                  widget.product['product_rating'].length == 0 ? true : false,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                color: Colors.white,
+                margin: const EdgeInsets.only(bottom: 5),
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [Text('No Ratings found.')],
+                ),
+              ),
+            ),
+            Visibility(
+              visible:
+                  widget.product['product_rating'].length == 0 ? false : true,
+              child: Container(
+                // color: Colors.white,
+                margin: const EdgeInsets.only(bottom: 10),
+                child: ListView.builder(
+                  itemCount: widget.product['product_rating'].length,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    // return Text('asdf');
+                    return Container(
+                      padding: const EdgeInsets.all(10),
+                      color: Colors.white,
+                      margin: const EdgeInsets.only(bottom: 5),
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 45,
+                            child: AspectRatio(
+                              aspectRatio: 1 / 1,
+                              child: NetworkImageWithLoader(
+                                  ratings[index].userImage, true),
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(ratings[index].userFirstName),
-                            RatingBarIndicator(
-                              rating: 4,
-                              itemBuilder: (context, index) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(ratings[index].userFirstName),
+                              RatingBarIndicator(
+                                rating: double.parse(
+                                    widget.product['product_rating'][index]
+                                        ['rating']),
+                                itemBuilder: (context, index) => const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                itemCount: 5,
+                                itemSize: 15.0,
                               ),
-                              itemCount: 5,
-                              itemSize: 15.0,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(5),
-                              color: Colors.white,
-                              width: 310,
-                              child: Row(
-                                children: <Widget>[
-                                  Flexible(
-                                    child: Text(ratings[index].comment),
-                                  ),
-                                ],
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                color: Colors.white,
+                                width: 310,
+                                child: Row(
+                                  children: <Widget>[
+                                    Flexible(
+                                      child: Text(
+                                          widget.product['product_rating']
+                                              [index]['message']),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],
