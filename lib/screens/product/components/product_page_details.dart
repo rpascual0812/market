@@ -33,6 +33,7 @@ class ProductPageDetails extends StatefulWidget {
 class _ProductPageDetailsState extends State<ProductPageDetails> {
   @override
   Widget build(BuildContext context) {
+    print('produc2t ${widget.product}');
     var userImage = widget.product['user_document'] == null
         ? '${dotenv.get('API')}/assets/images/no-image.jpg'
         : '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
@@ -130,10 +131,6 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                                     "This product has been added to your cart",
                                 confirmButtonText: "Go to Cart",
                               ));
-
-                          if (response == null) {
-                            return;
-                          }
 
                           if (response.isTapConfirmButton) {
                             ArtSweetAlert.show(

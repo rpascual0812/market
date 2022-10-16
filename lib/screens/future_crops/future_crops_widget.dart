@@ -104,7 +104,7 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => ProductPage(
-                              product: products[index],
+                              productPk: products[index]['pk'],
                             ),
                           ),
                         );
