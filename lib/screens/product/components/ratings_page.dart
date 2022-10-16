@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/components/network_image.dart';
 import 'package:market/constants/app_colors.dart';
-import 'package:market/models/ratings.dart';
 
 class RatingsPage extends StatefulWidget {
   const RatingsPage({
@@ -18,47 +18,8 @@ class RatingsPage extends StatefulWidget {
 }
 
 class _RatingsPageState extends State<RatingsPage> {
-  TextEditingController messageController = TextEditingController();
-
-  List<Ratings> ratings = [
-    Ratings(
-      pk: 1,
-      userId: 1,
-      userFirstName: 'Ferdinand',
-      userLastName: 'Dela Cruz',
-      userImage: 'https://i.imgur.com/vavfJqu.gif',
-      rating: 4,
-      comment:
-          '111 With the price I paid, it was worth it. What I ordered was perfect. Although delivery is late, ordered April 29th, received on the 3rd of May. Overall, I did not regret it.',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Ratings(
-      pk: 2,
-      userId: 2,
-      userFirstName: 'Mia',
-      userLastName: 'Sue',
-      userImage: 'https://i.imgur.com/jG0jrjW.gif',
-      rating: 4,
-      comment:
-          '111 Seller was super accomodating! Appreciate her help so much \'cause she answered all my questions. Hopefully, she sells more!',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Ratings(
-      pk: 3,
-      userId: 3,
-      userFirstName: 'Jone',
-      userLastName: 'Doe',
-      userImage: 'https://i.imgur.com/VocmKXJ.gif',
-      rating: 4,
-      comment:
-          '111 Supersatisfied with my order! The item was in great condition and I loved it. Thank you so much!',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    print(widget.product['product_rating'].length);
     return Scaffold(
       appBar: Appbar(),
       body: Container(
@@ -109,14 +70,14 @@ class _RatingsPageState extends State<RatingsPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    // const SizedBox(height: AppDefaults.height),
                   ],
                 ),
               ),
             ),
             Visibility(
               visible:
-                  widget.product['product_rating'].length == 0 ? true : false,
+                  widget.product['product_ratings'].length == 0 ? true : false,
               child: Container(
                 padding: const EdgeInsets.all(10),
                 color: Colors.white,
@@ -130,17 +91,42 @@ class _RatingsPageState extends State<RatingsPage> {
             ),
             Visibility(
               visible:
-                  widget.product['product_rating'].length == 0 ? false : true,
+                  widget.product['product_ratings'].length == 0 ? false : true,
               child: Container(
                 // color: Colors.white,
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ListView.builder(
-                  itemCount: widget.product['product_rating'].length,
+                  itemCount: widget.product['product_ratings'].length,
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    // return Text('asdf');
+                    var image =
+                        '${dotenv.get('API')}/assets/images/no-image.jpg';
+
+                    for (var i = 0;
+                        i <
+                            widget
+                                .product['product_ratings'][index]['user']
+                                    ['user_document']
+                                .length;
+                        i++) {
+                      // print(widget.product['product_ratings'][index]['user']['user_document'][i]['document']['path']);
+                      if (widget.product['product_ratings'][index]['user']
+                                  ['user_document'][i]['document']['path'] !=
+                              null &&
+                          widget.product['product_ratings'][index]['user']
+                                  ['user_document'][i]['type'] ==
+                              'profile_photo') {
+                        image =
+                            '${dotenv.get('API')}/${widget.product['product_ratings'][index]['user']['user_document'][i]['document']['path']}';
+                      }
+                    }
+
+                    if (widget.product['product_ratings'][index]['anonymous']) {
+                      image = '${dotenv.get('API')}/assets/images/user.png';
+                    }
+
                     return Container(
                       padding: const EdgeInsets.all(10),
                       color: Colors.white,
@@ -153,18 +139,20 @@ class _RatingsPageState extends State<RatingsPage> {
                             height: 45,
                             child: AspectRatio(
                               aspectRatio: 1 / 1,
-                              child: NetworkImageWithLoader(
-                                  ratings[index].userImage, true),
+                              child: NetworkImageWithLoader(image, true),
                             ),
                           ),
                           const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(ratings[index].userFirstName),
+                              Text(widget.product['product_ratings'][index]
+                                      ['anonymous']
+                                  ? 'Anonymous User'
+                                  : '${widget.product['product_ratings'][index]['user']['first_name']} ${widget.product['product_ratings'][index]['user']['last_name']}'),
                               RatingBarIndicator(
                                 rating: double.parse(
-                                    widget.product['product_rating'][index]
+                                    widget.product['product_ratings'][index]
                                         ['rating']),
                                 itemBuilder: (context, index) => const Icon(
                                   Icons.star,
@@ -181,7 +169,7 @@ class _RatingsPageState extends State<RatingsPage> {
                                   children: <Widget>[
                                     Flexible(
                                       child: Text(
-                                          widget.product['product_rating']
+                                          widget.product['product_ratings']
                                               [index]['message']),
                                     ),
                                   ],

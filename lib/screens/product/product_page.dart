@@ -16,7 +16,6 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print('product1 ${product['product_document'][0]['path']}');
     return Scaffold(
       appBar: Appbar(),
       body: SingleChildScrollView(
@@ -27,8 +26,8 @@ class ProductPage extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 0),
-                child:
-                    ProductSlider(documents: product['product_document'] ?? []),
+                child: ProductSlider(
+                    documents: product['product_documents'] ?? []),
               ),
               ProductPageDetails(product: product),
               const OtherProducts(

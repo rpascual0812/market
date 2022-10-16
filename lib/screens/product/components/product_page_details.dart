@@ -217,7 +217,8 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                   Row(
                     children: [
                       RatingBarIndicator(
-                        rating: double.parse(widget.product['total_rating']),
+                        rating: double.parse(
+                            widget.product['product_rating_total'].toString()),
                         itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: Colors.amber,
@@ -226,7 +227,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                         itemSize: 25.0,
                       ),
                       Text(
-                        '(${widget.product['rating_count'].toString()})',
+                        '(${widget.product['product_rating_count'].toString()})',
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.grey,
