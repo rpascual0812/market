@@ -20,6 +20,7 @@ class RatingsPage extends StatefulWidget {
 class _RatingsPageState extends State<RatingsPage> {
   @override
   Widget build(BuildContext context) {
+    // print(' product ratings ${widget.product['product_ratings']}');
     return Scaffold(
       appBar: Appbar(),
       body: Container(
@@ -170,7 +171,8 @@ class _RatingsPageState extends State<RatingsPage> {
                                     Flexible(
                                       child: Text(
                                           widget.product['product_ratings']
-                                              [index]['message']),
+                                                  [index]['message'] ??
+                                              ''),
                                     ),
                                   ],
                                 ),

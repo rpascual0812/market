@@ -33,7 +33,7 @@ class ProductPageDetails extends StatefulWidget {
 class _ProductPageDetailsState extends State<ProductPageDetails> {
   @override
   Widget build(BuildContext context) {
-    print('produc2t ${widget.product}');
+    // print('produc2t ${widget.product['user']}');
     var userImage = widget.product['user_document'] == null
         ? '${dotenv.get('API')}/assets/images/no-image.jpg'
         : '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
