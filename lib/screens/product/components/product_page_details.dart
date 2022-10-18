@@ -38,6 +38,14 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
         ? '${dotenv.get('API')}/assets/images/no-image.jpg'
         : '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
 
+    // dataJson = jsonDecode(res.body);
+    var userAddress = {};
+    for (var i = 0; i < widget.product['user_addresses'].length; i++) {
+      if (widget.product['user_addresses'][i]['default']) {
+        userAddress = widget.product['user_addresses'][i];
+      }
+    }
+    print('address $userAddress');
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -279,14 +287,14 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                             width: 150,
                             height: 20,
                             child: Row(
-                              children: const [
-                                Icon(
+                              children: [
+                                const Icon(
                                   ProductPageDetails.pin,
                                   size: 12,
                                 ),
                                 Text(
-                                  '',
-                                  style: TextStyle(
+                                  '${userAddress['city']['name']}, ${userAddress['province']['name']}',
+                                  style: const TextStyle(
                                     fontSize: 10,
                                     color: AppColors.defaultBlack,
                                   ),
@@ -497,8 +505,8 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
               padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Padding(
+                children: [
+                  const Padding(
                     padding: EdgeInsets.only(left: 10, right: 10),
                     child: SizedBox(
                       width: 130,
@@ -511,8 +519,8 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                     ),
                   ),
                   Text(
-                    'Baguio, Benguet',
-                    style: TextStyle(
+                    '${userAddress['city']['name']}, ${userAddress['province']['name']}',
+                    style: const TextStyle(
                         color: Colors.white, fontSize: AppDefaults.fontSize),
                   ),
                 ],

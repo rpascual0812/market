@@ -25,7 +25,6 @@ class _ProductSliderState extends State<ProductSlider> {
     super.initState();
 
     if (widget.documents.isEmpty) {
-      print('empty');
       widget.documents.add({
         'document': {'path': 'assets/images/no-image.jpg'}
       });

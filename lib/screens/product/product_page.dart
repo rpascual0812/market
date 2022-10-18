@@ -48,6 +48,7 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    // print(product);
     return Scaffold(
       appBar: Appbar(),
       body: SingleChildScrollView(
@@ -61,7 +62,10 @@ class _ProductPageState extends State<ProductPage> {
                 child: ProductSlider(
                     documents: product['product_documents'] ?? []),
               ),
-              ProductPageDetails(product: product),
+              Visibility(
+                visible: product['pk'] != null ? true : false,
+                child: ProductPageDetails(product: product),
+              ),
               const OtherProducts(
                   title: 'Products from the shop', theme: 'white'),
               const OtherProducts(title: 'Similar Products', theme: 'primary'),

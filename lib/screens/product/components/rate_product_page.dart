@@ -54,10 +54,11 @@ class _RateProductPageState extends State<RateProductPage> {
   Future fetch() async {
     try {
       var tokenObj = json.decode(token);
-      var params = {'product_pk': widget.product['pk'].toString()};
+      // var params = {'product_pk': widget.product['pk'].toString()};
 
-      final url = Uri.parse('${dotenv.get('API')}/products/rating')
-          .replace(queryParameters: params);
+      final url = Uri.parse(
+          '${dotenv.get('API')}/products/${widget.product['pk']}/rating');
+      // .replace(queryParameters: params);
       final headers = {
         HttpHeaders.authorizationHeader:
             'Bearer ${tokenObj['user']['access_token']}',
@@ -86,7 +87,7 @@ class _RateProductPageState extends State<RateProductPage> {
   Future submit() async {
     try {
       var tokenObj = json.decode(token);
-      final url = Uri.parse('${dotenv.get('API')}/products/rating');
+      final url = Uri.parse('${dotenv.get('API')}/products/ratings');
       final headers = {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${tokenObj['user']['access_token']}',
@@ -98,7 +99,7 @@ class _RateProductPageState extends State<RateProductPage> {
         'anonymous': anonymous.text,
         'product_pk': widget.product['pk'].toString()
       };
-
+      print(body);
       var res = await http.post(
         url,
         headers: headers,
