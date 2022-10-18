@@ -33,7 +33,7 @@ class ProductPageDetails extends StatefulWidget {
 class _ProductPageDetailsState extends State<ProductPageDetails> {
   @override
   Widget build(BuildContext context) {
-    print('produc2t ${widget.product}');
+    // print('produc2t ${widget.product}');
     var userImage = widget.product['user_document'] == null
         ? '${dotenv.get('API')}/assets/images/no-image.jpg'
         : '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
@@ -58,7 +58,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.product['name'],
+                  widget.product['name'] ?? '',
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 Row(
@@ -214,8 +214,11 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                   Row(
                     children: [
                       RatingBarIndicator(
-                        rating: double.parse(
-                            widget.product['product_rating_total'].toString()),
+                        rating: widget.product['product_rating_total'] != null
+                            ? double.parse(widget
+                                .product['product_rating_total']
+                                .toString())
+                            : 5.00,
                         itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: Colors.amber,
@@ -261,7 +264,9 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                             width: 150,
                             height: 20,
                             child: Text(
-                              '${widget.product['user']['first_name']} ${widget.product['user']['last_name']}',
+                              widget.product['user'] != null
+                                  ? '${widget.product['user']['first_name']} ${widget.product['user']['last_name']}'
+                                  : '',
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 10),
                             ),
@@ -473,8 +478,10 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                     ),
                   ),
                   Text(
-                    DateFormat('MMMM dd, yyyy')
-                        .format(DateTime.parse(widget.product['date_created'])),
+                    widget.product['date_created'] != null
+                        ? DateFormat('MMMM dd, yyyy').format(
+                            DateTime.parse(widget.product['date_created']))
+                        : '',
                     style: const TextStyle(
                       fontSize: AppDefaults.fontSize,
                     ),
@@ -521,7 +528,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                 children: [
                   Flexible(
                     child: Text(
-                      widget.product['description'],
+                      widget.product['description'] ?? '',
                       style: const TextStyle(
                         fontSize: AppDefaults.fontSize,
                       ),
