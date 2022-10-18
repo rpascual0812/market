@@ -4,17 +4,37 @@ import 'package:flutter/material.dart';
 // import 'package:market/screens/approot/app_root.dart';
 // import 'package:provider/provider.dart';
 
+import '../../../components/custom_animation.dart';
 import '../../../constants/index.dart';
-
 import 'package:http/http.dart' as http;
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../approot/app_root.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 const storage = FlutterSecureStorage();
 
 Future<void> main() async {
   await dotenv.load();
+  configLoading();
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false
+    ..customAnimation = CustomAnimation();
 }
 
 class LoginForm extends StatefulWidget {
@@ -159,6 +179,11 @@ class _LoginFormState extends State<LoginForm> {
                 padding: const EdgeInsets.all(1),
                 child: ElevatedButton(
                   onPressed: () async {
+                    await EasyLoading.show(
+                      status: 'loading...',
+                      maskType: EasyLoadingMaskType.clear,
+                    );
+
                     var username = usernameController.text;
                     var password = passwordController.text;
                     var jwt = await submit(username, password);
@@ -166,8 +191,8 @@ class _LoginFormState extends State<LoginForm> {
                       storage.write(key: "jwt", value: jwt);
                       if (!mounted) return;
 
-                      AppDefaults.toast(context, 'success',
-                          AppMessage.getSuccess('LOGIN_SUCCESS'));
+                      // AppDefaults.toast(context, 'success',
+                      //     AppMessage.getSuccess('LOGIN_SUCCESS'));
 
                       // Fluttertoast.showToast(
                       //   msg: "Please wait while we are fetching your account.",
@@ -178,24 +203,25 @@ class _LoginFormState extends State<LoginForm> {
                       //   textColor: Colors.white,
                       //   fontSize: 12.0,
                       // );
-
-                      Timer(
-                        const Duration(seconds: 1),
-                        () => {
-                          AppDefaults.navigate(context, AppRoot(jwt: jwt))
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => AppRoot(jwt: jwt),
-                          //   ),
-                          // )
-                        },
-                      );
+                      EasyLoading.dismiss();
+                      AppDefaults.navigate(context, AppRoot(jwt: jwt));
+                      // Timer(
+                      //   const Duration(seconds: 1),
+                      //   () => {
+                      //     AppDefaults.navigate(context, AppRoot(jwt: jwt))
+                      //     // Navigator.push(
+                      //     //   context,
+                      //     //   MaterialPageRoute(
+                      //     //     builder: (context) => AppRoot(jwt: jwt),
+                      //     //   ),
+                      //     // )
+                      //   },
+                      // );
                     } else {
                       if (!mounted) return;
                       // AppDefaults.displayDialog(context, "An Error Occurred",
                       //     "No account was found matching that username and password");
-
+                      EasyLoading.dismiss();
                       AppDefaults.toast(context, 'error',
                           AppMessage.getError('ERROR_USER_NOT_FOUND'));
 

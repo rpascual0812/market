@@ -45,7 +45,14 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
         userAddress = widget.product['user_addresses'][i];
       }
     }
-    print('address $userAddress');
+
+    var sellerAddress = {};
+    for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
+      if (widget.product['seller_addresses'][i]['default']) {
+        sellerAddress = widget.product['seller_addresses'][i];
+      }
+    }
+
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -519,7 +526,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                     ),
                   ),
                   Text(
-                    '${userAddress['city']['name']}, ${userAddress['province']['name']}',
+                    '${sellerAddress['city']['name']}, ${sellerAddress['province']['name']}',
                     style: const TextStyle(
                         color: Colors.white, fontSize: AppDefaults.fontSize),
                   ),

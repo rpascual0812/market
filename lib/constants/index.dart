@@ -5,3 +5,4 @@ export 'app_images.dart';
 export 'app_imports.dart';
 export 'app_alert.dart';
 export 'remote.dart';
+export 'app_loader.dart';

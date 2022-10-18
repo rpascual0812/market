@@ -4,6 +4,7 @@ import 'package:market/screens/onboarding/onboarding_page.dart';
 import 'theme.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 const storage = FlutterSecureStorage();
 
@@ -47,6 +48,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Samdhana Community Market',
       theme: AppTheme(context).lightTheme,
       home: welcome != '' ? AppRoot(jwt: jwt) : const OnboardingPage(),
+      builder: EasyLoading.init(),
     );
   }
 }
