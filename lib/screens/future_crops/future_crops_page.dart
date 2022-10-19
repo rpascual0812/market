@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:market/components/future_crops_page_tile.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
 
 import 'package:market/models/order.dart';
+
+import '../../constants/remote.dart';
 
 class FutureCropsPage extends StatefulWidget {
   const FutureCropsPage({Key? key}) : super(key: key);
@@ -16,32 +21,37 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
   late List<Order> orders = [];
   bool isLoading = false;
 
+  List products = [];
+  Map<Object, dynamic> dataJson = {};
+
   static const IconData leftArrow =
       IconData(0xe801, fontFamily: 'Custom', fontPackage: null);
   static const IconData rightArrow =
       IconData(0xe803, fontFamily: 'Custom', fontPackage: null);
 
-  TextEditingController yearController = TextEditingController(text: '2022');
+  TextEditingController yearController =
+      TextEditingController(text: DateFormat.y().format(DateTime.now()));
 
-  final List<bool> _isSelected = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
+  final List months = [
+    {'month': 'January', 'selected': false},
+    {'month': 'February', 'selected': false},
+    {'month': 'March', 'selected': false},
+    {'month': 'April', 'selected': false},
+    {'month': 'May', 'selected': false},
+    {'month': 'June', 'selected': false},
+    {'month': 'July', 'selected': false},
+    {'month': 'August', 'selected': false},
+    {'month': 'September', 'selected': false},
+    {'month': 'October', 'selected': false},
+    {'month': 'November', 'selected': false},
+    {'month': 'December', 'selected': false},
   ];
 
   @override
   void initState() {
+    isLoading = true;
     super.initState();
-    refreshOrders();
+    getProducts();
   }
 
   @override
@@ -51,11 +61,31 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
     super.dispose();
   }
 
-  Future refreshOrders() async {
-    setState(() => isLoading = true);
-
-    // orders = await HipposDatabase.instance.getAllOrders();
-    setState(() => isLoading = false);
+  Future<void> getProducts() async {
+    try {
+      products = [];
+      var res = await Remote.get('products', {'type': 'future_crops'});
+      // print('res $res');
+      if (res.statusCode == 200) {
+        setState(() {
+          dataJson = jsonDecode(res.body);
+          print(dataJson);
+          for (var i = 0; i < dataJson['data'].length; i++) {
+            products.add(dataJson['data'][i]);
+          }
+        });
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+      }
+      isLoading = false;
+      // if (res.statusCode == 200) return res.body;
+      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
   }
 
   Widget getTabWidget(String title, double padding, bool isTabSelected) {
@@ -78,14 +108,12 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
       children: [
         Expanded(
           child: Center(
-            child: isLoading
-                ? const CircularProgressIndicator()
-                : orders.isNotEmpty
-                    ? const Text(
-                        'No data found',
-                        style: TextStyle(color: Colors.black, fontSize: 24),
-                      )
-                    : buildOrders(),
+            child: products.isEmpty
+                ? const Text(
+                    'No data found',
+                    style: TextStyle(color: Colors.black, fontSize: 24),
+                  )
+                : buildOrders(),
           ),
         ),
       ],
@@ -141,10 +169,14 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                         child: IconButton(
                                           icon: const Icon(leftArrow),
                                           onPressed: () {
-                                            yearController.text = (int.parse(
-                                                        yearController.text) -
-                                                    1)
-                                                .toString();
+                                            setState(() {
+                                              yearController.text = (int.parse(
+                                                          yearController.text) -
+                                                      1)
+                                                  .toString();
+
+                                              getProducts();
+                                            });
                                           },
                                         ),
                                       ),
@@ -168,427 +200,65 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                         child: IconButton(
                                           icon: const Icon(rightArrow),
                                           onPressed: () {
-                                            yearController.text = (int.parse(
-                                                        yearController.text) +
-                                                    1)
-                                                .toString();
+                                            setState(() {
+                                              yearController.text = (int.parse(
+                                                          yearController.text) +
+                                                      1)
+                                                  .toString();
+
+                                              getProducts();
+                                            });
                                           },
                                         ),
                                       ),
                                     ],
                                   ),
                                   // const SizedBox(height: AppDefaults.margin),
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[0] =
-                                                    !_isSelected[0];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[0]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Jan',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[1] =
-                                                    !_isSelected[1];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[1]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Feb',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
+                                  Wrap(
+                                    alignment: WrapAlignment.start,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.start,
+                                    children: List.generate(
+                                      months.length,
+                                      (index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(1),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.29,
+                                            height: 30,
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  months[index]['selected'] =
+                                                      !months[index]
+                                                          ['selected'];
+                                                  getProducts();
+                                                });
+                                              },
+                                              style: TextButton.styleFrom(
+                                                backgroundColor: months[index]
+                                                        ['selected']
+                                                    ? AppColors.secondary
+                                                    : AppColors.primary,
+                                                minimumSize:
+                                                    Size.zero, // Set this
+                                                padding:
+                                                    EdgeInsets.zero, // and this
+                                              ),
+                                              child: Text(
+                                                months[index]['month'],
+                                                style: const TextStyle(
+                                                    fontSize: 10,
+                                                    color: Colors.white),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[2] =
-                                                    !_isSelected[2];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[2]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Mar',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[3] =
-                                                    !_isSelected[3];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[3]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Apr',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[4] =
-                                                    !_isSelected[4];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[4]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'May',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[5] =
-                                                    !_isSelected[5];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[5]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Jun',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[6] =
-                                                    !_isSelected[6];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[6]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Jul',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[7] =
-                                                    !_isSelected[7];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[7]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Aug',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[8] =
-                                                    !_isSelected[8];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[8]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Sep',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[9] =
-                                                    !_isSelected[9];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[9]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Oct',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[10] =
-                                                    !_isSelected[10];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[10]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Nov',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(1),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.29,
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isSelected[11] =
-                                                    !_isSelected[11];
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: _isSelected[11]
-                                                  ? AppColors.secondary
-                                                  : AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Dec',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ],
                               ),
@@ -602,77 +272,83 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
               ),
             ),
           ),
-          FutureCropsPageTile(
-            pk: 1,
-            name: 'Juan Dela Cruz',
-            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Almonds',
-            quantity: '103 kg',
-            date: 'April 2022',
-            price: 'P 200 per kilo',
-            location: 'Davao',
-            productPhoto: 'https://i.imgur.com/zdLsFZ0.jpeg',
-            onTap: () {},
-          ),
-          FutureCropsPageTile(
-            pk: 2,
-            name: 'Juan Dela Cruz',
-            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Banana Supplier',
-            quantity: '103 kg',
-            date: 'April 2022',
-            price: 'P 200 per kilo',
-            location: 'Davao',
-            productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
-            onTap: () {},
-          ),
-          FutureCropsPageTile(
-            pk: 3,
-            name: 'Juan Dela Cruz',
-            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Almonds',
-            quantity: '103 kg',
-            date: 'April 2022',
-            price: 'P 200 per kilo',
-            productPhoto: 'https://i.imgur.com/zdLsFZ0.jpeg',
-            location: 'Davao',
-            onTap: () {},
-          ),
-          FutureCropsPageTile(
-            pk: 4,
-            name: 'Juan Dela Cruz',
-            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Banana Supplier',
-            quantity: '103 kg',
-            date: 'April 2022',
-            price: 'P 200 per kilo',
-            productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
-            location: 'Davao',
-            onTap: () {},
-          ),
-          FutureCropsPageTile(
-            pk: 5,
-            name: 'Juan Dela Cruz',
-            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Almonds',
-            quantity: '103 kg',
-            date: 'April 2022',
-            price: 'P 200 per kilo',
-            productPhoto: 'https://i.imgur.com/zdLsFZ0.jpeg',
-            location: 'Davao',
-            onTap: () {},
-          ),
-          FutureCropsPageTile(
-            pk: 6,
-            name: 'Juan Dela Cruz',
-            profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
-            product: 'Banana Supplier',
-            quantity: '103 kg',
-            date: 'April 2022',
-            price: 'P 200 per kilo',
-            productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
-            location: 'Davao',
-            onTap: () {},
+          ListView(
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+            children: List.generate(
+                dataJson['data'] != null ? dataJson['data'].length : 0,
+                (index) {
+              return FutureCropsPageTile(
+                product: products[index],
+                onTap: () {},
+              );
+            }),
+            // children: [
+            //   FutureCropsPageTile(
+            //     product: products[index],
+            //     onTap: () {},
+            //   ),
+            //   FutureCropsPageTile(
+            //     pk: 2,
+            //     name: 'Juan Dela Cruz',
+            //     profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
+            //     product: 'Banana Supplier',
+            //     quantity: '103 kg',
+            //     date: 'April 2022',
+            //     price: 'P 200 per kilo',
+            //     location: 'Davao',
+            //     productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
+            //     onTap: () {},
+            //   ),
+            //   FutureCropsPageTile(
+            //     pk: 3,
+            //     name: 'Juan Dela Cruz',
+            //     profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
+            //     product: 'Almonds',
+            //     quantity: '103 kg',
+            //     date: 'April 2022',
+            //     price: 'P 200 per kilo',
+            //     productPhoto: 'https://i.imgur.com/zdLsFZ0.jpeg',
+            //     location: 'Davao',
+            //     onTap: () {},
+            //   ),
+            //   FutureCropsPageTile(
+            //     pk: 4,
+            //     name: 'Juan Dela Cruz',
+            //     profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
+            //     product: 'Banana Supplier',
+            //     quantity: '103 kg',
+            //     date: 'April 2022',
+            //     price: 'P 200 per kilo',
+            //     productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
+            //     location: 'Davao',
+            //     onTap: () {},
+            //   ),
+            //   FutureCropsPageTile(
+            //     pk: 5,
+            //     name: 'Juan Dela Cruz',
+            //     profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
+            //     product: 'Almonds',
+            //     quantity: '103 kg',
+            //     date: 'April 2022',
+            //     price: 'P 200 per kilo',
+            //     productPhoto: 'https://i.imgur.com/zdLsFZ0.jpeg',
+            //     location: 'Davao',
+            //     onTap: () {},
+            //   ),
+            //   FutureCropsPageTile(
+            //     pk: 6,
+            //     name: 'Juan Dela Cruz',
+            //     profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
+            //     product: 'Banana Supplier',
+            //     quantity: '103 kg',
+            //     date: 'April 2022',
+            //     price: 'P 200 per kilo',
+            //     productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
+            //     location: 'Davao',
+            //     onTap: () {},
+            //   ),
+            // ],
           ),
         ],
       );

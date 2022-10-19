@@ -27,8 +27,17 @@ class FutureCropsWidgetTile extends StatefulWidget {
 class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
   @override
   Widget build(BuildContext context) {
-    var userImage =
-        '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
+    // var userImage =
+    //     '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    for (var i = 0; i < widget.product['user_document'].length; i++) {
+      if (widget.product['user_document'][i]['document']['path'] != null &&
+          widget.product['user_document'][i]['type'] == 'profile_photo') {
+        userImage =
+            '${dotenv.get('API')}/${widget.product['user_document'][i]['document']['path']}';
+      }
+    }
+
     DateTime date = DateTime.parse(widget.product['date_created'].toString());
     // print('111 ${widget.product['date_created']}');
     return SizedBox(

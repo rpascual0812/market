@@ -1,8 +1,9 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/screens/chat/bubble.dart';
+import 'package:intl/intl.dart';
 
 import '../../constants/index.dart';
 import '../../components/network_image.dart';
@@ -16,37 +17,44 @@ class FutureCropsPageTile extends StatelessWidget {
 
   const FutureCropsPageTile({
     Key? key,
-    required this.pk,
-    required this.profilePhoto,
-    required this.name,
     required this.product,
-    required this.quantity,
-    required this.date,
-    required this.price,
-    required this.location,
-    required this.productPhoto,
     this.onTap,
-    this.hasFavourite = false,
-    this.isFavourite = false,
-    this.onFavouriteClicked,
   }) : super(key: key);
 
-  final int pk;
-  final String profilePhoto;
-  final String name;
-  final String product;
-  final String quantity;
-  final String date;
-  final String price;
-  final String location;
-  final String productPhoto;
+  final Map<String, dynamic> product;
   final void Function()? onTap;
-  final bool hasFavourite;
-  final bool isFavourite;
-  final void Function()? onFavouriteClicked;
 
   @override
   Widget build(BuildContext context) {
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    for (var i = 0; i < product['user_document'].length; i++) {
+      if (product['user_document'][i]['document']['path'] != null &&
+          product['user_document'][i]['type'] == 'profile_photo') {
+        userImage =
+            '${dotenv.get('API')}/${product['user_document'][i]['document']['path']}';
+      }
+    }
+
+    var userAddress = {};
+    if (product['user_addresses'] != null) {
+      for (var i = 0; i < product['user_addresses'].length; i++) {
+        if (product['user_addresses'][i]['default']) {
+          userAddress = product['user_addresses'][i];
+        }
+      }
+    }
+
+    DateTime date = DateTime.parse(product['date_created'].toString());
+
+    var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    for (var i = 0; i < product['product_documents'].length; i++) {
+      if (product['product_documents'][i]['document']['path'] != null &&
+          product['product_documents'][i]['default']) {
+        userImage =
+            '${dotenv.get('API')}/${product['product_documents'][i]['document']['path']}';
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: Material(
@@ -57,7 +65,7 @@ class FutureCropsPageTile extends StatelessWidget {
           borderRadius: AppDefaults.borderRadius,
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 310,
+            height: 370,
             padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
             child: Center(
               child: Stack(
@@ -95,7 +103,7 @@ class FutureCropsPageTile extends StatelessWidget {
                                           child: AspectRatio(
                                             aspectRatio: 1 / 1,
                                             child: NetworkImageWithLoader(
-                                                profilePhoto, true),
+                                                userImage, true),
                                           ),
                                         ),
                                         Positioned(
@@ -114,7 +122,7 @@ class FutureCropsPageTile extends StatelessWidget {
                                                   width: 150,
                                                   height: 20,
                                                   child: Text(
-                                                    name,
+                                                    '${product['user']['first_name']} ${product['user']['last_name']}',
                                                     style: const TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 10),
@@ -136,7 +144,10 @@ class FutureCropsPageTile extends StatelessWidget {
                                                         size: 15,
                                                       ),
                                                       Text(
-                                                        location,
+                                                        userAddress['city'] !=
+                                                                null
+                                                            ? '${userAddress['city']['name']}, ${userAddress['province']['name']}'
+                                                            : '',
                                                         style: const TextStyle(
                                                           fontSize: 10,
                                                           color: AppColors
@@ -231,10 +242,10 @@ class FutureCropsPageTile extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  product,
+                                  product['name'],
                                   style: const TextStyle(
-                                    fontSize: 15,
-                                    color: AppColors.primary,
+                                    fontSize: AppDefaults.fontSize + 10,
+                                    color: AppColors.defaultBlack,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -243,9 +254,9 @@ class FutureCropsPageTile extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  'Quantity: $quantity',
+                                  'Quantity: ${product['quantity']} ${product['measurement']['symbol']}',
                                   style: const TextStyle(
-                                    fontSize: 9,
+                                    fontSize: AppDefaults.fontSize,
                                     color: AppColors.defaultBlack,
                                   ),
                                 ),
@@ -254,9 +265,9 @@ class FutureCropsPageTile extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  date,
+                                  'Estimated date: ${DateFormat.MMMM().format(date)} ${DateFormat.y().format(date)}',
                                   style: const TextStyle(
-                                    fontSize: 9,
+                                    fontSize: AppDefaults.fontSize,
                                     color: AppColors.defaultBlack,
                                   ),
                                 ),
@@ -265,21 +276,21 @@ class FutureCropsPageTile extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  price,
+                                  'Estimated Price: ${product['price_from']}',
                                   style: const TextStyle(
-                                    fontSize: 9,
+                                    fontSize: AppDefaults.fontSize,
                                     color: AppColors.defaultBlack,
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: AppDefaults.margin / 10),
+                              const SizedBox(height: AppDefaults.margin / 2),
                               SizedBox(
                                 width: (MediaQuery.of(context).size.width),
-                                height: 150,
+                                height: 200,
                                 child: AspectRatio(
                                   aspectRatio: 1 / 1,
                                   child: NetworkImageWithLoader(
-                                      productPhoto, true),
+                                      productImage, true),
                                 ),
                               ),
                             ],
@@ -290,22 +301,22 @@ class FutureCropsPageTile extends StatelessWidget {
                   ),
 
                   /// This will show only when hasFavourite parameter is true
-                  if (hasFavourite)
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                        ),
-                        child: Icon(
-                          isFavourite ? IconlyBold.heart : IconlyLight.heart,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
+                  // if (hasFavourite)
+                  //   Positioned(
+                  //     top: 8,
+                  //     right: 8,
+                  //     child: Container(
+                  //       padding: const EdgeInsets.all(8.0),
+                  //       decoration: const BoxDecoration(
+                  //         shape: BoxShape.circle,
+                  //         color: Colors.white,
+                  //       ),
+                  //       child: Icon(
+                  //         isFavourite ? IconlyBold.heart : IconlyLight.heart,
+                  //         color: Colors.red,
+                  //       ),
+                  //     ),
+                  //   ),
                 ],
               ),
             ),

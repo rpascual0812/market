@@ -34,8 +34,17 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
   @override
   Widget build(BuildContext context) {
     // print('product ${widget.product['user_addresses']}');
-    var userImage =
-        '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+
+    for (var i = 0; i < widget.product['user_document'].length; i++) {
+      // print(product['product_documents'][i]['document']['path']);
+      if (widget.product['user_document'][i]['document']['path'] != null &&
+          widget.product['user_document']['type'] == 'profile_photo') {
+        userImage =
+            '${dotenv.get('API')}/${widget.product['user_document'][i]['document']['path']}';
+      }
+    }
+
     DateTime date = DateTime.parse(widget.product['date_created'].toString());
 
     var userAddress = {};
