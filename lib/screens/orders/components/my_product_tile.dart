@@ -44,7 +44,7 @@ class _MyProductTileState extends State<MyProductTile> {
   Widget build(BuildContext context) {
     var userImage =
         '${dotenv.get('API')}/${widget.userDocument[0]['document']['path']}';
-    print('aa $userImage');
+    // print('aa $userImage');
 
     return GestureDetector(
       // no onTap event for now

@@ -21,10 +21,10 @@ class ProductListPage extends StatelessWidget {
               unselectedLabelColor: Colors.grey,
               tabs: [
                 Tab(
-                  text: 'Looking for',
+                  text: 'Future Crops',
                 ),
                 Tab(
-                  text: 'Future Crops',
+                  text: 'Looking for',
                 ),
               ],
             ),
@@ -32,10 +32,10 @@ class ProductListPage extends StatelessWidget {
               child: TabBarView(
                 children: [
                   Scaffold(
-                    body: LookingForPage(),
+                    body: FutureCropsPage(),
                   ),
                   Scaffold(
-                    body: FutureCropsPage(),
+                    body: LookingForPage(),
                   ),
                 ],
               ),

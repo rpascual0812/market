@@ -12,7 +12,7 @@ class NetworkImageWithLoader extends StatelessWidget {
     this.circular, {
     Key? key,
     this.fit = BoxFit.cover,
-    this.radius = AppDefaults.radius,
+    this.radius = AppDefaults.radius * 2,
   }) : super(key: key);
 
   final bool circular;

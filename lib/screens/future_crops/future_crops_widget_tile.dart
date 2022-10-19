@@ -30,7 +30,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
     var userImage =
         '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
     DateTime date = DateTime.parse(widget.product['date_created'].toString());
-    print('111 ${widget.product['date_created']}');
+    // print('111 ${widget.product['date_created']}');
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.31,
       height: 125,

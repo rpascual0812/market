@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 
 import '../../constants/index.dart';
 import '../../components/network_image.dart';
@@ -13,34 +14,12 @@ class LookingForPageTile extends StatefulWidget {
 
   const LookingForPageTile({
     Key? key,
-    required this.pk,
-    required this.uuid,
-    required this.name,
-    required this.productDocument,
-    required this.quantity,
-    required this.measurement,
-    required this.description,
-    required this.location,
-    required this.type,
-    this.imageURL = '',
-    required this.user,
-    required this.userDocument,
-    required this.dateCreated,
+    required this.product,
+    this.onTap,
   }) : super(key: key);
 
-  final int pk;
-  final String uuid;
-  final String name;
-  final List productDocument;
-  final String quantity;
-  final Map<String, dynamic> measurement;
-  final String description;
-  final String location;
-  final String type; // looking for, future crop, already available
-  final String imageURL;
-  final Map<String, dynamic> user;
-  final List userDocument;
-  final DateTime dateCreated;
+  final Map<String, dynamic> product;
+  final void Function()? onTap;
 
   @override
   State<LookingForPageTile> createState() => _LookingForPageTileState();
@@ -54,9 +33,28 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
 
   @override
   Widget build(BuildContext context) {
+    // print('product ${widget.product['user_addresses']}');
     var userImage =
-        '${dotenv.get('API')}/${widget.userDocument[0]['document']['path']}';
-    print('aa $userImage');
+        '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
+    DateTime date = DateTime.parse(widget.product['date_created'].toString());
+
+    var userAddress = {};
+    if (widget.product['user_addresses'] != null) {
+      for (var i = 0; i < widget.product['user_addresses'].length; i++) {
+        if (widget.product['user_addresses'][i]['default']) {
+          userAddress = widget.product['user_addresses'][i];
+        }
+      }
+    }
+
+    var sellerAddress = {};
+    if (widget.product['seller_addresses'] != null) {
+      for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
+        if (widget.product['seller_addresses'][i]['default']) {
+          sellerAddress = widget.product['seller_addresses'][i];
+        }
+      }
+    }
 
     return GestureDetector(
       // no onTap event for now
@@ -115,7 +113,7 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                       child: Stack(
                                         children: [
                                           SizedBox(
-                                            height: 45,
+                                            height: 50,
                                             child: AspectRatio(
                                               aspectRatio: 1 / 1,
                                               child: NetworkImageWithLoader(
@@ -124,7 +122,7 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                           ),
                                           Positioned(
                                             top: 5,
-                                            left: 50,
+                                            left: 55,
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
@@ -138,10 +136,13 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                                     width: 150,
                                                     height: 20,
                                                     child: Text(
-                                                      '${widget.user[0]['first_name']} ${widget.user[0]['last_name']}',
+                                                      '${widget.product['user']['first_name']} ${widget.product['user']['last_name']}',
                                                       style: const TextStyle(
                                                           color: Colors.black,
-                                                          fontSize: 10),
+                                                          fontSize: AppDefaults
+                                                              .fontSize,
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                     ),
                                                   ),
                                                 ),
@@ -152,20 +153,45 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                                     alignment:
                                                         Alignment.centerLeft,
                                                     width: 150,
-                                                    height: 20,
+                                                    height: 12,
+                                                    child: Text(
+                                                      DateFormat.yMMMd()
+                                                          .format(date),
+                                                      style: const TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: AppDefaults
+                                                                  .fontSize -
+                                                              2),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(0),
+                                                  child: Container(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    width: 150,
+                                                    height: 15,
                                                     child: Row(
                                                       children: [
                                                         const Icon(
                                                           pin,
-                                                          size: 12,
+                                                          size: AppDefaults
+                                                                  .fontSize -
+                                                              2,
                                                         ),
                                                         Text(
-                                                          widget.location,
+                                                          userAddress['city'] !=
+                                                                  null
+                                                              ? '${userAddress['city']['name']}, ${userAddress['province']['name']}'
+                                                              : '',
                                                           style:
                                                               const TextStyle(
-                                                            fontSize: 10,
-                                                            color: AppColors
-                                                                .defaultBlack,
+                                                            fontSize: AppDefaults
+                                                                    .fontSize -
+                                                                2,
+                                                            color: Colors.grey,
                                                           ),
                                                         ),
                                                       ],
@@ -178,8 +204,8 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                           Positioned(
                                             right: 0,
                                             child: Container(
-                                              width: 35.0,
-                                              height: 35.0,
+                                              width: 30.0,
+                                              height: 30.0,
                                               padding: EdgeInsets.zero,
                                               child: OutlinedButton(
                                                 onPressed: () {
@@ -203,7 +229,8 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                                 child: const Icon(
                                                   chat,
                                                   color: AppColors.primary,
-                                                  size: 15,
+                                                  size:
+                                                      AppDefaults.fontSize + 10,
                                                 ),
                                               ),
                                             ),
@@ -217,21 +244,21 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    widget.name,
+                                    widget.product['name'],
                                     style: const TextStyle(
-                                      fontSize: 18,
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: AppDefaults.fontSize * 1.8,
+                                      color: AppColors.defaultBlack,
+                                      // fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: AppDefaults.margin / 10),
+                                const SizedBox(height: AppDefaults.margin / 2),
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    'Quantity: $widget.quantity',
+                                    'Quantity: ${widget.product['quantity']} ${widget.product['measurement']['symbol']}',
                                     style: const TextStyle(
-                                      fontSize: 9,
+                                      fontSize: AppDefaults.fontSize,
                                       color: AppColors.defaultBlack,
                                     ),
                                   ),
@@ -240,13 +267,23 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    widget.description,
+                                    'Price range: ${widget.product['price_from']} per ${widget.product['measurement']['name']}',
                                     style: const TextStyle(
-                                      fontSize: 9,
+                                      fontSize: AppDefaults.fontSize,
                                       color: AppColors.defaultBlack,
                                     ),
                                   ),
                                 ),
+                                // Align(
+                                //   alignment: Alignment.centerLeft,
+                                //   child: Text(
+                                //     widget.product['description'],
+                                //     style: const TextStyle(
+                                //       fontSize: 9,
+                                //       color: AppColors.defaultBlack,
+                                //     ),
+                                //   ),
+                                // ),
                                 const SizedBox(height: AppDefaults.margin / 10),
                               ],
                             ),
