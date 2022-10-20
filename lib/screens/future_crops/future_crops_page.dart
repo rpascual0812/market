@@ -6,9 +6,8 @@ import 'package:market/components/future_crops_page_tile.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
 
-import 'package:market/models/order.dart';
-
 import '../../constants/remote.dart';
+import '../product/product_page.dart';
 
 class FutureCropsPage extends StatefulWidget {
   const FutureCropsPage({Key? key}) : super(key: key);
@@ -18,7 +17,7 @@ class FutureCropsPage extends StatefulWidget {
 }
 
 class _FutureCropsPageState extends State<FutureCropsPage> {
-  late List<Order> orders = [];
+  // late List<Order> orders = [];
   bool isLoading = false;
 
   List products = [];
@@ -32,25 +31,34 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
   TextEditingController yearController =
       TextEditingController(text: DateFormat.y().format(DateTime.now()));
 
+  var monthNow = DateFormat.MMMM().format(DateTime.now());
+
   final List months = [
-    {'month': 'January', 'selected': false},
-    {'month': 'February', 'selected': false},
-    {'month': 'March', 'selected': false},
-    {'month': 'April', 'selected': false},
-    {'month': 'May', 'selected': false},
-    {'month': 'June', 'selected': false},
-    {'month': 'July', 'selected': false},
-    {'month': 'August', 'selected': false},
-    {'month': 'September', 'selected': false},
-    {'month': 'October', 'selected': false},
-    {'month': 'November', 'selected': false},
-    {'month': 'December', 'selected': false},
+    {'name': 'January', 'selected': false},
+    {'name': 'February', 'selected': false},
+    {'name': 'March', 'selected': false},
+    {'name': 'April', 'selected': false},
+    {'name': 'May', 'selected': false},
+    {'name': 'June', 'selected': false},
+    {'name': 'July', 'selected': false},
+    {'name': 'August', 'selected': false},
+    {'name': 'September', 'selected': false},
+    {'name': 'October', 'selected': false},
+    {'name': 'November', 'selected': false},
+    {'name': 'December', 'selected': false},
   ];
 
   @override
   void initState() {
     isLoading = true;
     super.initState();
+
+    for (var i = 0; i < months.length; i++) {
+      if (months[i]['name'] == monthNow) {
+        months[i]['selected'] = true;
+      }
+    }
+
     getProducts();
   }
 
@@ -63,13 +71,27 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
 
   Future<void> getProducts() async {
     try {
-      products = [];
-      var res = await Remote.get('products', {'type': 'future_crops'});
+      // products = [];
+
+      var monthsArr = [];
+
+      for (var month in months) {
+        if (month['selected']) {
+          monthsArr.add(jsonEncode(<String, String>{
+            'name': month['name'],
+          }));
+        }
+      }
+
+      var res = await Remote.get('products', {
+        'type': 'future_crops',
+        'year': yearController.text,
+        'months': monthsArr.toString(),
+      });
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {
           dataJson = jsonDecode(res.body);
-          print(dataJson);
           for (var i = 0; i < dataJson['data'].length; i++) {
             products.add(dataJson['data'][i]);
           }
@@ -108,12 +130,13 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
       children: [
         Expanded(
           child: Center(
-            child: products.isEmpty
-                ? const Text(
-                    'No data found',
-                    style: TextStyle(color: Colors.black, fontSize: 24),
-                  )
-                : buildOrders(),
+            child: buildOrders(),
+            // child: products.isEmpty
+            //     ? const Text(
+            //         'No data found',
+            //         style: TextStyle(color: Colors.black, fontSize: 24),
+            //       )
+            //     : buildOrders(),
           ),
         ),
       ],
@@ -249,7 +272,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                                     EdgeInsets.zero, // and this
                                               ),
                                               child: Text(
-                                                months[index]['month'],
+                                                months[index]['name'],
                                                 style: const TextStyle(
                                                     fontSize: 10,
                                                     color: Colors.white),
@@ -272,84 +295,40 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
               ),
             ),
           ),
-          ListView(
-            shrinkWrap: true,
-            physics: const ClampingScrollPhysics(),
-            children: List.generate(
-                dataJson['data'] != null ? dataJson['data'].length : 0,
-                (index) {
-              return FutureCropsPageTile(
-                product: products[index],
-                onTap: () {},
-              );
-            }),
-            // children: [
-            //   FutureCropsPageTile(
-            //     product: products[index],
-            //     onTap: () {},
-            //   ),
-            //   FutureCropsPageTile(
-            //     pk: 2,
-            //     name: 'Juan Dela Cruz',
-            //     profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
-            //     product: 'Banana Supplier',
-            //     quantity: '103 kg',
-            //     date: 'April 2022',
-            //     price: 'P 200 per kilo',
-            //     location: 'Davao',
-            //     productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
-            //     onTap: () {},
-            //   ),
-            //   FutureCropsPageTile(
-            //     pk: 3,
-            //     name: 'Juan Dela Cruz',
-            //     profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
-            //     product: 'Almonds',
-            //     quantity: '103 kg',
-            //     date: 'April 2022',
-            //     price: 'P 200 per kilo',
-            //     productPhoto: 'https://i.imgur.com/zdLsFZ0.jpeg',
-            //     location: 'Davao',
-            //     onTap: () {},
-            //   ),
-            //   FutureCropsPageTile(
-            //     pk: 4,
-            //     name: 'Juan Dela Cruz',
-            //     profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
-            //     product: 'Banana Supplier',
-            //     quantity: '103 kg',
-            //     date: 'April 2022',
-            //     price: 'P 200 per kilo',
-            //     productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
-            //     location: 'Davao',
-            //     onTap: () {},
-            //   ),
-            //   FutureCropsPageTile(
-            //     pk: 5,
-            //     name: 'Juan Dela Cruz',
-            //     profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
-            //     product: 'Almonds',
-            //     quantity: '103 kg',
-            //     date: 'April 2022',
-            //     price: 'P 200 per kilo',
-            //     productPhoto: 'https://i.imgur.com/zdLsFZ0.jpeg',
-            //     location: 'Davao',
-            //     onTap: () {},
-            //   ),
-            //   FutureCropsPageTile(
-            //     pk: 6,
-            //     name: 'Juan Dela Cruz',
-            //     profilePhoto: 'https://i.imgur.com/8G2bg5J.jpeg',
-            //     product: 'Banana Supplier',
-            //     quantity: '103 kg',
-            //     date: 'April 2022',
-            //     price: 'P 200 per kilo',
-            //     productPhoto: 'https://i.imgur.com/R3Cpn1T.jpeg',
-            //     location: 'Davao',
-            //     onTap: () {},
-            //   ),
-            // ],
+          const SizedBox(
+            height: AppDefaults.margin * 2,
           ),
+          products.isEmpty
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'No products found',
+                      style: TextStyle(color: Colors.black, fontSize: 24),
+                    )
+                  ],
+                )
+              : ListView(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  children: List.generate(
+                      dataJson['data'] != null ? dataJson['data'].length : 0,
+                      (index) {
+                    return FutureCropsPageTile(
+                      product: products[index],
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProductPage(
+                              productPk: products[index]['pk'],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }),
+                ),
         ],
       );
 }

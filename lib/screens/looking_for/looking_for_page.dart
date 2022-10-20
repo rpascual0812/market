@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:market/screens/looking_for/looking_for_page_tile.dart';
 
 import '../../constants/index.dart';
+import '../product/product_page.dart';
 
 class LookingForPage extends StatefulWidget {
   const LookingForPage({Key? key}) : super(key: key);
@@ -78,13 +79,13 @@ class _LookingForPageState extends State<LookingForPage> {
                   return LookingForPageTile(
                     product: products[index],
                     onTap: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (context) => ProductPage(
-                      //       productPk: products[index]['pk'],
-                      //     ),
-                      //   ),
-                      // );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ProductPage(
+                            productPk: products[index]['pk'],
+                          ),
+                        ),
+                      );
                     },
                   );
                 },

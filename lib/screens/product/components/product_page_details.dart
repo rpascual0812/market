@@ -34,9 +34,15 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
   @override
   Widget build(BuildContext context) {
     // print('produc2t ${widget.product}');
-    var userImage = widget.product['user_document'] == null
-        ? '${dotenv.get('API')}/assets/images/no-image.jpg'
-        : '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    for (var i = 0; i < widget.product['user_document'].length; i++) {
+      // print(product['product_documents'][i]['document']['path']);
+      if (widget.product['user_document'][i]['document']['path'] != null &&
+          widget.product['user_document'][i]['type'] == 'profile_photo') {
+        userImage =
+            '${dotenv.get('API')}/${widget.product['user_document'][i]['document']['path']}';
+      }
+    }
 
     // dataJson = jsonDecode(res.body);
     var userAddress = {};

@@ -9,7 +9,7 @@ import '../../constants/index.dart';
 import '../../components/network_image.dart';
 import '../screens/producer/producer_page/producer_page.dart';
 
-class FutureCropsPageTile extends StatelessWidget {
+class FutureCropsPageTile extends StatefulWidget {
   static const IconData chat =
       IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
   static const IconData pin =
@@ -25,33 +25,47 @@ class FutureCropsPageTile extends StatelessWidget {
   final void Function()? onTap;
 
   @override
+  State<FutureCropsPageTile> createState() => _FutureCropsPageTileState();
+}
+
+class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
+  @override
   Widget build(BuildContext context) {
     var userImage = '${dotenv.get('API')}/assets/images/user.png';
-    for (var i = 0; i < product['user_document'].length; i++) {
-      if (product['user_document'][i]['document']['path'] != null &&
-          product['user_document'][i]['type'] == 'profile_photo') {
+    for (var i = 0; i < widget.product['user_document'].length; i++) {
+      if (widget.product['user_document'][i]['document']['path'] != null &&
+          widget.product['user_document'][i]['type'] == 'profile_photo') {
         userImage =
-            '${dotenv.get('API')}/${product['user_document'][i]['document']['path']}';
+            '${dotenv.get('API')}/${widget.product['user_document'][i]['document']['path']}';
+      }
+    }
+
+    DateTime date = DateTime.parse(widget.product['date_created'].toString());
+
+    var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    for (var i = 0; i < widget.product['product_documents'].length; i++) {
+      if (widget.product['product_documents'][i]['document']['path'] != null &&
+          widget.product['product_documents'][i]['default']) {
+        userImage =
+            '${dotenv.get('API')}/${widget.product['product_documents'][i]['document']['path']}';
       }
     }
 
     var userAddress = {};
-    if (product['user_addresses'] != null) {
-      for (var i = 0; i < product['user_addresses'].length; i++) {
-        if (product['user_addresses'][i]['default']) {
-          userAddress = product['user_addresses'][i];
+    if (widget.product['user_addresses'] != null) {
+      for (var i = 0; i < widget.product['user_addresses'].length; i++) {
+        if (widget.product['user_addresses'][i]['default']) {
+          userAddress = widget.product['user_addresses'][i];
         }
       }
     }
 
-    DateTime date = DateTime.parse(product['date_created'].toString());
-
-    var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
-    for (var i = 0; i < product['product_documents'].length; i++) {
-      if (product['product_documents'][i]['document']['path'] != null &&
-          product['product_documents'][i]['default']) {
-        userImage =
-            '${dotenv.get('API')}/${product['product_documents'][i]['document']['path']}';
+    var sellerAddress = {};
+    if (widget.product['seller_addresses'] != null) {
+      for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
+        if (widget.product['seller_addresses'][i]['default']) {
+          sellerAddress = widget.product['seller_addresses'][i];
+        }
       }
     }
 
@@ -61,7 +75,7 @@ class FutureCropsPageTile extends StatelessWidget {
         color: Colors.white,
         borderRadius: AppDefaults.borderRadius,
         child: InkWell(
-          onTap: onTap,
+          onTap: widget.onTap,
           borderRadius: AppDefaults.borderRadius,
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -122,7 +136,7 @@ class FutureCropsPageTile extends StatelessWidget {
                                                   width: 150,
                                                   height: 20,
                                                   child: Text(
-                                                    '${product['user']['first_name']} ${product['user']['last_name']}',
+                                                    '${widget.product['user']['first_name']} ${widget.product['user']['last_name']}',
                                                     style: const TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 10),
@@ -140,7 +154,7 @@ class FutureCropsPageTile extends StatelessWidget {
                                                   child: Row(
                                                     children: [
                                                       const Icon(
-                                                        pin,
+                                                        FutureCropsPageTile.pin,
                                                         size: 15,
                                                       ),
                                                       Text(
@@ -188,7 +202,7 @@ class FutureCropsPageTile extends StatelessWidget {
                                                         const EdgeInsets.all(0),
                                                   ),
                                                   child: const Icon(
-                                                    chat,
+                                                    FutureCropsPageTile.chat,
                                                     color: AppColors.primary,
                                                     size: 15,
                                                   ),
@@ -242,7 +256,7 @@ class FutureCropsPageTile extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  product['name'],
+                                  widget.product['name'],
                                   style: const TextStyle(
                                     fontSize: AppDefaults.fontSize + 10,
                                     color: AppColors.defaultBlack,
@@ -254,7 +268,7 @@ class FutureCropsPageTile extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  'Quantity: ${product['quantity']} ${product['measurement']['symbol']}',
+                                  'Quantity: ${widget.product['quantity']} ${widget.product['measurement']['symbol']}',
                                   style: const TextStyle(
                                     fontSize: AppDefaults.fontSize,
                                     color: AppColors.defaultBlack,
@@ -276,8 +290,9 @@ class FutureCropsPageTile extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  'Estimated Price: ${product['price_from']}',
+                                  'Estimated Price: ${widget.product['country']['currency_symbol']}${widget.product['price_from']}',
                                   style: const TextStyle(
+                                    fontFamily: '',
                                     fontSize: AppDefaults.fontSize,
                                     color: AppColors.defaultBlack,
                                   ),

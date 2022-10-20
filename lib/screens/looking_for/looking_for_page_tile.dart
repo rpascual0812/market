@@ -35,11 +35,10 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
   Widget build(BuildContext context) {
     // print('product ${widget.product['user_addresses']}');
     var userImage = '${dotenv.get('API')}/assets/images/user.png';
-
     for (var i = 0; i < widget.product['user_document'].length; i++) {
       // print(product['product_documents'][i]['document']['path']);
       if (widget.product['user_document'][i]['document']['path'] != null &&
-          widget.product['user_document']['type'] == 'profile_photo') {
+          widget.product['user_document'][i]['type'] == 'profile_photo') {
         userImage =
             '${dotenv.get('API')}/${widget.product['user_document'][i]['document']['path']}';
       }
@@ -67,16 +66,7 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
 
     return GestureDetector(
       // no onTap event for now
-      // onTap: () {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) {
-      //         return const LoginPage();
-      //       },
-      //     ),
-      //   );
-      // },
+      onTap: widget.onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         child: Material(
@@ -276,8 +266,9 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    'Price range: ${widget.product['price_from']} per ${widget.product['measurement']['name']}',
+                                    'Price range: ${widget.product['country']['currency_symbol']}${widget.product['price_from']} per ${widget.product['measurement']['name']}',
                                     style: const TextStyle(
+                                      fontFamily: '',
                                       fontSize: AppDefaults.fontSize,
                                       color: AppColors.defaultBlack,
                                     ),

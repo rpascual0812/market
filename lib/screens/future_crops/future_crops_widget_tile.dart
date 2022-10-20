@@ -39,6 +39,25 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
     }
 
     DateTime date = DateTime.parse(widget.product['date_created'].toString());
+
+    var userAddress = {};
+    if (widget.product['user_addresses'] != null) {
+      for (var i = 0; i < widget.product['user_addresses'].length; i++) {
+        if (widget.product['user_addresses'][i]['default']) {
+          userAddress = widget.product['user_addresses'][i];
+        }
+      }
+    }
+    print('address $userAddress');
+    var sellerAddress = {};
+    if (widget.product['seller_addresses'] != null) {
+      for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
+        if (widget.product['seller_addresses'][i]['default']) {
+          sellerAddress = widget.product['seller_addresses'][i];
+        }
+      }
+    }
+
     // print('111 ${widget.product['date_created']}');
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.31,
@@ -120,15 +139,17 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                             ),
                                           ),
                                           Row(
-                                            children: const [
-                                              Icon(
+                                            children: [
+                                              const Icon(
                                                 FutureCropsWidgetTile.pin,
                                                 size: AppDefaults.fontSize - 5,
                                                 // color: Colors.grey,
                                               ),
                                               Text(
-                                                '',
-                                                style: TextStyle(
+                                                userAddress['city'] != null
+                                                    ? '${userAddress['city']['name']}, ${userAddress['province']['name']}'
+                                                    : '',
+                                                style: const TextStyle(
                                                   fontSize:
                                                       AppDefaults.fontSize - 5,
                                                   color: AppColors.defaultBlack,
