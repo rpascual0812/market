@@ -5,7 +5,7 @@ import 'package:market/constants/app_messages.dart';
 import 'package:market/screens/auth/login_page.dart';
 
 class AppDefaults {
-  static const double radius = 12.00;
+  static const double radius = 20.00;
   static const double circular = 25.00;
   static const double margin = 16.00;
   static const double padding = 16.00;

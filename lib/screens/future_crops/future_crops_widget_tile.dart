@@ -92,10 +92,10 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.3),
-                                spreadRadius: 1,
+                                spreadRadius: 2,
                                 blurRadius: 10,
                                 offset: const Offset(
-                                    0, 0), // changes position of shadow
+                                    0, 1), // changes position of shadow
                               ),
                             ],
                           ),

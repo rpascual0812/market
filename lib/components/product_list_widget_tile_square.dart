@@ -21,7 +21,6 @@ class ProductListWidgetTileSquare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var image = '${dotenv.get('API')}/assets/images/no-image.jpg';
-
     for (var i = 0; i < product['product_documents'].length; i++) {
       // print(product['product_documents'][i]['document']['path']);
       if (product['product_documents'][i]['document']['path'] != null &&
@@ -42,7 +41,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: AppDefaults.borderRadius,
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.3),

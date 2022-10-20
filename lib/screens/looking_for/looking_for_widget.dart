@@ -69,10 +69,10 @@ class _LookingForWidgetState extends State<LookingForWidget> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10),
+              topLeft: Radius.circular(AppDefaults.radius),
+              topRight: Radius.circular(AppDefaults.radius),
+              bottomLeft: Radius.circular(AppDefaults.radius),
+              bottomRight: Radius.circular(AppDefaults.radius),
             ),
             boxShadow: [
               BoxShadow(
