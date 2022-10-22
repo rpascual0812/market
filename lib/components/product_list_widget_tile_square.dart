@@ -76,7 +76,8 @@ class ProductListWidgetTileSquare extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         product['name'],
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style:
+                            const TextStyle(fontSize: AppDefaults.fontSize + 2),
                         maxLines: 2,
                       ),
                     ),
@@ -86,9 +87,10 @@ class ProductListWidgetTileSquare extends StatelessWidget {
                       child: Text(
                         '${product['country']['currency_symbol']}${product['price_from']}',
                         style: const TextStyle(
-                            fontFamily: '',
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.bold),
+                          fontFamily: '',
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                         maxLines: 1,
                       ),
                     ),

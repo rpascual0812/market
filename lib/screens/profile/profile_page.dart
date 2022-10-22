@@ -8,7 +8,6 @@ import 'package:market/constants/index.dart';
 import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/profile/components/profile_settings.dart';
 
-import 'components/profile_picture_section.dart';
 import 'components/profile_product.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -73,10 +72,10 @@ class _ProfilePageState extends State<ProfilePage> {
             Appbar(),
 
             /// Profile Picture
-            ProfilePictureSection(
-              size: size,
-              self: true,
-            ),
+            // ProfilePictureSection(
+            //   user: size,
+            //   self: true,
+            // ),
 
             // Text(
             //   'Raffier Lee',

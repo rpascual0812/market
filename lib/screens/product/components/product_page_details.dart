@@ -362,7 +362,8 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return const ProducerPage();
+                                return ProducerPage(
+                                    userPk: widget.product['user']['pk']);
                               },
                             ),
                           );

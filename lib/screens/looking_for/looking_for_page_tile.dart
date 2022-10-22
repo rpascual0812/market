@@ -137,11 +137,11 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                                     child: Text(
                                                       '${widget.product['user']['first_name']} ${widget.product['user']['last_name']}',
                                                       style: const TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: AppDefaults
-                                                              .fontSize,
-                                                          fontWeight:
-                                                              FontWeight.bold),
+                                                        color: Colors.black,
+                                                        fontSize: AppDefaults
+                                                                .fontSize +
+                                                            2,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -174,12 +174,11 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                                     height: 15,
                                                     child: Row(
                                                       children: [
-                                                        const Icon(
-                                                          pin,
-                                                          size: AppDefaults
-                                                                  .fontSize -
-                                                              2,
-                                                        ),
+                                                        const Icon(pin,
+                                                            size: AppDefaults
+                                                                    .fontSize -
+                                                                2,
+                                                            color: Colors.grey),
                                                         Text(
                                                           userAddress['city'] !=
                                                                   null

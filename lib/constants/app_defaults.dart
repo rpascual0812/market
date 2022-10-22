@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_messages.dart';
@@ -80,5 +81,51 @@ class AppDefaults {
         builder: (context) => const LoginPage(),
       ),
     );
+  }
+
+  static userImage(List documents) {
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    for (var i = 0; i < documents.length; i++) {
+      if (documents[i]['document']['path'] != null &&
+          documents[i]['type'] == 'profile_photo') {
+        userImage = '${dotenv.get('API')}/${documents[i]['document']['path']}';
+      }
+    }
+
+    return userImage;
+  }
+
+  static productImage(List documents) {
+    var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    for (var i = 0; i < documents.length; i++) {
+      if (documents[i]['document']['path'] != null && documents[i]['default']) {
+        productImage =
+            '${dotenv.get('API')}/${documents[i]['document']['path']}';
+      }
+    }
+
+    return productImage;
+  }
+
+  static userAddress(List addresses) {
+    Map<String, dynamic> userAddress = {};
+    for (var i = 0; i < addresses.length; i++) {
+      if (addresses[i]['default']) {
+        userAddress = addresses[i];
+      }
+    }
+
+    return userAddress;
+  }
+
+  static sellerAddress(List addresses) {
+    Map<String, dynamic> userAddress = {};
+    for (var i = 0; i < addresses.length; i++) {
+      if (addresses[i]['default']) {
+        userAddress = addresses[i];
+      }
+    }
+
+    return userAddress;
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -50,9 +51,9 @@ class _LookingForWidgetState extends State<LookingForWidget> {
       // if (res.statusCode == 200) return res.body;
       return;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -93,69 +94,82 @@ class _LookingForWidgetState extends State<LookingForWidget> {
               ),
               Container(
                 margin: const EdgeInsets.all(0),
-                child: DataTable(
-                  columns: const [
-                    DataColumn(
-                        label: Text('Name',
-                            style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold))),
-                    DataColumn(
-                        label: Text('Product',
-                            style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold))),
-                    DataColumn(
-                        label: Text('Quantity',
-                            style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold))),
-                    DataColumn(
-                        label: Text('Date',
-                            style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold))),
-                  ],
-                  rows: List.generate(
-                      dataJson['data'] != null ? dataJson['data'].length : 0,
-                      (index) {
-                    DateTime date = DateTime.parse(
-                        products[index]['date_created'].toString());
-                    return DataRow(cells: [
-                      DataCell(Text(products[index]['user']['first_name'],
-                          style: const TextStyle(fontSize: 10))),
-                      DataCell(Text(products[index]['name'],
-                          style: const TextStyle(fontSize: 10))),
-                      DataCell(Text(products[index]['quantity'],
-                          style: const TextStyle(fontSize: 10))),
-                      DataCell(Text(DateFormat.yMMMd().format(date),
-                          style: const TextStyle(fontSize: 10))),
-                    ]);
-                  }),
-                  // rows: const [
-                  //   DataRow(cells: [
-                  //     DataCell(Text('1', style: TextStyle(fontSize: 10))),
-                  //     DataCell(Text('Stephen', style: TextStyle(fontSize: 10))),
-                  //     DataCell(Text('Actor', style: TextStyle(fontSize: 10))),
-                  //     DataCell(Text('Actor', style: TextStyle(fontSize: 10))),
-                  //   ]),
-                  //   DataRow(cells: [
-                  //     DataCell(Text('5', style: TextStyle(fontSize: 10))),
-                  //     DataCell(Text('John', style: TextStyle(fontSize: 10))),
-                  //     DataCell(Text('Student', style: TextStyle(fontSize: 10))),
-                  //     DataCell(Text('Student', style: TextStyle(fontSize: 10))),
-                  //   ]),
-                  //   DataRow(cells: [
-                  //     DataCell(Text('10', style: TextStyle(fontSize: 10))),
-                  //     DataCell(Text('Harry', style: TextStyle(fontSize: 10))),
-                  //     DataCell(Text('Leader', style: TextStyle(fontSize: 10))),
-                  //     DataCell(Text('Leader', style: TextStyle(fontSize: 10))),
-                  //   ]),
-                  //   DataRow(cells: [
-                  //     DataCell(Text('15', style: TextStyle(fontSize: 10))),
-                  //     DataCell(Text('Peter', style: TextStyle(fontSize: 10))),
-                  //     DataCell(
-                  //         Text('Scientist', style: TextStyle(fontSize: 10))),
-                  //     DataCell(
-                  //         Text('Scientist', style: TextStyle(fontSize: 10))),
-                  //   ]),
-                  // ],
+                child: FittedBox(
+                  child: DataTable(
+                    horizontalMargin: 0,
+                    dataRowHeight: 25,
+                    // columnSpacing: 0,
+                    columns: const [
+                      DataColumn(
+                          label: Text('Name',
+                              style: TextStyle(
+                                  fontSize: AppDefaults.fontSize,
+                                  fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text('Product',
+                              style: TextStyle(
+                                  fontSize: AppDefaults.fontSize,
+                                  fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text('Quantity',
+                              style: TextStyle(
+                                  fontSize: AppDefaults.fontSize,
+                                  fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text('Date Posted',
+                              style: TextStyle(
+                                  fontSize: AppDefaults.fontSize,
+                                  fontWeight: FontWeight.bold))),
+                    ],
+                    rows: List.generate(
+                        dataJson['data'] != null ? dataJson['data'].length : 0,
+                        (index) {
+                      DateTime date = DateTime.parse(
+                          products[index]['date_created'].toString());
+                      return DataRow(cells: [
+                        DataCell(Text(products[index]['user']['first_name'],
+                            style: const TextStyle(
+                                fontSize: AppDefaults.fontSize - 2))),
+                        DataCell(Text(products[index]['name'],
+                            style: const TextStyle(
+                                fontSize: AppDefaults.fontSize - 2))),
+                        DataCell(Text(products[index]['quantity'],
+                            style: const TextStyle(
+                                fontSize: AppDefaults.fontSize - 2))),
+                        DataCell(Text(DateFormat.yMMMd().format(date),
+                            style: const TextStyle(
+                                fontSize: AppDefaults.fontSize - 2))),
+                      ]);
+                    }),
+                    // rows: const [
+                    //   DataRow(cells: [
+                    //     DataCell(Text('1', style: TextStyle(fontSize: 10))),
+                    //     DataCell(Text('Stephen', style: TextStyle(fontSize: 10))),
+                    //     DataCell(Text('Actor', style: TextStyle(fontSize: 10))),
+                    //     DataCell(Text('Actor', style: TextStyle(fontSize: 10))),
+                    //   ]),
+                    //   DataRow(cells: [
+                    //     DataCell(Text('5', style: TextStyle(fontSize: 10))),
+                    //     DataCell(Text('John', style: TextStyle(fontSize: 10))),
+                    //     DataCell(Text('Student', style: TextStyle(fontSize: 10))),
+                    //     DataCell(Text('Student', style: TextStyle(fontSize: 10))),
+                    //   ]),
+                    //   DataRow(cells: [
+                    //     DataCell(Text('10', style: TextStyle(fontSize: 10))),
+                    //     DataCell(Text('Harry', style: TextStyle(fontSize: 10))),
+                    //     DataCell(Text('Leader', style: TextStyle(fontSize: 10))),
+                    //     DataCell(Text('Leader', style: TextStyle(fontSize: 10))),
+                    //   ]),
+                    //   DataRow(cells: [
+                    //     DataCell(Text('15', style: TextStyle(fontSize: 10))),
+                    //     DataCell(Text('Peter', style: TextStyle(fontSize: 10))),
+                    //     DataCell(
+                    //         Text('Scientist', style: TextStyle(fontSize: 10))),
+                    //     DataCell(
+                    //         Text('Scientist', style: TextStyle(fontSize: 10))),
+                    //   ]),
+                    // ],
+                  ),
                 ),
               ),
               const Divider(),

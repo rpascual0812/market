@@ -1,20 +1,33 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/screens/producer/producer_page/components/products_tab.dart';
 import 'package:market/screens/profile/components/profile_picture_section.dart';
 
+import '../../../constants/remote.dart';
+
 class ProducerPage extends StatefulWidget {
-  const ProducerPage({Key? key}) : super(key: key);
+  const ProducerPage({
+    Key? key,
+    required this.userPk,
+  }) : super(key: key);
+
+  final int userPk;
 
   @override
   State<ProducerPage> createState() => _ProducerPageState();
 }
 
 class _ProducerPageState extends State<ProducerPage> {
+  Map<String, dynamic> user = <String, dynamic>{};
+
   @override
   void initState() {
     super.initState();
+    fetch();
   }
 
   @override
@@ -22,9 +35,25 @@ class _ProducerPageState extends State<ProducerPage> {
     super.dispose();
   }
 
+  Future fetch() async {
+    try {
+      var res = await Remote.get('users/${widget.userPk}', {});
+      if (res.statusCode == 200) {
+        setState(() {
+          var userJson = jsonDecode(res.body);
+          user = userJson;
+        });
+      }
+    } on Exception catch (exception) {
+      log('exception $exception');
+    } catch (error) {
+      log('error $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    // var size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: Appbar(),
@@ -33,7 +62,10 @@ class _ProducerPageState extends State<ProducerPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ProfilePictureSection(size: size, self: false),
+            Visibility(
+              visible: user.isNotEmpty ? true : false,
+              child: ProfilePictureSection(user: user, self: false),
+            ),
             SizedBox(
               height: 1500,
               child: DefaultTabController(

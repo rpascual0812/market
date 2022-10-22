@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../components/product_list_widget_tile_square.dart';
 import '../../../../constants/index.dart';
+import '../../../product/product_page.dart';
 
 class ProductsTab extends StatefulWidget {
   const ProductsTab({
@@ -76,25 +77,12 @@ class _ProductsTabState extends State<ProductsTab> {
                   return ProductListWidgetTileSquare(
                     product: products[index],
                     onTap: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (context) => ProductPage(
-                      //       pk: products[index].pk,
-                      //       uuid: products[index].uuid,
-                      //       title: products[index].title,
-                      //       productImage: products[index].productImage,
-                      //       quantity: products[index].quantity,
-                      //       unit: products[index].unit,
-                      //       description: products[index].description,
-                      //       location: products[index].location,
-                      //       type: products[index].type,
-                      //       createdBy: products[index].createdBy,
-                      //       userImage: products[index].userImage,
-                      //       userName: products[index].userName,
-                      //       dateCreated: products[index].dateCreated,
-                      //     ),
-                      //   ),
-                      // );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProductPage(productPk: products[index]['pk']),
+                        ),
+                      );
                     },
                   );
                 },

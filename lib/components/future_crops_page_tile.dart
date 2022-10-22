@@ -1,7 +1,6 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/screens/chat/bubble.dart';
 import 'package:intl/intl.dart';
 
@@ -31,44 +30,42 @@ class FutureCropsPageTile extends StatefulWidget {
 class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
   @override
   Widget build(BuildContext context) {
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
-    for (var i = 0; i < widget.product['user_document'].length; i++) {
-      if (widget.product['user_document'][i]['document']['path'] != null &&
-          widget.product['user_document'][i]['type'] == 'profile_photo') {
-        userImage =
-            '${dotenv.get('API')}/${widget.product['user_document'][i]['document']['path']}';
-      }
-    }
+    var userImage = AppDefaults.userImage(widget.product['user_document']);
+    // var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    // for (var i = 0; i < widget.product['user_document'].length; i++) {
+    //   if (widget.product['user_document'][i]['document']['path'] != null &&
+    //       widget.product['user_document'][i]['type'] == 'profile_photo') {
+    //     userImage =
+    //         '${dotenv.get('API')}/${widget.product['user_document'][i]['document']['path']}';
+    //   }
+    // }
 
     DateTime date = DateTime.parse(widget.product['date_created'].toString());
+    var productImage =
+        AppDefaults.productImage(widget.product['product_documents']);
 
-    var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
-    for (var i = 0; i < widget.product['product_documents'].length; i++) {
-      if (widget.product['product_documents'][i]['document']['path'] != null &&
-          widget.product['product_documents'][i]['default']) {
-        userImage =
-            '${dotenv.get('API')}/${widget.product['product_documents'][i]['document']['path']}';
-      }
-    }
+    // var userAddress = {};
+    var userAddress = AppDefaults.userAddress(widget.product['user_addresses']);
+    var sellerAddress =
+        AppDefaults.sellerAddress(widget.product['user_addresses']);
+    // if (widget.product['user_addresses'] != null) {
+    // for (var i = 0; i < widget.product['user_addresses'].length; i++) {
+    //   if (widget.product['user_addresses'][i]['default']) {
+    //     userAddress = widget.product['user_addresses'][i];
+    //   }
+    // }
+    // }
 
-    var userAddress = {};
-    if (widget.product['user_addresses'] != null) {
-      for (var i = 0; i < widget.product['user_addresses'].length; i++) {
-        if (widget.product['user_addresses'][i]['default']) {
-          userAddress = widget.product['user_addresses'][i];
-        }
-      }
-    }
+    // var sellerAddress = {};
+    // if (widget.product['seller_addresses'] != null) {
+    //   for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
+    //     if (widget.product['seller_addresses'][i]['default']) {
+    //       sellerAddress = widget.product['seller_addresses'][i];
+    //     }
+    //   }
+    // }
 
-    var sellerAddress = {};
-    if (widget.product['seller_addresses'] != null) {
-      for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
-        if (widget.product['seller_addresses'][i]['default']) {
-          sellerAddress = widget.product['seller_addresses'][i];
-        }
-      }
-    }
-
+    // log(widget.product['user_pk'].toString());
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: Material(
@@ -134,12 +131,14 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   width: 150,
-                                                  height: 20,
+                                                  height: 15,
                                                   child: Text(
                                                     '${widget.product['user']['first_name']} ${widget.product['user']['last_name']}',
                                                     style: const TextStyle(
                                                         color: Colors.black,
-                                                        fontSize: 10),
+                                                        fontSize: AppDefaults
+                                                                .fontSize +
+                                                            2),
                                                   ),
                                                 ),
                                               ),
@@ -155,17 +154,20 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                                     children: [
                                                       const Icon(
                                                         FutureCropsPageTile.pin,
-                                                        size: 15,
+                                                        size: AppDefaults
+                                                                .fontSize -
+                                                            2,
+                                                        color: Colors.grey,
                                                       ),
                                                       Text(
-                                                        userAddress['city'] !=
+                                                        sellerAddress['city'] !=
                                                                 null
-                                                            ? '${userAddress['city']['name']}, ${userAddress['province']['name']}'
+                                                            ? '${sellerAddress['city']['name']}, ${sellerAddress['province']['name']}'
                                                             : '',
                                                         style: const TextStyle(
-                                                          fontSize: 10,
-                                                          color: AppColors
-                                                              .defaultBlack,
+                                                          fontSize: AppDefaults
+                                                              .fontSize,
+                                                          color: Colors.grey,
                                                         ),
                                                       ),
                                                     ],
@@ -219,7 +221,10 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) {
-                                                        return const ProducerPage();
+                                                        return ProducerPage(
+                                                            userPk:
+                                                                widget.product[
+                                                                    'user_pk']);
                                                       },
                                                     ),
                                                   );

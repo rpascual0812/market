@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:market/constants/index.dart';
 import 'package:market/models/chat_message.dart';
 import 'package:market/screens/producer/producer_profile/producer_profile.dart';
-import 'package:market/screens/producer/producer_page/producer_page.dart';
 
 class Bubble extends StatefulWidget {
   const Bubble({Key? key}) : super(key: key);
@@ -140,14 +139,14 @@ class _BubbleState extends State<Bubble> {
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const ProducerPage();
-                            },
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) {
+                        //       return const ProducerPage(user: chat['user']);
+                        //     },
+                        //   ),
+                        // );
                       },
                     ),
                     // const VerticalDivider(),

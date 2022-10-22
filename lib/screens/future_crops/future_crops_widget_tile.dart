@@ -48,7 +48,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
         }
       }
     }
-    print('address $userAddress');
+
     var sellerAddress = {};
     if (widget.product['seller_addresses'] != null) {
       for (var i = 0; i < widget.product['seller_addresses'].length; i++) {

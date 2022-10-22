@@ -264,8 +264,8 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               style: TextButton.styleFrom(
                                                 backgroundColor: months[index]
                                                         ['selected']
-                                                    ? AppColors.secondary
-                                                    : AppColors.primary,
+                                                    ? AppColors.primary
+                                                    : Colors.grey,
                                                 minimumSize:
                                                     Size.zero, // Set this
                                                 padding:
@@ -313,7 +313,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
                   children: List.generate(
-                      dataJson['data'] != null ? dataJson['data'].length : 0,
+                      products.isNotEmpty ? dataJson['data'].length : 0,
                       (index) {
                     return FutureCropsPageTile(
                       product: products[index],

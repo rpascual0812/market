@@ -5,30 +5,37 @@ import 'package:market/constants/app_defaults.dart';
 import 'package:market/screens/profile/components/follower_list.dart';
 import 'package:market/screens/profile/components/following_list.dart';
 
-class ProfilePictureSection extends StatelessWidget {
+class ProfilePictureSection extends StatefulWidget {
   const ProfilePictureSection({
     Key? key,
-    required this.size,
+    required this.user,
     required this.self,
   }) : super(key: key);
 
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
-  final Size size;
+  final Map<String, dynamic> user;
   final bool self;
 
   @override
+  State<ProfilePictureSection> createState() => _ProfilePictureSectionState();
+}
+
+class _ProfilePictureSectionState extends State<ProfilePictureSection> {
+  @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var userImage = AppDefaults.userImage(widget.user['user_document']);
+    var userAddress = AppDefaults.userAddress(widget.user['user_addresses']);
+    var sellerAddress =
+        AppDefaults.sellerAddress(widget.user['seller_addresses']);
+
     return Stack(
       children: [
-        // CustomPaint(
-        //   size: Size(size.width, (size.width * 0.5625).toDouble()),
-        //   painter: CustomPaintBackground(),
-        // ),
         Container(
-          width: MediaQuery.of(context).size.width,
-          height: 320,
+          width: size.width,
+          height: 340,
           color: AppColors.secondary,
           child: Column(
             children: [
@@ -37,10 +44,10 @@ class ProfilePictureSection extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, left: 10),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CircleAvatar(
-                        backgroundImage: const CachedNetworkImageProvider(
-                            'https://i.imgur.com/8G2bg5J.jpeg'),
+                        backgroundImage: CachedNetworkImageProvider(userImage),
                         radius: size.height * 0.04,
                       ),
                       Padding(
@@ -58,12 +65,14 @@ class ProfilePictureSection extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'Raffier Lee',
-                                    style: TextStyle(color: Colors.white),
+                                  Text(
+                                    '${widget.user['first_name']} ${widget.user['last_name']}',
+                                    style: const TextStyle(color: Colors.white),
                                   ),
+                                  const SizedBox(
+                                      height: AppDefaults.margin / 2),
                                   Visibility(
-                                    visible: self ? false : true,
+                                    visible: widget.self ? false : true,
                                     maintainSize: true, //NEW
                                     maintainAnimation: true, //NEW
                                     maintainState: true, //NEW
@@ -75,17 +84,18 @@ class ProfilePictureSection extends StatelessWidget {
                                         onPressed: () {},
                                         style: OutlinedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(18.0),
+                                            borderRadius: BorderRadius.circular(
+                                                AppDefaults.radius),
                                           ),
                                           side: const BorderSide(
-                                              width: 2, color: Colors.white),
+                                              width: 1, color: Colors.white),
                                         ),
                                         child: const Text(
                                           '+ Follow',
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 12),
+                                              fontSize:
+                                                  AppDefaults.fontSize + 2),
                                         ),
                                       ),
                                     ),
@@ -103,7 +113,7 @@ class ProfilePictureSection extends StatelessWidget {
                             end: Alignment.centerRight,
                             colors: [
                               AppColors.secondary,
-                              AppColors.primary,
+                              AppColors.gradient2,
                             ],
                           ),
                         ),
@@ -132,19 +142,25 @@ class ProfilePictureSection extends StatelessWidget {
                                         0.19,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      children: const [
-                                        SizedBox(height: 5),
+                                      children: [
+                                        const SizedBox(height: 5),
                                         Text(
-                                          '100',
-                                          style: TextStyle(color: Colors.white),
+                                          widget.user['following_count']
+                                              .toString(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: AppDefaults.fontSize,
+                                          ),
                                           maxLines: 1,
                                           textAlign: TextAlign.center,
                                         ),
-                                        SizedBox(height: 5),
-                                        Text(
+                                        const SizedBox(height: 5),
+                                        const Text(
                                           'Following',
                                           style: TextStyle(
-                                              fontSize: 8, color: Colors.white),
+                                            fontSize: AppDefaults.fontSize,
+                                            color: Colors.white,
+                                          ),
                                         )
                                       ],
                                     ),
@@ -172,19 +188,25 @@ class ProfilePictureSection extends StatelessWidget {
                                         0.19,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      children: const [
-                                        SizedBox(height: 5),
+                                      children: [
+                                        const SizedBox(height: 5),
                                         Text(
-                                          '2',
-                                          style: TextStyle(color: Colors.white),
+                                          widget.user['follower_count']
+                                              .toString(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: AppDefaults.fontSize,
+                                          ),
                                           maxLines: 1,
                                           textAlign: TextAlign.center,
                                         ),
-                                        SizedBox(height: 5),
-                                        Text(
+                                        const SizedBox(height: 5),
+                                        const Text(
                                           'Followers',
                                           style: TextStyle(
-                                              fontSize: 8, color: Colors.white),
+                                            fontSize: AppDefaults.fontSize,
+                                            color: Colors.white,
+                                          ),
                                         )
                                       ],
                                     ),
@@ -208,40 +230,44 @@ class ProfilePictureSection extends StatelessWidget {
                 child: Column(
                   children: [
                     Row(
-                      children: const [
-                        Icon(
-                          pin,
+                      children: [
+                        const Icon(
+                          ProfilePictureSection.pin,
                           size: 15,
                           color: Colors.white,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         SizedBox(
                           width: 320,
                           child: Text(
-                            'Belmonte Stree Corner Aruego Street near Public Market, Urdaneta, Pangasinan',
-                            style: TextStyle(color: Colors.white, fontSize: 11),
+                            sellerAddress['city'] != null
+                                ? '${sellerAddress['address']}, ${sellerAddress['city']['name']} ${sellerAddress['province']['name']}'
+                                : '',
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 11),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: AppDefaults.height / 5),
                     Row(
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.phone,
                           size: 15,
                           color: Colors.white,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         SizedBox(
                           width: 320,
                           child: Text(
-                            '091234567890',
-                            style: TextStyle(color: Colors.white, fontSize: 11),
+                            widget.user['seller']['mobile_number'],
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 11),
                           ),
                         ),
                       ],
