@@ -1,17 +1,20 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 // import 'package:market/screens/approot/app_root.dart';
 // import 'package:provider/provider.dart';
-
+import 'package:market/db/market_db.dart';
+import 'package:market/models/config.dart';
 import '../../../components/custom_animation.dart';
 import '../../../constants/index.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../../approot/app_root.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import '../../approot/app_root.dart';
 
 const storage = FlutterSecureStorage();
 
@@ -46,10 +49,21 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final usernameController = TextEditingController(text: 'email@gmail.com');
+  final usernameController = TextEditingController(text: 'email01@gmail.com');
   final passwordController = TextEditingController(text: 'P@ssword1');
   String errorMessage = '';
   bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // MarketDatabase.instance.close();
+    super.dispose();
+  }
 
   Future submit(String username, String password) async {
     try {
@@ -186,8 +200,14 @@ class _LoginFormState extends State<LoginForm> {
 
                     var username = usernameController.text;
                     var password = passwordController.text;
-                    var jwt = await submit(username, password);
-                    if (jwt != null) {
+                    var result = await submit(username, password);
+                    if (result != null) {
+                      var jwtJson = jsonDecode(result);
+                      var jwt = jwtJson['user']['access_token'];
+
+                      await MarketDatabase.instance
+                          .create(Config(key: 'jwt', value: jwt));
+
                       storage.write(key: "jwt", value: jwt);
                       if (!mounted) return;
 
@@ -204,7 +224,7 @@ class _LoginFormState extends State<LoginForm> {
                       //   fontSize: 12.0,
                       // );
                       EasyLoading.dismiss();
-                      AppDefaults.navigate(context, AppRoot(jwt: jwt));
+                      AppDefaults.navigate(context, AppRoot(jwt: jwt ?? ''));
                       // Timer(
                       //   const Duration(seconds: 1),
                       //   () => {

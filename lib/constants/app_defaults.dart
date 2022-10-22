@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_messages.dart';
 import 'package:market/screens/auth/login_page.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 
 class AppDefaults {
   static const double radius = 20.00;
@@ -127,5 +128,12 @@ class AppDefaults {
     }
 
     return userAddress;
+  }
+
+  static jwtDecode(String? token) {
+    if (token != '') {
+      Map<String, dynamic> payload = Jwt.parseJwt(token!);
+      return payload;
+    }
   }
 }

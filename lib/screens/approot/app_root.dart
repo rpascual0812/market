@@ -1,7 +1,10 @@
 // import 'dart:html';
 
+import 'dart:convert';
+
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/constants/app_defaults.dart';
 import 'package:market/screens/auth/login_page.dart';
 import 'package:market/screens/chat/chat_page.dart';
@@ -12,6 +15,8 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 
 import '../../constants/app_colors.dart';
 import '../profile/profile_page.dart';
+
+import 'package:http/http.dart' as http;
 
 class AppRoot extends StatefulWidget {
   const AppRoot({Key? key, required this.jwt
@@ -31,9 +36,12 @@ class _AppRootState extends State<AppRoot> {
       IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
   static const IconData chatBold =
       IconData(0xe805, fontFamily: 'Custom', fontPackage: null);
+  Map<String, dynamic> account = {};
 
   @override
   void initState() {
+    var user = AppDefaults.jwtDecode(widget.jwt);
+
     super.initState();
     _allScreen = [
       const HomePage(),
@@ -41,6 +49,8 @@ class _AppRootState extends State<AppRoot> {
       const ChatPage(),
       widget.jwt != '' ? const ProfilePage() : const LoginPage(),
     ];
+
+    fetchUser(user['sub']);
   }
 
   int _currentIndex = 0;
@@ -49,6 +59,26 @@ class _AppRootState extends State<AppRoot> {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  Future fetchUser(int pk) async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${widget.jwt}',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        account = json.decode(res.body);
+        print('app root result ${account['user']}');
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
   }
 
   Future<bool> _onWillPop(BuildContext context) async {
@@ -90,6 +120,11 @@ class _AppRootState extends State<AppRoot> {
 
   @override
   Widget build(BuildContext context) {
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    if (account['user'] != null) {
+      userImage = AppDefaults.userImage(account['user']['user_document']);
+    }
+    // var userImage = AppDefaults.userImage(account['user']['user_document']);
     // print('approot');
     // print(widget.jwt);
     // final Size size = MediaQuery.of(context).size;
@@ -147,9 +182,8 @@ class _AppRootState extends State<AppRoot> {
             BottomNavigationBarItem(
               label: "",
               icon: widget.jwt != ''
-                  ? const CircleAvatar(
-                      backgroundImage: CachedNetworkImageProvider(
-                          'https://i.imgur.com/8G2bg5J.jpeg'),
+                  ? CircleAvatar(
+                      backgroundImage: CachedNetworkImageProvider(userImage),
                       radius: AppDefaults.radius,
                     )
                   : Icon(_currentIndex == 3

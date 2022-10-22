@@ -1,9 +1,6 @@
-// import 'dart:convert';
-
-// ignore: depend_on_referenced_packages
+import 'package:market/models/config.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:market/models/local.dart';
 
 class MarketDatabase {
   static final MarketDatabase instance = MarketDatabase._init();
@@ -25,7 +22,7 @@ class MarketDatabase {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDB,
       // onUpgrade: (db, oldVersion, newVersion) => 2,
     );
@@ -33,70 +30,74 @@ class MarketDatabase {
 
   Future _createDB(Database db, int version) async {
     await db.execute('''
-CREATE TABLE $tableLocal (
-  ${LocalFields.pk} INTEGER PRIMARY KEY AUTOINCREMENT,
-  ${LocalFields.uuid} TEXT NOT NULL,
-  ${LocalFields.name} TEXT NOT NULL,
-  ${LocalFields.notes} TEXT,
-  ${LocalFields.dateCreated} TEXT NOT NULL,
+CREATE TABLE $tableConfigs (
+  ${ConfigFields.pk} INTEGER PRIMARY KEY AUTOINCREMENT,
+  ${ConfigFields.key} TEXT NOT NULL,
+  ${ConfigFields.value} TEXT NOT NULL
   )
 ''');
   }
 
-  Future<Local> create(Local local) async {
+  Future<Config> create(Config config) async {
     final db = await instance.database;
 
     // raw insert
-    // final columns = '${LocalFields.productPk}, ...';
-    // final values = '${json[LocalFields.productPk', ...]';
+    // final columns = '${ConfigFields.productPk}, ...';
+    // final values = '${json[ConfigFields.productPk', ...]';
     // final pk =
     //     await db.rawInsert('insert into local($columns) values ($values)');
+    // delete(config.key);
+    final pk = await db.insert(tableConfigs, config.toJson());
 
-    final pk = await db.insert(tableLocal, local.toJson());
-    return local.copy(pk: pk);
+    return config.copy(pk: pk);
   }
 
-  Future<Local?> getLocal(String name) async {
+  Future<Config> fetchOne(String key) async {
     final db = await instance.database;
+
     final maps = await db.query(
-      tableLocal,
-      columns: LocalFields.values,
-      where: '${LocalFields.pk} = ?',
-      whereArgs: [name],
+      tableConfigs,
+      columns: ConfigFields.values,
+      where: '${ConfigFields.key} = ?',
+      whereArgs: [key],
     );
 
     if (maps.isNotEmpty) {
-      return Local.fromJson(maps.first);
+      return Config.fromJson(maps.first);
     } else {
-      return null;
+      throw Exception();
     }
   }
 
-  Future<List<Local>> getAllLocals() async {
+  Future<List<Config>> fetchAll() async {
     final db = await instance.database;
-    final result =
-        await db.query(tableLocal, orderBy: '${LocalFields.pk} DESC');
-    return result.map((json) => Local.fromJson(json)).toList();
+
+    final result = await db.rawQuery(
+        'SELECT * FROM $tableConfigs ORDER BY ${ConfigFields.pk} DESC');
+
+    // final result =
+    //     await db.query(tableConfigs, orderBy: '${ConfigFields.pk} ASC');
+    return result.map((json) => Config.fromJson(json)).toList();
   }
 
-  Future<int> update(Local local) async {
+  Future<int> update(Config config) async {
     final db = await instance.database;
 
     return db.update(
-      tableLocal,
-      local.toJson(),
-      where: '${LocalFields.pk} = ?',
-      whereArgs: [local.pk],
+      tableConfigs,
+      config.toJson(),
+      where: '${ConfigFields.pk} = ?',
+      whereArgs: [config.pk],
     );
   }
 
-  Future<int> delete(int pk) async {
+  Future<int> delete(String key) async {
     final db = await instance.database;
 
     return await db.delete(
-      tableLocal,
-      where: '${LocalFields.pk} = ?',
-      whereArgs: [pk],
+      tableConfigs,
+      where: '${ConfigFields.key} = ?',
+      whereArgs: [key],
     );
   }
 

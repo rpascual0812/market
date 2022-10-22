@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
 import 'package:market/screens/profile/components/follower_list.dart';
 import 'package:market/screens/profile/components/following_list.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+const storage = FlutterSecureStorage();
 
 class ProfilePictureSection extends StatefulWidget {
   const ProfilePictureSection({
@@ -23,6 +28,11 @@ class ProfilePictureSection extends StatefulWidget {
 }
 
 class _ProfilePictureSectionState extends State<ProfilePictureSection> {
+  Future getUser() async {
+    final result = await storage.containsKey(key: 'jwt');
+    log(result.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -30,6 +40,11 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
     var userAddress = AppDefaults.userAddress(widget.user['user_addresses']);
     var sellerAddress =
         AppDefaults.sellerAddress(widget.user['seller_addresses']);
+
+    Future follow(int pk) async {
+      getUser();
+      log(pk.toString());
+    }
 
     return Stack(
       children: [
@@ -81,7 +96,9 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                       height: 25.0,
                                       padding: EdgeInsets.zero,
                                       child: OutlinedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          follow(widget.user['pk']);
+                                        },
                                         style: OutlinedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(

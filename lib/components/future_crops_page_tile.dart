@@ -1,5 +1,7 @@
 // import 'dart:html';
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:market/screens/chat/bubble.dart';
 import 'package:intl/intl.dart';
@@ -31,15 +33,6 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
   @override
   Widget build(BuildContext context) {
     var userImage = AppDefaults.userImage(widget.product['user_document']);
-    // var userImage = '${dotenv.get('API')}/assets/images/user.png';
-    // for (var i = 0; i < widget.product['user_document'].length; i++) {
-    //   if (widget.product['user_document'][i]['document']['path'] != null &&
-    //       widget.product['user_document'][i]['type'] == 'profile_photo') {
-    //     userImage =
-    //         '${dotenv.get('API')}/${widget.product['user_document'][i]['document']['path']}';
-    //   }
-    // }
-
     DateTime date = DateTime.parse(widget.product['date_created'].toString());
     var productImage =
         AppDefaults.productImage(widget.product['product_documents']);
@@ -48,24 +41,8 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
     var userAddress = AppDefaults.userAddress(widget.product['user_addresses']);
     var sellerAddress =
         AppDefaults.sellerAddress(widget.product['user_addresses']);
-    // if (widget.product['user_addresses'] != null) {
-    // for (var i = 0; i < widget.product['user_addresses'].length; i++) {
-    //   if (widget.product['user_addresses'][i]['default']) {
-    //     userAddress = widget.product['user_addresses'][i];
-    //   }
-    // }
-    // }
 
-    // var sellerAddress = {};
-    // if (widget.product['seller_addresses'] != null) {
-    //   for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
-    //     if (widget.product['seller_addresses'][i]['default']) {
-    //       sellerAddress = widget.product['seller_addresses'][i];
-    //     }
-    //   }
-    // }
-
-    // log(widget.product['user_pk'].toString());
+    log(widget.product.toString());
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: Material(

@@ -23,29 +23,56 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final storage = const FlutterSecureStorage();
   String token = '';
+  Map<String, dynamic> account = {};
 
   @override
   void initState() {
     super.initState();
-
     readStorage();
   }
 
-  Future<void> readStorage() async {
-    final welcomeStorage = await storage.read(key: 'jwt');
+  @override
+  void dispose() {
+    // MarketDatabase.instance.close();
+    super.dispose();
+  }
 
+  Future<void> readStorage() async {
+    final jwt = await storage.read(key: 'jwt');
+    final user = AppDefaults.jwtDecode(jwt!);
+    print('profile ${user['sub']}');
     setState(() {
-      token = welcomeStorage!;
+      token = jwt;
+      fetchUser(user['sub']);
     });
+  }
+
+  Future fetchUser(int pk) async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        account = json.decode(res.body);
+        print('result ${account['user']}');
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
   }
 
   Future attemptLogOut() async {
     try {
-      var body = json.decode(token);
       final url = Uri.parse('${dotenv.get('API')}/logout');
       final headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${body['user']['access_token']}',
+        'Authorization': 'Bearer $token',
       };
 
       var res = await http.post(url, headers: headers);
@@ -63,6 +90,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    if (account['user'] != null) {
+      userImage = AppDefaults.userImage(account['user']['user_document']);
+    }
 
     return Scaffold(
       body: SingleChildScrollView(
