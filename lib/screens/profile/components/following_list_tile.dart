@@ -1,6 +1,7 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../constants/index.dart';
 
@@ -10,133 +11,93 @@ class FollowingListTile extends StatelessWidget {
 
   const FollowingListTile({
     Key? key,
-    required this.pk,
-    required this.firstName,
-    required this.lastName,
-    required this.image,
     required this.following,
     this.onTap,
   }) : super(key: key);
 
-  final int pk;
-  final String firstName;
-  final String lastName;
-  final String image;
-  final bool following;
+  final Map<String, dynamic> following;
   final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      child: Material(
-        color: Colors.white,
-        borderRadius: AppDefaults.borderRadius,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: AppDefaults.borderRadius,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            // padding: const EdgeInsets.all(AppDefaults.padding),
-            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-            child: Center(
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    if (following['createdBy'] != null) {
+      userImage =
+          AppDefaults.userImage(following['createdBy']['user_document']);
+    }
+
+    return Container(
+      color: Colors.white,
+      width: MediaQuery.of(context).size.width,
+      height: 80,
+      margin: const EdgeInsets.only(bottom: AppDefaults.margin / 2),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDefaults.margin,
+          vertical: AppDefaults.margin,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
               child: Stack(
                 children: [
-                  Column(
-                    // mainAxisSize: MainAxisSize.min,
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(
-                                  0, 0), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppDefaults.margin,
-                            vertical: AppDefaults.margin,
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(userImage),
+                    maxRadius: 20,
+                  ),
+                  Positioned(
+                    top: 10,
+                    left: 50,
+                    child: Row(
+                      children: [
+                        Text(
+                          '${following['user']['first_name']} ${following['user']['last_name']}',
+                          style: const TextStyle(
+                            fontSize: AppDefaults.fontSize + 2,
+                            color: AppColors.defaultBlack,
+                            fontWeight: FontWeight.normal,
                           ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Stack(
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundImage: NetworkImage(image),
-                                          maxRadius: 20,
-                                        ),
-                                        Positioned(
-                                          top: 15,
-                                          left: 50,
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                '$firstName $lastName',
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: AppColors.defaultBlack,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: -5,
-                                          right: 0,
-                                          child: Row(
-                                            children: [
-                                              OutlinedButton(
-                                                onPressed: () {},
-                                                style: OutlinedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            18.0),
-                                                  ),
-                                                  side: const BorderSide(
-                                                      width: 2,
-                                                      color: Colors.grey),
-                                                ),
-                                                child: Text(
-                                                  following
-                                                      ? 'Following'
-                                                      : 'Follow',
-                                                  style: const TextStyle(
-                                                    color: Colors.grey,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: 5,
+                    right: 0,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 90.0,
+                          height: 25.0,
+                          padding: EdgeInsets.zero,
+                          child: OutlinedButton(
+                            onPressed: () {},
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(AppDefaults.radius),
                               ),
-                              const SizedBox(height: AppDefaults.margin / 10),
-                            ],
+                              side: const BorderSide(
+                                  width: 1, color: Colors.grey),
+                            ),
+                            child: Text(
+                              following['isAlsoFollowed'].isEmpty
+                                  ? '+ Follow'
+                                  : 'Following',
+                              style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: AppDefaults.fontSize + 2),
+                            ),
                           ),
                         ),
-                      )
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

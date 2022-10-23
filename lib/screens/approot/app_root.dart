@@ -50,7 +50,9 @@ class _AppRootState extends State<AppRoot> {
       widget.jwt != '' ? const ProfilePage() : const LoginPage(),
     ];
 
-    fetchUser(user['sub']);
+    if (user != null) {
+      fetchUser(user['sub']);
+    }
   }
 
   int _currentIndex = 0;
@@ -72,7 +74,6 @@ class _AppRootState extends State<AppRoot> {
       var res = await http.get(url, headers: headers);
       if (res.statusCode == 200) {
         account = json.decode(res.body);
-        print('app root result ${account['user']}');
       }
       return null;
     } on Exception catch (e) {

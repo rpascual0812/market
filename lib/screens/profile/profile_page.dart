@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/index.dart';
-import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/profile/components/profile_settings.dart';
 
+import '../approot/app_root.dart';
 import 'components/profile_product.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -133,6 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   onPressed: () async {
                     var result = await attemptLogOut();
                     if (result != null) {
+                      await storage.deleteAll();
                       // ignore: use_build_context_synchronously
                       AppDefaults.toast(context, 'success',
                           AppMessage.getSuccess('LOGOUT_SUCCESS'));

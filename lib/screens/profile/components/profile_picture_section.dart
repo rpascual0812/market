@@ -1,12 +1,14 @@
-import 'dart:developer';
+import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
 import 'package:market/screens/profile/components/follower_list.dart';
 import 'package:market/screens/profile/components/following_list.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 const storage = FlutterSecureStorage();
 
@@ -28,9 +30,78 @@ class ProfilePictureSection extends StatefulWidget {
 }
 
 class _ProfilePictureSectionState extends State<ProfilePictureSection> {
-  Future getUser() async {
-    final result = await storage.containsKey(key: 'jwt');
-    log(result.toString());
+  Map<String, dynamic> isFollowed = {};
+  String? token = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getStorage();
+    checkIfFollowed();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future getStorage() async {
+    token = await storage.read(key: 'jwt');
+  }
+
+  Future follow() async {
+    final user = AppDefaults.jwtDecode(token);
+
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/users/follow');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      String follow = isFollowed.isEmpty ? 'follow' : 'unfollow';
+      final body = {'user_pk': widget.user['pk'].toString(), 'follow': follow};
+
+      var res = await http.post(url, headers: headers, body: body);
+      if (res.statusCode == 201) {
+        final result = json.decode(res.body);
+        setState(() {
+          follow == 'follow' ? checkIfFollowed() : isFollowed = {};
+        });
+      }
+      // if (res.statusCode == 200) return res.body;
+      return null;
+    } on Exception {
+      return null;
+    }
+  }
+
+  Future checkIfFollowed() async {
+    final token = await storage.read(key: 'jwt');
+    final user = AppDefaults.jwtDecode(token!);
+
+    if (user != null) {
+      try {
+        final url = Uri.parse('${dotenv.get('API')}/users/followedByUser');
+        final headers = {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        };
+        final body = {'user_pk': widget.user['pk'].toString()};
+
+        var res = await http.post(url, headers: headers, body: body);
+        if (res.statusCode == 201) {
+          final result = json.decode(res.body);
+          setState(() {
+            isFollowed = result;
+          });
+        }
+        // if (res.statusCode == 200) return res.body;
+        return null;
+      } on Exception {
+        return null;
+      }
+    }
   }
 
   @override
@@ -40,11 +111,6 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
     var userAddress = AppDefaults.userAddress(widget.user['user_addresses']);
     var sellerAddress =
         AppDefaults.sellerAddress(widget.user['seller_addresses']);
-
-    Future follow(int pk) async {
-      getUser();
-      log(pk.toString());
-    }
 
     return Stack(
       children: [
@@ -97,7 +163,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                       padding: EdgeInsets.zero,
                                       child: OutlinedButton(
                                         onPressed: () {
-                                          follow(widget.user['pk']);
+                                          follow();
                                         },
                                         style: OutlinedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
@@ -107,9 +173,11 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                           side: const BorderSide(
                                               width: 1, color: Colors.white),
                                         ),
-                                        child: const Text(
-                                          '+ Follow',
-                                          style: TextStyle(
+                                        child: Text(
+                                          isFollowed.isEmpty
+                                              ? '+ Follow'
+                                              : 'Following',
+                                          style: const TextStyle(
                                               color: Colors.white,
                                               fontSize:
                                                   AppDefaults.fontSize + 2),
@@ -147,7 +215,9 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                   onTap: () {
                                     showDialog(
                                         context: context,
-                                        builder: (_) => const FollowingList());
+                                        builder: (_) => FollowingList(
+                                            userPk: widget.user['pk'],
+                                            token: token ?? ''));
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.all(0),
@@ -192,8 +262,12 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                 child: InkWell(
                                   onTap: () {
                                     showDialog(
-                                        context: context,
-                                        builder: (_) => const FollowerList());
+                                      context: context,
+                                      builder: (_) => FollowerList(
+                                        userPk: widget.user['pk'],
+                                        token: token ?? '',
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(

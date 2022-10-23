@@ -85,7 +85,10 @@ class ProfilePictureSection extends StatelessWidget {
                                   onTap: () {
                                     showDialog(
                                         context: context,
-                                        builder: (_) => const FollowingList());
+                                        builder: (_) => const FollowingList(
+                                              userPk: 4,
+                                              token: '',
+                                            ));
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.all(0),
@@ -125,7 +128,10 @@ class ProfilePictureSection extends StatelessWidget {
                                   onTap: () {
                                     showDialog(
                                         context: context,
-                                        builder: (_) => const FollowerList());
+                                        builder: (_) => const FollowerList(
+                                              userPk: 4,
+                                              token: '',
+                                            ));
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(

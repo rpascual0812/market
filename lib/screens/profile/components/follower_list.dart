@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:market/constants/app_colors.dart';
-import 'package:market/models/follower.dart';
-import 'package:market/screens/profile/components/follower_list_tile.dart';
+
+import '../../../constants/index.dart';
+import 'follower_list_tile.dart';
 
 class FollowerList extends StatefulWidget {
-  const FollowerList({Key? key}) : super(key: key);
+  const FollowerList({Key? key, required this.userPk, required this.token})
+      : super(key: key);
+
+  final int userPk;
+  final String token;
 
   @override
   State<StatefulWidget> createState() => FollowerListState();
@@ -15,49 +21,14 @@ class FollowerListState extends State<FollowerList>
   static const IconData close = IconData(0xe16a, fontFamily: 'MaterialIcons');
   AnimationController? controller;
   Animation<double>? scaleAnimation;
-  List<Follower> followers = [
-    Follower(
-      pk: 1,
-      firstName: 'Babylyn',
-      lastName: 'Beanay',
-      imageURL: "https://i.imgur.com/vavfJqu.gif",
-    ),
-    Follower(
-      pk: 2,
-      firstName: 'Mia',
-      lastName: 'Sue',
-      imageURL: "https://i.imgur.com/jG0jrjW.gif",
-    ),
-    Follower(
-      pk: 3,
-      firstName: 'Jonathan',
-      lastName: 'Bernardo',
-      imageURL: "https://i.imgur.com/VocmKXJ.gif",
-    ),
-    Follower(
-      pk: 4,
-      firstName: 'Babylyn',
-      lastName: 'Beanay',
-      imageURL: "https://i.imgur.com/F1oP4Zh.gif",
-    ),
-    Follower(
-      pk: 5,
-      firstName: 'Jay',
-      lastName: 'Boni',
-      imageURL: "https://i.imgur.com/D8hOYEu.gif",
-    ),
-    Follower(
-      pk: 6,
-      firstName: 'Maria',
-      lastName: 'Clare',
-      imageURL: "https://i.imgur.com/BLz5n08.gif",
-    ),
-  ];
+
+  List followers = [];
 
   @override
   void initState() {
     super.initState();
 
+    fetch();
     controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
     scaleAnimation =
@@ -68,6 +39,26 @@ class FollowerListState extends State<FollowerList>
     });
 
     controller!.forward();
+  }
+
+  Future fetch() async {
+    try {
+      final user = AppDefaults.jwtDecode(widget.token);
+      var res = await Remote.get('users/${widget.userPk}/followers',
+          {'account_pk': user != null ? user['sub'].toString() : '0'});
+      if (res.statusCode == 200) {
+        setState(() {
+          var dataJson = json.decode(res.body);
+          for (var i = 0; i < dataJson['data'].length; i++) {
+            followers.add(dataJson['data'][i]);
+          }
+        });
+      }
+      // if (res.statusCode == 200) return res.body;
+      return null;
+    } on Exception {
+      return null;
+    }
   }
 
   @override
@@ -82,7 +73,7 @@ class FollowerListState extends State<FollowerList>
           height: 700.0,
           decoration: ShapeDecoration(
             // color: const Color.fromRGBO(41, 167, 77, 10),
-            color: Colors.white,
+            color: AppColors.fourth,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
@@ -123,8 +114,11 @@ class FollowerListState extends State<FollowerList>
                   ],
                 ),
               ),
-              SizedBox(
+              Container(
                 height: 615,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
@@ -135,10 +129,8 @@ class FollowerListState extends State<FollowerList>
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return FollowerListTile(
-                            pk: followers[index].pk,
-                            firstName: followers[index].firstName,
-                            lastName: followers[index].lastName,
-                            image: followers[index].imageURL,
+                            follower: followers[index],
+                            onTap: () {},
                           );
                         },
                       ),

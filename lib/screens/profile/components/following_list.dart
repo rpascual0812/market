@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:market/constants/app_colors.dart';
-import 'package:market/models/following.dart';
 import 'package:market/screens/profile/components/following_list_tile.dart';
 
+import '../../../constants/index.dart';
+
 class FollowingList extends StatefulWidget {
-  const FollowingList({Key? key}) : super(key: key);
+  const FollowingList({Key? key, required this.userPk, required this.token})
+      : super(key: key);
+
+  final int userPk;
+  final String token;
 
   @override
   State<StatefulWidget> createState() => FollowingListState();
@@ -15,55 +21,14 @@ class FollowingListState extends State<FollowingList>
   static const IconData close = IconData(0xe16a, fontFamily: 'MaterialIcons');
   AnimationController? controller;
   Animation<double>? scaleAnimation;
-  List<Following> followings = [
-    Following(
-      pk: 1,
-      firstName: 'Babylyn',
-      lastName: 'Beanay',
-      imageURL: "https://i.imgur.com/vavfJqu.gif",
-      following: true,
-    ),
-    Following(
-      pk: 2,
-      firstName: 'Mia',
-      lastName: 'Sue',
-      imageURL: "https://i.imgur.com/jG0jrjW.gif",
-      following: true,
-    ),
-    Following(
-      pk: 3,
-      firstName: 'Jonathan',
-      lastName: 'Bernardo',
-      imageURL: "https://i.imgur.com/VocmKXJ.gif",
-      following: true,
-    ),
-    Following(
-      pk: 4,
-      firstName: 'Babylyn',
-      lastName: 'Beanay',
-      imageURL: "https://i.imgur.com/F1oP4Zh.gif",
-      following: true,
-    ),
-    Following(
-      pk: 5,
-      firstName: 'Jay',
-      lastName: 'Boni',
-      imageURL: "https://i.imgur.com/D8hOYEu.gif",
-      following: true,
-    ),
-    Following(
-      pk: 6,
-      firstName: 'Maria',
-      lastName: 'Clare',
-      imageURL: "https://i.imgur.com/BLz5n08.gif",
-      following: true,
-    ),
-  ];
+
+  List followings = [];
 
   @override
   void initState() {
     super.initState();
 
+    fetch();
     controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
     scaleAnimation =
@@ -74,6 +39,26 @@ class FollowingListState extends State<FollowingList>
     });
 
     controller!.forward();
+  }
+
+  Future fetch() async {
+    try {
+      final user = AppDefaults.jwtDecode(widget.token);
+      var res = await Remote.get('users/${widget.userPk}/followings',
+          {'account_pk': user != null ? user['sub'].toString() : '0'});
+      if (res.statusCode == 200) {
+        setState(() {
+          var dataJson = json.decode(res.body);
+          for (var i = 0; i < dataJson['data'].length; i++) {
+            followings.add(dataJson['data'][i]);
+          }
+        });
+      }
+      // if (res.statusCode == 200) return res.body;
+      return null;
+    } on Exception {
+      return null;
+    }
   }
 
   @override
@@ -88,7 +73,7 @@ class FollowingListState extends State<FollowingList>
           height: 700.0,
           decoration: ShapeDecoration(
             // color: const Color.fromRGBO(41, 167, 77, 10),
-            color: Colors.white,
+            color: AppColors.fourth,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
@@ -141,11 +126,8 @@ class FollowingListState extends State<FollowingList>
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return FollowingListTile(
-                            pk: followings[index].pk,
-                            firstName: followings[index].firstName,
-                            lastName: followings[index].lastName,
-                            image: followings[index].imageURL,
-                            following: followings[index].following,
+                            following: followings[index],
+                            onTap: () {},
                           );
                         },
                       ),

@@ -1,7 +1,5 @@
 // import 'dart:html';
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:market/screens/chat/bubble.dart';
 import 'package:intl/intl.dart';
@@ -42,7 +40,6 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
     var sellerAddress =
         AppDefaults.sellerAddress(widget.product['user_addresses']);
 
-    log(widget.product.toString());
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: Material(
