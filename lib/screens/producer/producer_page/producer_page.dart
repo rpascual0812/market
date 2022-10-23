@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/screens/producer/producer_page/components/products_tab.dart';
-import 'package:market/screens/profile/components/profile_picture_section.dart';
+import 'package:market/screens/producer/producer_page/components/profile_picture_section.dart';
+// import 'package:market/screens/profile/components/profile_picture_section.dart';
 
 import '../../../constants/remote.dart';
 
@@ -64,7 +65,7 @@ class _ProducerPageState extends State<ProducerPage> {
           children: <Widget>[
             Visibility(
               visible: user.isNotEmpty ? true : false,
-              child: ProfilePictureSection(user: user, self: false),
+              child: ProfilePictureSection(user: user),
             ),
             SizedBox(
               height: 1500,

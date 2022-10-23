@@ -5,30 +5,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/index.dart';
+import 'package:market/screens/profile/components/profile_picture_section.dart';
 import 'package:market/screens/profile/components/profile_settings.dart';
 
 import '../approot/app_root.dart';
+// import '../producer/producer_page/components/profile_picture_section.dart';
 import 'components/profile_product.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({Key? key, required this.token}) : super(key: key);
+
+  final String token;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final storage = const FlutterSecureStorage();
-  String token = '';
-  Map<String, dynamic> account = {};
+  Map<String, dynamic> account = <String, dynamic>{};
+  int accountPk = 0;
 
   @override
   void initState() {
     super.initState();
-    readStorage();
+
+    var account = AppDefaults.jwtDecode(widget.token);
+    accountPk = account['sub'];
+    // readStorage();
+    fetch();
   }
 
   @override
@@ -37,28 +43,35 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
-  Future<void> readStorage() async {
-    final jwt = await storage.read(key: 'jwt');
-    final user = AppDefaults.jwtDecode(jwt!);
-    print('profile ${user['sub']}');
-    setState(() {
-      token = jwt;
-      fetchUser(user['sub']);
-    });
-  }
+  // Future<void> readStorage() async {
+  //   final jwt = await storage.read(key: 'jwt');
+  //   final user = AppDefaults.jwtDecode(jwt!);
 
-  Future fetchUser(int pk) async {
+  //   setState(() {
+  //     isLoading = true;
+  //     token = jwt;
+  //     fetch(user['sub']);
+  //   });
+  // }
+
+  Future fetch() async {
+    print('${dotenv.get('API')}/accounts/$accountPk');
+    print(widget.token);
     try {
-      final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
+      final url = Uri.parse('${dotenv.get('API')}/accounts/$accountPk');
       final headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer $widget.token',
       };
 
       var res = await http.get(url, headers: headers);
+      print('status : ${res.statusCode}');
       if (res.statusCode == 200) {
-        account = json.decode(res.body);
-        print('result ${account['user']}');
+        setState(() {
+          var userJson = jsonDecode(res.body);
+          account = userJson;
+          print('result ${account['user']}');
+        });
       }
       return null;
     } on Exception catch (e) {
@@ -67,12 +80,12 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  Future attemptLogOut() async {
+  Future logout() async {
     try {
       final url = Uri.parse('${dotenv.get('API')}/logout');
       final headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer $widget.token',
       };
 
       var res = await http.post(url, headers: headers);
@@ -102,21 +115,8 @@ class _ProfilePageState extends State<ProfilePage> {
             /// Header
             Appbar(),
 
-            /// Profile Picture
-            // ProfilePictureSection(
-            //   user: size,
-            //   self: true,
-            // ),
-
-            // Text(
-            //   'Raffier Lee',
-            //   style: Theme.of(context)
-            //       .textTheme
-            //       .headline5
-            //       ?.copyWith(fontWeight: FontWeight.bold),
-            // ),
-            // const Text('raffier.lee@gmail.com'),
-            // const SizedBox(height: 10),
+            // Profile Picture
+            const ProfilePictureSection(),
 
             /// Statuses
             const ProfileProduct(),
@@ -131,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(1),
                 child: ElevatedButton(
                   onPressed: () async {
-                    var result = await attemptLogOut();
+                    var result = await logout();
                     if (result != null) {
                       await storage.deleteAll();
                       // ignore: use_build_context_synchronously

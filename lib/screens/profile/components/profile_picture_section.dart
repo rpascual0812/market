@@ -3,41 +3,34 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:market/constants/app_colors.dart';
-import 'package:market/constants/app_defaults.dart';
-import 'package:market/screens/profile/components/follower_list.dart';
-import 'package:market/screens/profile/components/following_list.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+
+import '../../../constants/index.dart';
+import 'follower_list.dart';
+import 'following_list.dart';
 
 const storage = FlutterSecureStorage();
 
 class ProfilePictureSection extends StatefulWidget {
-  const ProfilePictureSection({
-    Key? key,
-    required this.user,
-    required this.self,
-  }) : super(key: key);
+  const ProfilePictureSection({Key? key}) : super(key: key);
 
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
-
-  final Map<String, dynamic> user;
-  final bool self;
 
   @override
   State<ProfilePictureSection> createState() => _ProfilePictureSectionState();
 }
 
 class _ProfilePictureSectionState extends State<ProfilePictureSection> {
-  Map<String, dynamic> isFollowed = {};
+  Map<String, dynamic> user = {};
   String? token = '';
 
   @override
   void initState() {
     super.initState();
+
     getStorage();
-    checkIfFollowed();
   }
 
   @override
@@ -47,75 +40,55 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
 
   Future getStorage() async {
     token = await storage.read(key: 'jwt');
+    fetch();
   }
 
-  Future follow() async {
-    final user = AppDefaults.jwtDecode(token);
-
+  Future fetch() async {
     try {
-      final url = Uri.parse('${dotenv.get('API')}/users/follow');
+      var account = AppDefaults.jwtDecode(token);
+      int accountPk = account['sub'];
+      final url = Uri.parse('${dotenv.get('API')}/accounts/$accountPk');
       final headers = {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       };
 
-      String follow = isFollowed.isEmpty ? 'follow' : 'unfollow';
-      final body = {'user_pk': widget.user['pk'].toString(), 'follow': follow};
+      var res = await http.get(url, headers: headers);
 
-      var res = await http.post(url, headers: headers, body: body);
-      if (res.statusCode == 201) {
-        final result = json.decode(res.body);
+      if (res.statusCode == 200) {
         setState(() {
-          follow == 'follow' ? checkIfFollowed() : isFollowed = {};
+          var userJson = jsonDecode(res.body);
+          user = userJson['user'];
         });
       }
-      // if (res.statusCode == 200) return res.body;
-      return null;
-    } on Exception {
-      return null;
-    }
-  }
-
-  Future checkIfFollowed() async {
-    final token = await storage.read(key: 'jwt');
-    final user = AppDefaults.jwtDecode(token!);
-
-    if (user != null) {
-      try {
-        final url = Uri.parse('${dotenv.get('API')}/users/followedByUser');
-        final headers = {
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        };
-        final body = {'user_pk': widget.user['pk'].toString()};
-
-        var res = await http.post(url, headers: headers, body: body);
-        if (res.statusCode == 201) {
-          final result = json.decode(res.body);
-          setState(() {
-            isFollowed = result;
-          });
-        }
-        // if (res.statusCode == 200) return res.body;
-        return null;
-      } on Exception {
-        return null;
-      }
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    var userImage = AppDefaults.userImage(widget.user['user_document']);
-    var userAddress = AppDefaults.userAddress(widget.user['user_addresses']);
-    var sellerAddress =
-        AppDefaults.sellerAddress(widget.user['seller_addresses']);
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    if (user['user_document'] != null) {
+      userImage = AppDefaults.userImage(user['user_document']);
+    }
+
+    var userAddress = {};
+    if (user['user_addresses'] != null) {
+      userAddress = AppDefaults.userAddress(user['user_addresses']);
+    }
+
+    var sellerAddress = {};
+    if (user['seller_addresses'] != null) {
+      sellerAddress = AppDefaults.sellerAddress(user['seller_addresses']);
+    }
 
     return Stack(
       children: [
         Container(
-          width: size.width,
+          width: MediaQuery.of(context).size.width,
           height: 340,
           color: AppColors.secondary,
           child: Column(
@@ -129,7 +102,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                     children: [
                       CircleAvatar(
                         backgroundImage: CachedNetworkImageProvider(userImage),
-                        radius: size.height * 0.04,
+                        radius: MediaQuery.of(context).size.height * 0.04,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -147,44 +120,11 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${widget.user['first_name']} ${widget.user['last_name']}',
+                                    '${user['first_name']} ${user['last_name']}',
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                   const SizedBox(
                                       height: AppDefaults.margin / 2),
-                                  Visibility(
-                                    visible: widget.self ? false : true,
-                                    maintainSize: true, //NEW
-                                    maintainAnimation: true, //NEW
-                                    maintainState: true, //NEW
-                                    child: Container(
-                                      width: 90.0,
-                                      height: 25.0,
-                                      padding: EdgeInsets.zero,
-                                      child: OutlinedButton(
-                                        onPressed: () {
-                                          follow();
-                                        },
-                                        style: OutlinedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                AppDefaults.radius),
-                                          ),
-                                          side: const BorderSide(
-                                              width: 1, color: Colors.white),
-                                        ),
-                                        child: Text(
-                                          isFollowed.isEmpty
-                                              ? '+ Follow'
-                                              : 'Following',
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  AppDefaults.fontSize + 2),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -216,7 +156,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                     showDialog(
                                         context: context,
                                         builder: (_) => FollowingList(
-                                            userPk: widget.user['pk'],
+                                            userPk: user['pk'],
                                             token: token ?? ''));
                                   },
                                   child: Container(
@@ -232,8 +172,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                       children: [
                                         const SizedBox(height: 5),
                                         Text(
-                                          widget.user['following_count']
-                                              .toString(),
+                                          user['following_count'].toString(),
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: AppDefaults.fontSize,
@@ -264,7 +203,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                     showDialog(
                                       context: context,
                                       builder: (_) => FollowerList(
-                                        userPk: widget.user['pk'],
+                                        userPk: user['pk'],
                                         token: token ?? '',
                                       ),
                                     );
@@ -282,8 +221,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                       children: [
                                         const SizedBox(height: 5),
                                         Text(
-                                          widget.user['follower_count']
-                                              .toString(),
+                                          user['follower_count'].toString(),
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: AppDefaults.fontSize,
@@ -333,8 +271,8 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                         SizedBox(
                           width: 320,
                           child: Text(
-                            sellerAddress['city'] != null
-                                ? '${sellerAddress['address']}, ${sellerAddress['city']['name']} ${sellerAddress['province']['name']}'
+                            userAddress['city'] != null
+                                ? '${userAddress['address']}, ${userAddress['city']['name']} ${userAddress['province']['name']}'
                                 : '',
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 11),
@@ -356,7 +294,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                         SizedBox(
                           width: 320,
                           child: Text(
-                            widget.user['seller']['mobile_number'],
+                            user['mobile_number'],
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 11),
                           ),

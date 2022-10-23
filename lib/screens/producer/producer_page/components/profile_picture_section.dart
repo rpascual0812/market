@@ -1,32 +1,122 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
 import 'package:market/screens/profile/components/follower_list.dart';
 import 'package:market/screens/profile/components/following_list.dart';
+import 'package:http/http.dart' as http;
 
-class ProfilePictureSection extends StatelessWidget {
+import '../../../../main.dart';
+
+class ProfilePictureSection extends StatefulWidget {
   const ProfilePictureSection({
     Key? key,
-    required this.size,
+    required this.user,
   }) : super(key: key);
+
+  final Map<String, dynamic> user;
 
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
-  final Size size;
+  @override
+  State<ProfilePictureSection> createState() => _ProfilePictureSectionState();
+}
+
+class _ProfilePictureSectionState extends State<ProfilePictureSection> {
+  Map<String, dynamic> isFollowed = {};
+  String? token = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    getStorage();
+    checkIfFollowed();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future getStorage() async {
+    token = await storage.read(key: 'jwt');
+  }
+
+  Future follow() async {
+    final user = AppDefaults.jwtDecode(token);
+
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/users/follow');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      String follow = isFollowed.isEmpty ? 'follow' : 'unfollow';
+      final body = {'user_pk': widget.user['pk'].toString(), 'follow': follow};
+
+      var res = await http.post(url, headers: headers, body: body);
+      if (res.statusCode == 201) {
+        final result = json.decode(res.body);
+        setState(() {
+          follow == 'follow' ? checkIfFollowed() : isFollowed = {};
+        });
+      }
+      // if (res.statusCode == 200) return res.body;
+      return null;
+    } on Exception {
+      return null;
+    }
+  }
+
+  Future checkIfFollowed() async {
+    final token = await storage.read(key: 'jwt');
+    final user = AppDefaults.jwtDecode(token!);
+
+    if (user != null) {
+      try {
+        final url = Uri.parse('${dotenv.get('API')}/users/followedByUser');
+        final headers = {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        };
+        final body = {'user_pk': widget.user['pk'].toString()};
+
+        var res = await http.post(url, headers: headers, body: body);
+        print(token);
+        print(res.statusCode);
+        if (res.statusCode == 201) {
+          final result = json.decode(res.body);
+          setState(() {
+            isFollowed = result;
+          });
+        }
+        // if (res.statusCode == 200) return res.body;
+        return null;
+      } on Exception {
+        return null;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var userImage = AppDefaults.userImage(widget.user['user_document']);
+    var userAddress = AppDefaults.userAddress(widget.user['user_addresses']);
+    var sellerAddress =
+        AppDefaults.sellerAddress(widget.user['seller_addresses']);
+
     return Stack(
       children: [
-        // CustomPaint(
-        //   size: Size(size.width, (size.width * 0.5625).toDouble()),
-        //   painter: CustomPaintBackground(),
-        // ),
         Container(
-          width: MediaQuery.of(context).size.width,
-          height: 305,
+          width: size.width,
+          height: 340,
           color: AppColors.secondary,
           child: Column(
             children: [
@@ -35,10 +125,10 @@ class ProfilePictureSection extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, left: 10),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CircleAvatar(
-                        backgroundImage: const CachedNetworkImageProvider(
-                            'https://i.imgur.com/8G2bg5J.jpeg'),
+                        backgroundImage: CachedNetworkImageProvider(userImage),
                         radius: size.height * 0.04,
                       ),
                       Padding(
@@ -53,9 +143,49 @@ class ProfilePictureSection extends StatelessWidget {
                               padding:
                                   const EdgeInsets.all(AppDefaults.padding),
                               width: MediaQuery.of(context).size.width * 0.43,
-                              child: const Text(
-                                'Raffier Lee',
-                                style: TextStyle(color: Colors.white),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${widget.user['first_name']} ${widget.user['last_name']}',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  const SizedBox(
+                                      height: AppDefaults.margin / 2),
+                                  Visibility(
+                                    visible: true,
+                                    maintainSize: true, //NEW
+                                    maintainAnimation: true, //NEW
+                                    maintainState: true, //NEW
+                                    child: Container(
+                                      width: 90.0,
+                                      height: 25.0,
+                                      padding: EdgeInsets.zero,
+                                      child: OutlinedButton(
+                                        onPressed: () {
+                                          follow();
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                AppDefaults.radius),
+                                          ),
+                                          side: const BorderSide(
+                                              width: 1, color: Colors.white),
+                                        ),
+                                        child: Text(
+                                          isFollowed.isEmpty
+                                              ? '+ Follow'
+                                              : 'Following',
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                                  AppDefaults.fontSize + 2),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -68,7 +198,7 @@ class ProfilePictureSection extends StatelessWidget {
                             end: Alignment.centerRight,
                             colors: [
                               AppColors.secondary,
-                              AppColors.primary,
+                              AppColors.gradient2,
                             ],
                           ),
                         ),
@@ -85,10 +215,9 @@ class ProfilePictureSection extends StatelessWidget {
                                   onTap: () {
                                     showDialog(
                                         context: context,
-                                        builder: (_) => const FollowingList(
-                                              userPk: 4,
-                                              token: '',
-                                            ));
+                                        builder: (_) => FollowingList(
+                                            userPk: widget.user['pk'],
+                                            token: token ?? ''));
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.all(0),
@@ -100,19 +229,25 @@ class ProfilePictureSection extends StatelessWidget {
                                         0.19,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      children: const [
-                                        SizedBox(height: 5),
+                                      children: [
+                                        const SizedBox(height: 5),
                                         Text(
-                                          '100',
-                                          style: TextStyle(color: Colors.white),
+                                          widget.user['following_count']
+                                              .toString(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: AppDefaults.fontSize,
+                                          ),
                                           maxLines: 1,
                                           textAlign: TextAlign.center,
                                         ),
-                                        SizedBox(height: 5),
-                                        Text(
+                                        const SizedBox(height: 5),
+                                        const Text(
                                           'Following',
                                           style: TextStyle(
-                                              fontSize: 8, color: Colors.white),
+                                            fontSize: AppDefaults.fontSize,
+                                            color: Colors.white,
+                                          ),
                                         )
                                       ],
                                     ),
@@ -127,11 +262,12 @@ class ProfilePictureSection extends StatelessWidget {
                                 child: InkWell(
                                   onTap: () {
                                     showDialog(
-                                        context: context,
-                                        builder: (_) => const FollowerList(
-                                              userPk: 4,
-                                              token: '',
-                                            ));
+                                      context: context,
+                                      builder: (_) => FollowerList(
+                                        userPk: widget.user['pk'],
+                                        token: token ?? '',
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -143,19 +279,25 @@ class ProfilePictureSection extends StatelessWidget {
                                         0.19,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      children: const [
-                                        SizedBox(height: 5),
+                                      children: [
+                                        const SizedBox(height: 5),
                                         Text(
-                                          '2',
-                                          style: TextStyle(color: Colors.white),
+                                          widget.user['follower_count']
+                                              .toString(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: AppDefaults.fontSize,
+                                          ),
                                           maxLines: 1,
                                           textAlign: TextAlign.center,
                                         ),
-                                        SizedBox(height: 5),
-                                        Text(
+                                        const SizedBox(height: 5),
+                                        const Text(
                                           'Followers',
                                           style: TextStyle(
-                                              fontSize: 8, color: Colors.white),
+                                            fontSize: AppDefaults.fontSize,
+                                            color: Colors.white,
+                                          ),
                                         )
                                       ],
                                     ),
@@ -179,40 +321,44 @@ class ProfilePictureSection extends StatelessWidget {
                 child: Column(
                   children: [
                     Row(
-                      children: const [
-                        Icon(
-                          pin,
+                      children: [
+                        const Icon(
+                          ProfilePictureSection.pin,
                           size: 15,
                           color: Colors.white,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         SizedBox(
                           width: 320,
                           child: Text(
-                            'Belmonte Stree Corner Aruego Street near Public Market, Urdaneta, Pangasinan',
-                            style: TextStyle(color: Colors.white, fontSize: 11),
+                            sellerAddress['city'] != null
+                                ? '${sellerAddress['address']}, ${sellerAddress['city']['name']} ${sellerAddress['province']['name']}'
+                                : '',
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 11),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: AppDefaults.height / 5),
                     Row(
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.phone,
                           size: 15,
                           color: Colors.white,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         SizedBox(
                           width: 320,
                           child: Text(
-                            '091234567890',
-                            style: TextStyle(color: Colors.white, fontSize: 11),
+                            widget.user['seller']['mobile_number'],
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 11),
                           ),
                         ),
                       ],

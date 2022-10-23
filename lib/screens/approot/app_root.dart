@@ -6,17 +6,18 @@ import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/constants/app_defaults.dart';
-import 'package:market/screens/auth/login_page.dart';
-import 'package:market/screens/chat/chat_page.dart';
 import 'package:market/screens/home/home_page.dart';
-import 'package:market/screens/product_list/product_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 
 import '../../constants/app_colors.dart';
-import '../profile/profile_page.dart';
 
 import 'package:http/http.dart' as http;
+
+import '../auth/login_page.dart';
+import '../chat/chat_page.dart';
+import '../product_list/product_list_page.dart';
+import '../profile/profile_page.dart';
 
 class AppRoot extends StatefulWidget {
   const AppRoot({Key? key, required this.jwt
@@ -40,18 +41,19 @@ class _AppRootState extends State<AppRoot> {
 
   @override
   void initState() {
-    var user = AppDefaults.jwtDecode(widget.jwt);
+    var token = AppDefaults.jwtDecode(widget.jwt);
 
     super.initState();
+
     _allScreen = [
       const HomePage(),
       const ProductListPage(),
       const ChatPage(),
-      widget.jwt != '' ? const ProfilePage() : const LoginPage(),
+      widget.jwt != '' ? ProfilePage(token: widget.jwt) : const LoginPage(),
     ];
 
-    if (user != null) {
-      fetchUser(user['sub']);
+    if (token != null) {
+      fetchUser(token['sub']);
     }
   }
 
@@ -73,7 +75,10 @@ class _AppRootState extends State<AppRoot> {
 
       var res = await http.get(url, headers: headers);
       if (res.statusCode == 200) {
-        account = json.decode(res.body);
+        setState(() {
+          account = json.decode(res.body);
+          print(account);
+        });
       }
       return null;
     } on Exception catch (e) {
