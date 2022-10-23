@@ -14,23 +14,15 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   List<Notifications> notifications = [
     Notifications(
-      title: 'Title 1',
-      description: 'Test notifications 1',
+      message: 'Babylyn Beanay stated following you',
       read: false,
     ),
     Notifications(
-      title: 'Title 2',
-      description: 'Test notifications 2',
+      message: 'Mia Sue stated following you',
       read: false,
     ),
     Notifications(
-      title: 'Title 3',
-      description: 'Test notifications 3',
-      read: false,
-    ),
-    Notifications(
-      title: 'Title 4',
-      description: 'Test notifications 4',
+      message: 'Check Justin Miguel\'s post on Future Crops',
       read: true,
     ),
   ];
@@ -61,8 +53,7 @@ class _NotificationPageState extends State<NotificationPage> {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return NotificationPageTile(
-                  title: notifications[index].title,
-                  description: notifications[index].description,
+                  message: notifications[index].message,
                   read: notifications[index].read,
                 );
               },

@@ -1,12 +1,10 @@
 // import 'package:flutter/cupertino.dart';
 
 class Notifications {
-  String title;
-  String description;
+  String message;
   bool read;
   Notifications({
-    required this.title,
-    required this.description,
+    required this.message,
     required this.read,
   });
 }
