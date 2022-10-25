@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/screens/orders/components/my_orders.dart';
-import 'package:market/screens/orders/components/my_products.dart';
+import 'package:market/screens/orders/components/sold_products.dart';
 
 class OrderPage extends StatelessWidget {
   const OrderPage({
     Key? key,
     required this.type,
+    required this.user,
   }) : super(key: key);
 
   final String type;
+  final Map<String, dynamic> user;
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +50,11 @@ class OrderPage extends StatelessWidget {
                 ),
               ],
             ),
-            const Expanded(
+            Expanded(
               child: TabBarView(
                 children: [
-                  MyProducts(),
-                  MyOrders(),
+                  SoldProducts(user: user),
+                  MyOrders(user: user),
                 ],
               ),
             )

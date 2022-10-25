@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:market/screens/orders/components/my_order_tile.dart';
+import 'package:market/screens/orders/components/sold_product_tile.dart';
 
 import '../../../main.dart';
 
@@ -11,8 +11,8 @@ import 'package:http/http.dart' as http;
 
 import '../../product/product_page.dart';
 
-class MyOrders extends StatefulWidget {
-  const MyOrders({
+class SoldProducts extends StatefulWidget {
+  const SoldProducts({
     Key? key,
     required this.user,
   }) : super(key: key);
@@ -20,10 +20,10 @@ class MyOrders extends StatefulWidget {
   final Map<String, dynamic> user;
 
   @override
-  State<MyOrders> createState() => _MyOrdersState();
+  State<SoldProducts> createState() => _SoldProductsState();
 }
 
-class _MyOrdersState extends State<MyOrders> {
+class _SoldProductsState extends State<SoldProducts> {
   List orders = [];
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
@@ -46,7 +46,7 @@ class _MyOrdersState extends State<MyOrders> {
       }
 
       final params = {'type': type.join(',')};
-      final url = Uri.parse('${dotenv.get('API')}/orders/bought')
+      final url = Uri.parse('${dotenv.get('API')}/orders/sold')
           .replace(queryParameters: params);
       final headers = {
         HttpHeaders.authorizationHeader: 'Bearer $token',
@@ -60,7 +60,6 @@ class _MyOrdersState extends State<MyOrders> {
       if (res.statusCode == 200) {
         setState(() {
           dataJson = jsonDecode(res.body);
-          print('dataJson $dataJson');
           for (var i = 0; i < dataJson['data'].length; i++) {
             orders.add(dataJson['data'][i]);
           }
@@ -119,7 +118,8 @@ class _MyOrdersState extends State<MyOrders> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
               Visibility(
                 visible: orders.isNotEmpty ? true : false,
                 child: ListView.builder(
@@ -129,7 +129,7 @@ class _MyOrdersState extends State<MyOrders> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     // print(orders[index]);
-                    return MyOrderTile(
+                    return SoldProductTile(
                       order: orders[index],
                       onTap: () {
                         Navigator.of(context).push(

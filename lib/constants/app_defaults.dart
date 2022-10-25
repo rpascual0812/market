@@ -23,6 +23,18 @@ class AppDefaults {
   static const double h6 = 25.00;
   static const double h7 = 20.00;
 
+  static const filters = [
+    'Best Seller',
+    'Newest',
+    'Highest Price',
+    'Lowest Price',
+    'Average Rating',
+    'Vegetables',
+    'Fruits',
+    'Seeds',
+    'Herbs',
+  ];
+
   static BorderRadius borderRadius = BorderRadius.circular(radius);
   static EdgeInsets edgeInset =
       const EdgeInsets.symmetric(vertical: 15, horizontal: 10.0);

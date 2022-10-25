@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
@@ -29,6 +30,7 @@ class _PostLookingForState extends State<PostLookingFor> {
   final quantityController = TextEditingController(text: '');
   var priceRangeController = TextEditingController(text: '');
 
+  Map<String, dynamic> account = {};
   List measurements = [];
   String quantityMeasurementController = '1';
   // RangeValues priceRangeValuesController = const RangeValues(100, 500);
@@ -50,6 +52,7 @@ class _PostLookingForState extends State<PostLookingFor> {
     super.initState();
 
     readStorage();
+
     // Timer(const Duration(seconds: 2), () => getMeasurements());
   }
 
@@ -61,29 +64,72 @@ class _PostLookingForState extends State<PostLookingFor> {
 
       if (token != '') {
         getMeasurements();
+        fetchUser();
       }
     });
   }
 
   Future getMeasurements() async {
     try {
-      var body = json.decode(token);
       final url = Uri.parse('${dotenv.get('API')}/measurements');
       final headers = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${body['user']['access_token']}',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
       };
 
-      var res = await http.get(url, headers: headers);
+      var res = await http.get(
+        url,
+        headers: headers,
+      );
+
       if (res.statusCode == 200) {
         final result = json.decode(res.body);
         setState(() {
           measurements = result;
         });
       }
-      // if (res.statusCode == 200) return res.body;
+      if (res.statusCode == 200) return res.body;
+
+      // var body = json.decode(token);
+      // final url = Uri.parse('${dotenv.get('API')}/measurements');
+      // final headers = {
+      //   'Accept': 'application/json',
+      //   'Authorization': 'Bearer ${body['user']['access_token']}',
+      // };
+
+      // var res = await http.get(url, headers: headers);
+
       return null;
-    } on Exception {
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
+
+  Future fetchUser() async {
+    var user = AppDefaults.jwtDecode(token);
+
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/accounts/${user['sub']}');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        setState(() {
+          var userJson = jsonDecode(res.body);
+          account = userJson;
+        });
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+        await storage.deleteAll();
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
       return null;
     }
   }
@@ -127,6 +173,20 @@ class _PostLookingForState extends State<PostLookingFor> {
 
   @override
   Widget build(BuildContext context) {
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    if (account['user'] != null) {
+      userImage = AppDefaults.userImage(account['user']['user_document']);
+    }
+
+    var userAddress = {};
+    if (account['user']['user_addresses'] != null) {
+      for (var i = 0; i < account['user']['user_addresses'].length; i++) {
+        if (account['user']['user_addresses'][i]['default']) {
+          userAddress = account['user']['user_addresses'][i];
+        }
+      }
+    }
+
     return Scaffold(
       appBar: Appbar(),
       body: SingleChildScrollView(
@@ -229,12 +289,15 @@ class _PostLookingForState extends State<PostLookingFor> {
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 10),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
                 child: UserCard(
-                  firstName: 'Kennet',
-                  lastName: 'Egino',
-                  address: 'San Vicente, Manila',
+                  userImage: userImage,
+                  firstName: account['user']['first_name'],
+                  lastName: account['user']['last_name'],
+                  address: userAddress['city'] != null
+                      ? '${userAddress['city']['name']}, ${userAddress['province']['name']}'
+                      : '',
                 ),
               ),
               Padding(

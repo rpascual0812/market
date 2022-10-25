@@ -44,7 +44,7 @@ class _AppRootState extends State<AppRoot> {
     var token = AppDefaults.jwtDecode(widget.jwt);
 
     super.initState();
-
+    // print('approot ${widget.jwt}');
     _allScreen = [
       const HomePage(),
       const ProductListPage(),

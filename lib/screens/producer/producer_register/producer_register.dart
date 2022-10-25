@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/components/network_image.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
-import 'package:market/models/ratings.dart';
 
 class ProducerRegister extends StatefulWidget {
   const ProducerRegister({Key? key}) : super(key: key);
@@ -19,16 +16,15 @@ class _ProducerRegisterState extends State<ProducerRegister> {
 
   TextEditingController messageController = TextEditingController();
 
-  String provinceValue = 'Item 1';
+  String provinceValue = 'Metro Manila';
+  String cityValue = 'Pasig';
+  String areaValue = 'Palatiw';
 
   // List of items in our dropdown menu
-  var provinces = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
+  var provinces = ['Metro Manila', 'Rizal', 'Quezon'];
+
+  var cities = ['Pasig', 'Makati', 'Antipolo'];
+  var areas = ['Palatiw', 'Pinagbuhatan', 'Kapasigan'];
 
   @override
   Widget build(BuildContext context) {
@@ -115,34 +111,46 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 1.0, vertical: 0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      border: Border.all(
-                                        color: Colors.black,
-                                        style: BorderStyle.solid,
-                                        width: 1,
+                                  SizedBox(
+                                    height: AppDefaults.height,
+                                    // padding: EdgeInsets.zero,
+                                    child: DropdownButtonFormField<String>(
+                                      isDense: true,
+                                      value: provinceValue,
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                      // elevation: 16,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              AppDefaults.radius),
+                                          borderSide: const BorderSide(
+                                              color: Colors.grey, width: 1),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              AppDefaults.radius),
+                                          borderSide: const BorderSide(
+                                              color: Colors.grey, width: 1),
+                                        ),
                                       ),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButtonFormField<String>(
-                                        value: provinceValue,
-                                        icon: const Icon(
-                                            Icons.keyboard_arrow_down),
-                                        items: provinces.map((String province) {
-                                          return DropdownMenuItem(
-                                            value: province,
-                                            child: Text(province),
-                                          );
-                                        }).toList(),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            provinceValue = newValue!;
-                                          });
-                                        },
-                                      ),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          provinceValue = value!;
+                                        });
+                                      },
+                                      items: provinces
+                                          .map<DropdownMenuItem<String>>(
+                                              (value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value.toString(),
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
                                     ),
                                   ),
                                 ],
@@ -162,34 +170,46 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 1.0, vertical: 0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      border: Border.all(
-                                        color: Colors.black,
-                                        style: BorderStyle.solid,
-                                        width: 1,
+                                  SizedBox(
+                                    height: AppDefaults.height,
+                                    // padding: EdgeInsets.zero,
+                                    child: DropdownButtonFormField<String>(
+                                      isDense: true,
+                                      value: cityValue,
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                      // elevation: 16,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              AppDefaults.radius),
+                                          borderSide: const BorderSide(
+                                              color: Colors.grey, width: 1),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              AppDefaults.radius),
+                                          borderSide: const BorderSide(
+                                              color: Colors.grey, width: 1),
+                                        ),
                                       ),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButtonFormField<String>(
-                                        value: provinceValue,
-                                        icon: const Icon(
-                                            Icons.keyboard_arrow_down),
-                                        items: provinces.map((String province) {
-                                          return DropdownMenuItem(
-                                            value: province,
-                                            child: Text(province),
-                                          );
-                                        }).toList(),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            provinceValue = newValue!;
-                                          });
-                                        },
-                                      ),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          cityValue = value!;
+                                        });
+                                      },
+                                      items: cities
+                                          .map<DropdownMenuItem<String>>(
+                                              (value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value.toString(),
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
                                     ),
                                   ),
                                 ],
@@ -209,34 +229,46 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 1.0, vertical: 0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      border: Border.all(
-                                        color: Colors.black,
-                                        style: BorderStyle.solid,
-                                        width: 1,
+                                  SizedBox(
+                                    height: AppDefaults.height,
+                                    // padding: EdgeInsets.zero,
+                                    child: DropdownButtonFormField<String>(
+                                      isDense: true,
+                                      value: areaValue,
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                      // elevation: 16,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              AppDefaults.radius),
+                                          borderSide: const BorderSide(
+                                              color: Colors.grey, width: 1),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              AppDefaults.radius),
+                                          borderSide: const BorderSide(
+                                              color: Colors.grey, width: 1),
+                                        ),
                                       ),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButtonFormField<String>(
-                                        value: provinceValue,
-                                        icon: const Icon(
-                                            Icons.keyboard_arrow_down),
-                                        items: provinces.map((String province) {
-                                          return DropdownMenuItem(
-                                            value: province,
-                                            child: Text(province),
-                                          );
-                                        }).toList(),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            provinceValue = newValue!;
-                                          });
-                                        },
-                                      ),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          areaValue = value!;
+                                        });
+                                      },
+                                      items: areas
+                                          .map<DropdownMenuItem<String>>(
+                                              (value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value.toString(),
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
                                     ),
                                   ),
                                 ],

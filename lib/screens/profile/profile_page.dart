@@ -8,11 +8,12 @@ import 'package:market/constants/index.dart';
 import 'package:market/screens/profile/components/profile_picture_section.dart';
 import 'package:market/screens/profile/components/profile_settings.dart';
 
-import '../approot/app_root.dart';
 // import '../producer/producer_page/components/profile_picture_section.dart';
-import 'components/profile_product.dart';
 
 import 'package:http/http.dart' as http;
+
+import '../approot/app_root.dart';
+import 'components/profile_product.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key, required this.token}) : super(key: key);
@@ -55,23 +56,24 @@ class _ProfilePageState extends State<ProfilePage> {
   // }
 
   Future fetch() async {
-    print('${dotenv.get('API')}/accounts/$accountPk');
-    print(widget.token);
+    // print('${dotenv.get('API')}/accounts/$accountPk');
     try {
       final url = Uri.parse('${dotenv.get('API')}/accounts/$accountPk');
       final headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer $widget.token',
+        'Authorization': 'Bearer ${widget.token}',
       };
 
       var res = await http.get(url, headers: headers);
-      print('status : ${res.statusCode}');
       if (res.statusCode == 200) {
         setState(() {
           var userJson = jsonDecode(res.body);
           account = userJson;
-          print('result ${account['user']}');
         });
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+        await storage.deleteAll();
       }
       return null;
     } on Exception catch (e) {
@@ -93,6 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
         final result = json.decode(res.body);
         storage.write(key: "jwt", value: '');
       }
+
       return null;
     } on Exception catch (e) {
       print('ERROR $e');
@@ -119,14 +122,16 @@ class _ProfilePageState extends State<ProfilePage> {
             const ProfilePictureSection(),
 
             /// Statuses
-            const ProfileProduct(),
-            const SizedBox(height: AppDefaults.margin),
+            account['user'] != null
+                ? ProfileProduct(user: account['user'])
+                : const SizedBox(height: 1),
+            // const SizedBox(height: AppDefaults.margin),
 
             ProfileSettings(),
 
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.4,
-              height: AppDefaults.height,
+              // height: AppDefaults.height,
               child: Padding(
                 padding: const EdgeInsets.all(1),
                 child: ElevatedButton(

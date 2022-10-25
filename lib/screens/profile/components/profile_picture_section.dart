@@ -47,6 +47,8 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
     try {
       var account = AppDefaults.jwtDecode(token);
       int accountPk = account['sub'];
+      // print('${dotenv.get('API')}/accounts/$accountPk');
+      // print(token);
       final url = Uri.parse('${dotenv.get('API')}/accounts/$accountPk');
       final headers = {
         'Accept': 'application/json',
@@ -54,7 +56,6 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
       };
 
       var res = await http.get(url, headers: headers);
-
       if (res.statusCode == 200) {
         setState(() {
           var userJson = jsonDecode(res.body);
@@ -294,7 +295,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                         SizedBox(
                           width: 320,
                           child: Text(
-                            user['mobile_number'],
+                            user['mobile_number'] ?? '',
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 11),
                           ),

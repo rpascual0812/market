@@ -7,7 +7,10 @@ import '../../../constants/index.dart';
 class ProfileProduct extends StatelessWidget {
   const ProfileProduct({
     Key? key,
+    required this.user,
   }) : super(key: key);
+
+  final Map<String, dynamic> user;
 
   static const IconData box =
       IconData(0xe806, fontFamily: 'Custom', fontPackage: null);
@@ -31,7 +34,7 @@ class ProfileProduct extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return const OrderPage(type: 'products');
+                    return OrderPage(type: 'products', user: user);
                   },
                 ),
               );
@@ -48,7 +51,7 @@ class ProfileProduct extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return const OrderPage(type: 'orders');
+                    return OrderPage(type: 'orders', user: user);
                   },
                 ),
               );

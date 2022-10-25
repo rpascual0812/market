@@ -6,11 +6,13 @@ import 'network_image.dart';
 class UserCard extends StatelessWidget {
   const UserCard({
     Key? key,
+    required this.userImage,
     required this.firstName,
     required this.lastName,
     required this.address,
   }) : super(key: key);
 
+  final String userImage;
   final String firstName;
   final String lastName;
   final String address;
@@ -22,12 +24,11 @@ class UserCard extends StatelessWidget {
 
     return Row(
       children: [
-        const SizedBox(
+        SizedBox(
           height: 45,
           child: AspectRatio(
             aspectRatio: 1 / 1,
-            child: NetworkImageWithLoader(
-                'https://i.imgur.com/8G2bg5J.jpeg', true),
+            child: NetworkImageWithLoader(userImage, true),
           ),
         ),
         Column(

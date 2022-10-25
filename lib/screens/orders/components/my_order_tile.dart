@@ -8,30 +8,12 @@ import '../../../components/network_image.dart';
 class MyOrderTile extends StatefulWidget {
   const MyOrderTile({
     Key? key,
-    required this.pk,
-    required this.uuid,
-    required this.name,
-    required this.user,
-    required this.productDocument,
-    required this.userDocument,
-    required this.quantity,
-    required this.description,
-    required this.location,
-    required this.type,
-    required this.date,
+    required this.order,
+    this.onTap,
   }) : super(key: key);
 
-  final int pk;
-  final String uuid;
-  final String name;
-  final Map<String, dynamic> user;
-  final List productDocument;
-  final List userDocument;
-  final String quantity;
-  final String description;
-  final String location;
-  final String type; // looking for, future crop, already available
-  final DateTime date;
+  final Map<String, dynamic> order;
+  final void Function()? onTap;
 
   @override
   State<MyOrderTile> createState() => _MyOrderTileState();
@@ -43,22 +25,23 @@ class _MyOrderTileState extends State<MyOrderTile> {
 
   @override
   Widget build(BuildContext context) {
-    var userImage =
-        '${dotenv.get('API')}/${widget.userDocument[0]['document']['path']}';
-    print('aa $userImage');
+    DateTime date = DateTime.parse(widget.order['date_created'].toString());
+    var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    if (widget.order['product_documents'] != null) {
+      productImage =
+          AppDefaults.productImage(widget.order['product_documents']);
+    }
+
+    var sellerAddress = {};
+    if (widget.order['seller_addresses'] != null) {
+      for (var i = 0; i < widget.order['seller_addresses'].length; i++) {
+        if (widget.order['seller_addresses'][i]['default']) {
+          sellerAddress = widget.order['seller_addresses'][i];
+        }
+      }
+    }
 
     return GestureDetector(
-      // no onTap event for now
-      // onTap: () {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) {
-      //         return const LoginPage();
-      //       },
-      //     ),
-      //   );
-      // },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Material(
@@ -100,25 +83,31 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                               child: Icon(
                                                 Icons.store,
                                                 color: Colors.grey,
-                                                size: 14,
+                                                size: AppDefaults.fontSize,
                                               ),
                                             ),
                                             Positioned(
                                               left: 15,
                                               child: Text(
-                                                widget.user[0]['first_name'],
+                                                '${widget.order['seller']['first_name']} ${widget.order['seller']['last_name']}',
                                                 style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: AppColors.defaultBlack,
+                                                  fontSize:
+                                                      AppDefaults.fontSize,
+                                                  color: Colors.grey,
                                                 ),
                                               ),
                                             ),
-                                            const Positioned(
+                                            Positioned(
                                               right: 0,
                                               child: Text(
-                                                'Delivered',
-                                                style: TextStyle(
-                                                  fontSize: 12,
+                                                widget.order['status'] != null
+                                                    ? widget.order['status']
+                                                        ['name']
+                                                    : ''
+                                                        '',
+                                                style: const TextStyle(
+                                                  fontSize:
+                                                      AppDefaults.fontSize,
                                                   color: AppColors.primary,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -138,16 +127,16 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                       child: Stack(
                                         children: [
                                           SizedBox(
-                                            height: 65,
+                                            height: 75,
                                             child: AspectRatio(
                                               aspectRatio: 1 / 1,
                                               child: NetworkImageWithLoader(
-                                                  userImage, true),
+                                                  productImage, false),
                                             ),
                                           ),
                                           Positioned(
                                             top: 5,
-                                            left: 75,
+                                            left: 85,
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
@@ -161,11 +150,15 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                                     alignment:
                                                         Alignment.centerLeft,
                                                     width: 150,
-                                                    height: 18,
+                                                    height: 25,
                                                     child: Text(
-                                                      widget.name,
+                                                      widget.order['product']
+                                                              ['name'] ??
+                                                          '',
                                                       style: const TextStyle(
-                                                        fontSize: 16,
+                                                        fontSize: AppDefaults
+                                                                .fontSize +
+                                                            8,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
@@ -184,14 +177,22 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                                       children: [
                                                         const Icon(
                                                           pin,
-                                                          size: 12,
+                                                          size: AppDefaults
+                                                                  .fontSize -
+                                                              2,
                                                           color: Colors.grey,
                                                         ),
                                                         Text(
-                                                          widget.location,
+                                                          sellerAddress[
+                                                                      'city'] !=
+                                                                  null
+                                                              ? '${sellerAddress['address']}, ${sellerAddress['city']['name']} ${sellerAddress['province']['name']}'
+                                                              : '',
                                                           style:
                                                               const TextStyle(
-                                                            fontSize: 10,
+                                                            fontSize: AppDefaults
+                                                                    .fontSize -
+                                                                2,
                                                             color: Colors.grey,
                                                           ),
                                                         ),
@@ -200,9 +201,10 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                                   ),
                                                 ),
                                                 const SizedBox(height: 10),
-                                                const Text(
-                                                  '₱300 x2',
-                                                  style: TextStyle(
+                                                Text(
+                                                  '${widget.order['product']['country']['currency_symbol']}${NumberFormat.decimalPattern().format(double.parse(widget.order['product']['price_from']))} x${NumberFormat.decimalPattern().format(double.parse(widget.order['product']['quantity']))}',
+                                                  style: const TextStyle(
+                                                    fontFamily: '',
                                                     fontSize: 12,
                                                     color: AppColors.primary,
                                                   ),
@@ -222,7 +224,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                                       MainAxisAlignment.end,
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.end,
-                                                  children: const [
+                                                  children: [
                                                     // Text(
                                                     //   'Delivered',
                                                     //   style: TextStyle(
@@ -233,10 +235,11 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                                     //         FontWeight.bold,
                                                     //   ),
                                                     // ),
-                                                    SizedBox(height: 5),
+                                                    const SizedBox(height: 5),
                                                     Text(
-                                                      'Order Total: ₱300',
-                                                      style: TextStyle(
+                                                      'Order Total: ${widget.order['product']['country']['currency_symbol']}${NumberFormat.decimalPattern().format(double.parse(widget.order['product']['price_from']) * double.parse(widget.order['product']['quantity']))}',
+                                                      style: const TextStyle(
+                                                        fontFamily: '',
                                                         fontSize: 12,
                                                         color:
                                                             AppColors.primary,
@@ -260,10 +263,10 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                       Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          'Order created: ${DateFormat.yMMMd().format(widget.date)}',
+                                          'Order created: ${DateFormat.yMMMd().format(date)}',
                                           style: const TextStyle(
-                                            fontSize: 10,
-                                            color: AppColors.defaultBlack,
+                                            fontSize: AppDefaults.fontSize - 2,
+                                            color: Colors.grey,
                                           ),
                                         ),
                                       ),

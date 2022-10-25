@@ -68,19 +68,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  var filterValue = 'Lowest Price';
-
-  var filters = [
-    'Best Seller',
-    'Newest',
-    'Highest Price',
-    'Lowest Price',
-    'Average Rating',
-    'Vegetables',
-    'Fruits',
-    'Seeds',
-    'Herbs',
-  ];
+  var filterValue = AppDefaults.filters[3];
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SelectDropdown(
-                  options: filters,
+                  options: AppDefaults.filters,
                   defaultValue: filterValue,
                   onChanged: (option) {
                     filterValue = option as String;

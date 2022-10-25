@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:market/components/network_image.dart';
 import 'package:market/screens/chat/bubble.dart';
@@ -11,6 +14,7 @@ import 'package:art_sweetalert/art_sweetalert.dart';
 
 import '../../../constants/index.dart';
 import '../../orders/order_page.dart';
+import 'package:http/http.dart' as http;
 // import 'color_picker.dart';
 
 class ProductPageDetails extends StatefulWidget {
@@ -31,6 +35,87 @@ class ProductPageDetails extends StatefulWidget {
 }
 
 class _ProductPageDetailsState extends State<ProductPageDetails> {
+  final storage = const FlutterSecureStorage();
+  String token = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    readStorage();
+    // Timer(const Duration(seconds: 2), () => getMeasurements());
+  }
+
+  Future<void> readStorage() async {
+    final all = await storage.read(key: 'jwt');
+
+    setState(() {
+      token = all!;
+    });
+  }
+
+  Future saveToCart(pk) async {
+    final token = await storage.read(key: 'jwt');
+    final user = AppDefaults.jwtDecode(token!);
+
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/orders');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+      final body = {
+        'product_pk': widget.product['pk'].toString(),
+        'measurement_pk': widget.product['measurement']['pk'].toString(),
+        'quantity': widget.product['quantity'].toString(),
+        'price': widget.product['price_from'].toString(),
+        'status': 'Added to Cart'
+      };
+
+      var res = await http.post(url, headers: headers, body: body);
+
+      if (res.statusCode == 200) {
+        final result = json.decode(res.body);
+        setState(() {});
+      }
+      // if (res.statusCode == 200) return res.body;
+      return null;
+    } on Exception {
+      return null;
+    }
+  }
+
+  Future saveOrder(pk) async {
+    final token = await storage.read(key: 'jwt');
+    final user = AppDefaults.jwtDecode(token!);
+
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/orders');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+      final body = {
+        'product_pk': widget.product['pk'].toString(),
+        'measurement_pk': widget.product['measurement']['pk'].toString(),
+        'quantity': widget.product['quantity'].toString(),
+        'price': widget.product['price_from'].toString(),
+        'status': 'Ordered',
+      };
+
+      var res = await http.post(url, headers: headers, body: body);
+
+      if (res.statusCode == 200) {
+        final result = json.decode(res.body);
+        setState(() {});
+      }
+      // if (res.statusCode == 200) return res.body;
+      return null;
+    } on Exception {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // print('produc2t ${widget.product}');
@@ -90,6 +175,8 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(
                         onPressed: () async {
+                          saveOrder(widget.product['pk']);
+
                           ArtDialogResponse response = await ArtSweetAlert.show(
                             barrierDismissible: false,
                             context: context,
@@ -98,7 +185,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                                 denyButtonText: "Cancel",
                                 denyButtonColor: Colors.grey,
                                 title: "Are you sure you want to buy this?",
-                                confirmButtonText: "Confirm",
+                                confirmButtonText: "Continue",
                                 confirmButtonColor: AppColors.primary),
                           );
 
@@ -108,7 +195,10 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return const OrderPage(type: 'orders');
+                                  return const OrderPage(
+                                    type: 'orders',
+                                    user: {},
+                                  );
                                 },
                               ),
                             );
@@ -141,6 +231,8 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(
                         onPressed: () async {
+                          saveToCart(widget.product['pk']);
+
                           ArtDialogResponse response = await ArtSweetAlert.show(
                               barrierDismissible: false,
                               context: context,
@@ -154,6 +246,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                               ));
 
                           if (response.isTapConfirmButton) {
+                            print('confirmed');
                             ArtSweetAlert.show(
                                 context: context,
                                 artDialogArgs: ArtDialogArgs(
@@ -201,8 +294,9 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Text(
-              '₱${widget.product['price_from'].toString()}',
+              '${widget.product['country']['currency_symbol']}${double.parse(widget.product['price_from']).toStringAsFixed(2)}',
               style: const TextStyle(
+                fontFamily: '',
                 color: AppColors.primary,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
