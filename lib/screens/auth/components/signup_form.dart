@@ -103,10 +103,10 @@ class _SignUpFormState extends State<SignUpForm> {
         var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
             body: body);
 
-        print(res.statusCode);
+        // print(res.statusCode);
         if (res.statusCode == 200) {
           if (!mounted) return;
-          print(AppMessage.getSuccess('REGISTER_SUCCESS'));
+          // print(AppMessage.getSuccess('REGISTER_SUCCESS'));
           AppDefaults.toast(
               context, 'success', AppMessage.getSuccess('REGISTER_SUCCESS'));
           AppDefaults.navigate(context, const LoginPage());

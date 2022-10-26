@@ -124,7 +124,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                                           const TextStyle(color: Colors.black),
                                       decoration: InputDecoration(
                                         contentPadding: const EdgeInsets.only(
-                                            left: 10, right: 10),
+                                            left: 5, right: 5),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
                                               AppDefaults.radius),
@@ -183,7 +183,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                                           const TextStyle(color: Colors.black),
                                       decoration: InputDecoration(
                                         contentPadding: const EdgeInsets.only(
-                                            left: 10, right: 10),
+                                            left: 5, right: 5),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
                                               AppDefaults.radius),
@@ -218,7 +218,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                              padding: const EdgeInsets.fromLTRB(1, 0, 0, 0),
                               child: Column(
                                 children: [
                                   const Align(
@@ -242,7 +242,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                                           const TextStyle(color: Colors.black),
                                       decoration: InputDecoration(
                                         contentPadding: const EdgeInsets.only(
-                                            left: 10, right: 10),
+                                            left: 5, right: 5),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
                                               AppDefaults.radius),

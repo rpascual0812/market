@@ -77,7 +77,7 @@ class _AppRootState extends State<AppRoot> {
       if (res.statusCode == 200) {
         setState(() {
           account = json.decode(res.body);
-          print(account);
+          // print(account);
         });
       }
       return null;

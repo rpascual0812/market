@@ -21,9 +21,8 @@ class FollowingListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userImage = '${dotenv.get('API')}/assets/images/user.png';
-    if (following['createdBy'] != null) {
-      userImage =
-          AppDefaults.userImage(following['createdBy']['user_document']);
+    if (following['user'] != null) {
+      userImage = AppDefaults.userImage(following['user']['user_document']);
     }
 
     return Container(

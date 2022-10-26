@@ -127,7 +127,8 @@ class _LookingForWidgetState extends State<LookingForWidget> {
                       DateTime date = DateTime.parse(
                           products[index]['date_created'].toString());
                       return DataRow(cells: [
-                        DataCell(Text(products[index]['user']['first_name'],
+                        DataCell(Text(
+                            '${products[index]['user']['first_name']} ${products[index]['user']['last_name']}',
                             style: const TextStyle(
                                 fontSize: AppDefaults.fontSize - 2))),
                         DataCell(Text(products[index]['name'],
