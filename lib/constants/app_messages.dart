@@ -29,6 +29,8 @@ class AppMessage {
         return "Email address is invalid.";
       case "ERROR_IMAGE_FAILED":
         return "Failed to fetch your image.";
+      case "ERROR_FILE_FAILED":
+        return "Failed to fetch your file.";
       case "UPLOAD_FAILED":
         return "An error occurred while uploading your photo.";
       case "TERMS_REQUIRED":

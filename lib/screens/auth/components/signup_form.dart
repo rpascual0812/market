@@ -37,9 +37,7 @@ class _SignUpFormState extends State<SignUpForm> {
       TextEditingController(text: 'P@ssword1');
   TextEditingController confirmPasswordController =
       TextEditingController(text: 'P@ssword1');
-  String provinceValue = 'Item 1';
-  String cityValue = 'Item 1';
-  String areaValue = 'Item 1';
+
   TextEditingController addressDetailsController =
       TextEditingController(text: 'Pasig');
 
@@ -66,14 +64,14 @@ class _SignUpFormState extends State<SignUpForm> {
   };
 
   // List of items in our dropdown menu
-  var provinces = [
-    '',
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
+  var provinces = ['Metro Manila', 'Rizal', 'Quezon'];
+
+  var cities = ['Pasig', 'Makati', 'Antipolo'];
+  var areas = ['Palatiw', 'Pinagbuhatan', 'Kapasigan'];
+
+  String provinceValue = 'Rizal';
+  String cityValue = 'Pasig';
+  String areaValue = 'Palatiw';
 
   @override
   void initState() {
@@ -149,7 +147,7 @@ class _SignUpFormState extends State<SignUpForm> {
       }
     } on Exception {
       AppDefaults.toast(
-          context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
+          context, 'error', AppMessage.getError('ERROR_IMAGE_FAILED'));
     }
   }
 
@@ -670,7 +668,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                       ),
                                       icon:
                                           const Icon(Icons.keyboard_arrow_down),
-                                      items: provinces.map((String city) {
+                                      items: cities.map((String city) {
                                         return DropdownMenuItem(
                                           value: city,
                                           child: Text(
@@ -748,7 +746,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                       ),
                                       icon:
                                           const Icon(Icons.keyboard_arrow_down),
-                                      items: provinces.map((String area) {
+                                      items: areas.map((String area) {
                                         return DropdownMenuItem(
                                           value: area,
                                           child: Text(
@@ -861,8 +859,8 @@ class _SignUpFormState extends State<SignUpForm> {
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(0),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(AppDefaults.radius),
+                                  borderRadius: BorderRadius.circular(
+                                      AppDefaults.radius - 10),
                                 ),
                               ),
                               child: const Text('+ Add Photo'),
@@ -901,8 +899,8 @@ class _SignUpFormState extends State<SignUpForm> {
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(0),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(AppDefaults.radius),
+                                  borderRadius: BorderRadius.circular(
+                                      AppDefaults.radius - 10),
                                 ),
                               ),
                               child: const Text('Scan ID'),
@@ -1094,8 +1092,8 @@ class _SignUpFormState extends State<SignUpForm> {
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(0),
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(AppDefaults.radius),
+                              borderRadius: BorderRadius.circular(
+                                  AppDefaults.radius - 10),
                             ),
                           ),
                           child: const Text('Sign Up'),

@@ -23,11 +23,20 @@ class HomeSliderSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var background =
-        '${dotenv.get('API')}/${sliderDocument[0]['document']['path']}';
-    var icon = sliderDocument.asMap().containsKey(1)
-        ? '${dotenv.get('API')}/${sliderDocument[1]['document']['path']}'
-        : '';
+    var background = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    var icon = '${dotenv.get('API')}/assets/images/user.png';
+
+    for (var i = 0; i < sliderDocument.length; i++) {
+      if (sliderDocument[i]['document']['path'] != null) {
+        if (sliderDocument[i]['type'] == 'icon') {
+          icon =
+              '${dotenv.get('API')}/${sliderDocument[i]['document']['path']}';
+        } else if (sliderDocument[i]['type'] == 'background') {
+          background =
+              '${dotenv.get('API')}/${sliderDocument[i]['document']['path']}';
+        }
+      }
+    }
 
     // print('${dotenv.get('API')}/${sliderDocument[1]['path']}');
     return Stack(

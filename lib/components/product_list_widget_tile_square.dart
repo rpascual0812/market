@@ -29,7 +29,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
             '${dotenv.get('API')}/${product['product_documents'][i]['document']['path']}';
       }
     }
-
+    print(image);
     // var image = product['product_documents'].isEmpty
     //     ? '${dotenv.get('API')}/assets/images/no-image.jpg'
     //     : '${dotenv.get('API')}/${product['product_documents'][0]['document']['path']}';

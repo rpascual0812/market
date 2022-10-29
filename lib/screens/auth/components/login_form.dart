@@ -103,16 +103,8 @@ class _LoginFormState extends State<LoginForm> {
                 validator: validateEmail,
                 decoration: InputDecoration(
                   // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDefaults.radius),
-                    borderSide:
-                        const BorderSide(width: 1.0, color: Colors.grey),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDefaults.radius),
-                    borderSide:
-                        const BorderSide(width: 1.0, color: Colors.grey),
-                  ),
+                  focusedBorder: AppDefaults.outlineInputBorderSuccess,
+                  enabledBorder: AppDefaults.outlineInputBorderSuccess,
                 ),
                 style: const TextStyle(
                     fontSize: AppDefaults.fontSize), // <-- SEE HERE
@@ -150,16 +142,8 @@ class _LoginFormState extends State<LoginForm> {
                 validator: validatePassword,
                 decoration: InputDecoration(
                   // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDefaults.radius),
-                    borderSide:
-                        const BorderSide(width: 1.0, color: Colors.grey),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDefaults.radius),
-                    borderSide:
-                        const BorderSide(width: 1.0, color: Colors.grey),
-                  ),
+                  focusedBorder: AppDefaults.outlineInputBorderSuccess,
+                  enabledBorder: AppDefaults.outlineInputBorderSuccess,
                 ),
                 style: const TextStyle(fontSize: 14), // <-- SEE HERE
               ),
@@ -263,7 +247,8 @@ class _LoginFormState extends State<LoginForm> {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(0),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppDefaults.radius),
+                      borderRadius:
+                          BorderRadius.circular(AppDefaults.radius - 10),
                     ),
                   ),
                   child: const Text('Log In'),

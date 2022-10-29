@@ -27,7 +27,6 @@ class _HomeSliderState extends State<HomeSlider> {
 
   @override
   void initState() {
-    print('slider init');
     super.initState();
     getSlides();
     readStorage();
@@ -45,7 +44,6 @@ class _HomeSliderState extends State<HomeSlider> {
   Future<void> getSlides() async {
     try {
       var res = await Remote.get('sliders', {});
-      print('sliders $res');
       if (res.statusCode == 200) {
         setState(() {
           slidesJson = jsonDecode(res.body);

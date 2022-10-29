@@ -43,11 +43,11 @@ class AppDefaults {
 
   static TextStyle formTextStyle = const TextStyle(fontSize: fontSize);
   static OutlineInputBorder outlineInputBorderSuccess = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(AppDefaults.radius),
+    borderRadius: BorderRadius.circular(AppDefaults.radius - 10),
     borderSide: const BorderSide(width: 1.0, color: Colors.grey),
   );
   static OutlineInputBorder outlineInputBorderError = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(AppDefaults.radius),
+    borderRadius: BorderRadius.circular(AppDefaults.radius - 10),
     borderSide: const BorderSide(width: 1.0, color: Colors.redAccent),
   );
 
