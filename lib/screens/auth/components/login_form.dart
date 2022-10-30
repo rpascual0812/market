@@ -185,6 +185,7 @@ class _LoginFormState extends State<LoginForm> {
                     var username = usernameController.text;
                     var password = passwordController.text;
                     var result = await submit(username, password);
+                    print(result);
                     if (result != null) {
                       var jwtJson = jsonDecode(result);
                       var jwt = jwtJson['user']['access_token'];
@@ -193,6 +194,12 @@ class _LoginFormState extends State<LoginForm> {
                           .create(Config(key: 'jwt', value: jwt));
 
                       storage.write(key: "jwt", value: jwt);
+                      if (jwtJson['user']['seller_pk'] != '0') {
+                        storage.write(
+                          key: "producer",
+                          value: jwtJson['user']['seller_pk'].toString(),
+                        );
+                      }
                       if (!mounted) return;
 
                       // AppDefaults.toast(context, 'success',
