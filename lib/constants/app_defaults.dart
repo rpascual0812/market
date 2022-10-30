@@ -144,8 +144,12 @@ class AppDefaults {
 
   static jwtDecode(String? token) {
     if (token != '') {
-      Map<String, dynamic> payload = Jwt.parseJwt(token!);
-      return payload;
+      try {
+        Map<String, dynamic> payload = Jwt.parseJwt(token!);
+        return payload;
+      } catch (error) {
+        // invalid token format
+      }
     }
   }
 }

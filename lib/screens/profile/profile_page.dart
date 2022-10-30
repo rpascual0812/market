@@ -33,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
 
     var account = AppDefaults.jwtDecode(widget.token);
-    accountPk = account['sub'];
+    accountPk = account != null ? account['sub'] : 0;
     // readStorage();
     fetch();
   }

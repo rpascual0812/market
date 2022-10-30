@@ -15,6 +15,8 @@ import '../../../constants/index.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
+import '../my_producer_page/my_producer_page.dart';
+
 class ProducerRegister extends StatefulWidget {
   const ProducerRegister({Key? key}) : super(key: key);
 
@@ -69,10 +71,10 @@ class _ProducerRegisterState extends State<ProducerRegister> {
       );
       if (result != null) {
         PlatformFile file = result.files.first;
-        print('NAME: ${file.name}');
-        print('SIZE: ${file.size}');
-        print('EXT: ${file.extension}');
-        print('PATH: ${file.path}');
+        // print('NAME: ${file.name}');
+        // print('SIZE: ${file.size}');
+        // print('EXT: ${file.extension}');
+        // print('PATH: ${file.path}');
 
         final imageTemp = File(file.path!);
 
@@ -80,12 +82,11 @@ class _ProducerRegisterState extends State<ProducerRegister> {
           type == 'documents' ? 'documents' : 'display',
           imageTemp,
         );
-        // print(document);
+
         Map<String, dynamic> json = jsonDecode(document);
         // print('document $document');
         // print('JSON: $json');
         setState(() {
-          print('DOC: ${json['document']}');
           if (type == 'documents') {
             documents.add(json['document']);
           } else {
@@ -148,7 +149,6 @@ class _ProducerRegisterState extends State<ProducerRegister> {
   }
 
   Future save() async {
-    print('saving...');
     if (_key.currentState!.validate()) {
       try {
         final url = Uri.parse('${dotenv.get('API')}/sellers');
@@ -156,18 +156,50 @@ class _ProducerRegisterState extends State<ProducerRegister> {
           HttpHeaders.authorizationHeader: 'Bearer $token',
         };
 
+        var documentPks = [];
+        for (var document in documents) {
+          documentPks.add(document['pk']);
+        }
+
+        var photoPks = [];
+        for (var photo in photos) {
+          photoPks.add(photo['pk']);
+        }
+
         var body = {
           'province': provinceValue,
           'city': cityValue,
           'area': areaValue,
           'address': addressController.text,
-          'documents': documents.toString(),
-          'photos': photos.toString(),
+          'documents': documentPks.join(','),
+          'photos': photoPks.join(','),
         };
-        print(json.encode(body));
+
         var res = await http.post(url, headers: headers, body: body);
 
-        if (res.statusCode == 200) return res.body;
+        if (res.statusCode == 200) {
+          print('res $res');
+          // storage.write(key: "producer", value: res.body['pk']);
+          ArtDialogResponse response = await ArtSweetAlert.show(
+            context: context,
+            artDialogArgs: ArtDialogArgs(
+                type: ArtSweetAlertType.success,
+                title: "Success!",
+                text:
+                    "You are now producer. You will be redirected to the producer's page."),
+          );
+
+          if (response.isTapConfirmButton) {
+            if (!mounted) return;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MyProducerPage(),
+              ),
+            );
+            return;
+          }
+        }
         return null;
       } on Exception catch (exception) {
         print('exception $exception');
