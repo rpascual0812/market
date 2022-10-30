@@ -53,6 +53,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
     super.initState();
 
     readStorage();
+    getProvinces();
   }
 
   Future<void> readStorage() async {
@@ -61,6 +62,49 @@ class _ProducerRegisterState extends State<ProducerRegister> {
     setState(() {
       token = all!;
     });
+  }
+
+  Future getProvinces() async {
+    try {
+      var res = await Remote.get('provinces', {});
+      print('res ${res.statusCode}');
+      if (res.statusCode == 200) {
+        setState(() {});
+      }
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
+
+  Future getCities() async {
+    try {
+      var res =
+          await Remote.get('cities', {'province_pk': provinceValue.toString()});
+      print('res ${res.statusCode}');
+      if (res.statusCode == 200) {
+        setState(() {});
+      }
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
+
+  Future getAreas() async {
+    try {
+      var res = await Remote.get('areas', {});
+      print('res ${res.statusCode}');
+      if (res.statusCode == 200) {
+        setState(() {});
+      }
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
   }
 
   Future pickFile(String type, List<String> ext) async {
@@ -178,8 +222,11 @@ class _ProducerRegisterState extends State<ProducerRegister> {
         var res = await http.post(url, headers: headers, body: body);
 
         if (res.statusCode == 200) {
-          print('res $res');
-          // storage.write(key: "producer", value: res.body['pk']);
+          var result = json.decode(res.body);
+
+          storage.write(
+              key: "producer", value: result['data']['pk'].toString());
+
           ArtDialogResponse response = await ArtSweetAlert.show(
             context: context,
             artDialogArgs: ArtDialogArgs(
@@ -194,7 +241,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const MyProducerPage(),
+                builder: (context) => MyProducerPage(token: token),
               ),
             );
             return;
@@ -334,6 +381,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                                         onChanged: (String? value) {
                                           setState(() {
                                             provinceValue = value!;
+                                            getCities();
                                           });
                                         },
                                         items: provinces
@@ -396,6 +444,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                                         onChanged: (String? value) {
                                           setState(() {
                                             cityValue = value!;
+                                            getAreas();
                                           });
                                         },
                                         items: cities

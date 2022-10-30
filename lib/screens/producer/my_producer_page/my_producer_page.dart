@@ -1,18 +1,24 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/components/network_image.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/models/ratings.dart';
 import 'package:market/screens/producer/my_producer_page/components/my_products_tab.dart';
 
+import '../../../components/network_image.dart';
 import '../../../constants/app_defaults.dart';
-import '../../profile/components/follower_list.dart';
-import '../../profile/components/following_list.dart';
+
+import 'package:http/http.dart' as http;
 
 class MyProducerPage extends StatefulWidget {
-  const MyProducerPage({Key? key}) : super(key: key);
+  const MyProducerPage({
+    Key? key,
+    required this.token,
+  }) : super(key: key);
+
+  final String token;
 
   @override
   State<MyProducerPage> createState() => _MyProducerPageState();
@@ -60,8 +66,49 @@ class _MyProducerPageState extends State<MyProducerPage> {
     ),
   ];
 
+  Map<String, dynamic> user = {};
+
+  @override
+  void initState() {
+    var token = AppDefaults.jwtDecode(widget.token);
+
+    super.initState();
+
+    if (token != null) {
+      fetchUser(token['sub']);
+    }
+  }
+
+  Future fetchUser(int pk) async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${widget.token}',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        setState(() {
+          var account = json.decode(res.body);
+          user = account['user'];
+          print(user);
+        });
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    if (user.isNotEmpty) {
+      userImage = AppDefaults.userImage(user['user_document']);
+    }
+
     return Scaffold(
       appBar: Appbar(),
       body: SingleChildScrollView(
@@ -112,13 +159,16 @@ class _MyProducerPageState extends State<MyProducerPage> {
                               alignment: Alignment.topLeft,
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.only(top: 16.0, left: 10),
+                                    const EdgeInsets.only(top: 20.0, left: 10),
                                 child: Row(
                                   children: [
-                                    const CircleAvatar(
-                                      backgroundImage: CachedNetworkImageProvider(
-                                          'https://i.imgur.com/8G2bg5J.jpeg'),
-                                      radius: 20,
+                                    SizedBox(
+                                      height: 50,
+                                      child: AspectRatio(
+                                        aspectRatio: 1 / 1,
+                                        child: NetworkImageWithLoader(
+                                            userImage, true),
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -128,6 +178,8 @@ class _MyProducerPageState extends State<MyProducerPage> {
                                         // color: Colors.white,
                                         child: InkWell(
                                           child: Container(
+                                            margin:
+                                                const EdgeInsets.only(top: 30),
                                             color: Colors.transparent,
                                             padding: const EdgeInsets.all(
                                                 AppDefaults.padding),
@@ -139,9 +191,9 @@ class _MyProducerPageState extends State<MyProducerPage> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                const Text(
-                                                  'Raffier Lee',
-                                                  style: TextStyle(
+                                                Text(
+                                                  '${user['first_name']} ${user['last_name']}',
+                                                  style: const TextStyle(
                                                     color: Colors.white,
                                                   ),
                                                 ),
@@ -151,15 +203,18 @@ class _MyProducerPageState extends State<MyProducerPage> {
                                                       'Following',
                                                       style: TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 12,
+                                                        fontSize: AppDefaults
+                                                            .fontSize,
                                                       ),
                                                     ),
                                                     const SizedBox(width: 5),
-                                                    const Text(
-                                                      '100',
-                                                      style: TextStyle(
+                                                    Text(
+                                                      user['following_count']
+                                                          .toString(),
+                                                      style: const TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 12,
+                                                        fontSize: AppDefaults
+                                                            .fontSize,
                                                       ),
                                                     ),
                                                     Container(
@@ -183,9 +238,10 @@ class _MyProducerPageState extends State<MyProducerPage> {
                                                       ),
                                                     ),
                                                     const SizedBox(width: 5),
-                                                    const Text(
-                                                      '2',
-                                                      style: TextStyle(
+                                                    Text(
+                                                      user['follower_count']
+                                                          .toString(),
+                                                      style: const TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 12,
                                                       ),

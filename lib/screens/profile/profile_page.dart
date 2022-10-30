@@ -127,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 : const SizedBox(height: 1),
             // const SizedBox(height: AppDefaults.margin),
 
-            ProfileSettings(),
+            ProfileSettings(token: widget.token),
 
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.4,

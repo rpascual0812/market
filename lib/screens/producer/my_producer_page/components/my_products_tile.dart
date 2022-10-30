@@ -8,32 +8,12 @@ import '../../../../components/network_image.dart';
 class MyProductTile extends StatefulWidget {
   const MyProductTile({
     Key? key,
-    required this.pk,
-    required this.uuid,
-    required this.name,
-    required this.user,
-    required this.userDocument,
-    required this.productDocument,
-    required this.measurement,
-    required this.quantity,
-    required this.description,
-    required this.location,
-    required this.type,
-    required this.dateCreated,
+    required this.product,
+    this.onTap,
   }) : super(key: key);
 
-  final int pk;
-  final String uuid;
-  final String name;
-  final Map<String, dynamic> user;
-  final List userDocument;
-  final List productDocument;
-  final Map<String, dynamic> measurement;
-  final String quantity;
-  final String description;
-  final String location;
-  final String type; // looking for, future crop, already available
-  final DateTime dateCreated;
+  final Map<String, dynamic> product;
+  final void Function()? onTap;
 
   @override
   State<MyProductTile> createState() => _MyProductTileState();
@@ -41,10 +21,19 @@ class MyProductTile extends StatefulWidget {
 
 class _MyProductTileState extends State<MyProductTile> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var userImage =
-        '${dotenv.get('API')}/${widget.userDocument[0]['document']['path']}';
-    print('aa $userImage');
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    if (widget.product['user'] != null) {
+      userImage =
+          AppDefaults.userImage(widget.product['user']['user_document'] ?? []);
+    }
+
+    DateTime date = DateTime.parse(widget.product['date_created'].toString());
 
     return GestureDetector(
       // no onTap event for now
@@ -112,7 +101,7 @@ class _MyProductTileState extends State<MyProductTile> {
                                                 width: 150,
                                                 height: 18,
                                                 child: Text(
-                                                  widget.name,
+                                                  widget.product['name'],
                                                   style: const TextStyle(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.bold,
@@ -191,7 +180,7 @@ class _MyProductTileState extends State<MyProductTile> {
                                       Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          'Product created: ${DateFormat.yMMMd().format(widget.dateCreated)}',
+                                          'Product created: ${DateFormat.yMMMd().format(date)}',
                                           style: const TextStyle(
                                             fontSize: 10,
                                             color: AppColors.defaultBlack,

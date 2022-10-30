@@ -98,10 +98,13 @@ class AppDefaults {
 
   static userImage(List documents) {
     var userImage = '${dotenv.get('API')}/assets/images/user.png';
-    for (var i = 0; i < documents.length; i++) {
-      if (documents[i]['document']['path'] != null &&
-          documents[i]['type'] == 'profile_photo') {
-        userImage = '${dotenv.get('API')}/${documents[i]['document']['path']}';
+    if (documents.isNotEmpty) {
+      for (var i = 0; i < documents.length; i++) {
+        if (documents[i]['document']['path'] != null &&
+            documents[i]['type'] == 'profile_photo') {
+          userImage =
+              '${dotenv.get('API')}/${documents[i]['document']['path']}';
+        }
       }
     }
 
