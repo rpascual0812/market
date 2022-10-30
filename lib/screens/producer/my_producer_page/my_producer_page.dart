@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/app_colors.dart';
-import 'package:market/models/ratings.dart';
 import 'package:market/screens/producer/my_producer_page/components/my_products_tab.dart';
 
 import '../../../components/network_image.dart';
@@ -29,42 +28,6 @@ class _MyProducerPageState extends State<MyProducerPage> {
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
   TextEditingController messageController = TextEditingController();
-
-  List<Ratings> ratings = [
-    Ratings(
-      pk: 1,
-      userId: 1,
-      userFirstName: 'Ferdinand',
-      userLastName: 'Dela Cruz',
-      userImage: 'https://i.imgur.com/vavfJqu.gif',
-      rating: 4,
-      comment:
-          'With the price I paid, it was worth it. What I ordered was perfect. Although delivery is late, ordered April 29th, received on the 3rd of May. Overall, I did not regret it.',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Ratings(
-      pk: 2,
-      userId: 2,
-      userFirstName: 'Mia',
-      userLastName: 'Sue',
-      userImage: 'https://i.imgur.com/jG0jrjW.gif',
-      rating: 4,
-      comment:
-          'Seller was super accomodating! Appreciate her help so much \'cause she answered all my questions. Hopefully, she sells more!',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Ratings(
-      pk: 3,
-      userId: 3,
-      userFirstName: 'Jone',
-      userLastName: 'Doe',
-      userImage: 'https://i.imgur.com/VocmKXJ.gif',
-      rating: 4,
-      comment:
-          'Supersatisfied with my order! The item was in great condition and I loved it. Thank you so much!',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-  ];
 
   Map<String, dynamic> user = {};
 
@@ -195,6 +158,9 @@ class _MyProducerPageState extends State<MyProducerPage> {
                                                   '${user['first_name']} ${user['last_name']}',
                                                   style: const TextStyle(
                                                     color: Colors.white,
+                                                    fontSize:
+                                                        AppDefaults.fontSize +
+                                                            5,
                                                   ),
                                                 ),
                                                 Row(
@@ -234,7 +200,8 @@ class _MyProducerPageState extends State<MyProducerPage> {
                                                       'Following',
                                                       style: TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 12,
+                                                        fontSize: AppDefaults
+                                                            .fontSize,
                                                       ),
                                                     ),
                                                     const SizedBox(width: 5),
@@ -243,7 +210,8 @@ class _MyProducerPageState extends State<MyProducerPage> {
                                                           .toString(),
                                                       style: const TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 12,
+                                                        fontSize: AppDefaults
+                                                            .fontSize,
                                                       ),
                                                     ),
                                                   ],
@@ -276,7 +244,9 @@ class _MyProducerPageState extends State<MyProducerPage> {
                                                           child: const Text(
                                                             'View Shop',
                                                             style: TextStyle(
-                                                                fontSize: 10,
+                                                                fontSize:
+                                                                    AppDefaults
+                                                                        .fontSize,
                                                                 color: AppColors
                                                                     .primary),
                                                           ),
@@ -309,7 +279,9 @@ class _MyProducerPageState extends State<MyProducerPage> {
                                                           child: const Text(
                                                             'See Rating',
                                                             style: TextStyle(
-                                                                fontSize: 10,
+                                                                fontSize:
+                                                                    AppDefaults
+                                                                        .fontSize,
                                                                 color: AppColors
                                                                     .primary),
                                                           ),
@@ -335,31 +307,6 @@ class _MyProducerPageState extends State<MyProducerPage> {
                   ),
                 ],
               ),
-
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: SizedBox(
-              //     child: Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: [
-              //         TextButton(
-              //           onPressed: () => Navigator.pop(context),
-              //           style: TextButton.styleFrom(
-              //               padding: EdgeInsets.zero,
-              //               minimumSize: const Size(50, 30),
-              //               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              //               alignment: Alignment.centerLeft),
-              //           child: const Text(
-              //             'Back',
-              //             style: TextStyle(
-              //               color: Colors.grey,
-              //             ),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
               SizedBox(
                 height: 1500,
                 child: DefaultTabController(

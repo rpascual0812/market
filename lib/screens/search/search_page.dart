@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/index.dart';
-import 'package:market/models/product.dart';
 
 import 'package:market/models/order.dart';
 import 'package:market/screens/search/components/search_product_tile.dart';
+
+import '../product/product_page.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -17,47 +18,32 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   var filterValue = 'All';
-  var filters = ['Show All', 'Show only unread', 'Mark all as read'];
+  TextEditingController searchController = TextEditingController();
 
   late List<Order> orders = [];
   bool isLoading = false;
 
-  List<Products> products = [];
+  List products = [];
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    getProducts();
+    fetch();
   }
 
-  Future<void> getProducts() async {
+  Future<void> fetch() async {
     try {
-      var res = await Remote.get('products', {});
+      var res = await Remote.get('products',
+          {'keyword': searchController.text, 'filter': filterValue});
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {
+          products = [];
           dataJson = jsonDecode(res.body);
           for (var i = 0; i < dataJson['data'].length; i++) {
-            products.add(Products(
-              pk: dataJson['data'][i]['pk'],
-              uuid: dataJson['data'][i]['uuid'],
-              type: dataJson['data'][i]['type'],
-              name: dataJson['data'][i]['name'],
-              description: dataJson['data'][i]['description'],
-              quantity: dataJson['data'][i]['quantity'],
-              priceFrom: dataJson['data'][i]['price_from'],
-              priceTo: dataJson['data'][i]['price_to'],
-              user: dataJson['data'][i]['user'],
-              measurement: dataJson['data'][i]['measurement'],
-              category: dataJson['data'][i]['category'],
-              country: dataJson['data'][i]['country'],
-              userDocument: dataJson['data'][i]['user_document'],
-              productDocument: dataJson['data'][i]['product_document'],
-              dateCreated: dataJson['data'][i]['date_created'],
-            ));
-            // print('products $products');
+            products.add(dataJson['data'][i]);
           }
         });
       } else if (res.statusCode == 401) {
@@ -93,7 +79,9 @@ class _SearchPageState extends State<SearchPage> {
                 children: [
                   Expanded(
                     child: SizedBox(
-                      child: TextField(
+                      child: TextFormField(
+                        controller: searchController,
+                        onChanged: (value) => fetch(),
                         decoration: InputDecoration(
                           hintText: "Search...",
                           hintStyle: TextStyle(
@@ -142,6 +130,7 @@ class _SearchPageState extends State<SearchPage> {
                     onPressed: () {
                       setState(() {
                         filterValue = 'All';
+                        fetch();
                       });
                     },
                     style: TextButton.styleFrom(
@@ -174,6 +163,7 @@ class _SearchPageState extends State<SearchPage> {
                     onPressed: () {
                       setState(() {
                         filterValue = 'Location';
+                        fetch();
                       });
                     },
                     style: TextButton.styleFrom(
@@ -206,6 +196,7 @@ class _SearchPageState extends State<SearchPage> {
                     onPressed: () {
                       setState(() {
                         filterValue = 'Products';
+                        fetch();
                       });
                     },
                     style: TextButton.styleFrom(
@@ -230,6 +221,7 @@ class _SearchPageState extends State<SearchPage> {
                     onPressed: () {
                       setState(() {
                         filterValue = 'Shops';
+                        fetch();
                       });
                     },
                     style: TextButton.styleFrom(
@@ -249,25 +241,29 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ],
             ),
-            ListView.builder(
-              itemCount: products.length,
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 16),
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return SearchProductTile(
-                  pk: products[index].pk,
-                  uuid: products[index].uuid,
-                  name: products[index].name,
-                  description: products[index].description,
-                  productDocument: products[index].productDocument,
-                  quantity: products[index].quantity,
-                  measurement: products[index].measurement,
-                  location: '',
-                  type: products[index].type,
-                  dateCreated: products[index].dateCreated,
-                );
-              },
+            Visibility(
+              visible: products.isNotEmpty ? true : false,
+              child: ListView.builder(
+                itemCount: products.length,
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(top: 16),
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return SearchProductTile(
+                    filter: filterValue,
+                    product: products[index],
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ProductPage(
+                            productPk: products[index]['pk'],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),

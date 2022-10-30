@@ -9,11 +9,9 @@ class MyProductTile extends StatefulWidget {
   const MyProductTile({
     Key? key,
     required this.product,
-    this.onTap,
   }) : super(key: key);
 
   final Map<String, dynamic> product;
-  final void Function()? onTap;
 
   @override
   State<MyProductTile> createState() => _MyProductTileState();
@@ -27,10 +25,10 @@ class _MyProductTileState extends State<MyProductTile> {
 
   @override
   Widget build(BuildContext context) {
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
-    if (widget.product['user'] != null) {
-      userImage =
-          AppDefaults.userImage(widget.product['user']['user_document'] ?? []);
+    var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    if (widget.product['product_documents'] != null) {
+      productImage =
+          AppDefaults.productImage(widget.product['product_documents']);
     }
 
     DateTime date = DateTime.parse(widget.product['date_created'].toString());
@@ -86,7 +84,7 @@ class _MyProductTileState extends State<MyProductTile> {
                                             child: AspectRatio(
                                               aspectRatio: 1 / 1,
                                               child: NetworkImageWithLoader(
-                                                  userImage, false),
+                                                  productImage, false),
                                             ),
                                           ),
                                           const SizedBox(width: 5),
@@ -119,19 +117,22 @@ class _MyProductTileState extends State<MyProductTile> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
-                                                    children: const [
+                                                    children: [
                                                       Text(
-                                                        '₱300',
-                                                        style: TextStyle(
-                                                          fontSize: 12,
+                                                        '${widget.product['country']['currency_symbol']}${double.parse(widget.product['price_from']).toStringAsFixed(2)}',
+                                                        style: const TextStyle(
+                                                          fontFamily: '',
+                                                          fontSize: AppDefaults
+                                                              .fontSize,
                                                           color:
                                                               AppColors.primary,
                                                         ),
                                                       ),
                                                       Text(
-                                                        '1kg',
-                                                        style: TextStyle(
-                                                          fontSize: 12,
+                                                        '1${widget.product['measurement']['symbol']}',
+                                                        style: const TextStyle(
+                                                          fontSize: AppDefaults
+                                                              .fontSize,
                                                           color:
                                                               AppColors.primary,
                                                         ),
@@ -144,19 +145,21 @@ class _MyProductTileState extends State<MyProductTile> {
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
-                                                    children: const [
+                                                    children: [
                                                       Text(
-                                                        'Stocks: 168',
-                                                        style: TextStyle(
-                                                          fontSize: 12,
+                                                        'Stocks: ${widget.product['quantity']}',
+                                                        style: const TextStyle(
+                                                          fontSize: AppDefaults
+                                                              .fontSize,
                                                           color:
                                                               AppColors.primary,
                                                         ),
                                                       ),
                                                       Text(
-                                                        'Category: Fruits',
-                                                        style: TextStyle(
-                                                          fontSize: 12,
+                                                        'Category: ${widget.product['category']['name']}',
+                                                        style: const TextStyle(
+                                                          fontSize: AppDefaults
+                                                              .fontSize,
                                                           color:
                                                               AppColors.primary,
                                                         ),

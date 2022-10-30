@@ -4,32 +4,19 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../constants/index.dart';
 import '../../../components/network_image.dart';
+import '../../chat/bubble.dart';
 
 class SearchProductTile extends StatefulWidget {
   const SearchProductTile({
     Key? key,
-    required this.pk,
-    required this.uuid,
-    required this.name,
-    required this.description,
-    required this.productDocument,
-    required this.quantity,
-    required this.measurement,
-    required this.location,
-    required this.type,
-    required this.dateCreated,
+    required this.filter,
+    required this.product,
+    this.onTap,
   }) : super(key: key);
 
-  final int pk;
-  final String uuid;
-  final String name;
-  final List productDocument;
-  final String quantity;
-  final Map<String, dynamic> measurement;
-  final String description;
-  final String location;
-  final String type; // looking for, future crop, already available
-  final DateTime dateCreated;
+  final String filter;
+  final Map<String, dynamic> product;
+  final void Function()? onTap;
 
   @override
   State<SearchProductTile> createState() => _SearchProductTileState();
@@ -38,25 +25,28 @@ class SearchProductTile extends StatefulWidget {
 class _SearchProductTileState extends State<SearchProductTile> {
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
+  static const IconData chat =
+      IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
 
   @override
   Widget build(BuildContext context) {
-    var productImage =
-        '${dotenv.get('API')}/${widget.productDocument[0]['document']['path']}';
-    print('aa $productImage');
+    var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    if (widget.product['product_documents'] != null) {
+      productImage =
+          AppDefaults.productImage(widget.product['product_documents']);
+    }
+
+    var sellerAddress = {};
+    if (widget.product['seller_addresses'] != null) {
+      for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
+        if (widget.product['seller_addresses'][i]['default']) {
+          sellerAddress = widget.product['seller_addresses'][i];
+        }
+      }
+    }
 
     return GestureDetector(
-      // no onTap event for now
-      // onTap: () {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) {
-      //         return const LoginPage();
-      //       },
-      //     ),
-      //   );
-      // },
+      onTap: widget.onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Material(
@@ -96,7 +86,7 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                             child: AspectRatio(
                                               aspectRatio: 1 / 1,
                                               child: NetworkImageWithLoader(
-                                                  productImage, true),
+                                                  productImage, false),
                                             ),
                                           ),
                                           Positioned(
@@ -117,7 +107,8 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                                     width: 150,
                                                     height: 18,
                                                     child: Text(
-                                                      widget.name,
+                                                      widget.product['name'] ??
+                                                          '',
                                                       style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
@@ -142,7 +133,11 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                                           color: Colors.grey,
                                                         ),
                                                         Text(
-                                                          widget.location,
+                                                          sellerAddress[
+                                                                      'city'] !=
+                                                                  null
+                                                              ? '${sellerAddress['address']}, ${sellerAddress['city']['name']} ${sellerAddress['province']['name']}'
+                                                              : '',
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 10,
@@ -156,34 +151,87 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                               ],
                                             ),
                                           ),
-                                          Positioned(
-                                            top: 15,
-                                            right: 0,
-                                            child: Container(
-                                              width: 100.0,
-                                              height: 25.0,
-                                              padding: EdgeInsets.zero,
-                                              child: SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.18,
-                                                height: 20,
-                                                child: ElevatedButton(
-                                                  onPressed: () {},
-                                                  style: TextButton.styleFrom(
-                                                    backgroundColor:
-                                                        AppColors.primary,
-                                                    minimumSize:
-                                                        Size.zero, // Set this
-                                                    padding: EdgeInsets
-                                                        .zero, // and this
+                                          Visibility(
+                                            visible: widget.filter != 'Shops',
+                                            child: Positioned(
+                                              top: 15,
+                                              right: 0,
+                                              child: Container(
+                                                width: 100.0,
+                                                height: 25.0,
+                                                padding: EdgeInsets.zero,
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.18,
+                                                  height: 20,
+                                                  child: ElevatedButton(
+                                                    onPressed: () {},
+                                                    style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          AppColors.primary,
+                                                      minimumSize:
+                                                          Size.zero, // Set this
+                                                      padding: EdgeInsets
+                                                          .zero, // and this
+                                                    ),
+                                                    child: Text(
+                                                      '${widget.product['country']['currency_symbol']}${double.parse(widget.product['price_from']).toStringAsFixed(2)}',
+                                                      style: const TextStyle(
+                                                        fontFamily: '',
+                                                        fontSize: 10,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
                                                   ),
-                                                  child: const Text(
-                                                    '₱300.00',
-                                                    style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Visibility(
+                                            visible: widget.filter == 'Shops',
+                                            child: Positioned(
+                                              top: 15,
+                                              right: 0,
+                                              child: Container(
+                                                width: 30.0,
+                                                height: 30.0,
+                                                padding: EdgeInsets.zero,
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.18,
+                                                  height: 20,
+                                                  child: OutlinedButton(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return const Bubble();
+                                                          },
+                                                        ),
+                                                      );
+                                                    },
+                                                    style: OutlinedButton
+                                                        .styleFrom(
+                                                      side: const BorderSide(
+                                                        width: 1,
+                                                        color:
+                                                            AppColors.primary,
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              0),
+                                                    ),
+                                                    child: const Icon(
+                                                      chat,
+                                                      color: AppColors.primary,
+                                                      size:
+                                                          AppDefaults.fontSize +
+                                                              10,
                                                     ),
                                                   ),
                                                 ),
