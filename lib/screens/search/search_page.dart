@@ -8,6 +8,7 @@ import 'package:market/models/order.dart';
 import 'package:market/screens/search/components/search_product_tile.dart';
 
 import '../product/product_page.dart';
+import 'components/search_producer_tile.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -244,26 +245,37 @@ class _SearchPageState extends State<SearchPage> {
             Visibility(
               visible: products.isNotEmpty ? true : false,
               child: ListView.builder(
-                itemCount: products.length,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 16),
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return SearchProductTile(
-                    filter: filterValue,
-                    product: products[index],
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ProductPage(
-                            productPk: products[index]['pk'],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
+                  itemCount: products.length,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(top: 16),
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return filterValue == 'Shops'
+                        ? SearchProducerTile(
+                            product: products[index],
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ProductPage(
+                                    productPk: products[index]['pk'],
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : SearchProductTile(
+                            product: products[index],
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ProductPage(
+                                    productPk: products[index]['pk'],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                  }),
             ),
           ],
         ),
