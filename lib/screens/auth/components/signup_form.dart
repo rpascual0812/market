@@ -34,9 +34,9 @@ class _SignUpFormState extends State<SignUpForm> {
   TextEditingController mobileController =
       TextEditingController(text: '9172052424');
   TextEditingController passwordController =
-      TextEditingController(text: 'P@ssword1');
+      TextEditingController(text: 'Password1');
   TextEditingController confirmPasswordController =
-      TextEditingController(text: 'P@ssword1');
+      TextEditingController(text: 'Password1');
 
   TextEditingController addressDetailsController =
       TextEditingController(text: 'Pasig');
@@ -1129,13 +1129,13 @@ String? validatePassword(String? formPassword) {
     return 'Password is required.';
   }
 
-  String pattern =
-      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+  String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$';
+  // r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
   RegExp regex = RegExp(pattern);
   if (!regex.hasMatch(formPassword)) {
     return '''
       Password must be at least 8 characters,
-      include an uppercase letter, number and symbol.
+      include an uppercase letter, and number.
       ''';
   }
 

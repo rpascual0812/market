@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-// import 'package:market/screens/approot/app_root.dart';
-// import 'package:provider/provider.dart';
+
 import 'package:market/db/market_db.dart';
 import 'package:market/models/config.dart';
 import '../../../components/custom_animation.dart';
@@ -49,8 +48,8 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final usernameController = TextEditingController(text: 'email01@gmail.com');
-  final passwordController = TextEditingController(text: 'P@ssword1');
+  final usernameController = TextEditingController(text: 'email02@gmail.com');
+  final passwordController = TextEditingController(text: 'Password1');
   String errorMessage = '';
   bool isLoading = false;
 

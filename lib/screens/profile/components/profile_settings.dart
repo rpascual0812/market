@@ -56,6 +56,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
     setState(() {
       producerPk = pk!;
+      print('producerPk $producerPk');
     });
   }
 
@@ -84,7 +85,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       );
                     }),
                 Visibility(
-                  visible: producerPk == '' ? true : false,
+                  visible: producerPk == '0' ? true : false,
                   child: SettingTile(
                       name: 'Register as Producer',
                       callback: () {
@@ -97,7 +98,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       }),
                 ),
                 Visibility(
-                  visible: producerPk == '' ? false : true,
+                  visible: producerPk == '0' ? false : true,
                   child: SettingTile(
                       name: 'Go to Producer\'s Page',
                       callback: () {

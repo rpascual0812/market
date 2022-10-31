@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:market/screens/orders/order_page.dart';
 import 'package:market/screens/profile/components/profile_card.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../constants/index.dart';
 
-class ProfileProduct extends StatelessWidget {
+class ProfileProduct extends StatefulWidget {
   const ProfileProduct({
     Key? key,
     required this.user,
@@ -18,30 +19,62 @@ class ProfileProduct extends StatelessWidget {
       IconData(0xe807, fontFamily: 'Custom', fontPackage: null);
 
   @override
+  State<ProfileProduct> createState() => _ProfileProductState();
+}
+
+class _ProfileProductState extends State<ProfileProduct> {
+  final storage = const FlutterSecureStorage();
+
+  String producerPk = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    readStorage();
+  }
+
+  Future<void> readStorage() async {
+    final pk = await storage.read(key: 'producer');
+
+    setState(() {
+      producerPk = pk!;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
           ProfileCard(
-            iconData: box,
-            iconBackground: AppColors.primary.withOpacity(0.1),
-            iconColor: AppColors.primary,
+            producerPk: producerPk,
+            iconData: ProfileProduct.box,
+            iconBackground: producerPk == '0'
+                ? AppColors.grey1.withOpacity(0.5)
+                : AppColors.primary.withOpacity(0.5),
+            iconColor: producerPk == '0' ? Colors.black12 : AppColors.primary,
             statusName: 'My Products',
             status: '10+',
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return OrderPage(type: 'products', user: user);
-                  },
-                ),
-              );
+              if (producerPk == '0') {
+                //dont do anything for now
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return OrderPage(type: 'products', user: widget.user);
+                    },
+                  ),
+                );
+              }
             },
           ),
           ProfileCard(
-            iconData: cart,
+            producerPk: producerPk,
+            iconData: ProfileProduct.cart,
             iconBackground: Colors.blue.withOpacity(0.1),
             iconColor: Colors.blue,
             statusName: 'My Orders',
@@ -51,7 +84,7 @@ class ProfileProduct extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return OrderPage(type: 'orders', user: user);
+                    return OrderPage(type: 'orders', user: widget.user);
                   },
                 ),
               );

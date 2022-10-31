@@ -125,7 +125,14 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                   const SizedBox(
-                                      height: AppDefaults.margin / 2),
+                                      height: AppDefaults.margin / 4),
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      'Edit Profile',
+                                      style: TextStyle(color: Colors.black38),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

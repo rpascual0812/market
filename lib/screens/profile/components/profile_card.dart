@@ -6,6 +6,7 @@ import '../../../constants/index.dart';
 class ProfileCard extends StatelessWidget {
   const ProfileCard({
     Key? key,
+    required this.producerPk,
     required this.iconData,
     required this.iconBackground,
     required this.iconColor,
@@ -14,6 +15,7 @@ class ProfileCard extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
+  final String producerPk;
   final IconData iconData;
   final Color iconBackground;
   final Color iconColor;
@@ -34,7 +36,9 @@ class ProfileCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
+              color: statusName == 'My Products' && producerPk == '0'
+                  ? Colors.black12
+                  : Colors.white,
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.3),
@@ -58,10 +62,10 @@ class ProfileCard extends StatelessWidget {
                 const SizedBox(height: 5),
                 Text(
                   statusName,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      ?.copyWith(color: Colors.black54),
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                      color: statusName == 'My Products' && producerPk == '0'
+                          ? Colors.black12
+                          : Colors.black54),
                   maxLines: 1,
                   textAlign: TextAlign.center,
                 ),
