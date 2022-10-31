@@ -73,6 +73,7 @@ dependencies:
   jwt_decode: ^0.3.1
   file_picker: ^5.2.2
   badges: ^2.0.3
+  flutter_switch: ^0.3.2
   
   
 

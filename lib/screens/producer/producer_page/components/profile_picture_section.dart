@@ -88,8 +88,8 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
         final body = {'user_pk': widget.user['pk'].toString()};
 
         var res = await http.post(url, headers: headers, body: body);
-        print(token);
-        print(res.statusCode);
+        // print(token);
+        // print(res.statusCode);
         if (res.statusCode == 201) {
           final result = json.decode(res.body);
           setState(() {

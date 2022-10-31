@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:market/components/network_image.dart';
 import 'package:market/screens/chat/bubble.dart';
 import 'package:market/screens/producer/producer_page/producer_page.dart';
+import 'package:market/screens/product/components/cart_page.dart';
 import 'package:market/screens/product/components/rate_product_page.dart';
 import 'package:market/screens/product/components/ratings_page.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
@@ -233,39 +234,39 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                         onPressed: () async {
                           saveToCart(widget.product['pk']);
 
-                          ArtDialogResponse response = await ArtSweetAlert.show(
-                              barrierDismissible: false,
-                              context: context,
-                              artDialogArgs: ArtDialogArgs(
-                                type: ArtSweetAlertType.success,
-                                denyButtonText: "Ok",
-                                denyButtonColor: Colors.grey,
-                                title:
-                                    "This product has been added to your cart",
-                                confirmButtonText: "Go to Cart",
-                              ));
+                          // ArtDialogResponse response = await ArtSweetAlert.show(
+                          //     barrierDismissible: false,
+                          //     context: context,
+                          //     artDialogArgs: ArtDialogArgs(
+                          //       type: ArtSweetAlertType.success,
+                          //       denyButtonText: "Ok",
+                          //       denyButtonColor: Colors.grey,
+                          //       title:
+                          //           "This product has been added to your cart",
+                          //       confirmButtonText: "Go to Cart",
+                          //     ));
 
-                          if (response.isTapConfirmButton) {
-                            print('confirmed');
-                            ArtSweetAlert.show(
-                                context: context,
-                                artDialogArgs: ArtDialogArgs(
-                                    type: ArtSweetAlertType.success,
-                                    title: "Saved!"));
-                            return;
-                          }
+                          // if (response.isTapConfirmButton) {
+                          //   print('confirmed');
+                          //   ArtSweetAlert.show(
+                          //       context: context,
+                          //       artDialogArgs: ArtDialogArgs(
+                          //           type: ArtSweetAlertType.success,
+                          //           title: "Saved!"));
+                          //   return;
+                          // }
 
-                          if (response.isTapDenyButton) {
-                            return;
-                          }
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) {
-                          //       return const Bubble();
-                          //     },
-                          //   ),
-                          // );
+                          // if (response.isTapDenyButton) {
+                          //   return;
+                          // }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return CartPage(token: token);
+                              },
+                            ),
+                          );
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: AppColors.primary,
