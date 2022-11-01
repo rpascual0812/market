@@ -8,9 +8,11 @@ import '../../../constants/index.dart';
 class ProfileProduct extends StatefulWidget {
   const ProfileProduct({
     Key? key,
+    required this.token,
     required this.user,
   }) : super(key: key);
 
+  final String token;
   final Map<String, dynamic> user;
 
   static const IconData box =

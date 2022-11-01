@@ -11,6 +11,9 @@ import '../../../constants/app_defaults.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../producer_page/producer_page.dart';
+import '../producer_ratings_page.dart';
+
 class MyProducerPage extends StatefulWidget {
   const MyProducerPage({
     Key? key,
@@ -55,7 +58,6 @@ class _MyProducerPageState extends State<MyProducerPage> {
         setState(() {
           var account = json.decode(res.body);
           user = account['user'];
-          print(user);
         });
       }
       return null;
@@ -231,7 +233,19 @@ class _MyProducerPageState extends State<MyProducerPage> {
                                                             0.20,
                                                         height: 25,
                                                         child: ElevatedButton(
-                                                          onPressed: () {},
+                                                          onPressed: () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                                  return ProducerPage(
+                                                                      userPk: user[
+                                                                          'pk']);
+                                                                },
+                                                              ),
+                                                            );
+                                                          },
                                                           style: TextButton
                                                               .styleFrom(
                                                             backgroundColor:
@@ -266,7 +280,18 @@ class _MyProducerPageState extends State<MyProducerPage> {
                                                             0.20,
                                                         height: 25,
                                                         child: ElevatedButton(
-                                                          onPressed: () {},
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(
+                                                              MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ProducerRatingsPage(
+                                                                        user:
+                                                                            user),
+                                                              ),
+                                                            );
+                                                          },
                                                           style: TextButton
                                                               .styleFrom(
                                                             backgroundColor:

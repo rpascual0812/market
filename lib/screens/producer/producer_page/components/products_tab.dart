@@ -1,15 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../../components/product_list_widget_tile_square.dart';
 import '../../../../constants/index.dart';
 import '../../../product/product_page.dart';
+import 'package:http/http.dart' as http;
 
 class ProductsTab extends StatefulWidget {
-  const ProductsTab({
-    Key? key,
-  }) : super(key: key);
+  const ProductsTab({Key? key, required this.type, required this.userPk})
+      : super(key: key);
+
+  final String type;
+  final int userPk;
 
   @override
   State<ProductsTab> createState() => _ProductsTabState();
@@ -30,8 +34,16 @@ class _ProductsTabState extends State<ProductsTab> {
 
   Future<void> getProducts() async {
     try {
-      var res = await Remote.get('products', {});
-      // print('res $res');
+      final params = {'type': widget.type};
+      final url =
+          Uri.parse('${dotenv.get('API')}/sellers/${widget.userPk}/products')
+              .replace(queryParameters: params);
+
+      var res = await http.get(
+        url,
+        // headers: headers,
+      );
+
       if (res.statusCode == 200) {
         setState(() {
           dataJson = jsonDecode(res.body);
@@ -72,7 +84,7 @@ class _ProductsTabState extends State<ProductsTab> {
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 5,
                 ),
-                itemCount: products.length,
+                itemCount: products.isNotEmpty ? products.length : 0,
                 itemBuilder: (BuildContext context, int index) {
                   return ProductListWidgetTileSquare(
                     product: products[index],

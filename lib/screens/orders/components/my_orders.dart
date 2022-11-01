@@ -60,7 +60,6 @@ class _MyOrdersState extends State<MyOrders> {
       if (res.statusCode == 200) {
         setState(() {
           dataJson = jsonDecode(res.body);
-          print('dataJson $dataJson');
           for (var i = 0; i < dataJson['data'].length; i++) {
             orders.add(dataJson['data'][i]);
           }

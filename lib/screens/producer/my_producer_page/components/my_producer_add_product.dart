@@ -38,8 +38,8 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
 
-  var categoryValue = 'Fruits';
-  var categories = ['Fruits', 'Vegetables', 'Nuts', 'Herbs'];
+  var categoryValue = '1';
+  var categories = [];
 
   List documents = [];
 
@@ -47,6 +47,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
   void initState() {
     super.initState();
 
+    getCategories();
     readStorage();
   }
 
@@ -135,6 +136,33 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
     }
   }
 
+  Future<void> getCategories() async {
+    try {
+      categories = [];
+      var res = await Remote.get('categories', {});
+      // print('res $res');
+      if (res.statusCode == 200) {
+        setState(() {
+          var dataJson = jsonDecode(res.body);
+          for (var i = 0; i < dataJson['data'].length; i++) {
+            categories.add(dataJson['data'][i]);
+          }
+
+          categoryValue = categories[0]['pk'];
+        });
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+      }
+      // if (res.statusCode == 200) return res.body;
+      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
+
   Future save() async {
     if (_key.currentState!.validate()) {
       try {
@@ -160,7 +188,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
         };
 
         var res = await http.post(url, headers: headers, body: body);
-        print(res.statusCode);
+
         if (res.statusCode == 200) {
           var result = json.decode(res.body);
 
@@ -458,47 +486,45 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                         ),
                         const SizedBox(height: AppDefaults.margin / 2),
                         SizedBox(
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButtonFormField<String>(
-                              isExpanded: true,
-                              value: categoryValue,
-                              validator: (value) {
-                                if (value != null && value.isEmpty) {
-                                  return '';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                isDense: true,
-                                contentPadding: AppDefaults.edgeInsetDropdown,
-                                prefixIconConstraints: const BoxConstraints(
-                                    minWidth: 0, minHeight: 0),
-                                focusedBorder:
-                                    AppDefaults.outlineInputBorderSuccess,
-                                enabledBorder:
-                                    AppDefaults.outlineInputBorderSuccess,
-                                focusedErrorBorder:
-                                    AppDefaults.outlineInputBorderError,
-                                errorBorder:
-                                    AppDefaults.outlineInputBorderError,
-                              ),
-                              icon: const Icon(Icons.keyboard_arrow_down),
-                              items: categories.map((String category) {
-                                return DropdownMenuItem(
-                                  value: category,
-                                  child: Text(
-                                    category,
-                                    style: const TextStyle(
-                                        fontSize: AppDefaults.fontSize),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  categoryValue = newValue!;
-                                });
-                              },
+                          height: AppDefaults.height,
+                          // padding: EdgeInsets.zero,
+                          child: DropdownButtonFormField<String>(
+                            isDense: true,
+                            value: categoryValue,
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            // elevation: 16,
+                            style: const TextStyle(color: Colors.black),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return '* required';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: AppDefaults.edgeInset,
+                              prefixIconConstraints: const BoxConstraints(
+                                  minWidth: 0, minHeight: 0),
+                              focusedBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              enabledBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              focusedErrorBorder:
+                                  AppDefaults.outlineInputBorderError,
+                              errorBorder: AppDefaults.outlineInputBorderError,
                             ),
+                            onChanged: (String? value) {
+                              setState(() {
+                                categoryValue = value!;
+                              });
+                            },
+                            items: categories
+                                .map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value['pk'].toString(),
+                                child: Text('${value['name']}'),
+                              );
+                            }).toList(),
                           ),
                         ),
                         const SizedBox(height: AppDefaults.margin),

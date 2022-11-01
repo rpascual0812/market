@@ -7,22 +7,20 @@ import '../../../constants/index.dart';
 class ArticleTile extends StatelessWidget {
   const ArticleTile({
     Key? key,
-    required this.title,
-    required this.description,
-    required this.articleDocument,
+    required this.article,
     required this.onTap,
   }) : super(key: key);
 
-  final String title;
-  final String description;
-  final List articleDocument;
+  final Map<String, dynamic> article;
   final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
-    var background =
-        '${dotenv.get('API')}/${articleDocument[0]['document']['path']}';
-    print('aa $background');
+    var articleImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    if (article['article_document'] != null) {
+      articleImage =
+          '${dotenv.get('API')}/${article['article_document']['document']['path']}';
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDefaults.margin / 2),
@@ -57,7 +55,7 @@ class ArticleTile extends StatelessWidget {
                           child: AspectRatio(
                             aspectRatio: 1 / 1,
                             child: NetworkImageWithLoader(
-                              background,
+                              articleImage,
                               true,
                               fit: BoxFit.cover,
                             ),
@@ -98,7 +96,7 @@ class ArticleTile extends StatelessWidget {
           ),
           const SizedBox(height: AppDefaults.margin / 4),
           Text(
-            title,
+            article['title'],
             style: const TextStyle(
               fontSize: AppDefaults.fontSize,
               color: AppColors.primary,

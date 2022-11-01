@@ -77,7 +77,12 @@ class _MyProductsTabState extends State<MyProductsTab> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                SelectDropdown(options: filters, defaultValue: filterValue),
+                SelectDropdown(
+                  width: 160,
+                  height: 55,
+                  options: filters,
+                  defaultValue: filterValue,
+                ),
                 Container(
                   padding: const EdgeInsets.all(0),
                   margin: const EdgeInsets.all(0),

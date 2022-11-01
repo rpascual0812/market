@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
-import 'package:market/models/article.dart';
 
 import '../../../constants/index.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'article_tile.dart';
 
 class ArticleList extends StatefulWidget {
@@ -16,17 +17,17 @@ class ArticleList extends StatefulWidget {
 }
 
 class _ArticleListState extends State<ArticleList> {
-  List<Articles> articles = [];
+  List articles = [];
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    getArticles();
+    fetch();
   }
 
-  Future<void> getArticles() async {
+  Future<void> fetch() async {
     try {
       var res = await Remote.get('articles', {});
       // print('res $res');
@@ -34,13 +35,7 @@ class _ArticleListState extends State<ArticleList> {
         setState(() {
           dataJson = jsonDecode(res.body);
           for (var i = 0; i < dataJson['data'].length; i++) {
-            articles.add(Articles(
-              pk: dataJson['data'][i]['pk'],
-              title: dataJson['data'][i]['title'],
-              description: dataJson['data'][i]['description'],
-              articleDocument: dataJson['data'][i]['article_document'],
-              userPk: dataJson['data'][i]['user_pk'],
-            ));
+            articles.add(dataJson['data'][i]);
             // print('articles $articles');
           }
         });
@@ -65,14 +60,29 @@ class _ArticleListState extends State<ArticleList> {
         scrollDirection: Axis.horizontal,
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: List.generate(
-              dataJson['data'] != null ? dataJson['data'].length : 0, (index) {
-            return ArticleTile(
-              title: articles[index].title,
-              description: articles[index].description,
-              articleDocument: articles[index].articleDocument,
-              onTap: () {},
-            );
+          children: List.generate(articles.length, (index) {
+            return articles.isNotEmpty
+                ? ArticleTile(
+                    article: articles[index],
+                    onTap: () async {
+                      ArtDialogResponse response = await ArtSweetAlert.show(
+                          barrierDismissible: false,
+                          context: context,
+                          artDialogArgs: ArtDialogArgs(
+                            denyButtonText: "Cancel",
+                            title:
+                                "You are about to leave Samdhana Community Market. Do you want to continue?",
+                            confirmButtonText: "Continue",
+                          ));
+
+                      if (response.isTapConfirmButton) {
+                        var url = Uri.parse(articles[index]['url']);
+                        await launchUrl(url);
+                        return;
+                      }
+                    },
+                  )
+                : const Text('No articles found');
           }),
         ),
         // children: const [

@@ -123,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
             /// Statuses
             account['user'] != null
-                ? ProfileProduct(user: account['user'])
+                ? ProfileProduct(token: widget.token, user: account['user'])
                 : const SizedBox(height: 1),
             // const SizedBox(height: AppDefaults.margin),
 

@@ -101,7 +101,12 @@ class _ChatPageState extends State<ChatPage> {
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
-                    SelectDropdown(options: filters, defaultValue: filterValue),
+                    SelectDropdown(
+                      width: 160,
+                      height: 55,
+                      options: filters,
+                      defaultValue: filterValue,
+                    ),
                   ],
                 ),
               ),

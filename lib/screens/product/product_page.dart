@@ -63,7 +63,7 @@ class _ProductPageState extends State<ProductPage> {
                     documents: product['product_documents'] ?? []),
               ),
               Visibility(
-                visible: product['pk'] != null ? true : false,
+                visible: product['name'] != null ? true : false,
                 child: ProductPageDetails(product: product),
               ),
               const OtherProducts(

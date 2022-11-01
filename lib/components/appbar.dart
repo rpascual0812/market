@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:market/screens/notifications/notification_page.dart';
+import 'package:market/screens/product/components/cart_page.dart';
 import 'package:market/screens/search/search_page.dart';
 
 class Appbar extends StatelessWidget with PreferredSizeWidget {
@@ -34,7 +35,8 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
             Visibility(
               visible: showHide(),
               child: IconButton(
-                padding: const EdgeInsets.all(0),
+                padding: const EdgeInsets.only(left: 10),
+                constraints: const BoxConstraints(),
                 icon: const Icon(Icons.search),
                 color: Colors.white,
                 onPressed: () {
@@ -53,7 +55,27 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
             Visibility(
               visible: showHide(),
               child: IconButton(
-                padding: const EdgeInsets.all(0),
+                padding: const EdgeInsets.only(left: 10),
+                constraints: const BoxConstraints(),
+                icon: const Icon(Icons.shopping_cart),
+                color: Colors.white,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const CartPage();
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: showHide(),
+              child: IconButton(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                constraints: const BoxConstraints(),
                 icon: const Icon(Icons.notifications),
                 color: Colors.white,
                 onPressed: () {

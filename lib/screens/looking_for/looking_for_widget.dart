@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:market/components/section_divider_title.dart';
 
 import '../../constants/index.dart';
+import '../product/product_page.dart';
 // import 'info_row.dart';
 
 class LookingForWidget extends StatefulWidget {
@@ -96,6 +97,7 @@ class _LookingForWidgetState extends State<LookingForWidget> {
                 margin: const EdgeInsets.all(0),
                 child: FittedBox(
                   child: DataTable(
+                    showCheckboxColumn: false,
                     horizontalMargin: 0,
                     dataRowHeight: 25,
                     // columnSpacing: 0,
@@ -126,21 +128,33 @@ class _LookingForWidgetState extends State<LookingForWidget> {
                         (index) {
                       DateTime date = DateTime.parse(
                           products[index]['date_created'].toString());
-                      return DataRow(cells: [
-                        DataCell(Text(
-                            '${products[index]['user']['first_name']} ${products[index]['user']['last_name']}',
-                            style: const TextStyle(
-                                fontSize: AppDefaults.fontSize - 2))),
-                        DataCell(Text(products[index]['name'],
-                            style: const TextStyle(
-                                fontSize: AppDefaults.fontSize - 2))),
-                        DataCell(Text(products[index]['quantity'],
-                            style: const TextStyle(
-                                fontSize: AppDefaults.fontSize - 2))),
-                        DataCell(Text(DateFormat.yMMMd().format(date),
-                            style: const TextStyle(
-                                fontSize: AppDefaults.fontSize - 2))),
-                      ]);
+                      return DataRow(
+                          onSelectChanged: (bool? selected) {
+                            if (selected != null && selected) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ProductPage(
+                                    productPk: products[index]['pk'],
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          cells: [
+                            DataCell(Text(
+                                '${products[index]['user']['first_name']} ${products[index]['user']['last_name']}',
+                                style: const TextStyle(
+                                    fontSize: AppDefaults.fontSize - 2))),
+                            DataCell(Text(products[index]['name'],
+                                style: const TextStyle(
+                                    fontSize: AppDefaults.fontSize - 2))),
+                            DataCell(Text(products[index]['quantity'],
+                                style: const TextStyle(
+                                    fontSize: AppDefaults.fontSize - 2))),
+                            DataCell(Text(DateFormat.yMMMd().format(date),
+                                style: const TextStyle(
+                                    fontSize: AppDefaults.fontSize - 2))),
+                          ]);
                     }),
                     // rows: const [
                     //   DataRow(cells: [

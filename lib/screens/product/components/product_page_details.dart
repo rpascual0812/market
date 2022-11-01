@@ -132,16 +132,17 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
 
     // dataJson = jsonDecode(res.body);
     var userAddress = {};
-    for (var i = 0; i < widget.product['user_addresses'].length; i++) {
-      if (widget.product['user_addresses'][i]['default']) {
-        userAddress = widget.product['user_addresses'][i];
+    if (widget.product['type'] == 'looking_for') {
+      for (var i = 0; i < widget.product['user_addresses'].length; i++) {
+        if (widget.product['user_addresses'][i]['default']) {
+          userAddress = widget.product['user_addresses'][i];
+        }
       }
-    }
-
-    var sellerAddress = {};
-    for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
-      if (widget.product['seller_addresses'][i]['default']) {
-        sellerAddress = widget.product['seller_addresses'][i];
+    } else {
+      for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
+        if (widget.product['seller_addresses'][i]['default']) {
+          userAddress = widget.product['seller_addresses'][i];
+        }
       }
     }
 
@@ -263,7 +264,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return CartPage(token: token);
+                                return const CartPage();
                               },
                             ),
                           );
@@ -628,7 +629,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                     ),
                   ),
                   Text(
-                    '${sellerAddress['city']['name']}, ${sellerAddress['province']['name']}',
+                    '${userAddress['city']['name']}, ${userAddress['province']['name']}',
                     style: const TextStyle(
                         color: Colors.white, fontSize: AppDefaults.fontSize),
                   ),

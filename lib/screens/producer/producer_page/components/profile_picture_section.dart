@@ -111,7 +111,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
     var userAddress = AppDefaults.userAddress(widget.user['user_addresses']);
     var sellerAddress =
         AppDefaults.sellerAddress(widget.user['seller_addresses']);
-
+    print(userImage);
     return Stack(
       children: [
         Container(
@@ -376,12 +376,13 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 320,
                           child: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                            style: TextStyle(color: Colors.white, fontSize: 11),
+                            widget.user['about'] ?? '',
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 11),
                           ),
                         ),
                       ],

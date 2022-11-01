@@ -80,7 +80,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const PostLookingFor(),
+                          builder: (context) =>
+                              PostLookingFor(token: widget.token),
                         ),
                       );
                     }),

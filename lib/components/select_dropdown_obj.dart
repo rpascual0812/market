@@ -5,8 +5,8 @@ import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
 
 //ignore: must_be_immutable
-class SelectDropdown extends StatefulWidget {
-  SelectDropdown({
+class SelectDropdownObj extends StatefulWidget {
+  SelectDropdownObj({
     Key? key,
     required this.width,
     required this.height,
@@ -17,15 +17,15 @@ class SelectDropdown extends StatefulWidget {
 
   final double width;
   final double height;
-  final List<String> options;
+  final List options;
   String defaultValue;
   final void Function(String?)? onChanged;
 
   @override
-  State<SelectDropdown> createState() => _SelectDropdownState();
+  State<SelectDropdownObj> createState() => _SelectDropdownObjState();
 }
 
-class _SelectDropdownState extends State<SelectDropdown> {
+class _SelectDropdownObjState extends State<SelectDropdownObj> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -54,9 +54,9 @@ class _SelectDropdownState extends State<SelectDropdown> {
             ),
             items: widget.options
                 .map((item) => DropdownMenuItem<String>(
-                      value: item,
+                      value: item['pk'].toString(),
                       child: Text(
-                        item,
+                        item['name'],
                         style: const TextStyle(
                           fontSize: AppDefaults.fontSize,
                           color: Colors.white,

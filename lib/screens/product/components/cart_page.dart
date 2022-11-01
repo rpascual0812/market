@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:market/screens/product/components/cart_page_tile.dart';
 
 import '../../../components/appbar.dart';
@@ -13,16 +14,16 @@ import 'package:http/http.dart' as http;
 class CartPage extends StatefulWidget {
   const CartPage({
     Key? key,
-    required this.token,
   }) : super(key: key);
-
-  final String token;
 
   @override
   State<CartPage> createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
+  final storage = const FlutterSecureStorage();
+  String? token = '';
+
   bool isLoading = false;
   List orders = [];
   Map<Object, dynamic> dataJson = {};
@@ -31,12 +32,15 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
+    getStorage();
+  }
+
+  Future getStorage() async {
+    token = await storage.read(key: 'jwt');
     fetch();
   }
 
   Future<void> fetch() async {
-    // try {
-    final token = widget.token;
     final url = Uri.parse('${dotenv.get('API')}/orders/cart');
     final headers = {
       HttpHeaders.authorizationHeader: 'Bearer $token',
@@ -46,11 +50,10 @@ class _CartPageState extends State<CartPage> {
       url,
       headers: headers,
     );
-    print(res.statusCode);
+    // print(res.statusCode);
     if (res.statusCode == 200) {
       setState(() {
         dataJson = jsonDecode(res.body);
-        print('dataJson $dataJson');
         for (var i = 0; i < dataJson['data'].length; i++) {
           dataJson['data'][i]['selected'] = false;
           orders.add(dataJson['data'][i]);

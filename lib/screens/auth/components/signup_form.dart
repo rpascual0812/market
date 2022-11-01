@@ -41,6 +41,8 @@ class _SignUpFormState extends State<SignUpForm> {
   TextEditingController addressDetailsController =
       TextEditingController(text: 'Pasig');
 
+  TextEditingController aboutMeController = TextEditingController(text: '');
+
   bool accept = false;
 
   File? displayPhoto;
@@ -59,6 +61,7 @@ class _SignUpFormState extends State<SignUpForm> {
     'city': '',
     'area': '',
     'address_details': '',
+    'about_me': '',
     'accept': '',
     'images': {'display': '', 'id': ''}
   };
@@ -93,6 +96,7 @@ class _SignUpFormState extends State<SignUpForm> {
           'city': cityValue,
           'area': areaValue,
           'address_details': addressDetailsController.text,
+          'about': aboutMeController.text,
           'accept': accept.toString(),
           'display_photo': displayPhotoPk.toString(),
           'id_photo': idPhotoPk.toString(),
@@ -806,6 +810,37 @@ class _SignUpFormState extends State<SignUpForm> {
                         style: const TextStyle(fontSize: AppDefaults.fontSize),
                       ),
                     ),
+                    const SizedBox(height: AppDefaults.margin),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'About Me',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: AppDefaults.fontSize,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppDefaults.margin / 2),
+                    SizedBox(
+                      child: TextFormField(
+                        maxLines: 5,
+                        controller: aboutMeController,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: AppDefaults.edgeInset,
+                          prefixIconConstraints:
+                              const BoxConstraints(minWidth: 0, minHeight: 0),
+                          // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                          focusedBorder: AppDefaults.outlineInputBorderSuccess,
+                          enabledBorder: AppDefaults.outlineInputBorderSuccess,
+                          focusedErrorBorder:
+                              AppDefaults.outlineInputBorderError,
+                          errorBorder: AppDefaults.outlineInputBorderError,
+                        ),
+                        style: const TextStyle(fontSize: AppDefaults.fontSize),
+                      ),
+                    ),
                     // const Align(
                     //   alignment: Alignment.centerLeft,
                     //   child: Text(
@@ -917,40 +952,40 @@ class _SignUpFormState extends State<SignUpForm> {
                       ],
                     ),
                     const SizedBox(height: AppDefaults.margin),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Attach Document 1',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: AppDefaults.fontSize,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: AppDefaults.margin / 2),
-                    SizedBox(
-                      height: AppDefaults.height,
-                      // padding: EdgeInsets.zero,
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                        ),
-                        style: const TextStyle(
-                            fontSize: AppDefaults.fontSize), // <-- SEE HERE
-                      ),
-                    ),
+                    // const Align(
+                    //   alignment: Alignment.centerLeft,
+                    //   child: Text(
+                    //     'Attach Document 1',
+                    //     style: TextStyle(
+                    //       fontWeight: FontWeight.bold,
+                    //       fontSize: AppDefaults.fontSize,
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(height: AppDefaults.margin / 2),
+                    // SizedBox(
+                    //   height: AppDefaults.height,
+                    //   // padding: EdgeInsets.zero,
+                    //   child: TextFormField(
+                    //     decoration: InputDecoration(
+                    //       // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                    //       focusedBorder: OutlineInputBorder(
+                    //         borderRadius:
+                    //             BorderRadius.circular(AppDefaults.radius),
+                    //         borderSide: const BorderSide(
+                    //             width: 1.0, color: Colors.grey),
+                    //       ),
+                    //       enabledBorder: OutlineInputBorder(
+                    //         borderRadius:
+                    //             BorderRadius.circular(AppDefaults.radius),
+                    //         borderSide: const BorderSide(
+                    //             width: 1.0, color: Colors.grey),
+                    //       ),
+                    //     ),
+                    //     style: const TextStyle(
+                    //         fontSize: AppDefaults.fontSize), // <-- SEE HERE
+                    //   ),
+                    // ),
                     // const Align(
                     //   alignment: Alignment.centerLeft,
                     //   child: Text(
@@ -968,41 +1003,41 @@ class _SignUpFormState extends State<SignUpForm> {
                     //     floatingLabelBehavior: FloatingLabelBehavior.always,
                     //   ),
                     // ),
-                    const SizedBox(height: AppDefaults.margin),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Attach Document 2',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: AppDefaults.fontSize,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: AppDefaults.margin / 2),
-                    SizedBox(
-                      height: AppDefaults.height,
-                      // padding: EdgeInsets.zero,
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDefaults.radius),
-                            borderSide: const BorderSide(
-                                width: 1.0, color: Colors.grey),
-                          ),
-                        ),
-                        style: const TextStyle(
-                            fontSize: AppDefaults.fontSize), // <-- SEE HERE
-                      ),
-                    ),
+                    // const SizedBox(height: AppDefaults.margin),
+                    // const Align(
+                    //   alignment: Alignment.centerLeft,
+                    //   child: Text(
+                    //     'Attach Document 2',
+                    //     style: TextStyle(
+                    //       fontWeight: FontWeight.bold,
+                    //       fontSize: AppDefaults.fontSize,
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(height: AppDefaults.margin / 2),
+                    // SizedBox(
+                    //   height: AppDefaults.height,
+                    //   // padding: EdgeInsets.zero,
+                    //   child: TextFormField(
+                    //     decoration: InputDecoration(
+                    //       // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                    //       focusedBorder: OutlineInputBorder(
+                    //         borderRadius:
+                    //             BorderRadius.circular(AppDefaults.radius),
+                    //         borderSide: const BorderSide(
+                    //             width: 1.0, color: Colors.grey),
+                    //       ),
+                    //       enabledBorder: OutlineInputBorder(
+                    //         borderRadius:
+                    //             BorderRadius.circular(AppDefaults.radius),
+                    //         borderSide: const BorderSide(
+                    //             width: 1.0, color: Colors.grey),
+                    //       ),
+                    //     ),
+                    //     style: const TextStyle(
+                    //         fontSize: AppDefaults.fontSize), // <-- SEE HERE
+                    //   ),
+                    // ),
                     // const Align(
                     //   alignment: Alignment.centerLeft,
                     //   child: Text(

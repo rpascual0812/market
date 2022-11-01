@@ -72,8 +72,8 @@ class _ProducerPageState extends State<ProducerPage> {
               child: DefaultTabController(
                 length: 2,
                 child: Column(
-                  children: const [
-                    TabBar(
+                  children: [
+                    const TabBar(
                       labelColor: AppColors.primary,
                       indicatorColor: AppColors.primary,
                       unselectedLabelColor: Colors.grey,
@@ -90,10 +90,12 @@ class _ProducerPageState extends State<ProducerPage> {
                       child: TabBarView(
                         children: [
                           Scaffold(
-                            body: ProductsTab(),
+                            body: ProductsTab(
+                                type: 'product', userPk: widget.userPk),
                           ),
                           Scaffold(
-                            body: ProductsTab(),
+                            body: ProductsTab(
+                                type: 'future_crops', userPk: widget.userPk),
                           ),
                         ],
                       ),

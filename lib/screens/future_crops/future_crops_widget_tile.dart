@@ -60,7 +60,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
 
     // print('111 ${widget.product['date_created']}');
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.31,
+      width: MediaQuery.of(context).size.width * 0.41,
       height: 125,
       // decoration: const BoxDecoration(color: Colors.red),
       child: Padding(

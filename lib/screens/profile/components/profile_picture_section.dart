@@ -322,12 +322,13 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         SizedBox(
                           width: 320,
                           child: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                            style: TextStyle(color: Colors.white, fontSize: 11),
+                            user['about'] ?? '',
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 11),
                           ),
                         ),
                       ],

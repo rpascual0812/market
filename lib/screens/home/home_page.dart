@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
 // import 'package:market/components/cards/big/big_card_image.dart';
 import 'package:market/components/select_dropdown.dart';
+import 'package:market/components/select_dropdown_obj.dart';
 import 'package:market/components/sliders/home_slider.dart';
 // import 'package:market/demo_data.dart';
 import 'package:market/screens/future_crops/future_crops_widget.dart';
-import 'package:market/screens/home/components/article_list.dart';
 import 'package:market/screens/home/components/home_header.dart';
 import 'package:market/screens/looking_for/looking_for_widget.dart';
 // import 'package:market/screens/product_list/product_list_widget.dart';
@@ -19,6 +19,7 @@ import '../../components/section_divider_title.dart';
 import '../../constants/app_defaults.dart';
 import '../../constants/remote.dart';
 import '../product/product_page.dart';
+import 'components/article_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -34,23 +35,53 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List products = [];
-  Map<Object, dynamic> dataJson = {};
+  List categories = [];
   int intialIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    getProducts();
+    getCategories();
+  }
+
+  Future<void> getCategories() async {
+    try {
+      categories = [];
+      var res = await Remote.get('categories', {});
+      // print('res $res');
+      if (res.statusCode == 200) {
+        setState(() {
+          var dataJson = jsonDecode(res.body);
+          for (var i = 0; i < dataJson['data'].length; i++) {
+            categories.add(dataJson['data'][i]);
+          }
+
+          categories.insert(0, {'pk': 0, 'name': 'All'});
+          print(categories);
+          getProducts();
+        });
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+      }
+      // if (res.statusCode == 200) return res.body;
+      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
   }
 
   Future<void> getProducts() async {
     try {
       products = [];
-      var res = await Remote.get('products', {'orderBy': filterValue});
+      var res = await Remote.get('products',
+          {'orderBy': filterValue, 'categoryFilter': categoryFilterValue});
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {
-          dataJson = jsonDecode(res.body);
+          var dataJson = jsonDecode(res.body);
           for (var i = 0; i < dataJson['data'].length; i++) {
             products.add(dataJson['data'][i]);
           }
@@ -68,6 +99,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  var categoryFilterValue = '0';
   var filterValue = AppDefaults.filters[3];
 
   @override
@@ -87,9 +119,9 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: AppDefaults.margin / 2),
             // const TitleAndSubtitle(),
-            const SizedBox(height: AppDefaults.margin / 2),
+            // const SizedBox(height: AppDefaults.margin / 2),
             // const SearchBar(),
-            const SizedBox(height: AppDefaults.margin),
+            // const SizedBox(height: AppDefaults.margin),
             const ArticleList(),
             const SizedBox(height: AppDefaults.margin),
             const FutureCropsWidget(),
@@ -106,15 +138,40 @@ class _HomePageState extends State<HomePage> {
                     title: 'Product Post',
                   ),
                 ),
-                SelectDropdown(
-                  options: AppDefaults.filters,
-                  defaultValue: filterValue,
-                  onChanged: (option) {
-                    filterValue = option as String;
-                    setState(() {
-                      getProducts();
-                    });
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 5),
+                      child: SelectDropdownObj(
+                        width: 80,
+                        height: 55,
+                        options: categories,
+                        defaultValue: categoryFilterValue,
+                        onChanged: (option) {
+                          categoryFilterValue = option as String;
+                          setState(() {
+                            getProducts();
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(right: 5),
+                      child: SelectDropdown(
+                        width: 100,
+                        height: 55,
+                        options: AppDefaults.filters,
+                        defaultValue: filterValue,
+                        onChanged: (option) {
+                          filterValue = option as String;
+                          setState(() {
+                            getProducts();
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -53,15 +53,12 @@ class _RateProductPageState extends State<RateProductPage> {
 
   Future fetch() async {
     try {
-      var tokenObj = json.decode(token);
+      print(token);
       // var params = {'product_pk': widget.product['pk'].toString()};
-
       final url = Uri.parse(
           '${dotenv.get('API')}/products/${widget.product['pk']}/rating');
-      // .replace(queryParameters: params);
       final headers = {
-        HttpHeaders.authorizationHeader:
-            'Bearer ${tokenObj['user']['access_token']}',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
       };
 
       var res = await http.get(
@@ -86,25 +83,18 @@ class _RateProductPageState extends State<RateProductPage> {
 
   Future submit() async {
     try {
-      var tokenObj = json.decode(token);
       final url = Uri.parse('${dotenv.get('API')}/products/ratings');
       final headers = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${tokenObj['user']['access_token']}',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
       };
-
       var body = {
         'message': message.text,
         'rating': rating.text,
         'anonymous': anonymous.text,
         'product_pk': widget.product['pk'].toString()
       };
-      print(body);
-      var res = await http.post(
-        url,
-        headers: headers,
-        body: body,
-      );
+
+      var res = await http.post(url, headers: headers, body: body);
 
       if (res.statusCode == 200) {
         ArtDialogResponse response = await ArtSweetAlert.show(

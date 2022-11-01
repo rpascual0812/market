@@ -21,18 +21,15 @@ class ProductListWidgetTileSquare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var image = '${dotenv.get('API')}/assets/images/no-image.jpg';
-    for (var i = 0; i < product['product_documents'].length; i++) {
-      // print(product['product_documents'][i]['document']['path']);
-      if (product['product_documents'][i]['document']['path'] != null &&
-          product['product_documents'][i]['default'] == true) {
-        image =
-            '${dotenv.get('API')}/${product['product_documents'][i]['document']['path']}';
+    if (product['product_documents'] != null) {
+      for (var i = 0; i < product['product_documents'].length; i++) {
+        if (product['product_documents'][i]['document'] != null &&
+            product['product_documents'][i]['default'] == true) {
+          image =
+              '${dotenv.get('API')}/${product['product_documents'][i]['document']['path']}';
+        }
       }
     }
-    print(image);
-    // var image = product['product_documents'].isEmpty
-    //     ? '${dotenv.get('API')}/assets/images/no-image.jpg'
-    //     : '${dotenv.get('API')}/${product['product_documents'][0]['document']['path']}';
 
     return InkWell(
       onTap: onTap,
@@ -100,7 +97,8 @@ class ProductListWidgetTileSquare extends StatelessWidget {
                       child: RatingBarIndicator(
                         rating: product['product_rating_total'] != null
                             ? double.parse(
-                                product['product_rating_total'].toString())
+                                product['product_rating_total'].toString(),
+                              )
                             : 0.00,
                         itemBuilder: (context, index) => const Icon(
                           Icons.star,
