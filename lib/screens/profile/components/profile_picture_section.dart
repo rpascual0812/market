@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../constants/index.dart';
+import '../../auth/profile_edit_page.dart';
 import 'follower_list.dart';
 import 'following_list.dart';
 
@@ -126,11 +127,21 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                   ),
                                   const SizedBox(
                                       height: AppDefaults.margin / 4),
-                                  const Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child: Text(
-                                      'Edit Profile',
-                                      style: TextStyle(color: Colors.black38),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProfileEditPage(user: user),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Edit Profile',
+                                        style: TextStyle(color: Colors.black38),
+                                      ),
                                     ),
                                   ),
                                 ],

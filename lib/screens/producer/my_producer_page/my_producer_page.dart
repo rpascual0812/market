@@ -355,10 +355,10 @@ class _MyProducerPageState extends State<MyProducerPage> {
                         child: TabBarView(
                           children: [
                             Scaffold(
-                              body: MyProductsTab(),
+                              body: MyProductsTab(type: 'products'),
                             ),
                             Scaffold(
-                              body: MyProductsTab(),
+                              body: MyProductsTab(type: 'future_crops'),
                             ),
                           ],
                         ),

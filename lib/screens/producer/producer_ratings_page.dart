@@ -130,7 +130,9 @@ class _ProducerRatingsPageState extends State<ProducerRatingsPage> {
                       }
                     }
 
-                    if (widget.user['user_ratings'][index]['anonymous']) {
+                    if (widget.user['user_ratings'][index]['anonymous'] !=
+                            null &&
+                        widget.user['user_ratings'][index]['anonymous']) {
                       image = '${dotenv.get('API')}/assets/images/user.png';
                     }
 
@@ -154,7 +156,10 @@ class _ProducerRatingsPageState extends State<ProducerRatingsPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(widget.user['user_ratings'][index]
-                                      ['anonymous']
+                                              ['anonymous'] !=
+                                          null &&
+                                      widget.user['user_ratings'][index]
+                                          ['anonymous']
                                   ? 'Anonymous User'
                                   : '${widget.user['user_ratings'][index]['user']['first_name']} ${widget.user['user_ratings'][index]['user']['last_name']}'),
                               RatingBarIndicator(

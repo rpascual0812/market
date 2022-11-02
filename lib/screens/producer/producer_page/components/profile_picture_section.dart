@@ -111,7 +111,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
     var userAddress = AppDefaults.userAddress(widget.user['user_addresses']);
     var sellerAddress =
         AppDefaults.sellerAddress(widget.user['seller_addresses']);
-    print(userImage);
+    // print(userImage);
     return Stack(
       children: [
         Container(

@@ -52,6 +52,8 @@ class AppMessage {
         return "You have been successfully logged out.";
       case "REGISTER_SUCCESS":
         return "Your account has been created successfully.";
+      case "PROFILE_UPDATE":
+        return "Your account has been updated.";
       case "PRODUCT_LOOKING_SAVED":
         return "The product you are looking for has been posted.";
       default:

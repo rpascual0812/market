@@ -1,14 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:market/components/select_dropdown.dart';
-import 'package:market/screens/producer/my_producer_page/components/my_producer_add_product.dart';
-import 'package:market/screens/producer/my_producer_page/components/my_products_tile.dart';
 
+import '../../../../components/select_dropdown.dart';
 import '../../../../constants/index.dart';
+import 'my_producer_add_product.dart';
+import 'my_products_tile.dart';
 
 class MyProductsTab extends StatefulWidget {
-  const MyProductsTab({Key? key}) : super(key: key);
+  const MyProductsTab({
+    Key? key,
+    required this.type,
+  }) : super(key: key);
+
+  final String type;
 
   @override
   State<MyProductsTab> createState() => _MyProductsTabState();
@@ -17,7 +22,7 @@ class MyProductsTab extends StatefulWidget {
 class _MyProductsTabState extends State<MyProductsTab> {
   bool includeFutureCrops = false;
 
-  var filterValue = 'Sort by Category';
+  var filterValue = 'Sort by Date';
   var filters = ['Sort by Category', 'Sort by Name', 'Sort by Date'];
 
   List products = [];
@@ -32,7 +37,9 @@ class _MyProductsTabState extends State<MyProductsTab> {
 
   Future<void> fetch() async {
     try {
-      var res = await Remote.get('products', {});
+      products = [];
+      var res = await Remote.get(
+          'products', {'orderBy': filterValue, 'owned': 'true'});
       if (res.statusCode == 200) {
         setState(() {
           dataJson = jsonDecode(res.body);
@@ -55,6 +62,7 @@ class _MyProductsTabState extends State<MyProductsTab> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
           child: Center(
@@ -65,70 +73,83 @@ class _MyProductsTabState extends State<MyProductsTab> {
     );
   }
 
-  Widget buildOrders() => ListView(
-        // shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(left: 10, right: 10),
-            color: Colors.white,
-            width: MediaQuery.of(context).size.width,
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                SelectDropdown(
-                  width: 160,
-                  height: 55,
-                  options: filters,
-                  defaultValue: filterValue,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(0),
-                  margin: const EdgeInsets.all(0),
-                  width: 150,
-                  height: 30,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const MyProducerAddProduct(),
-                        ),
-                      );
+  Widget buildOrders() => ListView.builder(
+      shrinkWrap: true,
+      itemCount: 1,
+      itemBuilder: (BuildContext context, int index) {
+        return Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 10, right: 10),
+              color: Colors.white,
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  SelectDropdown(
+                    onChanged: (option) {
+                      filterValue = option as String;
+                      setState(() {
+                        fetch();
+                      });
                     },
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.zero),
-                    ),
-                    child: const Text(
-                      'Add Product',
-                      style: TextStyle(fontSize: 12),
+                    width: 160,
+                    height: 55,
+                    options: filters,
+                    defaultValue: filterValue,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(0),
+                    margin: const EdgeInsets.all(0),
+                    width: 150,
+                    height: 30,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const MyProducerAddProduct(),
+                          ),
+                        );
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.zero),
+                      ),
+                      child: const Text(
+                        'Add Product',
+                        style: TextStyle(fontSize: AppDefaults.fontSize),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          products.isEmpty
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Text(
-                      'No products found',
-                      style: TextStyle(color: Colors.black, fontSize: 24),
-                    )
-                  ],
-                )
-              : ListView(
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  children: List.generate(
-                      products.isNotEmpty ? dataJson['data'].length : 0,
-                      (index) {
-                    return MyProductTile(product: products[index]);
-                  }),
-                ),
-        ],
-      );
+            products.isEmpty
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      Text(
+                        'No products found',
+                        style: TextStyle(color: Colors.black, fontSize: 24),
+                      )
+                    ],
+                  )
+                : ListView.builder(
+                    itemCount: products.length,
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      return MyProductTile(product: products[index]);
+                    }
+                    // children: List.generate(
+                    //     products.isNotEmpty ? dataJson['data'].length : 0,
+                    //     (index) {
+                    //   return MyProductTile(product: products[index]);
+                    // }),
+                    ),
+          ],
+        );
+      });
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
+import 'package:market/screens/producer/my_producer_page/components/my_producer_edit_product.dart';
 
 import '../../../../constants/index.dart';
 import '../../../../components/network_image.dart';
@@ -101,7 +102,9 @@ class _MyProductTileState extends State<MyProductTile> {
                                                 child: Text(
                                                   widget.product['name'],
                                                   style: const TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize:
+                                                        AppDefaults.fontSize +
+                                                            5,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
@@ -185,7 +188,7 @@ class _MyProductTileState extends State<MyProductTile> {
                                         child: Text(
                                           'Product created: ${DateFormat.yMMMd().format(date)}',
                                           style: const TextStyle(
-                                            fontSize: 10,
+                                            fontSize: AppDefaults.fontSize - 2,
                                             color: AppColors.defaultBlack,
                                           ),
                                         ),
@@ -205,14 +208,16 @@ class _MyProductTileState extends State<MyProductTile> {
                                               padding: EdgeInsets.zero,
                                               child: OutlinedButton(
                                                 onPressed: () {
-                                                  // Navigator.push(
-                                                  //   context,
-                                                  //   MaterialPageRoute(
-                                                  //     builder: (context) {
-                                                  //       return const Bubble();
-                                                  //     },
-                                                  //   ),
-                                                  // );
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return MyProducerEditProduct(
+                                                            product:
+                                                                widget.product);
+                                                      },
+                                                    ),
+                                                  );
                                                 },
                                                 style: OutlinedButton.styleFrom(
                                                   side: const BorderSide(

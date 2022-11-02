@@ -10,21 +10,25 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:market/components/appbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:market/screens/producer/my_producer_page/my_producer_page.dart';
 // import 'package:market/components/network_image.dart';
 
 import '../../../../components/network_image.dart';
 import '../../../../constants/index.dart';
 // import 'package:market/models/ratings.dart';
 
-class MyProducerAddProduct extends StatefulWidget {
-  const MyProducerAddProduct({Key? key}) : super(key: key);
+class MyProducerEditProduct extends StatefulWidget {
+  const MyProducerEditProduct({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
+
+  final Map<String, dynamic> product;
 
   @override
-  State<MyProducerAddProduct> createState() => _MyProducerAddProductState();
+  State<MyProducerEditProduct> createState() => _MyProducerEditProductState();
 }
 
-class _MyProducerAddProductState extends State<MyProducerAddProduct> {
+class _MyProducerEditProductState extends State<MyProducerEditProduct> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   final storage = const FlutterSecureStorage();
@@ -49,6 +53,19 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
 
     getCategories();
     readStorage();
+
+    productNameController.text = widget.product['name'];
+    priceController.text = widget.product['price_from'];
+    stockController.text = widget.product['quantity'];
+    descriptionController.text = widget.product['description'];
+    categoryController.text = widget.product['category_pk'].toString();
+    categoryValue = widget.product['category_pk'].toString();
+
+    if (widget.product['product_documents'].length > 0) {
+      for (var i = 0; i < widget.product['product_documents'].length; i++) {
+        documents.add(widget.product['product_documents'][i]['document']);
+      }
+    }
   }
 
   Future<void> readStorage() async {
@@ -172,6 +189,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
         }
 
         var body = {
+          'pk': widget.product['pk'].toString(),
           'type': 'product',
           'name': productNameController.text,
           'price': priceController.text,
@@ -182,7 +200,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
           'documents': documentPks.join(','),
         };
 
-        final url = Uri.parse('${dotenv.get('API')}/products');
+        final url = Uri.parse('${dotenv.get('API')}/products/update');
         final headers = {
           HttpHeaders.authorizationHeader: 'Bearer $token',
         };
@@ -197,17 +215,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
             artDialogArgs: ArtDialogArgs(
                 type: ArtSweetAlertType.success,
                 title: "Success!",
-                text: "Your product has been successfully added."),
-          );
-
-          if (!mounted) return;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return MyProducerPage(token: token);
-              },
-            ),
+                text: "Your product has been updated."),
           );
         }
         return null;

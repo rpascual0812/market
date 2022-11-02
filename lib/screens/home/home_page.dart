@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
           }
 
           categories.insert(0, {'pk': 0, 'name': 'All'});
-          print(categories);
+          // print(categories);
           getProducts();
         });
       } else if (res.statusCode == 401) {

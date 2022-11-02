@@ -13,16 +13,19 @@ import '../../../constants/index.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 
-class SignUpForm extends StatefulWidget {
-  const SignUpForm({
+class ProfileEditForm extends StatefulWidget {
+  const ProfileEditForm({
     Key? key,
+    required this.user,
   }) : super(key: key);
 
+  final Map<String, dynamic> user;
+
   @override
-  State<SignUpForm> createState() => _SignUpFormState();
+  State<ProfileEditForm> createState() => _ProfileEditFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _ProfileEditFormState extends State<ProfileEditForm> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   TextEditingController firstNameController = TextEditingController(text: '');
   TextEditingController lastNameController = TextEditingController(text: '');
@@ -76,6 +79,25 @@ class _SignUpFormState extends State<SignUpForm> {
   void initState() {
     getProvinces();
 
+    if (widget.user.isNotEmpty) {
+      firstNameController.text = widget.user['first_name'] ?? '';
+      lastNameController.text = widget.user['last_name'] ?? '';
+      birthdayController.text = widget.user['birthdate'] ?? '';
+      emailController.text = widget.user['email_address'] ?? '';
+      mobileController.text = widget.user['mobile_number'] ?? '';
+      aboutMeController.text = widget.user['about'] ?? '';
+    }
+
+    if (widget.user['user_document'].length > 0) {
+      for (var i = 0; i < widget.user['user_document'].length; i++) {
+        if (widget.user['user_document'][i]['type'] == 'profile_photo') {
+          displayPhoto = widget.user['user_document'][i]['document'];
+        } else if (widget.user['user_document'][i]['type'] == 'id_photo') {
+          idPhoto = widget.user['user_document'][i]['document'];
+        }
+      }
+    }
+
     super.initState();
   }
 
@@ -115,6 +137,7 @@ class _SignUpFormState extends State<SignUpForm> {
         setState(() {
           cities = result['data'];
           cities.insert(0, {'pk': 0, 'name': 'Select'});
+          // print(cities);
           // print(cities);
         });
       }
@@ -156,6 +179,7 @@ class _SignUpFormState extends State<SignUpForm> {
     if (_key.currentState!.validate()) {
       try {
         body = {
+          'pk': widget.user['pk'].toString(),
           'first_name': firstNameController.text,
           'last_name': lastNameController.text,
           'birthday': birthdayController.text.toString(),
@@ -172,11 +196,14 @@ class _SignUpFormState extends State<SignUpForm> {
           'id_photo': idPhoto!['pk'].toString(),
         };
         // print(Uri.parse('${dotenv.get('API')}/register'));
-        var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
-            body: body);
+        var url = widget.user['pk'] != null
+            ? '${dotenv.get('API')}/users/update'
+            : '${dotenv.get('API')}/register';
+
+        var res = await http.post(Uri.parse(url), body: body);
 
         // print(res.statusCode);
-        if (res.statusCode == 200) {
+        if (res.statusCode == 201) {
           if (!mounted) return;
           // print(AppMessage.getSuccess('REGISTER_SUCCESS'));
           AppDefaults.toast(
@@ -550,351 +577,396 @@ class _SignUpFormState extends State<SignUpForm> {
                       ),
                     ),
                     const SizedBox(height: AppDefaults.margin),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Password',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: AppDefaults.fontSize,
+                    Visibility(
+                      visible: widget.user.isNotEmpty ? false : true,
+                      child: const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Password',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDefaults.fontSize,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppDefaults.margin / 2),
-                    SizedBox(
-                      // padding: EdgeInsets.zero,
-                      child: TextFormField(
-                        obscureText: true,
-                        enableSuggestions: false,
-                        autocorrect: false,
-                        controller: passwordController,
-                        validator: validatePassword,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: AppDefaults.edgeInset,
-                          prefixIconConstraints:
-                              const BoxConstraints(minWidth: 0, minHeight: 0),
-                          // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                          focusedBorder: AppDefaults.outlineInputBorderSuccess,
-                          enabledBorder: AppDefaults.outlineInputBorderSuccess,
-                          focusedErrorBorder:
-                              AppDefaults.outlineInputBorderError,
-                          errorBorder: AppDefaults.outlineInputBorderError,
-                        ),
-                        style: const TextStyle(
-                            fontSize: AppDefaults.fontSize), // <-- SEE HERE
-                      ),
-                    ),
-                    const SizedBox(height: AppDefaults.margin),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Confirm Password',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: AppDefaults.fontSize,
+                    Visibility(
+                        visible: widget.user.isNotEmpty ? false : true,
+                        child: const SizedBox(height: AppDefaults.margin / 2)),
+                    Visibility(
+                      visible: widget.user.isNotEmpty ? false : true,
+                      child: SizedBox(
+                        // padding: EdgeInsets.zero,
+                        child: TextFormField(
+                          obscureText: true,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          controller: passwordController,
+                          validator: validatePassword,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: AppDefaults.edgeInset,
+                            prefixIconConstraints:
+                                const BoxConstraints(minWidth: 0, minHeight: 0),
+                            // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                            focusedBorder:
+                                AppDefaults.outlineInputBorderSuccess,
+                            enabledBorder:
+                                AppDefaults.outlineInputBorderSuccess,
+                            focusedErrorBorder:
+                                AppDefaults.outlineInputBorderError,
+                            errorBorder: AppDefaults.outlineInputBorderError,
+                          ),
+                          style: const TextStyle(
+                              fontSize: AppDefaults.fontSize), // <-- SEE HERE
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppDefaults.margin / 2),
-                    SizedBox(
-                      child: TextFormField(
-                        obscureText: true,
-                        enableSuggestions: false,
-                        autocorrect: false,
-                        controller: confirmPasswordController,
-                        validator: (value) {
-                          if (value != null && value.isEmpty) {
-                            return 'Confirm password is required';
-                          }
-                          if (value != passwordController.text) {
-                            return 'Confirm password does not match';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: AppDefaults.edgeInset,
-                          prefixIconConstraints:
-                              const BoxConstraints(minWidth: 0, minHeight: 0),
-                          // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                          focusedBorder: AppDefaults.outlineInputBorderSuccess,
-                          enabledBorder: AppDefaults.outlineInputBorderSuccess,
-                          focusedErrorBorder:
-                              AppDefaults.outlineInputBorderError,
-                          errorBorder: AppDefaults.outlineInputBorderError,
+                    Visibility(
+                        visible: widget.user.isNotEmpty ? false : true,
+                        child: const SizedBox(height: AppDefaults.margin)),
+                    Visibility(
+                      visible: widget.user.isNotEmpty ? false : true,
+                      child: const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Confirm Password',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDefaults.fontSize,
+                          ),
                         ),
-                        style: const TextStyle(fontSize: AppDefaults.fontSize),
                       ),
                     ),
-                    const SizedBox(height: AppDefaults.margin),
+                    Visibility(
+                        visible: widget.user.isNotEmpty ? false : true,
+                        child: const SizedBox(height: AppDefaults.margin / 2)),
+                    Visibility(
+                      visible: widget.user.isNotEmpty ? false : true,
+                      child: SizedBox(
+                        child: TextFormField(
+                          obscureText: true,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          controller: confirmPasswordController,
+                          validator: (value) {
+                            if (value != null && value.isEmpty) {
+                              return 'Confirm password is required';
+                            }
+                            if (value != passwordController.text) {
+                              return 'Confirm password does not match';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: AppDefaults.edgeInset,
+                            prefixIconConstraints:
+                                const BoxConstraints(minWidth: 0, minHeight: 0),
+                            // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                            focusedBorder:
+                                AppDefaults.outlineInputBorderSuccess,
+                            enabledBorder:
+                                AppDefaults.outlineInputBorderSuccess,
+                            focusedErrorBorder:
+                                AppDefaults.outlineInputBorderError,
+                            errorBorder: AppDefaults.outlineInputBorderError,
+                          ),
+                          style:
+                              const TextStyle(fontSize: AppDefaults.fontSize),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                        visible: widget.user.isNotEmpty ? false : true,
+                        child: const SizedBox(height: AppDefaults.margin)),
                   ],
                 ), //Container
               ),
             ),
-            const SizedBox(height: AppDefaults.margin),
+            Visibility(
+                visible: widget.user.isNotEmpty ? false : true,
+                child: const SizedBox(height: AppDefaults.margin)),
             // Address
-            Container(
-              width: MediaQuery.of(context).size.width,
-              // height: MediaQuery.of(context).size.height,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: Column(
-                  children: [
-                    const SizedBox(height: AppDefaults.margin * 1),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                            child: Column(
-                              children: [
-                                const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Province',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: AppDefaults.fontSize,
+            Visibility(
+              visible: widget.user.isNotEmpty ? false : true,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                // height: MediaQuery.of(context).size.height,
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: AppDefaults.margin * 1),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                              child: Column(
+                                children: [
+                                  const Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Province',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: AppDefaults.fontSize,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: AppDefaults.margin / 2),
-                                SizedBox(
-                                  height: AppDefaults.height,
-                                  // padding: EdgeInsets.zero,
-                                  child: DropdownButtonFormField<String>(
-                                    isDense: true,
-                                    value: provinceValue,
-                                    icon: const Icon(Icons.keyboard_arrow_down),
-                                    // elevation: 16,
-                                    style: const TextStyle(color: Colors.black),
-                                    validator: (value) {
-                                      if (value != null && value.isEmpty) {
-                                        return '* required';
-                                      }
-                                      return null;
-                                    },
-                                    decoration: InputDecoration(
+                                  const SizedBox(
+                                      height: AppDefaults.margin / 2),
+                                  SizedBox(
+                                    height: AppDefaults.height,
+                                    // padding: EdgeInsets.zero,
+                                    child: DropdownButtonFormField<String>(
                                       isDense: true,
-                                      contentPadding: AppDefaults.edgeInset,
-                                      prefixIconConstraints:
-                                          const BoxConstraints(
-                                              minWidth: 0, minHeight: 0),
-                                      focusedBorder:
-                                          AppDefaults.outlineInputBorderSuccess,
-                                      enabledBorder:
-                                          AppDefaults.outlineInputBorderSuccess,
-                                      focusedErrorBorder:
-                                          AppDefaults.outlineInputBorderError,
-                                      errorBorder:
-                                          AppDefaults.outlineInputBorderError,
+                                      value: provinceValue,
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                      // elevation: 16,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      validator: (value) {
+                                        if (value != null && value.isEmpty) {
+                                          return '* required';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        contentPadding: AppDefaults.edgeInset,
+                                        prefixIconConstraints:
+                                            const BoxConstraints(
+                                                minWidth: 0, minHeight: 0),
+                                        focusedBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        enabledBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        focusedErrorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                        errorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                      ),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          provinceValue = value!;
+                                          getCities();
+                                        });
+                                      },
+                                      items: provinces
+                                          .map<DropdownMenuItem<String>>(
+                                              (value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value['pk'].toString(),
+                                          child: Text('${value['name']}'),
+                                        );
+                                      }).toList(),
                                     ),
-                                    onChanged: (String? value) {
-                                      setState(() {
-                                        provinceValue = value!;
-                                        getCities();
-                                      });
-                                    },
-                                    items: provinces
-                                        .map<DropdownMenuItem<String>>((value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value['pk'].toString(),
-                                        child: Text('${value['name']}'),
-                                      );
-                                    }).toList(),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                            child: Column(
-                              children: [
-                                const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'City',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: AppDefaults.fontSize,
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                              child: Column(
+                                children: [
+                                  const Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'City',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: AppDefaults.fontSize,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: AppDefaults.margin / 2),
-                                SizedBox(
-                                  height: AppDefaults.height,
-                                  // padding: EdgeInsets.zero,
-                                  child: DropdownButtonFormField<String>(
-                                    isDense: true,
-                                    value: cityValue,
-                                    icon: const Icon(Icons.keyboard_arrow_down),
-                                    // elevation: 16,
-                                    style: const TextStyle(color: Colors.black),
-                                    validator: (value) {
-                                      if (value != null && value.isEmpty) {
-                                        return '* required';
-                                      }
-                                      return null;
-                                    },
-                                    decoration: InputDecoration(
+                                  const SizedBox(
+                                      height: AppDefaults.margin / 2),
+                                  SizedBox(
+                                    height: AppDefaults.height,
+                                    // padding: EdgeInsets.zero,
+                                    child: DropdownButtonFormField<String>(
                                       isDense: true,
-                                      contentPadding: AppDefaults.edgeInset,
-                                      prefixIconConstraints:
-                                          const BoxConstraints(
-                                              minWidth: 0, minHeight: 0),
-                                      focusedBorder:
-                                          AppDefaults.outlineInputBorderSuccess,
-                                      enabledBorder:
-                                          AppDefaults.outlineInputBorderSuccess,
-                                      focusedErrorBorder:
-                                          AppDefaults.outlineInputBorderError,
-                                      errorBorder:
-                                          AppDefaults.outlineInputBorderError,
+                                      value: cityValue,
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                      // elevation: 16,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      validator: (value) {
+                                        if (value != null && value.isEmpty) {
+                                          return '* required';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        contentPadding: AppDefaults.edgeInset,
+                                        prefixIconConstraints:
+                                            const BoxConstraints(
+                                                minWidth: 0, minHeight: 0),
+                                        focusedBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        enabledBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        focusedErrorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                        errorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                      ),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          cityValue = value!;
+                                          getAreas();
+                                        });
+                                      },
+                                      items: cities
+                                          .map<DropdownMenuItem<String>>(
+                                              (value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value['pk'].toString(),
+                                          child: Text('${value['name']}'),
+                                        );
+                                      }).toList(),
                                     ),
-                                    onChanged: (String? value) {
-                                      setState(() {
-                                        cityValue = value!;
-                                        getAreas();
-                                      });
-                                    },
-                                    items: cities
-                                        .map<DropdownMenuItem<String>>((value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value['pk'].toString(),
-                                        child: Text('${value['name']}'),
-                                      );
-                                    }).toList(),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                            child: Column(
-                              children: [
-                                const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Area',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: AppDefaults.fontSize,
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                              child: Column(
+                                children: [
+                                  const Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Area',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: AppDefaults.fontSize,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: AppDefaults.margin / 2),
-                                SizedBox(
-                                  height: AppDefaults.height,
-                                  child: DropdownButtonFormField<String>(
-                                    isDense: true,
-                                    value: areaValue,
-                                    icon: const Icon(Icons.keyboard_arrow_down),
-                                    // elevation: 16,
-                                    style: const TextStyle(color: Colors.black),
-                                    validator: (value) {
-                                      if (value != null && value.isEmpty) {
-                                        return '* required';
-                                      }
-                                      return null;
-                                    },
-                                    decoration: InputDecoration(
+                                  const SizedBox(
+                                      height: AppDefaults.margin / 2),
+                                  SizedBox(
+                                    height: AppDefaults.height,
+                                    child: DropdownButtonFormField<String>(
                                       isDense: true,
-                                      contentPadding: AppDefaults.edgeInset,
-                                      prefixIconConstraints:
-                                          const BoxConstraints(
-                                              minWidth: 0, minHeight: 0),
-                                      focusedBorder:
-                                          AppDefaults.outlineInputBorderSuccess,
-                                      enabledBorder:
-                                          AppDefaults.outlineInputBorderSuccess,
-                                      focusedErrorBorder:
-                                          AppDefaults.outlineInputBorderError,
-                                      errorBorder:
-                                          AppDefaults.outlineInputBorderError,
+                                      value: areaValue,
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                      // elevation: 16,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      validator: (value) {
+                                        if (value != null && value.isEmpty) {
+                                          return '* required';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        contentPadding: AppDefaults.edgeInset,
+                                        prefixIconConstraints:
+                                            const BoxConstraints(
+                                                minWidth: 0, minHeight: 0),
+                                        focusedBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        enabledBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        focusedErrorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                        errorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                      ),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          areaValue = value!;
+                                        });
+                                      },
+                                      items: areas
+                                          .map<DropdownMenuItem<String>>(
+                                              (value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value['pk'].toString(),
+                                          child: Text('${value['name']}'),
+                                        );
+                                      }).toList(),
                                     ),
-                                    onChanged: (String? value) {
-                                      setState(() {
-                                        areaValue = value!;
-                                      });
-                                    },
-                                    items: areas
-                                        .map<DropdownMenuItem<String>>((value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value['pk'].toString(),
-                                        child: Text('${value['name']}'),
-                                      );
-                                    }).toList(),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDefaults.margin),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Address Details',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: AppDefaults.fontSize,
+                        ],
+                      ),
+                      const SizedBox(height: AppDefaults.margin),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Address Details',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDefaults.fontSize,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: AppDefaults.margin / 2),
-                    SizedBox(
-                      child: TextFormField(
-                        controller: addressDetailsController,
-                        validator: (value) {
-                          if (value != null && value.isEmpty) {
-                            return 'Address Details is required';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: AppDefaults.edgeInset,
-                          prefixIconConstraints:
-                              const BoxConstraints(minWidth: 0, minHeight: 0),
-                          // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                          focusedBorder: AppDefaults.outlineInputBorderSuccess,
-                          enabledBorder: AppDefaults.outlineInputBorderSuccess,
-                          focusedErrorBorder:
-                              AppDefaults.outlineInputBorderError,
-                          errorBorder: AppDefaults.outlineInputBorderError,
+                      const SizedBox(height: AppDefaults.margin / 2),
+                      SizedBox(
+                        child: TextFormField(
+                          controller: addressDetailsController,
+                          validator: (value) {
+                            if (value != null && value.isEmpty) {
+                              return 'Address Details is required';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: AppDefaults.edgeInset,
+                            prefixIconConstraints:
+                                const BoxConstraints(minWidth: 0, minHeight: 0),
+                            // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                            focusedBorder:
+                                AppDefaults.outlineInputBorderSuccess,
+                            enabledBorder:
+                                AppDefaults.outlineInputBorderSuccess,
+                            focusedErrorBorder:
+                                AppDefaults.outlineInputBorderError,
+                            errorBorder: AppDefaults.outlineInputBorderError,
+                          ),
+                          style:
+                              const TextStyle(fontSize: AppDefaults.fontSize),
                         ),
-                        style: const TextStyle(fontSize: AppDefaults.fontSize),
                       ),
-                    ),
 
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text(
-                    //     'Address Details',
-                    //     style: TextStyle(fontWeight: FontWeight.bold),
-                    //   ),
-                    // ),
-                    // const TextField(
-                    //   keyboardType: TextInputType.text,
-                    //   decoration: InputDecoration(
-                    //     border: OutlineInputBorder(),
-                    //     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    //   ),
-                    // ),
-                    const SizedBox(height: AppDefaults.margin),
-                  ],
-                ), //Container
+                      // const Align(
+                      //   alignment: Alignment.centerLeft,
+                      //   child: Text(
+                      //     'Address Details',
+                      //     style: TextStyle(fontWeight: FontWeight.bold),
+                      //   ),
+                      // ),
+                      // const TextField(
+                      //   keyboardType: TextInputType.text,
+                      //   decoration: InputDecoration(
+                      //     border: OutlineInputBorder(),
+                      //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                      //   ),
+                      // ),
+                      const SizedBox(height: AppDefaults.margin),
+                    ],
+                  ), //Container
+                ),
               ),
             ),
 
@@ -1120,84 +1192,111 @@ class _SignUpFormState extends State<SignUpForm> {
 
             const SizedBox(height: AppDefaults.margin),
             // Terms
-            Container(
-              width: MediaQuery.of(context).size.width,
-              // height: MediaQuery.of(context).size.height,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'I have read and agree to the Terms',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1
-                              ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: AppDefaults.fontSize),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: FormField(
-                            initialValue: false,
-                            validator: (value) {
-                              if (value == false) {
-                                return AppMessage.getError('TERMS_REQUIRED');
-                              }
-                              return null;
-                            },
-                            builder: (FormFieldState<bool> field) {
-                              return Switch(
-                                value: accept,
-                                onChanged: (value) {
-                                  accept = !accept;
-                                  field.didChange(value);
-                                  if (accept) {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => const TermsPage(),
-                                      ),
-                                    );
-                                  }
-                                },
-                              );
-                            },
+            Visibility(
+              visible: widget.user.isNotEmpty ? false : true,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                // height: MediaQuery.of(context).size.height,
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'I have read and agree to the Terms',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1
+                                ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: AppDefaults.fontSize),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDefaults.margin),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: AppDefaults.height,
-                      child: Padding(
-                        padding: const EdgeInsets.all(1),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            var account = await save();
-                            if (account != null) {}
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  AppDefaults.radius - 10),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: FormField(
+                              initialValue: false,
+                              validator: (value) {
+                                if (value == false) {
+                                  return AppMessage.getError('TERMS_REQUIRED');
+                                }
+                                return null;
+                              },
+                              builder: (FormFieldState<bool> field) {
+                                return Switch(
+                                  value: accept,
+                                  onChanged: (value) {
+                                    accept = !accept;
+                                    field.didChange(value);
+                                    if (accept) {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const TermsPage(),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                );
+                              },
                             ),
                           ),
-                          child: const Text('Sign Up'),
+                        ],
+                      ),
+                      const SizedBox(height: AppDefaults.margin),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: AppDefaults.height,
+                        child: Padding(
+                          padding: const EdgeInsets.all(1),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              var account = await save();
+                              if (account != null) {}
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.all(0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    AppDefaults.radius - 10),
+                              ),
+                            ),
+                            child: const Text('Sign Up'),
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: AppDefaults.margin),
-                  ],
-                ), //Container
+                      const SizedBox(height: AppDefaults.margin),
+                    ],
+                  ), //Container
+                ),
               ),
             ),
-
+            Visibility(
+              visible: widget.user.isNotEmpty ? true : false,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: AppDefaults.height,
+                child: Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      var account = await save();
+                      if (account != null) {}
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(AppDefaults.radius - 10),
+                      ),
+                    ),
+                    child: const Text('Update'),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: AppDefaults.margin * 2),
           ],
         ),
