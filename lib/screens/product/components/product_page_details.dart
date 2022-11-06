@@ -218,7 +218,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                           padding: const EdgeInsets.all(5),
                         ),
                         child: const Text(
-                          'Buy Now',
+                          'Order Now',
                           style: TextStyle(
                             color: AppColors.primary,
                             fontSize: 13,
@@ -278,7 +278,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                           padding: const EdgeInsets.all(5),
                         ),
                         child: const Text(
-                          'Add to Cart',
+                          'Add to Basket',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 13,

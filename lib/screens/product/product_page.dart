@@ -67,7 +67,7 @@ class _ProductPageState extends State<ProductPage> {
                 child: ProductPageDetails(product: product),
               ),
               const OtherProducts(
-                  title: 'Products from the shop', theme: 'white'),
+                  title: 'Products from this producer', theme: 'white'),
               const OtherProducts(title: 'Similar Products', theme: 'primary'),
             ],
           ),

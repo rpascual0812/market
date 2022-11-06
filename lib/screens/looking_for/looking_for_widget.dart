@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:market/components/section_divider_title.dart';
 
 import '../../constants/index.dart';
+import '../approot/app_root.dart';
 import '../product/product_page.dart';
 // import 'info_row.dart';
 
@@ -19,6 +21,9 @@ class LookingForWidget extends StatefulWidget {
 }
 
 class _LookingForWidgetState extends State<LookingForWidget> {
+  final storage = const FlutterSecureStorage();
+  String? token = '';
+
   List products = [];
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
@@ -26,6 +31,7 @@ class _LookingForWidgetState extends State<LookingForWidget> {
   @override
   void initState() {
     super.initState();
+    readStorage();
     getProducts();
   }
 
@@ -34,9 +40,18 @@ class _LookingForWidgetState extends State<LookingForWidget> {
     super.dispose();
   }
 
+  Future<void> readStorage() async {
+    final all = await storage.read(key: 'jwt');
+
+    setState(() {
+      token = all;
+    });
+  }
+
   Future<void> getProducts() async {
     try {
-      var res = await Remote.get('products', {});
+      var res = await Remote.get(
+          'products', {'type': 'looking_for', 'skip': '0', 'take': '10'});
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {
@@ -91,7 +106,17 @@ class _LookingForWidgetState extends State<LookingForWidget> {
             children: [
               SectionDividerTitle(
                 title: 'Looking For',
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AppRoot(
+                        jwt: token ?? '',
+                        menuIndex: 1,
+                        subIndex: 1,
+                      ),
+                    ),
+                  );
+                },
               ),
               Container(
                 margin: const EdgeInsets.all(0),

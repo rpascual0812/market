@@ -17,22 +17,26 @@ class SectionDividerTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDefaults.margin),
+      padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Text(
+            title,
+            style: const TextStyle(
+                color: AppColors.primary,
+                fontSize: AppDefaults.fontSize + 5,
+                fontWeight: FontWeight.bold),
+          ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ),
+              InkWell(
+                onTap: onTap,
+                child: const Text('see more'),
+              ),
+              InkWell(
+                onTap: onTap,
+                child: const Icon(Icons.keyboard_arrow_right),
               ),
             ],
           ),

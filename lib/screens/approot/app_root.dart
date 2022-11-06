@@ -20,12 +20,17 @@ import '../product_list/product_list_page.dart';
 import '../profile/profile_page.dart';
 
 class AppRoot extends StatefulWidget {
-  const AppRoot({Key? key, required this.jwt
-      // this.backButton,
-      })
-      : super(key: key);
+  const AppRoot({
+    Key? key,
+    required this.jwt,
+    this.menuIndex = 0,
+    this.subIndex = 0,
+    // this.backButton,
+  }) : super(key: key);
 
   final String jwt;
+  final int menuIndex;
+  final int subIndex;
   // final Widget? backButton;
   @override
   State<AppRoot> createState() => _AppRootState();
@@ -41,13 +46,14 @@ class _AppRootState extends State<AppRoot> {
 
   @override
   void initState() {
+    print('sub index ${widget.menuIndex}');
     var token = AppDefaults.jwtDecode(widget.jwt);
 
     super.initState();
     // print('approot ${widget.jwt}');
     _allScreen = [
       const HomePage(),
-      const ProductListPage(),
+      ProductListPage(index: widget.subIndex),
       const ChatPage(),
       widget.jwt != '' ? ProfilePage(token: widget.jwt) : const LoginPage(),
     ];
@@ -55,6 +61,8 @@ class _AppRootState extends State<AppRoot> {
     if (token != null) {
       fetchUser(token['sub']);
     }
+
+    updateMenu(widget.menuIndex);
   }
 
   int _currentIndex = 0;

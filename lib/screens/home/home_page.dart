@@ -15,7 +15,7 @@ import 'package:market/screens/looking_for/looking_for_widget.dart';
 import 'package:market/size_config.dart';
 
 import '../../components/product_list_widget_tile_square.dart';
-import '../../components/section_divider_title.dart';
+import '../../constants/app_colors.dart';
 import '../../constants/app_defaults.dart';
 import '../../constants/remote.dart';
 import '../product/product_page.dart';
@@ -133,9 +133,13 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Padding(
-                  padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
-                  child: SectionDividerTitle(
-                    title: 'Product Post',
+                  padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                  child: Text(
+                    'Product Post',
+                    style: TextStyle(
+                        color: AppColors.primary,
+                        fontSize: AppDefaults.fontSize + 5,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 Row(

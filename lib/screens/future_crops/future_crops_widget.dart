@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:market/screens/approot/app_root.dart';
 import '../../components/section_divider_title.dart';
 import '../../constants/index.dart';
 import 'future_crops_widget_tile.dart';
@@ -17,6 +19,9 @@ class FutureCropsWidget extends StatefulWidget {
 }
 
 class _FutureCropsWidgetState extends State<FutureCropsWidget> {
+  final storage = const FlutterSecureStorage();
+  String? token = '';
+
   List products = [];
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
@@ -24,6 +29,7 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
   @override
   void initState() {
     super.initState();
+    readStorage();
     getProducts();
   }
 
@@ -32,9 +38,18 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
     super.dispose();
   }
 
+  Future<void> readStorage() async {
+    final all = await storage.read(key: 'jwt');
+
+    setState(() {
+      token = all;
+    });
+  }
+
   Future<void> getProducts() async {
     try {
-      var res = await Remote.get('products', {});
+      var res = await Remote.get(
+          'products', {'type': 'future_crops', 'skip': '0', 'take': '10'});
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {
@@ -89,7 +104,17 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
             children: [
               SectionDividerTitle(
                 title: 'Future Crops',
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AppRoot(
+                        jwt: token ?? '',
+                        menuIndex: 1,
+                        subIndex: 0,
+                      ),
+                    ),
+                  );
+                },
               ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,

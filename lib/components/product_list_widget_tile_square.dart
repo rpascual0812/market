@@ -22,12 +22,18 @@ class ProductListWidgetTileSquare extends StatelessWidget {
   Widget build(BuildContext context) {
     var image = '${dotenv.get('API')}/assets/images/no-image.jpg';
     if (product['product_documents'] != null) {
+      var found = false;
       for (var i = 0; i < product['product_documents'].length; i++) {
         if (product['product_documents'][i]['document'] != null &&
             product['product_documents'][i]['default'] == true) {
           image =
               '${dotenv.get('API')}/${product['product_documents'][i]['document']['path']}';
         }
+      }
+
+      if (product['product_documents'].length > 0 && !found) {
+        image =
+            '${dotenv.get('API')}/${product['product_documents'][0]['document']['path']}';
       }
     }
 
