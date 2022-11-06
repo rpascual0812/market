@@ -48,8 +48,8 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final usernameController = TextEditingController(text: 'email02@gmail.com');
-  final passwordController = TextEditingController(text: 'Password1');
+  final usernameController = TextEditingController(text: '');
+  final passwordController = TextEditingController(text: '');
   String errorMessage = '';
   bool isLoading = false;
 
