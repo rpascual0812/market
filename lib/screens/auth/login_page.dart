@@ -25,7 +25,7 @@ class LoginPage extends StatelessWidget {
             const Spacer(),
             // Header
             Text(
-              "Login",
+              "Community Market",
               style: Theme.of(context).textTheme.headline6,
             ),
             const Spacer(),

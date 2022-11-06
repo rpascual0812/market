@@ -10,10 +10,12 @@ import '../product_page.dart';
 class OtherProducts extends StatefulWidget {
   const OtherProducts({
     Key? key,
+    this.userPk = '',
     required this.title,
     required this.theme,
   }) : super(key: key);
 
+  final String userPk;
   final String title;
   final String theme;
 
@@ -34,8 +36,12 @@ class _OtherProductsState extends State<OtherProducts> {
 
   Future<void> getProducts() async {
     try {
-      var res = await Remote.get('products', {});
-      // print('res $res');
+      Map<String, String> filters = {};
+      if (widget.userPk != '') {
+        filters = {'user_pk': widget.userPk};
+      }
+
+      var res = await Remote.get('products', filters);
       if (res.statusCode == 200) {
         setState(() {
           dataJson = jsonDecode(res.body);

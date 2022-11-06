@@ -66,8 +66,13 @@ class _ProductPageState extends State<ProductPage> {
                 visible: product['name'] != null ? true : false,
                 child: ProductPageDetails(product: product),
               ),
-              const OtherProducts(
-                  title: 'Products from this producer', theme: 'white'),
+              Visibility(
+                visible: product['name'] != null ? true : false,
+                child: OtherProducts(
+                    userPk: product['user_pk'].toString(),
+                    title: 'Products from this producer',
+                    theme: 'white'),
+              ),
               const OtherProducts(title: 'Similar Products', theme: 'primary'),
             ],
           ),

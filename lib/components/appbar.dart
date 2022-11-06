@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/notifications/notification_page.dart';
 import 'package:market/screens/product/components/cart_page.dart';
 import 'package:market/screens/search/search_page.dart';
 
-class Appbar extends StatelessWidget with PreferredSizeWidget {
-  Appbar({Key? key, this.module = 'home'}) : super(key: key);
+class Appbar extends StatefulWidget {
+  const Appbar({Key? key, this.module = 'home'}) : super(key: key);
 
   final String module;
+
+  @override
+  State<Appbar> createState() => _AppbarState();
+}
+
+class _AppbarState extends State<Appbar> {
+  final storage = const FlutterSecureStorage();
+  String? token = '';
+
+  @override
+  void initState() {
+    super.initState();
+    readStorage();
+  }
+
+  Future<void> readStorage() async {
+    final all = await storage.read(key: 'jwt');
+
+    setState(() {
+      token = all;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +38,35 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
       automaticallyImplyLeading: false,
       title: Row(
         children: [
-          Image.asset(
-            'assets/images/logo.png',
-            width: 30,
-            height: 30,
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => AppRoot(jwt: token ?? ''),
+                ),
+              );
+            },
+            child: Image.asset(
+              'assets/images/logo.png',
+              width: 30,
+              height: 30,
+            ),
           ),
           const SizedBox(
             width: 10,
           ),
-          const Text(
-            'Samdhana Community Market',
-            style: TextStyle(fontSize: 15, color: Colors.white),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const AppRoot(jwt: ''),
+                ),
+              );
+            },
+            child: const Text(
+              'Samdhana Community Market',
+              style: TextStyle(fontSize: 15, color: Colors.white),
+            ),
           )
         ],
       ),
@@ -98,7 +140,7 @@ class Appbar extends StatelessWidget with PreferredSizeWidget {
   }
 
   showHide() {
-    switch (module) {
+    switch (widget.module) {
       case 'signin':
         {
           return false;
