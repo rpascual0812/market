@@ -75,7 +75,7 @@ class _MyProducerPageState extends State<MyProducerPage> {
     }
 
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         child: Container(
           color: AppColors.grey1,
@@ -337,8 +337,8 @@ class _MyProducerPageState extends State<MyProducerPage> {
                 child: DefaultTabController(
                   length: 2,
                   child: Column(
-                    children: const [
-                      TabBar(
+                    children: [
+                      const TabBar(
                         labelColor: AppColors.primary,
                         indicatorColor: AppColors.primary,
                         unselectedLabelColor: Colors.grey,
@@ -355,10 +355,21 @@ class _MyProducerPageState extends State<MyProducerPage> {
                         child: TabBarView(
                           children: [
                             Scaffold(
-                              body: MyProductsTab(type: 'products'),
+                              body: Visibility(
+                                visible: user['pk'] != null ? true : false,
+                                child: MyProductsTab(
+                                  type: 'product',
+                                  userPk: user['pk'].toString(),
+                                ),
+                              ),
                             ),
-                            Scaffold(
-                              body: MyProductsTab(type: 'future_crops'),
+                            Visibility(
+                              visible: user['pk'] != null ? true : false,
+                              child: Scaffold(
+                                body: MyProductsTab(
+                                    type: 'future_crop',
+                                    userPk: user['pk'].toString()),
+                              ),
                             ),
                           ],
                         ),

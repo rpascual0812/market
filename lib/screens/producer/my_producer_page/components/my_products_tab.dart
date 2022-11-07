@@ -11,9 +11,11 @@ class MyProductsTab extends StatefulWidget {
   const MyProductsTab({
     Key? key,
     required this.type,
+    required this.userPk,
   }) : super(key: key);
 
   final String type;
+  final String userPk;
 
   @override
   State<MyProductsTab> createState() => _MyProductsTabState();
@@ -38,8 +40,10 @@ class _MyProductsTabState extends State<MyProductsTab> {
   Future<void> fetch() async {
     try {
       products = [];
-      var res = await Remote.get(
-          'products', {'orderBy': filterValue, 'owned': 'true'});
+      // var res = await Remote.get(
+      //     'products', {'orderBy': filterValue, 'owned': 'true'});
+      var res = await Remote.get('sellers/${widget.userPk}/products',
+          {'orderBy': filterValue, 'type': widget.type});
       if (res.statusCode == 200) {
         setState(() {
           dataJson = jsonDecode(res.body);
