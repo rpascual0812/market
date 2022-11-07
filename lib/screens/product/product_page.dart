@@ -50,7 +50,7 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     // print(product);
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: SafeArea(

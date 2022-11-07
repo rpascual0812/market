@@ -29,7 +29,7 @@ class _ProductListPageState extends State<ProductListPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(module: 'products'),
+      appBar: const Appbar(module: 'products'),
       body: DefaultTabController(
         length: 2,
         child: Column(

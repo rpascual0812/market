@@ -5,13 +5,16 @@ import 'package:market/screens/notifications/notification_page.dart';
 import 'package:market/screens/product/components/cart_page.dart';
 import 'package:market/screens/search/search_page.dart';
 
-class Appbar extends StatefulWidget {
+class Appbar extends StatefulWidget implements PreferredSizeWidget {
   const Appbar({Key? key, this.module = 'home'}) : super(key: key);
 
   final String module;
 
   @override
   State<Appbar> createState() => _AppbarState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(55);
 }
 
 class _AppbarState extends State<Appbar> {

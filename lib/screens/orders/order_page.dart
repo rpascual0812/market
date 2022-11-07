@@ -18,7 +18,7 @@ class OrderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.fourth,
-      appBar: Appbar(module: 'orders'),
+      appBar: const Appbar(module: 'orders'),
       body: DefaultTabController(
         initialIndex: type == 'products' ? 0 : 1,
         length: 2,

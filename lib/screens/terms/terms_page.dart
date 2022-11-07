@@ -4,10 +4,10 @@ import 'package:animations/animations.dart';
 import 'package:market/components/appbar.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/app_colors.dart';
-
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
+
+import '../../constants/index.dart';
 
 class TermsPage extends StatefulWidget {
   const TermsPage({
@@ -56,8 +56,9 @@ class _TermsPageState extends State<TermsPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Appbar(),
+                const Appbar(),
                 Accordion(
+                  headerBorderRadius: 10,
                   maxOpenSections: 1,
                   headerBackgroundColorOpened: Colors.black54,
                   scaleWhenAnimating: true,
@@ -68,46 +69,105 @@ class _TermsPageState extends State<TermsPage> {
                   sectionClosingHapticFeedback: SectionHapticFeedback.light,
                   children: [
                     AccordionSection(
-                      isOpen: true,
-                      // leftIcon: const Icon(Icons.insights_rounded,
-                      //     color: Colors.white),
-                      headerBackgroundColor: AppColors.primary,
+                      isOpen: false,
+                      headerBackgroundColor: Colors.white,
                       headerBackgroundColorOpened: AppColors.primary,
-                      header: Text('Disclaimer', style: _headerStyle),
+                      header: const Text('Disclaimer'),
                       content: Text(_loremIpsum, style: _contentStyle),
                       contentHorizontalPadding: 20,
-                      contentBorderWidth: 1,
-                      // onOpenSection: () => print('onOpenSection ...'),
-                      // onCloseSection: () => print('onCloseSection ...'),
+                      contentBorderColor: Colors.black54,
                     ),
                     AccordionSection(
-                      isOpen: true,
-                      // leftIcon: const Icon(Icons.insights_rounded,
-                      //     color: Colors.white),
-                      headerBackgroundColor: AppColors.primary,
+                      isOpen: false,
+                      headerBackgroundColor: Colors.white,
                       headerBackgroundColorOpened: AppColors.primary,
-                      header: Text('Legal Conditions', style: _headerStyle),
+                      header: const Text('Legal Conditions'),
                       content: Text(_loremIpsum, style: _contentStyle),
                       contentHorizontalPadding: 20,
-                      contentBorderWidth: 1,
-                      // onOpenSection: () => print('onOpenSection ...'),
-                      // onCloseSection: () => print('onCloseSection ...'),
+                      contentBorderColor: Colors.black54,
                     ),
                     AccordionSection(
-                      isOpen: true,
-                      // leftIcon: const Icon(Icons.insights_rounded,
-                      //     color: Colors.white),
-                      headerBackgroundColor: AppColors.primary,
+                      isOpen: false,
+                      headerBackgroundColor: Colors.white,
                       headerBackgroundColorOpened: AppColors.primary,
-                      header: Text('Terms and Conditions', style: _headerStyle),
+                      header: const Text('Terms and Conditions'),
                       content: Text(_loremIpsum, style: _contentStyle),
                       contentHorizontalPadding: 20,
-                      contentBorderWidth: 1,
-                      // onOpenSection: () => print('onOpenSection ...'),
-                      // onCloseSection: () => print('onCloseSection ...'),
+                      contentBorderColor: Colors.black54,
                     ),
                   ],
                 ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: AppDefaults.height,
+                  child: Padding(
+                    padding: const EdgeInsets.all(1),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(AppDefaults.radius - 10),
+                        ),
+                      ),
+                      child: const Text('I Agree!'),
+                    ),
+                  ),
+                ),
+                // Accordion(
+                //   maxOpenSections: 1,
+                //   headerBackgroundColorOpened: Colors.black54,
+                //   scaleWhenAnimating: true,
+                //   openAndCloseAnimation: true,
+                //   headerPadding:
+                //       const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
+                //   sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
+                //   sectionClosingHapticFeedback: SectionHapticFeedback.light,
+                //   children: [
+                //     AccordionSection(
+                //       isOpen: true,
+                //       // leftIcon: const Icon(Icons.insights_rounded,
+                //       //     color: Colors.white),
+                //       headerBackgroundColor: AppColors.primary,
+                //       headerBackgroundColorOpened: AppColors.primary,
+                //       header: Text('Disclaimer', style: _headerStyle),
+                //       content: Text(_loremIpsum, style: _contentStyle),
+                //       contentHorizontalPadding: 20,
+                //       contentBorderWidth: 1,
+                //       // onOpenSection: () => print('onOpenSection ...'),
+                //       // onCloseSection: () => print('onCloseSection ...'),
+                //     ),
+                //     AccordionSection(
+                //       isOpen: true,
+                //       // leftIcon: const Icon(Icons.insights_rounded,
+                //       //     color: Colors.white),
+                //       headerBackgroundColor: AppColors.primary,
+                //       headerBackgroundColorOpened: AppColors.primary,
+                //       header: Text('Legal Conditions', style: _headerStyle),
+                //       content: Text(_loremIpsum, style: _contentStyle),
+                //       contentHorizontalPadding: 20,
+                //       contentBorderWidth: 1,
+                //       // onOpenSection: () => print('onOpenSection ...'),
+                //       // onCloseSection: () => print('onCloseSection ...'),
+                //     ),
+                //     AccordionSection(
+                //       isOpen: true,
+                //       // leftIcon: const Icon(Icons.insights_rounded,
+                //       //     color: Colors.white),
+                //       headerBackgroundColor: AppColors.primary,
+                //       headerBackgroundColorOpened: AppColors.primary,
+                //       header: Text('Terms and Conditions', style: _headerStyle),
+                //       content: Text(_loremIpsum, style: _contentStyle),
+                //       contentHorizontalPadding: 20,
+                //       contentBorderWidth: 1,
+                //       // onOpenSection: () => print('onOpenSection ...'),
+                //       // onCloseSection: () => print('onCloseSection ...'),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),
