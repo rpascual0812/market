@@ -69,7 +69,7 @@ class _TermsPageState extends State<TermsPage> {
                   sectionClosingHapticFeedback: SectionHapticFeedback.light,
                   children: [
                     AccordionSection(
-                      isOpen: false,
+                      isOpen: true,
                       headerBackgroundColor: Colors.white,
                       headerBackgroundColorOpened: AppColors.primary,
                       header: const Text('Disclaimer'),

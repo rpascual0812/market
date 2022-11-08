@@ -69,9 +69,7 @@ class _MyProductsTabState extends State<MyProductsTab> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
-          child: Center(
-            child: buildOrders(),
-          ),
+          child: buildOrders(),
         ),
       ],
     );
@@ -82,6 +80,8 @@ class _MyProductsTabState extends State<MyProductsTab> {
       itemCount: 1,
       itemBuilder: (BuildContext context, int index) {
         return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               margin: const EdgeInsets.only(left: 10, right: 10),

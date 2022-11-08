@@ -76,6 +76,7 @@ dependencies:
   flutter_switch: ^0.3.2
   url_launcher: ^6.1.6
   expandable: ^5.0.1
+  sticky_headers: ^0.3.0+2
   
   
 

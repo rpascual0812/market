@@ -63,6 +63,12 @@ class _MyOrdersState extends State<MyOrders> {
           for (var i = 0; i < dataJson['data'].length; i++) {
             orders.add(dataJson['data'][i]);
           }
+          for (var i = 0; i < dataJson['data'].length; i++) {
+            orders.add(dataJson['data'][i]);
+          }
+          for (var i = 0; i < dataJson['data'].length; i++) {
+            orders.add(dataJson['data'][i]);
+          }
         });
       }
       // else if (res.statusCode == 401) {
