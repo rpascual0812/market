@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:market/components/section_divider_title.dart';
+import 'package:market/screens/buyer/buyer_page.dart';
 
 import '../../constants/index.dart';
 import '../approot/app_root.dart';
-import '../product/product_page.dart';
 // import 'info_row.dart';
 
 class LookingForWidget extends StatefulWidget {
@@ -157,10 +157,16 @@ class _LookingForWidgetState extends State<LookingForWidget> {
                           onSelectChanged: (bool? selected) {
                             if (selected != null && selected) {
                               Navigator.of(context).push(
+                                // MaterialPageRoute(
+                                //   builder: (context) => ProductPage(
+                                //     productPk: products[index]['pk'],
+                                //   ),
+                                // ),
                                 MaterialPageRoute(
-                                  builder: (context) => ProductPage(
-                                    productPk: products[index]['pk'],
-                                  ),
+                                  builder: (context) {
+                                    return BuyerPage(
+                                        userPk: products[index]['user_pk']);
+                                  },
                                 ),
                               );
                             }

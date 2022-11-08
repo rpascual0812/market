@@ -174,8 +174,8 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
         var body = {
           'type': 'product',
           'name': productNameController.text,
-          'price': priceController.text,
-          'stock': stockController.text,
+          'price_from': priceController.text,
+          'quantity': stockController.text,
           'description': descriptionController.text,
           'measurement': measurementController.text,
           'category': categoryValue,
@@ -224,7 +224,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         child: Container(
           color: AppColors.grey1,

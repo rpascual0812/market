@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:market/screens/buyer/buyer_page.dart';
 
 import 'package:market/screens/looking_for/looking_for_page_tile.dart';
 
 import '../../constants/index.dart';
-import '../product/product_page.dart';
 
 class LookingForPage extends StatefulWidget {
   const LookingForPage({Key? key}) : super(key: key);
@@ -80,10 +80,16 @@ class _LookingForPageState extends State<LookingForPage> {
                     product: products[index],
                     onTap: () {
                       Navigator.of(context).push(
+                        // MaterialPageRoute(
+                        //   builder: (context) => ProductPage(
+                        //     productPk: products[index]['pk'],
+                        //   ),
+                        // ),
                         MaterialPageRoute(
-                          builder: (context) => ProductPage(
-                            productPk: products[index]['pk'],
-                          ),
+                          builder: (context) {
+                            return BuyerPage(
+                                userPk: products[index]['user_pk']);
+                          },
                         ),
                       );
                     },

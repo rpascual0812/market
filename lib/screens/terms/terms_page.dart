@@ -21,12 +21,10 @@ class TermsPage extends StatefulWidget {
 }
 
 class _TermsPageState extends State<TermsPage> {
-  final _headerStyle = const TextStyle(
-      color: Color(0xffffffff), fontSize: 15, fontWeight: FontWeight.bold);
-  // final _contentStyleHeader = const TextStyle(
-  //     color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.w700);
   final _contentStyle = const TextStyle(
-      color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.normal);
+      color: Colors.black,
+      fontSize: AppDefaults.fontSize,
+      fontWeight: FontWeight.normal);
   final _loremIpsum =
       '''Lorem ipsum is typically a corrupted version of 'De finibus bonorum et malorum', a 1st century BC text by the Roman statesman and philosopher Cicero, with words altered, added, and removed to make it nonsensical and improper Latin.''';
 
@@ -75,7 +73,7 @@ class _TermsPageState extends State<TermsPage> {
                       header: const Text('Disclaimer'),
                       content: Text(_loremIpsum, style: _contentStyle),
                       contentHorizontalPadding: 20,
-                      contentBorderColor: Colors.black54,
+                      contentBorderColor: AppColors.primary,
                     ),
                     AccordionSection(
                       isOpen: false,
@@ -84,7 +82,7 @@ class _TermsPageState extends State<TermsPage> {
                       header: const Text('Legal Conditions'),
                       content: Text(_loremIpsum, style: _contentStyle),
                       contentHorizontalPadding: 20,
-                      contentBorderColor: Colors.black54,
+                      contentBorderColor: AppColors.primary,
                     ),
                     AccordionSection(
                       isOpen: false,
@@ -93,7 +91,7 @@ class _TermsPageState extends State<TermsPage> {
                       header: const Text('Terms and Conditions'),
                       content: Text(_loremIpsum, style: _contentStyle),
                       contentHorizontalPadding: 20,
-                      contentBorderColor: Colors.black54,
+                      contentBorderColor: AppColors.primary,
                     ),
                   ],
                 ),

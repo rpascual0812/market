@@ -49,7 +49,7 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
   Future<void> getProducts() async {
     try {
       var res = await Remote.get(
-          'products', {'type': 'future_crops', 'skip': '0', 'take': '10'});
+          'products', {'type': 'future_crop', 'skip': '0', 'take': '10'});
       // print('res $res');
       if (res.statusCode == 200) {
         setState(() {

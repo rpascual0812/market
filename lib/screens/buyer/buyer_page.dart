@@ -3,15 +3,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/constants/app_colors.dart';
-import 'package:market/screens/producer/producer_page/components/products_tab.dart';
-import 'package:market/screens/producer/producer_page/components/profile_picture_section.dart';
-// import 'package:market/screens/profile/components/profile_picture_section.dart';
+import 'package:market/screens/buyer/components/looking_for_list.dart';
+import 'package:market/screens/buyer/components/profile_picture_section.dart';
 
-import '../../../constants/remote.dart';
+import '../../constants/index.dart';
 
-class ProducerPage extends StatefulWidget {
-  const ProducerPage({
+class BuyerPage extends StatefulWidget {
+  const BuyerPage({
     Key? key,
     required this.userPk,
   }) : super(key: key);
@@ -19,10 +17,10 @@ class ProducerPage extends StatefulWidget {
   final int userPk;
 
   @override
-  State<ProducerPage> createState() => _ProducerPageState();
+  State<BuyerPage> createState() => _BuyerPageState();
 }
 
-class _ProducerPageState extends State<ProducerPage> {
+class _BuyerPageState extends State<BuyerPage> {
   Map<String, dynamic> user = <String, dynamic>{};
 
   @override
@@ -70,7 +68,7 @@ class _ProducerPageState extends State<ProducerPage> {
             SizedBox(
               height: 1500,
               child: DefaultTabController(
-                length: 2,
+                length: 1,
                 child: Column(
                   children: [
                     const TabBar(
@@ -79,10 +77,7 @@ class _ProducerPageState extends State<ProducerPage> {
                       unselectedLabelColor: Colors.grey,
                       tabs: [
                         Tab(
-                          text: 'Products',
-                        ),
-                        Tab(
-                          text: 'Future Crops',
+                          text: 'Looking For',
                         ),
                       ],
                     ),
@@ -90,12 +85,8 @@ class _ProducerPageState extends State<ProducerPage> {
                       child: TabBarView(
                         children: [
                           Scaffold(
-                            body: ProductsTab(
-                                type: 'product', userPk: widget.userPk),
-                          ),
-                          Scaffold(
-                            body: ProductsTab(
-                                type: 'future_crops', userPk: widget.userPk),
+                            body: LookingForList(
+                                type: 'looking_for', userPk: widget.userPk),
                           ),
                         ],
                       ),
