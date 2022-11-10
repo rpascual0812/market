@@ -238,10 +238,12 @@ class _ProducerRegisterState extends State<ProducerRegister> {
 
           if (response.isTapConfirmButton) {
             if (!mounted) return;
+            var jwt = AppDefaults.jwtDecode(token);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => MyProducerPage(token: token),
+                builder: (context) => MyProducerPage(
+                    accountPk: jwt['sub'].toString(), token: token),
               ),
             );
             return;
@@ -261,7 +263,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         child: Container(
           color: AppColors.grey1,

@@ -3,9 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:market/screens/orders/components/sold_product_tile.dart';
 
-import '../../../main.dart';
+import '../../../constants/index.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -24,6 +25,9 @@ class SoldProducts extends StatefulWidget {
 }
 
 class _SoldProductsState extends State<SoldProducts> {
+  final storage = const FlutterSecureStorage();
+  String? token = '';
+
   List orders = [];
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
@@ -33,20 +37,31 @@ class _SoldProductsState extends State<SoldProducts> {
   @override
   void initState() {
     super.initState();
+    readStorage();
     fetch();
+  }
+
+  Future<void> readStorage() async {
+    final all = await storage.read(key: 'jwt');
+
+    setState(() {
+      token = all;
+    });
   }
 
   Future<void> fetch() async {
     final token = await storage.read(key: 'jwt');
+    var account = AppDefaults.jwtDecode(token);
+
     orders = [];
     try {
-      var type = ['looking_for'];
+      var type = ['product'];
       if (includeFutureCrops) {
         type.add('future_crops');
       }
 
-      final params = {'type': type.join(',')};
-      final url = Uri.parse('${dotenv.get('API')}/orders/sold')
+      final params = {'type': type.join(','), 'seller': 'true'};
+      final url = Uri.parse('${dotenv.get('API')}/orders')
           .replace(queryParameters: params);
       final headers = {
         HttpHeaders.authorizationHeader: 'Bearer $token',
@@ -131,6 +146,7 @@ class _SoldProductsState extends State<SoldProducts> {
                     itemBuilder: (context, index) {
                       // print(orders[index]);
                       return SoldProductTile(
+                        token: token!,
                         order: orders[index],
                         onTap: () {
                           Navigator.of(context).push(
@@ -140,6 +156,9 @@ class _SoldProductsState extends State<SoldProducts> {
                               ),
                             ),
                           );
+                        },
+                        refresh: () {
+                          fetch();
                         },
                       );
                     },

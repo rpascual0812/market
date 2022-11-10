@@ -38,7 +38,7 @@ class StatusCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconWithBackground(
-                  iconData: iconData,
+                  iconData: 'box',
                   color: iconBackground,
                   iconColor: iconColor,
                 ),

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:market/constants/app_icons.dart';
 
 import '../constants/index.dart';
 
 class IconWithBackground extends StatelessWidget {
+  static const IconData box =
+      IconData(0xe806, fontFamily: 'Custom', fontPackage: null);
+
   const IconWithBackground({
     Key? key,
     required this.iconData,
@@ -13,7 +17,7 @@ class IconWithBackground extends StatelessWidget {
     this.radius,
   }) : super(key: key);
 
-  final IconData iconData;
+  final String iconData;
   final Color? color;
   final Color? iconColor;
   final double? size;
@@ -26,17 +30,15 @@ class IconWithBackground extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Material(
         borderRadius: radius ?? const BorderRadius.all(Radius.circular(8.0)),
-        color: color ?? AppColors.primary.withOpacity(0.1),
+        // color: color ?? AppColors.primary.withOpacity(0.1),
         child: InkWell(
           onTap: onTap,
           borderRadius: AppDefaults.borderRadius,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              iconData,
-              color: iconColor ?? AppColors.primary,
-              size: size,
-            ),
+            child: iconData == 'box'
+                ? Icon(box, color: iconColor ?? AppColors.primary, size: 65)
+                : AppIcons.shoppingBagCheckWhite,
           ),
         ),
       ),

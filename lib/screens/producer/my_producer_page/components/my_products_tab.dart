@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:market/screens/product/product_page.dart';
 
 import '../../../../components/select_dropdown.dart';
 import '../../../../constants/index.dart';
@@ -112,7 +113,8 @@ class _MyProductsTabState extends State<MyProductsTab> {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const MyProducerAddProduct(),
+                            builder: (context) =>
+                                MyProducerAddProduct(type: widget.type),
                           ),
                         );
                       },
@@ -145,7 +147,22 @@ class _MyProductsTabState extends State<MyProductsTab> {
                     shrinkWrap: true,
                     physics: const ClampingScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
-                      return MyProductTile(product: products[index]);
+                      return MyProductTile(
+                        product: products[index],
+                        onEdit: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ProductPage(
+                                productPk: products[index]['pk'],
+                              ),
+                            ),
+                          );
+                        },
+                        refresh: () {
+                          // print('deleted');
+                          fetch();
+                        },
+                      );
                     }
                     // children: List.generate(
                     //     products.isNotEmpty ? dataJson['data'].length : 0,

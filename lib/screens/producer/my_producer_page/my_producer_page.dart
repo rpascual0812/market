@@ -15,9 +15,11 @@ class MyProducerPage extends StatefulWidget {
   const MyProducerPage({
     Key? key,
     required this.token,
+    required this.accountPk,
   }) : super(key: key);
 
   final String token;
+  final String accountPk;
 
   @override
   State<MyProducerPage> createState() => _MyProducerPageState();
@@ -33,16 +35,14 @@ class _MyProducerPageState extends State<MyProducerPage> {
 
   @override
   void initState() {
-    var token = AppDefaults.jwtDecode(widget.token);
+    // var token = AppDefaults.jwtDecode(widget.token);
 
     super.initState();
 
-    if (token != null) {
-      fetchUser(token['sub']);
-    }
+    fetchUser(widget.accountPk);
   }
 
-  Future fetchUser(int pk) async {
+  Future fetchUser(String pk) async {
     try {
       final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
       final headers = {

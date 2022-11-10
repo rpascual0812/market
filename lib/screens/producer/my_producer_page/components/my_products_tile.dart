@@ -1,27 +1,66 @@
+import 'dart:io';
+
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:market/screens/producer/my_producer_page/components/my_producer_edit_product.dart';
 
 import '../../../../constants/index.dart';
 import '../../../../components/network_image.dart';
 
+import 'package:http/http.dart' as http;
+
 class MyProductTile extends StatefulWidget {
   const MyProductTile({
     Key? key,
     required this.product,
+    required this.onEdit,
+    required this.refresh,
   }) : super(key: key);
 
   final Map<String, dynamic> product;
+  final void Function() onEdit;
+  final void Function() refresh;
 
   @override
   State<MyProductTile> createState() => _MyProductTileState();
 }
 
 class _MyProductTileState extends State<MyProductTile> {
+  final storage = const FlutterSecureStorage();
+  String? token = '';
+
   @override
   void initState() {
     super.initState();
+    readStorage();
+  }
+
+  Future<void> readStorage() async {
+    final all = await storage.read(key: 'jwt');
+
+    setState(() {
+      token = all;
+    });
+  }
+
+  delete(Map<String, dynamic> product) async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/products/${product['pk']}');
+      final headers = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+      var res = await http.delete(url, headers: headers);
+      if (res.statusCode == 200) {
+        widget.refresh();
+      }
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
   }
 
   @override
@@ -36,22 +75,13 @@ class _MyProductTileState extends State<MyProductTile> {
 
     return GestureDetector(
       // no onTap event for now
-      // onTap: () {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) {
-      //         return const LoginPage();
-      //       },
-      //     ),
-      //   );
-      // },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
         child: Material(
           // color: Colors.white,
           borderRadius: AppDefaults.borderRadius,
           child: InkWell(
+            onTap: widget.onEdit,
             borderRadius: AppDefaults.borderRadius,
             child: Container(
               // margin: const EdgeInsets.only(top: 10),
@@ -213,8 +243,12 @@ class _MyProductTileState extends State<MyProductTile> {
                                                     MaterialPageRoute(
                                                       builder: (context) {
                                                         return MyProducerEditProduct(
-                                                            product:
-                                                                widget.product);
+                                                          product:
+                                                              widget.product,
+                                                          onSave: () {
+                                                            widget.refresh();
+                                                          },
+                                                        );
                                                       },
                                                     ),
                                                   );
@@ -245,15 +279,36 @@ class _MyProductTileState extends State<MyProductTile> {
                                               height: 25.0,
                                               padding: EdgeInsets.zero,
                                               child: OutlinedButton(
-                                                onPressed: () {
-                                                  // Navigator.push(
-                                                  //   context,
-                                                  //   MaterialPageRoute(
-                                                  //     builder: (context) {
-                                                  //       return const Bubble();
-                                                  //     },
-                                                  //   ),
-                                                  // );
+                                                onPressed: () async {
+                                                  ArtDialogResponse response =
+                                                      await ArtSweetAlert.show(
+                                                    barrierDismissible: false,
+                                                    context: context,
+                                                    artDialogArgs: ArtDialogArgs(
+                                                        type: ArtSweetAlertType
+                                                            .danger,
+                                                        denyButtonText:
+                                                            "Cancel",
+                                                        denyButtonColor:
+                                                            Colors.grey,
+                                                        title:
+                                                            "Are you sure you want to delete this product?",
+                                                        confirmButtonText:
+                                                            "Delete",
+                                                        confirmButtonColor:
+                                                            AppColors.danger),
+                                                  );
+
+                                                  if (response
+                                                      .isTapConfirmButton) {
+                                                    if (!mounted) return;
+                                                    delete(widget.product);
+                                                  }
+
+                                                  if (response
+                                                      .isTapDenyButton) {
+                                                    return;
+                                                  }
                                                 },
                                                 style: OutlinedButton.styleFrom(
                                                   side: const BorderSide(

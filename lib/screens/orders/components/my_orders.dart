@@ -3,9 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:market/screens/orders/components/my_order_tile.dart';
 
-import '../../../main.dart';
+import '../../../constants/index.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -24,6 +25,9 @@ class MyOrders extends StatefulWidget {
 }
 
 class _MyOrdersState extends State<MyOrders> {
+  final storage = const FlutterSecureStorage();
+  String? token = '';
+
   List orders = [];
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
@@ -33,20 +37,35 @@ class _MyOrdersState extends State<MyOrders> {
   @override
   void initState() {
     super.initState();
+    readStorage();
     fetch();
+  }
+
+  Future<void> readStorage() async {
+    final all = await storage.read(key: 'jwt');
+
+    setState(() {
+      token = all;
+    });
   }
 
   Future<void> fetch() async {
     final token = await storage.read(key: 'jwt');
+    var account = AppDefaults.jwtDecode(token);
     orders = [];
     try {
-      var type = ['looking_for'];
+      var type = ['product'];
       if (includeFutureCrops) {
         type.add('future_crops');
       }
 
-      final params = {'type': type.join(',')};
-      final url = Uri.parse('${dotenv.get('API')}/orders/bought')
+      final params = {
+        'type': type.join(','),
+        'user_pk': account['sub'].toString(),
+        // 'status': 'Ordered'
+      };
+
+      final url = Uri.parse('${dotenv.get('API')}/orders')
           .replace(queryParameters: params);
       final headers = {
         HttpHeaders.authorizationHeader: 'Bearer $token',
@@ -127,6 +146,7 @@ class _MyOrdersState extends State<MyOrders> {
                 itemBuilder: (context, index) {
                   // print(orders[index]);
                   return MyOrderTile(
+                    token: token!,
                     order: orders[index],
                     onTap: () {
                       Navigator.of(context).push(
@@ -136,6 +156,9 @@ class _MyOrdersState extends State<MyOrders> {
                           ),
                         ),
                       );
+                    },
+                    refresh: () {
+                      fetch();
                     },
                   );
                 },

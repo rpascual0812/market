@@ -16,7 +16,7 @@ class ProfileCard extends StatelessWidget {
   }) : super(key: key);
 
   final String producerPk;
-  final IconData iconData;
+  final String iconData;
   final Color iconBackground;
   final Color iconColor;
   final String statusName;

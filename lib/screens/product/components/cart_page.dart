@@ -53,6 +53,7 @@ class _CartPageState extends State<CartPage> {
     // print(res.statusCode);
     if (res.statusCode == 200) {
       setState(() {
+        orders = [];
         dataJson = jsonDecode(res.body);
         for (var i = 0; i < dataJson['data'].length; i++) {
           dataJson['data'][i]['selected'] = false;
@@ -66,6 +67,35 @@ class _CartPageState extends State<CartPage> {
     // } catch (error) {
     //   print('error $error');
     // }
+  }
+
+  Future<void> order() async {
+    var selectedProducts = [];
+    print(orders.length);
+    for (var i = 0; i < orders.length; i++) {
+      if (orders[i]['selected']) {
+        selectedProducts.add(orders[i]['pk']);
+      }
+    }
+
+    print(selectedProducts);
+    final url = Uri.parse('${dotenv.get('API')}/orders/update');
+    final headers = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+    var body = {
+      'status': 'Ordered',
+      'order_pks': selectedProducts.join(','),
+    };
+
+    var res = await http.post(url, headers: headers, body: body);
+    print(res.statusCode);
+    if (res.statusCode == 200) {
+      setState(() {
+        fetch();
+      });
+    }
+    return;
   }
 
   @override
@@ -88,7 +118,7 @@ class _CartPageState extends State<CartPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Appbar(),
+            const Appbar(),
             Padding(
               padding: const EdgeInsets.only(left: 8, top: 8, right: 8),
               child: Row(
@@ -109,20 +139,25 @@ class _CartPageState extends State<CartPage> {
                     width: 80.0,
                     height: 30.0,
                     padding: EdgeInsets.zero,
-                    child: OutlinedButton(
-                      onPressed: () async {},
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(
-                          width: 1,
-                          color: AppColors.primary,
+                    child: Visibility(
+                      visible: orders.isNotEmpty ? true : false,
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          order();
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                            width: 1,
+                            color: AppColors.primary,
+                          ),
+                          padding: const EdgeInsets.all(5),
                         ),
-                        padding: const EdgeInsets.all(5),
-                      ),
-                      child: const Text(
-                        'Buy Now',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 13,
+                        child: const Text(
+                          'Order Now',
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 13,
+                          ),
                         ),
                       ),
                     ),
@@ -140,6 +175,9 @@ class _CartPageState extends State<CartPage> {
                 itemBuilder: (context, index) {
                   return CartPageTile(
                     order: orders[index],
+                    onToggle: () {
+                      orders[index]['selected'] = !orders[index]['selected'];
+                    },
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -153,6 +191,19 @@ class _CartPageState extends State<CartPage> {
                 },
               ),
             ),
+            Visibility(
+                visible: orders.isEmpty ? true : false,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    SizedBox(height: AppDefaults.margin * 2),
+                    Text(
+                      'Your basket is empty',
+                      style: TextStyle(color: Colors.black, fontSize: 24),
+                    )
+                  ],
+                )),
           ],
         ),
       ),

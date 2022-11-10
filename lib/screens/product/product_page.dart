@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/screens/product/components/other_products.dart';
@@ -22,12 +23,23 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
+  final storage = const FlutterSecureStorage();
+  String? token = '';
+
   Map<String, dynamic> product = <String, dynamic>{};
   @override
   void initState() {
     super.initState();
-
+    readStorage();
     fetch();
+  }
+
+  Future<void> readStorage() async {
+    final all = await storage.read(key: 'jwt');
+
+    setState(() {
+      token = all;
+    });
   }
 
   Future fetch() async {
@@ -48,7 +60,11 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    // print(product);
+    var accountPk = '';
+    if (product['user'] != null && product['user']['account'] != null) {
+      accountPk = product['user']['account']['pk'].toString();
+    }
+
     return Scaffold(
       appBar: const Appbar(),
       body: SingleChildScrollView(
@@ -69,11 +85,19 @@ class _ProductPageState extends State<ProductPage> {
               Visibility(
                 visible: product['name'] != null ? true : false,
                 child: OtherProducts(
-                    userPk: product['user_pk'].toString(),
-                    title: 'Products from this producer',
-                    theme: 'white'),
+                  userPk: product['user_pk'].toString(),
+                  title: 'Products from this producer',
+                  theme: 'white',
+                  token: token!,
+                  accountPk: accountPk.toString(),
+                ),
               ),
-              const OtherProducts(title: 'Similar Products', theme: 'primary'),
+              OtherProducts(
+                title: 'Similar Products',
+                theme: 'primary',
+                token: token!,
+                accountPk: accountPk.toString(),
+              ),
             ],
           ),
         ),

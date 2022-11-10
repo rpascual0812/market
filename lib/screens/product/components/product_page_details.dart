@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -7,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:market/components/network_image.dart';
 import 'package:market/screens/chat/bubble.dart';
+import 'package:market/screens/orders/order_page.dart';
 import 'package:market/screens/producer/producer_page/producer_page.dart';
 import 'package:market/screens/product/components/cart_page.dart';
 import 'package:market/screens/product/components/rate_product_page.dart';
@@ -14,7 +13,6 @@ import 'package:market/screens/product/components/ratings_page.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
 
 import '../../../constants/index.dart';
-import '../../orders/order_page.dart';
 import 'package:http/http.dart' as http;
 // import 'color_picker.dart';
 
@@ -74,10 +72,24 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
       };
 
       var res = await http.post(url, headers: headers, body: body);
-
+      print(res.statusCode);
       if (res.statusCode == 200) {
-        final result = json.decode(res.body);
-        setState(() {});
+        // final result = json.decode(res.body);
+        setState(() {
+          ArtSweetAlert.show(
+              context: context,
+              artDialogArgs: ArtDialogArgs(
+                  type: ArtSweetAlertType.success, title: "Added to Barket!"));
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const CartPage();
+              },
+            ),
+          );
+        });
       }
       // if (res.statusCode == 200) return res.body;
       return null;
@@ -105,15 +117,28 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
       };
 
       var res = await http.post(url, headers: headers, body: body);
-
       if (res.statusCode == 200) {
-        final result = json.decode(res.body);
-        setState(() {});
+        // final result = json.decode(res.body);
+        setState(() {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const OrderPage(
+                  type: 'orders',
+                  user: {},
+                );
+              },
+            ),
+          );
+        });
       }
       // if (res.statusCode == 200) return res.body;
       return null;
-    } on Exception {
-      return null;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
     }
   }
 
@@ -133,16 +158,28 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
     // dataJson = jsonDecode(res.body);
     var userAddress = {};
     if (widget.product['type'] == 'looking_for') {
+      var defaultFound = false;
       for (var i = 0; i < widget.product['user_addresses'].length; i++) {
         if (widget.product['user_addresses'][i]['default']) {
+          defaultFound = true;
           userAddress = widget.product['user_addresses'][i];
         }
       }
+
+      if (!defaultFound) {
+        userAddress = widget.product['user_addresses'][0];
+      }
     } else {
+      var defaultFound = false;
       for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
         if (widget.product['seller_addresses'][i]['default']) {
+          defaultFound = true;
           userAddress = widget.product['seller_addresses'][i];
         }
+      }
+
+      if (!defaultFound) {
+        userAddress = widget.product['seller_addresses'][0];
       }
     }
 
@@ -177,8 +214,6 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(
                         onPressed: () async {
-                          saveOrder(widget.product['pk']);
-
                           ArtDialogResponse response = await ArtSweetAlert.show(
                             barrierDismissible: false,
                             context: context,
@@ -193,17 +228,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
 
                           if (response.isTapConfirmButton) {
                             if (!mounted) return;
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const OrderPage(
-                                    type: 'orders',
-                                    user: {},
-                                  );
-                                },
-                              ),
-                            );
+                            saveOrder(widget.product['pk']);
                           }
 
                           if (response.isTapDenyButton) {
@@ -260,14 +285,6 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                           // if (response.isTapDenyButton) {
                           //   return;
                           // }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const CartPage();
-                              },
-                            ),
-                          );
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: AppColors.primary,
@@ -401,11 +418,15 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                                   ProductPageDetails.pin,
                                   size: 12,
                                 ),
-                                Text(
-                                  '${userAddress['city']['name']}, ${userAddress['province']['name']}',
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    color: AppColors.defaultBlack,
+                                Visibility(
+                                  visible:
+                                      userAddress.isNotEmpty ? true : false,
+                                  child: Text(
+                                    '${userAddress['city']['name']}, ${userAddress['province']['name']}',
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: AppColors.defaultBlack,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -590,7 +611,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                     child: SizedBox(
                       width: 130,
                       child: Text(
-                        'Product Posted',
+                        'Posted Date',
                         style: TextStyle(fontSize: AppDefaults.fontSize),
                       ),
                     ),
@@ -599,6 +620,36 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                     widget.product['date_created'] != null
                         ? DateFormat('MMMM dd, yyyy').format(
                             DateTime.parse(widget.product['date_created']))
+                        : '',
+                    style: const TextStyle(
+                      fontSize: AppDefaults.fontSize,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    child: SizedBox(
+                      width: 130,
+                      child: Text(
+                        'Available Date',
+                        style: TextStyle(fontSize: AppDefaults.fontSize),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    widget.product['date_created'] != null
+                        ? DateFormat('MMMM dd, yyyy').format(
+                            DateTime.parse(widget.product['date_available']))
                         : '',
                     style: const TextStyle(
                       fontSize: AppDefaults.fontSize,
@@ -628,10 +679,13 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       ),
                     ),
                   ),
-                  Text(
-                    '${userAddress['city']['name']}, ${userAddress['province']['name']}',
-                    style: const TextStyle(
-                        color: Colors.white, fontSize: AppDefaults.fontSize),
+                  Visibility(
+                    visible: userAddress.isNotEmpty ? true : false,
+                    child: Text(
+                      '${userAddress['city']['name']}, ${userAddress['province']['name']}',
+                      style: const TextStyle(
+                          color: Colors.white, fontSize: AppDefaults.fontSize),
+                    ),
                   ),
                 ],
               ),

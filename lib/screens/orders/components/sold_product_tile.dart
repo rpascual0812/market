@@ -1,9 +1,14 @@
+import 'dart:io';
+
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 
 import '../../../constants/index.dart';
 import '../../../components/network_image.dart';
+
+import 'package:http/http.dart' as http;
 
 class SoldProductTile extends StatefulWidget {
   static const IconData chat =
@@ -13,12 +18,16 @@ class SoldProductTile extends StatefulWidget {
 
   const SoldProductTile({
     Key? key,
+    required this.token,
     required this.order,
     this.onTap,
+    this.refresh,
   }) : super(key: key);
 
+  final String token;
   final Map<String, dynamic> order;
   final void Function()? onTap;
+  final void Function()? refresh;
 
   @override
   State<SoldProductTile> createState() => _SoldProductTileState();
@@ -29,6 +38,24 @@ class _SoldProductTileState extends State<SoldProductTile> {
       IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
+
+  update(String status) async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/orders/update');
+      final headers = {
+        HttpHeaders.authorizationHeader: 'Bearer ${widget.token}',
+      };
+      var body = {'order_pks': widget.order['pk'].toString(), 'status': status};
+      var res = await http.post(url, headers: headers, body: body);
+      if (res.statusCode == 200) {
+        widget.refresh!();
+      }
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,61 +214,124 @@ class _SoldProductTileState extends State<SoldProductTile> {
                                       ),
                                     ),
                                   ),
-                                  Positioned(
-                                    right: 0,
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.18,
-                                          height: 20,
-                                          child: ElevatedButton(
-                                            onPressed: () {},
-                                            style: TextButton.styleFrom(
-                                              backgroundColor:
-                                                  AppColors.primary,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Fulfilled',
-                                              style: TextStyle(
-                                                fontSize: 10,
-                                                color: Colors.white,
+                                  Visibility(
+                                    visible: widget.order['status_pk'] == 2 ||
+                                            widget.order['status_pk'] == 6
+                                        ? true
+                                        : false,
+                                    child: Positioned(
+                                      right: 0,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.18,
+                                            height: 20,
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                ArtDialogResponse response =
+                                                    await ArtSweetAlert.show(
+                                                  barrierDismissible: false,
+                                                  context: context,
+                                                  artDialogArgs: ArtDialogArgs(
+                                                      type: ArtSweetAlertType
+                                                          .question,
+                                                      denyButtonText: "Cancel",
+                                                      denyButtonColor:
+                                                          Colors.grey,
+                                                      title:
+                                                          "Are you sure you want to update the status of this order?",
+                                                      confirmButtonText:
+                                                          "Update",
+                                                      confirmButtonColor:
+                                                          AppColors.primary),
+                                                );
+
+                                                if (response
+                                                    .isTapConfirmButton) {
+                                                  if (!mounted) return;
+                                                  update('Delivered');
+                                                }
+
+                                                if (response.isTapDenyButton) {
+                                                  return;
+                                                }
+                                              },
+                                              style: TextButton.styleFrom(
+                                                backgroundColor:
+                                                    AppColors.primary,
+                                                minimumSize:
+                                                    Size.zero, // Set this
+                                                padding:
+                                                    EdgeInsets.zero, // and this
+                                              ),
+                                              child: const Text(
+                                                'Fulfilled',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        const VerticalDivider(),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.18,
-                                          height: 20,
-                                          child: ElevatedButton(
-                                            onPressed: () {},
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: AppColors.danger,
-                                              minimumSize:
-                                                  Size.zero, // Set this
-                                              padding:
-                                                  EdgeInsets.zero, // and this
-                                            ),
-                                            child: const Text(
-                                              'Cancel',
-                                              style: TextStyle(
-                                                fontSize: 10,
-                                                color: Colors.white,
+                                          const VerticalDivider(),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.18,
+                                            height: 20,
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                ArtDialogResponse response =
+                                                    await ArtSweetAlert.show(
+                                                  barrierDismissible: false,
+                                                  context: context,
+                                                  artDialogArgs: ArtDialogArgs(
+                                                      type: ArtSweetAlertType
+                                                          .danger,
+                                                      denyButtonText: "Close",
+                                                      denyButtonColor:
+                                                          Colors.grey,
+                                                      title:
+                                                          "Are you sure you want to cancel this order?",
+                                                      confirmButtonText:
+                                                          "Cancel",
+                                                      confirmButtonColor:
+                                                          AppColors.danger),
+                                                );
+
+                                                if (response
+                                                    .isTapConfirmButton) {
+                                                  if (!mounted) return;
+                                                  update('Cancelled');
+                                                }
+
+                                                if (response.isTapDenyButton) {
+                                                  return;
+                                                }
+                                              },
+                                              style: TextButton.styleFrom(
+                                                backgroundColor:
+                                                    AppColors.danger,
+                                                minimumSize:
+                                                    Size.zero, // Set this
+                                                padding:
+                                                    EdgeInsets.zero, // and this
+                                              ),
+                                              child: const Text(
+                                                'Cancel',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   )
                                 ],

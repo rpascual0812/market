@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:market/components/product_list_widget_tile_square.dart';
+import 'package:market/screens/producer/my_producer_page/my_producer_page.dart';
 
 import '../../../constants/index.dart';
 import '../product_page.dart';
@@ -13,11 +14,15 @@ class OtherProducts extends StatefulWidget {
     this.userPk = '',
     required this.title,
     required this.theme,
+    required this.token,
+    required this.accountPk,
   }) : super(key: key);
 
   final String userPk;
   final String title;
   final String theme;
+  final String token;
+  final String accountPk;
 
   @override
   State<OtherProducts> createState() => _OtherProductsState();
@@ -118,19 +123,34 @@ class _OtherProductsState extends State<OtherProducts> {
               },
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
-              Padding(
-                padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-                child: SizedBox(
-                  child: Text(
-                    'View more',
-                    style: TextStyle(color: Colors.grey),
+          Visibility(
+            visible: widget.title == 'Similar Products' ? false : true,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: SizedBox(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => MyProducerPage(
+                              token: widget.token,
+                              accountPk: widget.accountPk.toString(),
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'View more',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 10),
         ],

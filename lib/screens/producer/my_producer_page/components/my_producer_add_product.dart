@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 // import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:market/components/appbar.dart';
 import 'package:http/http.dart' as http;
@@ -18,7 +19,12 @@ import '../../../../constants/index.dart';
 // import 'package:market/models/ratings.dart';
 
 class MyProducerAddProduct extends StatefulWidget {
-  const MyProducerAddProduct({Key? key}) : super(key: key);
+  const MyProducerAddProduct({
+    Key? key,
+    required this.type,
+  }) : super(key: key);
+
+  final String type;
 
   @override
   State<MyProducerAddProduct> createState() => _MyProducerAddProductState();
@@ -37,6 +43,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
       TextEditingController(text: '1');
   TextEditingController descriptionController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
 
   var categoryValue = '1';
   var categories = [];
@@ -172,10 +179,11 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
         }
 
         var body = {
-          'type': 'product',
+          'type': widget.type,
           'name': productNameController.text,
           'price_from': priceController.text,
           'quantity': stockController.text,
+          'date_available': dateController.text.toString(),
           'description': descriptionController.text,
           'measurement': measurementController.text,
           'category': categoryValue,
@@ -201,11 +209,13 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
           );
 
           if (!mounted) return;
+          var jwt = AppDefaults.jwtDecode(token);
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) {
-                return MyProducerPage(token: token);
+                return MyProducerPage(
+                    accountPk: jwt['sub'].toString(), token: token);
               },
             ),
           );
@@ -392,7 +402,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                                     const Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        'Stock',
+                                        'Estimated Quantity',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -432,6 +442,62 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                               ),
                             ),
                           ],
+                        ),
+                        const SizedBox(height: AppDefaults.margin),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Available On',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: AppDefaults.margin / 2),
+                        SizedBox(
+                          // padding: EdgeInsets.zero,
+                          child: TextFormField(
+                            readOnly: true,
+                            controller: dateController,
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Birthday is required';
+                              }
+                              return null;
+                            },
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(
+                                    1900), //DateTime.now() - not to allow to choose before today.
+                                lastDate: DateTime(2101),
+                              );
+                              if (pickedDate != null) {
+                                String formattedDate =
+                                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                                setState(() {
+                                  dateController.text =
+                                      formattedDate; //set output date to TextField value.
+                                });
+                              } else {
+                                // print("Date is not selected");
+                              }
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: AppDefaults.edgeInset,
+                              prefixIconConstraints: const BoxConstraints(
+                                  minWidth: 0, minHeight: 0),
+                              // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                              focusedBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              enabledBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              focusedErrorBorder:
+                                  AppDefaults.outlineInputBorderError,
+                              errorBorder: AppDefaults.outlineInputBorderError,
+                            ),
+                            style: AppDefaults.formTextStyle,
+                          ),
                         ),
                         const SizedBox(height: AppDefaults.margin),
                         const Align(

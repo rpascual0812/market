@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 // import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:market/components/appbar.dart';
 import 'package:http/http.dart' as http;
@@ -20,9 +21,11 @@ class MyProducerEditProduct extends StatefulWidget {
   const MyProducerEditProduct({
     Key? key,
     required this.product,
+    required this.onSave,
   }) : super(key: key);
 
   final Map<String, dynamic> product;
+  final void Function() onSave;
 
   @override
   State<MyProducerEditProduct> createState() => _MyProducerEditProductState();
@@ -41,8 +44,9 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
       TextEditingController(text: '1');
   TextEditingController descriptionController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
 
-  var categoryValue = '1';
+  var categoryValue = '2';
   var categories = [];
 
   List documents = [];
@@ -57,9 +61,12 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
     productNameController.text = widget.product['name'];
     priceController.text = widget.product['price_from'];
     stockController.text = widget.product['quantity'];
+    dateController.text = DateFormat('yyyy-MM-dd')
+        .format(DateTime.parse(widget.product['date_available']))
+        .toString();
     descriptionController.text = widget.product['description'];
     categoryController.text = widget.product['category_pk'].toString();
-    categoryValue = widget.product['category_pk'].toString();
+    // categoryValue = widget.product['category_pk'].toString();
 
     if (widget.product['product_documents'].length > 0) {
       for (var i = 0; i < widget.product['product_documents'].length; i++) {
@@ -165,7 +172,11 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
             categories.add(dataJson['data'][i]);
           }
 
-          categoryValue = categories[0]['pk'].toString();
+          if (widget.product['category_pk'].toString() != '') {
+            categoryValue = widget.product['category_pk'].toString();
+          } else {
+            categoryValue = categories[0]['pk'].toString();
+          }
         });
       } else if (res.statusCode == 401) {
         if (!mounted) return;
@@ -194,6 +205,7 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
           'name': productNameController.text,
           'price': priceController.text,
           'stock': stockController.text,
+          'date_available': dateController.text.toString(),
           'description': descriptionController.text,
           'measurement': measurementController.text,
           'category': categoryValue,
@@ -208,15 +220,20 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
         var res = await http.post(url, headers: headers, body: body);
 
         if (res.statusCode == 200) {
-          var result = json.decode(res.body);
+          // var result = json.decode(res.body);
 
-          ArtSweetAlert.show(
+          ArtDialogResponse response = await ArtSweetAlert.show(
             context: context,
             artDialogArgs: ArtDialogArgs(
                 type: ArtSweetAlertType.success,
                 title: "Success!",
                 text: "Your product has been updated."),
           );
+          if (response.isTapConfirmButton) {
+            widget.onSave();
+            if (!mounted) return;
+            Navigator.pop(context);
+          }
         }
         return null;
       } on Exception catch (exception) {
@@ -232,7 +249,7 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         child: Container(
           color: AppColors.grey1,
@@ -450,6 +467,62 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
                           ),
                         ),
                         const SizedBox(height: AppDefaults.margin / 2),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Available On',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: AppDefaults.margin / 2),
+                        SizedBox(
+                          // padding: EdgeInsets.zero,
+                          child: TextFormField(
+                            readOnly: true,
+                            controller: dateController,
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Birthday is required';
+                              }
+                              return null;
+                            },
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(
+                                    1900), //DateTime.now() - not to allow to choose before today.
+                                lastDate: DateTime(2101),
+                              );
+                              if (pickedDate != null) {
+                                String formattedDate =
+                                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                                setState(() {
+                                  dateController.text =
+                                      formattedDate; //set output date to TextField value.
+                                });
+                              } else {
+                                // print("Date is not selected");
+                              }
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: AppDefaults.edgeInset,
+                              prefixIconConstraints: const BoxConstraints(
+                                  minWidth: 0, minHeight: 0),
+                              // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                              focusedBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              enabledBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              focusedErrorBorder:
+                                  AppDefaults.outlineInputBorderError,
+                              errorBorder: AppDefaults.outlineInputBorderError,
+                            ),
+                            style: AppDefaults.formTextStyle,
+                          ),
+                        ),
+                        const SizedBox(height: AppDefaults.margin),
                         Container(
                           width: 370.0,
                           height: 120.0,

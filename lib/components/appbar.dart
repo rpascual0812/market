@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:market/constants/app_icons.dart';
 import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/notifications/notification_page.dart';
 import 'package:market/screens/product/components/cart_page.dart';
@@ -82,7 +83,7 @@ class _AppbarState extends State<Appbar> {
               child: IconButton(
                 padding: const EdgeInsets.only(left: 10),
                 constraints: const BoxConstraints(),
-                icon: const Icon(Icons.search),
+                icon: AppIcons.searchWhite,
                 color: Colors.white,
                 onPressed: () {
                   Navigator.push(
@@ -102,7 +103,7 @@ class _AppbarState extends State<Appbar> {
               child: IconButton(
                 padding: const EdgeInsets.only(left: 10),
                 constraints: const BoxConstraints(),
-                icon: const Icon(Icons.shopping_cart),
+                icon: AppIcons.shoppingBagWhite,
                 color: Colors.white,
                 onPressed: () {
                   Navigator.push(
@@ -121,7 +122,7 @@ class _AppbarState extends State<Appbar> {
               child: IconButton(
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 constraints: const BoxConstraints(),
-                icon: const Icon(Icons.notifications),
+                icon: AppIcons.bellWhite,
                 color: Colors.white,
                 onPressed: () {
                   Navigator.push(

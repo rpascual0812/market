@@ -147,6 +147,9 @@ flutter:
     - family: Custom
       fonts:
         - asset: assets/fonts/CustomIcons.ttf
+    - family: Market
+      fonts:
+        - asset: assets/fonts/MarketIcons.ttf
     - family: Roboto
       fonts:
         - asset: assets/fonts/Roboto/Roboto-Condensed.ttf

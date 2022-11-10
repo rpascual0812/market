@@ -42,19 +42,31 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
 
     var userAddress = {};
     if (widget.product['user_addresses'] != null) {
+      var defaultFound = false;
       for (var i = 0; i < widget.product['user_addresses'].length; i++) {
         if (widget.product['user_addresses'][i]['default']) {
+          defaultFound = true;
           userAddress = widget.product['user_addresses'][i];
         }
+      }
+
+      if (!defaultFound) {
+        userAddress = widget.product['user_addresses'][0];
       }
     }
 
     var sellerAddress = {};
     if (widget.product['seller_addresses'] != null) {
+      var defaultFound = false;
       for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
         if (widget.product['seller_addresses'][i]['default']) {
+          defaultFound = true;
           sellerAddress = widget.product['seller_addresses'][i];
         }
+      }
+
+      if (!defaultFound) {
+        userAddress = widget.product['seller_addresses'][0];
       }
     }
 

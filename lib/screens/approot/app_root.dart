@@ -14,6 +14,7 @@ import '../../constants/app_colors.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../../constants/app_icons.dart';
 import '../auth/login_page.dart';
 import '../chat/chat_page.dart';
 import '../product_list/product_list_page.dart';
@@ -46,7 +47,7 @@ class _AppRootState extends State<AppRoot> {
 
   @override
   void initState() {
-    print('sub index ${widget.menuIndex}');
+    // print('sub index ${widget.menuIndex}');
     var token = AppDefaults.jwtDecode(widget.jwt);
 
     super.initState();
@@ -173,14 +174,15 @@ class _AppRootState extends State<AppRoot> {
           items: [
             BottomNavigationBarItem(
               label: "",
-              icon:
-                  Icon(_currentIndex == 0 ? IconlyBold.home : IconlyLight.home),
+              icon: _currentIndex == 0
+                  ? AppIcons.homeActive
+                  : AppIcons.homeInactive,
             ),
             BottomNavigationBarItem(
               label: "",
-              icon: Icon(_currentIndex == 1
-                  ? IconlyBold.document
-                  : IconlyLight.document),
+              icon: _currentIndex == 1
+                  ? AppIcons.newspaperActive
+                  : AppIcons.newspaperInactive,
             ),
             // BottomNavigationBarItem(
             //   label: "",
@@ -190,7 +192,9 @@ class _AppRootState extends State<AppRoot> {
             // ),
             BottomNavigationBarItem(
               label: "",
-              icon: Icon(_currentIndex == 2 ? chatBold : chat),
+              icon: _currentIndex == 2
+                  ? AppIcons.chatActive
+                  : AppIcons.chatInactive,
             ),
 
             BottomNavigationBarItem(
@@ -200,9 +204,15 @@ class _AppRootState extends State<AppRoot> {
                       backgroundImage: CachedNetworkImageProvider(userImage),
                       radius: AppDefaults.radius,
                     )
-                  : Icon(_currentIndex == 3
-                      ? IconlyBold.profile
-                      : IconlyLight.profile),
+                  : Icon(
+                      _currentIndex == 3
+                          ? IconlyBold.profile
+                          : IconlyLight.profile,
+                      color: _currentIndex == 3
+                          ? AppColors.primary
+                          : AppColors.secondary,
+                      size: 30,
+                    ),
             ),
           ],
         ),

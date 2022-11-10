@@ -11,10 +11,12 @@ class CartPageTile extends StatefulWidget {
     Key? key,
     required this.order,
     this.onTap,
+    required this.onToggle,
   }) : super(key: key);
 
   final Map<String, dynamic> order;
   final void Function()? onTap;
+  final void Function() onToggle;
 
   @override
   State<CartPageTile> createState() => _CartPageTileState();
@@ -36,12 +38,18 @@ class _CartPageTileState extends State<CartPageTile> {
 
     var sellerAddress = {};
     if (widget.order['product']['seller_addresses'] != null) {
+      var defaultFound = false;
       for (var i = 0;
           i < widget.order['product']['seller_addresses'].length;
           i++) {
         if (widget.order['product']['seller_addresses'][i]['default']) {
+          defaultFound = true;
           sellerAddress = widget.order['product']['seller_addresses'][i];
         }
+      }
+
+      if (!defaultFound) {
+        sellerAddress = widget.order['product']['seller_addresses'][0];
       }
     }
 
@@ -99,6 +107,8 @@ class _CartPageTileState extends State<CartPageTile> {
                                                   ? !widget.order['product']
                                                       ['selected']
                                                   : true;
+
+                                          widget.onToggle();
                                         });
                                       },
                                     ),

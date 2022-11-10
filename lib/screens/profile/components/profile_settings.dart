@@ -6,6 +6,7 @@ import 'package:market/components/setting_tile.dart';
 import 'package:market/screens/post/post_looking_for.dart';
 import 'package:market/screens/profile/components/recently_viewed_page.dart';
 
+import '../../../constants/index.dart';
 import '../../approot/app_root.dart';
 import '../../chat/moderator.dart';
 import '../../producer/my_producer_page/my_producer_page.dart';
@@ -103,11 +104,13 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   child: SettingTile(
                       name: 'Go to Producer\'s Page',
                       callback: () {
+                        var token = AppDefaults.jwtDecode(widget.token);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                MyProducerPage(token: widget.token),
+                            builder: (context) => MyProducerPage(
+                                token: widget.token,
+                                accountPk: token['sub'].toString()),
                           ),
                         );
                       }),

@@ -84,7 +84,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
       }
 
       var res = await Remote.get('products', {
-        'type': 'future_crops',
+        'type': 'product',
         'year': yearController.text,
         'months': monthsArr.toString(),
       });

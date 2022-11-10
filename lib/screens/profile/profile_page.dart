@@ -116,7 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           children: [
             /// Header
-            Appbar(),
+            const Appbar(),
 
             // Profile Picture
             const ProfilePictureSection(),

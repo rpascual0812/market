@@ -52,7 +52,7 @@ class _ProfileProductState extends State<ProfileProduct> {
         children: [
           ProfileCard(
             producerPk: producerPk,
-            iconData: ProfileProduct.box,
+            iconData: 'box',
             iconBackground: producerPk == '0'
                 ? AppColors.grey1.withOpacity(0.5)
                 : AppColors.primary.withOpacity(0.5),
@@ -76,7 +76,7 @@ class _ProfileProductState extends State<ProfileProduct> {
           ),
           ProfileCard(
             producerPk: producerPk,
-            iconData: ProfileProduct.cart,
+            iconData: 'cart',
             iconBackground: Colors.blue.withOpacity(0.1),
             iconColor: Colors.blue,
             statusName: 'My Orders',
