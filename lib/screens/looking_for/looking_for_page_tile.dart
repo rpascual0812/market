@@ -261,11 +261,23 @@ class _LookingForPageTileState extends State<LookingForPageTile> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: AppDefaults.margin / 10),
+                                const SizedBox(height: AppDefaults.margin / 2),
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    'Price range: ${widget.product['country']['currency_symbol']}${widget.product['price_from']} per ${widget.product['measurement']['name']}',
+                                    'Price range: ${widget.product['country']['currency_symbol']}${widget.product['price_from']} - ${widget.product['country']['currency_symbol']}${widget.product['price_to']} per ${widget.product['measurement']['name']}',
+                                    style: const TextStyle(
+                                      fontFamily: '',
+                                      fontSize: AppDefaults.fontSize,
+                                      color: AppColors.defaultBlack,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: AppDefaults.margin / 2),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    widget.product['description'],
                                     style: const TextStyle(
                                       fontFamily: '',
                                       fontSize: AppDefaults.fontSize,
