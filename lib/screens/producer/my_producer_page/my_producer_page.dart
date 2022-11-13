@@ -25,7 +25,9 @@ class MyProducerPage extends StatefulWidget {
   State<MyProducerPage> createState() => _MyProducerPageState();
 }
 
-class _MyProducerPageState extends State<MyProducerPage> {
+class _MyProducerPageState extends State<MyProducerPage>
+    with SingleTickerProviderStateMixin {
+  late final _tabController = TabController(length: 2, vsync: this);
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
@@ -72,64 +74,59 @@ class _MyProducerPageState extends State<MyProducerPage> {
     }
 
     return Scaffold(
-      appBar: const Appbar(),
-      body: SingleChildScrollView(
-        child: Container(
-          color: AppColors.grey1,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Visibility(
-                visible: user.isNotEmpty ? true : false,
-                child: MyProducerHeader(user: user),
-              ),
-              SizedBox(
-                height: 1500,
-                child: DefaultTabController(
-                  length: 2,
-                  child: Column(
-                    children: [
-                      const TabBar(
-                        labelColor: AppColors.primary,
-                        indicatorColor: AppColors.primary,
-                        unselectedLabelColor: Colors.grey,
-                        tabs: [
-                          Tab(
-                            text: 'Products',
-                          ),
-                          Tab(
-                            text: 'Future Crops',
-                          ),
-                        ],
+      appBar: const Appbar(module: 'products'),
+      body: Column(
+        children: [
+          Visibility(
+            visible: user.isNotEmpty ? true : false,
+            child: MyProducerHeader(user: user),
+          ),
+          Expanded(
+            child: DefaultTabController(
+              length: 2,
+              child: Column(
+                children: [
+                  TabBar(
+                    controller: _tabController,
+                    labelColor: AppColors.primary,
+                    indicatorColor: AppColors.primary,
+                    unselectedLabelColor: Colors.grey,
+                    tabs: const [
+                      Tab(
+                        text: 'Products',
                       ),
-                      Expanded(
-                        child: TabBarView(
-                          children: [
-                            Visibility(
-                              visible: user['pk'] != null ? true : false,
-                              child: MyProductsTab(
-                                type: 'product',
-                                userPk: user['pk'].toString(),
-                              ),
-                            ),
-                            Visibility(
-                              visible: user['pk'] != null ? true : false,
-                              child: Scaffold(
-                                body: MyProductsTab(
-                                    type: 'future_crop',
-                                    userPk: user['pk'].toString()),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
+                      Tab(
+                        text: 'Future Crops',
+                      ),
                     ],
                   ),
-                ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        Visibility(
+                          visible: user['pk'] != null ? true : false,
+                          child: MyProductsTab(
+                            type: 'product',
+                            userPk: user['pk'].toString(),
+                          ),
+                        ),
+                        Visibility(
+                          visible: user['pk'] != null ? true : false,
+                          child: Scaffold(
+                            body: MyProductsTab(
+                                type: 'future_crop',
+                                userPk: user['pk'].toString()),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

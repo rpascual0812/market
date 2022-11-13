@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/app_colors.dart';
+import 'package:market/screens/orders/components/my_looking_for.dart';
 import 'package:market/screens/orders/components/my_orders.dart';
 import 'package:market/screens/orders/components/sold_products.dart';
 
@@ -21,7 +22,7 @@ class OrderPage extends StatelessWidget {
       appBar: const Appbar(module: 'orders'),
       body: DefaultTabController(
         initialIndex: type == 'products' ? 0 : 1,
-        length: 2,
+        length: 3,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,6 +49,9 @@ class OrderPage extends StatelessWidget {
                 Tab(
                   text: 'My Orders',
                 ),
+                Tab(
+                  text: 'My Looking For',
+                ),
               ],
             ),
             Expanded(
@@ -55,6 +59,7 @@ class OrderPage extends StatelessWidget {
                 children: [
                   SoldProducts(user: user),
                   MyOrders(user: user),
+                  MyLookingFor(user: user),
                 ],
               ),
             )

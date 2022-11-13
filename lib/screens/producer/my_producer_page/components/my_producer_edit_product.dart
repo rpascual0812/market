@@ -68,7 +68,8 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
     categoryController.text = widget.product['category_pk'].toString();
     // categoryValue = widget.product['category_pk'].toString();
 
-    if (widget.product['product_documents'].length > 0) {
+    if (widget.product['product_documents'] != null &&
+        widget.product['product_documents'].length > 0) {
       for (var i = 0; i < widget.product['product_documents'].length; i++) {
         documents.add(widget.product['product_documents'][i]['document']);
       }
@@ -248,6 +249,7 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.product);
     return Scaffold(
       appBar: const Appbar(),
       body: SingleChildScrollView(

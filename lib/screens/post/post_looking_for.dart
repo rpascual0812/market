@@ -43,6 +43,7 @@ class _PostLookingForState extends State<PostLookingFor> {
   final descriptionController = TextEditingController(text: '');
   final quantityController = TextEditingController(text: '');
   var priceRangeController = TextEditingController(text: '');
+  TextEditingController categoryController = TextEditingController();
 
   Map<String, dynamic> account = {};
   List measurements = [];
@@ -61,13 +62,44 @@ class _PostLookingForState extends State<PostLookingFor> {
   RangeValues rangeValues = const RangeValues(100, 1000);
   List photos = [];
 
+  var categoryValue = '1';
+  var categories = [];
+
   @override
   void initState() {
     super.initState();
 
+    getCategories();
     getMeasurements();
     fetchUser();
     // Timer(const Duration(seconds: 2), () => getMeasurements());
+  }
+
+  Future<void> getCategories() async {
+    try {
+      categories = [];
+      var res = await Remote.get('categories', {});
+      // print('res $res');
+      if (res.statusCode == 200) {
+        setState(() {
+          var dataJson = jsonDecode(res.body);
+          for (var i = 0; i < dataJson['data'].length; i++) {
+            categories.add(dataJson['data'][i]);
+          }
+
+          categoryValue = categories[0]['pk'].toString();
+        });
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+      }
+      // if (res.statusCode == 200) return res.body;
+      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
   }
 
   Future getMeasurements() async {
@@ -236,8 +268,10 @@ class _PostLookingForState extends State<PostLookingFor> {
           "measurement": quantityMeasurementController,
           'price_from': priceRangeValuesController.start.round().toString(),
           'price_to': priceRangeValuesController.end.round().toString(),
+          'category': categoryValue,
           'currency': 'php',
           'documents': photoPks.join(','),
+          'status': 'Posted',
         });
 
         if (res.statusCode == 200) {
@@ -294,7 +328,7 @@ class _PostLookingForState extends State<PostLookingFor> {
     }
 
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         child: Container(
           color: AppColors.grey1,
@@ -687,6 +721,57 @@ class _PostLookingForState extends State<PostLookingFor> {
                                 ),
                               ),
                             ]),
+                        const SizedBox(height: AppDefaults.margin),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Category',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: AppDefaults.margin / 2),
+                        SizedBox(
+                          height: AppDefaults.height,
+                          // padding: EdgeInsets.zero,
+                          child: DropdownButtonFormField<String>(
+                            isDense: true,
+                            value: categoryValue,
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            // elevation: 16,
+                            style: const TextStyle(color: Colors.black),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return '* required';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: AppDefaults.edgeInset,
+                              prefixIconConstraints: const BoxConstraints(
+                                  minWidth: 0, minHeight: 0),
+                              focusedBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              enabledBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              focusedErrorBorder:
+                                  AppDefaults.outlineInputBorderError,
+                              errorBorder: AppDefaults.outlineInputBorderError,
+                            ),
+                            onChanged: (String? value) {
+                              setState(() {
+                                categoryValue = value!;
+                              });
+                            },
+                            items: categories
+                                .map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value['pk'].toString(),
+                                child: Text('${value['name']}'),
+                              );
+                            }).toList(),
+                          ),
+                        ),
                         const SizedBox(height: AppDefaults.margin * 2),
                         const Align(
                           alignment: Alignment.centerLeft,

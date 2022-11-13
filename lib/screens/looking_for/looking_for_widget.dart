@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:market/components/section_divider_title.dart';
-import 'package:market/screens/buyer/buyer_page.dart';
+import 'package:market/screens/looking_for/looking_for_page.dart';
 
 import '../../constants/index.dart';
 import '../approot/app_root.dart';
@@ -164,8 +164,8 @@ class _LookingForWidgetState extends State<LookingForWidget> {
                                 // ),
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return BuyerPage(
-                                        userPk: products[index]['user_pk']);
+                                    return LookingForPage(
+                                        productPk: products[index]['pk']);
                                   },
                                 ),
                               );

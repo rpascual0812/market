@@ -15,11 +15,13 @@ import 'package:http/http.dart' as http;
 class MyProductTile extends StatefulWidget {
   const MyProductTile({
     Key? key,
+    required this.type,
     required this.product,
     required this.onEdit,
     required this.refresh,
   }) : super(key: key);
 
+  final String type;
   final Map<String, dynamic> product;
   final void Function() onEdit;
   final void Function() refresh;
@@ -71,7 +73,9 @@ class _MyProductTileState extends State<MyProductTile> {
           AppDefaults.productImage(widget.product['product_documents']);
     }
 
-    DateTime date = DateTime.parse(widget.product['date_created'].toString());
+    DateTime date = widget.type == 'future_crop'
+        ? DateTime.parse(widget.product['date_available'].toString())
+        : DateTime.parse(widget.product['date_created'].toString());
 
     return GestureDetector(
       // no onTap event for now
@@ -216,7 +220,9 @@ class _MyProductTileState extends State<MyProductTile> {
                                       Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          'Product created: ${DateFormat.yMMMd().format(date)}',
+                                          widget.type == 'future_crop'
+                                              ? 'Available on: ${DateFormat.yMMMd().format(date)}'
+                                              : 'Product created: ${DateFormat.yMMMd().format(date)}',
                                           style: const TextStyle(
                                             fontSize: AppDefaults.fontSize - 2,
                                             color: AppColors.defaultBlack,

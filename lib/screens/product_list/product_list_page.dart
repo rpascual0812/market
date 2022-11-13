@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/screens/future_crops/future_crops_page.dart';
-import 'package:market/screens/looking_for/looking_for_page.dart';
+import 'package:market/screens/looking_for/looking_for_list.dart';
 
 class ProductListPage extends StatefulWidget {
   const ProductListPage({
@@ -56,7 +56,7 @@ class _ProductListPageState extends State<ProductListPage>
                     body: FutureCropsPage(),
                   ),
                   Scaffold(
-                    body: LookingForPage(),
+                    body: LookingForList(),
                   ),
                 ],
               ),

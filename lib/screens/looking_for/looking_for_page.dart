@@ -1,46 +1,54 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:market/screens/buyer/buyer_page.dart';
-
-import 'package:market/screens/looking_for/looking_for_page_tile.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:market/components/appbar.dart';
+import 'package:market/screens/looking_for/components/looking_for_page_details.dart';
 
 import '../../constants/index.dart';
 
 class LookingForPage extends StatefulWidget {
-  const LookingForPage({Key? key}) : super(key: key);
+  const LookingForPage({
+    Key? key,
+    required this.productPk,
+  }) : super(key: key);
+
+  final int productPk;
 
   @override
   State<LookingForPage> createState() => _LookingForPageState();
 }
 
 class _LookingForPageState extends State<LookingForPage> {
-  bool isLoading = false;
-  List products = [];
-  Map<Object, dynamic> dataJson = {};
-  int intialIndex = 0;
+  final storage = const FlutterSecureStorage();
+  String? token = '';
 
+  Map<String, dynamic> product = <String, dynamic>{};
   @override
   void initState() {
     super.initState();
-    getProducts();
+    readStorage();
+    fetch();
   }
 
-  Future<void> getProducts() async {
+  Future<void> readStorage() async {
+    final all = await storage.read(key: 'jwt');
+
+    setState(() {
+      token = all;
+    });
+  }
+
+  Future fetch() async {
     try {
-      var res = await Remote.get('products', {'type': 'looking_for'});
+      var res = await Remote.get('products/${widget.productPk}', {});
       if (res.statusCode == 200) {
         setState(() {
-          dataJson = jsonDecode(res.body);
-          for (var i = 0; i < dataJson['data'].length; i++) {
-            products.add(dataJson['data'][i]);
-          }
+          var productJson = jsonDecode(res.body);
+          product = productJson['data'];
         });
-      } else if (res.statusCode == 401) {
-        if (!mounted) return;
-        AppDefaults.logout(context);
       }
-      return;
     } on Exception catch (exception) {
       print('exception $exception');
     } catch (error) {
@@ -49,55 +57,49 @@ class _LookingForPageState extends State<LookingForPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Future refreshOrders() async {
-    setState(() => isLoading = true);
-
-    // orders = await HipposDatabase.instance.getAllOrders();
-    setState(() => isLoading = false);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    var accountPk = '';
+    if (product['user'] != null && product['user']['account'] != null) {
+      accountPk = product['user']['account']['pk'].toString();
+    }
+
     return Scaffold(
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Visibility(
-              visible: products.isNotEmpty ? true : false,
-              child: ListView.builder(
-                itemCount: products.length,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 16),
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return LookingForPageTile(
-                    product: products[index],
-                    onTap: () {
-                      Navigator.of(context).push(
-                        // MaterialPageRoute(
-                        //   builder: (context) => ProductPage(
-                        //     productPk: products[index]['pk'],
-                        //   ),
-                        // ),
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return BuyerPage(
-                                userPk: products[index]['user_pk']);
-                          },
-                        ),
-                      );
-                    },
-                  );
-                },
+        child: SafeArea(
+          top: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(50, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      alignment: Alignment.centerLeft),
+                  child: const Text(
+                    'Back',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ],
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 0),
+              //   child: ProductSlider(
+              //       documents: product['product_documents'] ?? []),
+              // ),
+              Visibility(
+                visible: product['name'] != null ? true : false,
+                child: LookingForPageDetails(product: product),
+              ),
+            ],
+          ),
         ),
       ),
     );

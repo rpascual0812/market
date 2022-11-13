@@ -63,9 +63,9 @@ class _SoldProductTileState extends State<SoldProductTile> {
 
     DateTime date = DateTime.parse(widget.order['date_created'].toString());
     var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
-    if (widget.order['product_documents'] != null) {
-      productImage =
-          AppDefaults.productImage(widget.order['product_documents']);
+    if (widget.order['product']['product_documents'] != null) {
+      productImage = AppDefaults.productImage(
+          widget.order['product']['product_documents']);
     }
 
     return GestureDetector(

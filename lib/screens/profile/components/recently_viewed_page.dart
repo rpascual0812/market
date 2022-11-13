@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/screens/looking_for/looking_for_page_tile.dart';
+import 'package:market/screens/looking_for/looking_for_list_tile.dart';
 
 import '../../../constants/index.dart';
 
@@ -66,7 +66,7 @@ class _RecentlyViewedPageState extends State<RecentlyViewedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -117,7 +117,7 @@ class _RecentlyViewedPageState extends State<RecentlyViewedPage> {
                 padding: const EdgeInsets.only(top: 16),
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return LookingForPageTile(
+                  return LookingForListTile(
                     product: products[index],
                     onTap: () {
                       // Navigator.of(context).push(

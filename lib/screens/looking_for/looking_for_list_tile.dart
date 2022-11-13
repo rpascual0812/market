@@ -6,13 +6,13 @@ import '../../constants/index.dart';
 import '../../components/network_image.dart';
 import 'package:market/screens/chat/bubble.dart';
 
-class LookingForPageTile extends StatefulWidget {
+class LookingForListTile extends StatefulWidget {
   static const IconData chat =
       IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
-  const LookingForPageTile({
+  const LookingForListTile({
     Key? key,
     required this.product,
     this.onTap,
@@ -22,10 +22,10 @@ class LookingForPageTile extends StatefulWidget {
   final void Function()? onTap;
 
   @override
-  State<LookingForPageTile> createState() => _LookingForPageTileState();
+  State<LookingForListTile> createState() => _LookingForListTileState();
 }
 
-class _LookingForPageTileState extends State<LookingForPageTile> {
+class _LookingForListTileState extends State<LookingForListTile> {
   static const IconData chat =
       IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
   static const IconData pin =

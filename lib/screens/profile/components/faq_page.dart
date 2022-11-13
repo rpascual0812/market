@@ -5,7 +5,7 @@ import 'package:market/components/appbar.dart';
 import 'package:market/constants/app_colors.dart';
 
 import 'package:market/models/product.dart';
-import 'package:market/screens/looking_for/looking_for_page_tile.dart';
+import 'package:market/screens/looking_for/looking_for_list_tile.dart';
 
 class FaqPage extends StatefulWidget {
   const FaqPage({Key? key}) : super(key: key);
@@ -48,7 +48,7 @@ class _FaqPageState extends State<FaqPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(

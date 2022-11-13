@@ -66,6 +66,7 @@ class _MyProductsTabState extends State<MyProductsTab> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.type);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -148,6 +149,7 @@ class _MyProductsTabState extends State<MyProductsTab> {
                     physics: const ClampingScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
                       return MyProductTile(
+                        type: widget.type,
                         product: products[index],
                         onEdit: () {
                           Navigator.of(context).push(

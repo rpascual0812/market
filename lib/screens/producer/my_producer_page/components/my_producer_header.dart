@@ -33,7 +33,7 @@ class _MyProducerHeaderState extends State<MyProducerHeader> {
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 200,
+      height: 150,
       decoration: BoxDecoration(
         color: Colors.black,
         image: DecorationImage(
@@ -69,7 +69,7 @@ class _MyProducerHeaderState extends State<MyProducerHeader> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 20.0, left: 10),
+                  padding: const EdgeInsets.only(left: 10),
                   child: Row(
                     children: [
                       SizedBox(
@@ -87,7 +87,7 @@ class _MyProducerHeaderState extends State<MyProducerHeader> {
                           // color: Colors.white,
                           child: InkWell(
                             child: Container(
-                              margin: const EdgeInsets.only(top: 30),
+                              margin: const EdgeInsets.all(0),
                               color: Colors.transparent,
                               padding:
                                   const EdgeInsets.all(AppDefaults.padding),

@@ -4,14 +4,15 @@ import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
+import 'package:market/screens/producer/my_producer_page/components/my_producer_edit_product.dart';
 
 import '../../../constants/index.dart';
 import '../../../components/network_image.dart';
 
 import 'package:http/http.dart' as http;
 
-class MyOrderTile extends StatefulWidget {
-  const MyOrderTile({
+class MyLookingForTile extends StatefulWidget {
+  const MyLookingForTile({
     Key? key,
     required this.token,
     required this.order,
@@ -25,10 +26,10 @@ class MyOrderTile extends StatefulWidget {
   final void Function()? refresh;
 
   @override
-  State<MyOrderTile> createState() => _MyOrderTileState();
+  State<MyLookingForTile> createState() => _MyLookingForTileState();
 }
 
-class _MyOrderTileState extends State<MyOrderTile> {
+class _MyLookingForTileState extends State<MyLookingForTile> {
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
@@ -290,7 +291,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                       Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          'Order created: ${DateFormat.yMMMd().format(date)}',
+                                          'Posted on: ${DateFormat.yMMMd().format(date)}',
                                           style: const TextStyle(
                                             fontSize: AppDefaults.fontSize - 2,
                                             color: Colors.grey,
@@ -300,13 +301,59 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                       Visibility(
                                         visible: widget.order['status_pk'] ==
                                                     2 ||
-                                                widget.order['status_pk'] == 4
+                                                widget.order['status_pk'] ==
+                                                    4 ||
+                                                widget.order['status_pk'] == 8
                                             ? true
                                             : false,
                                         child: Positioned(
                                           right: 0,
                                           child: Row(
                                             children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: AppColors.primary,
+                                                ),
+                                                width: 20.0,
+                                                height: 20.0,
+                                                padding: EdgeInsets.zero,
+                                                child: OutlinedButton(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) {
+                                                          return MyProducerEditProduct(
+                                                            product:
+                                                                widget.order[
+                                                                    'product'],
+                                                            onSave: () {
+                                                              widget.refresh!();
+                                                            },
+                                                          );
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                  style:
+                                                      OutlinedButton.styleFrom(
+                                                    side: const BorderSide(
+                                                      width: 1,
+                                                      color: AppColors.primary,
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(0),
+                                                  ),
+                                                  child: const Icon(
+                                                    Icons.edit,
+                                                    color: Colors.white,
+                                                    size: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              const VerticalDivider(),
                                               SizedBox(
                                                 width: MediaQuery.of(context)
                                                         .size
@@ -390,7 +437,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                                           title:
                                                               "Are you sure you want to cancel this order?",
                                                           confirmButtonText:
-                                                              "Cancel",
+                                                              "Yes, cancel",
                                                           confirmButtonColor:
                                                               AppColors.danger),
                                                     );
