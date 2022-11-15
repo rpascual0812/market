@@ -569,6 +569,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.2"
+  infinite_scroll:
+    dependency: "direct main"
+    description:
+      name: infinite_scroll
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   intl:
     dependency: "direct main"
     description:
