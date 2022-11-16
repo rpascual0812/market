@@ -27,13 +27,38 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ScrollController _scrollController = ScrollController();
+
+  Future<List<String>> getNextPageData(int page) async {
+    await Future.delayed(const Duration(seconds: 2));
+    if (page == 3) return [];
+    final items = List<String>.generate(20, (i) => "Item $i Page $page");
+    return items;
+  }
+
+  List<String> data = [];
+  bool everyThingLoaded = false;
+
   List products = [];
   List categories = [];
   int intialIndex = 0;
+  int page = 0;
 
   @override
   void initState() {
     super.initState();
+    loadInitialData();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
+        print('end of file');
+        setState(() {
+          page++;
+        });
+      }
+    });
   }
 
   @override
@@ -41,6 +66,7 @@ class _HomePageState extends State<HomePage> {
     SizeConfig().init(context);
 
     return SingleChildScrollView(
+      controller: _scrollController,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0),
         child: Column(
@@ -63,11 +89,68 @@ class _HomePageState extends State<HomePage> {
             const LookingForWidget(),
             const SizedBox(height: AppDefaults.margin),
             // const ProductListWidget(),
-            const ProductList(),
+            ProductList(page: page),
+            // InfiniteScrollGrid(
+            //   shrinkWrap: true,
+            //   physics: const BouncingScrollPhysics(),
+            //   padding: const EdgeInsets.all(10),
+            //   crossAxisSpacing: 10,
+            //   mainAxisSpacing: 10,
+            //   onLoadingStart: (page) async {
+            //     print(page);
+            //     List<String> newData = await getNextPageData(page);
+            //     setState(() {
+            //       data += newData;
+            //       if (newData.isEmpty) {
+            //         everyThingLoaded = true;
+            //       }
+            //     });
+            //   },
+            //   everythingLoaded: everyThingLoaded,
+            //   crossAxisCount: 2,
+            //   children: data
+            //       .map(
+            //         (e) => GridItem(text: e),
+            //       )
+            //       .toList(),
+            // ),
             // const SizedBox(height: AppDefaults.margin / 2),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> loadInitialData() async {
+    data = await getNextPageData(0);
+    setState(() {});
+  }
+}
+
+class GridItem extends StatelessWidget {
+  final String text;
+  const GridItem({Key? key, required this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.all(10),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor.withOpacity(.3),
+            borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const CircleAvatar(
+              child: Icon(Icons.image),
+            ),
+            Text(
+              text,
+              style: Theme.of(context).textTheme.bodyText1,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ));
   }
 }

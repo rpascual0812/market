@@ -9,9 +9,9 @@ import 'package:market/screens/product/product_page.dart';
 import '../../../constants/index.dart';
 
 class ProductList extends StatefulWidget {
-  const ProductList({
-    Key? key,
-  }) : super(key: key);
+  const ProductList({Key? key, required this.page}) : super(key: key);
+
+  final int page;
 
   @override
   State<ProductList> createState() => _ProductListState();
@@ -33,9 +33,31 @@ class _ProductListState extends State<ProductList> {
     getCategories();
   }
 
+  /// Here is the important part: When data is set from the parent,
+  /// move this widget
+  @override
+  void didUpdateWidget(covariant ProductList oldWidget) {
+    // If you want to react only to changes you could check
+    if (oldWidget.page != widget.page) {
+      print(oldWidget.page.toString());
+      print(widget.page.toString());
+      print('didupdate');
+      next();
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void next() async {
+    print('next');
+    skip = take;
+    take += take;
+    await fetch();
   }
 
   Future<void> getCategories() async {
