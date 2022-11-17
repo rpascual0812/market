@@ -23,9 +23,16 @@ class ProductListWidgetTileSquare extends StatelessWidget {
     var image = '${dotenv.get('API')}/assets/images/no-image.jpg';
     if (product['product_documents'] != null) {
       var found = false;
+      // if (product['pk'] == 33) {
+      //   print(product['uuid']);
+      //   print(product['user_document']);
+      //   print(product['product_documents']);
+      //   print(product['user_addresses']);
+      // }
       for (var i = 0; i < product['product_documents'].length; i++) {
         if (product['product_documents'][i]['document'] != null &&
             product['product_documents'][i]['default'] == true) {
+          found = true;
           image =
               '${dotenv.get('API')}/${product['product_documents'][i]['document']['path']}';
         }
