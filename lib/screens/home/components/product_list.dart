@@ -82,15 +82,15 @@ class _ProductListState extends State<ProductList> {
       var res = await Remote.get('categories', {});
       // print('res $res');
       if (res.statusCode == 200) {
-        setState(() async {
-          var dataJson = jsonDecode(res.body);
-          for (var i = 0; i < dataJson['data'].length; i++) {
-            categories.add(dataJson['data'][i]);
-          }
+        var dataJson = jsonDecode(res.body);
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          categories.add(dataJson['data'][i]);
+        }
 
-          categories.insert(0, {'pk': 0, 'name': 'All'});
-          // print(categories);
-          products = await fetch();
+        categories.insert(0, {'pk': 0, 'name': 'All'});
+        print(categories);
+        setState(() async {
+          // products = await fetch();
         });
       } else if (res.statusCode == 401) {
         if (!mounted) return;

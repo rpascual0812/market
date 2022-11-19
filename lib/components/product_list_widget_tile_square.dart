@@ -66,7 +66,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 10),
+              // const SizedBox(height: 10),
               Container(
                 margin: const EdgeInsets.all(10),
                 width: (MediaQuery.of(context).size.width),
