@@ -145,8 +145,7 @@ class _MyProductTileState extends State<MyProductTile> {
                                               ),
                                               const SizedBox(height: 5),
                                               Wrap(
-                                                spacing:
-                                                    100, // set spacing here
+                                                spacing: 70, // set spacing here
                                                 children: <Widget>[
                                                   Column(
                                                     mainAxisAlignment:

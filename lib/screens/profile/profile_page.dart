@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/components/appbar.dart';
@@ -87,13 +88,12 @@ class _ProfilePageState extends State<ProfilePage> {
       final url = Uri.parse('${dotenv.get('API')}/logout');
       final headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer $widget.token',
+        'Authorization': 'Bearer ${widget.token}',
       };
 
       var res = await http.post(url, headers: headers);
       if (res.statusCode == 200) {
-        final result = json.decode(res.body);
-        storage.write(key: "jwt", value: '');
+        return json.decode(res.body);
       }
 
       return null;
@@ -133,28 +133,44 @@ class _ProfilePageState extends State<ProfilePage> {
               width: MediaQuery.of(context).size.width * 0.4,
               // height: AppDefaults.height,
               child: Padding(
-                padding: const EdgeInsets.all(1),
+                padding: const EdgeInsets.all(0),
                 child: ElevatedButton(
                   onPressed: () async {
-                    var result = await logout();
-                    if (result != null) {
-                      await storage.deleteAll();
-                      // ignore: use_build_context_synchronously
-                      AppDefaults.toast(context, 'success',
-                          AppMessage.getSuccess('LOGOUT_SUCCESS'));
-                    }
-
-                    Timer(
-                      const Duration(seconds: 1),
-                      () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AppRoot(jwt: ''),
-                          ),
-                        )
-                      },
+                    ArtDialogResponse response = await ArtSweetAlert.show(
+                      barrierDismissible: false,
+                      context: context,
+                      artDialogArgs: ArtDialogArgs(
+                        denyButtonText: "No",
+                        denyButtonColor: Colors.grey,
+                        title: "Are you sure you want to log out?",
+                        // text: "You won't be able to revert this!",
+                        confirmButtonText: "Yes",
+                        confirmButtonColor: AppColors.danger,
+                        type: ArtSweetAlertType.question,
+                      ),
                     );
+
+                    if (response.isTapConfirmButton) {
+                      var result = await logout();
+                      if (result != null) {
+                        await storage.delete(key: 'jwt');
+                        // ignore: use_build_context_synchronously
+                        AppDefaults.toast(context, 'success',
+                            AppMessage.getSuccess('LOGOUT_SUCCESS'));
+                      }
+
+                      Timer(
+                        const Duration(seconds: 1),
+                        () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AppRoot(jwt: ''),
+                            ),
+                          )
+                        },
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(0),

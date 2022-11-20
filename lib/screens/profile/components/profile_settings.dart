@@ -1,5 +1,6 @@
 // import 'dart:ffi';
 
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:market/components/setting_tile.dart';
@@ -65,12 +66,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 600,
+      height: 550,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 600,
+            height: 550,
             width: MediaQuery.of(context).size.width,
             // height: 580,
             child: Column(
@@ -177,13 +178,31 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     }),
                 SettingTile(
                     name: 'Delete my Account permanently',
-                    callback: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AppRoot(jwt: ''),
+                    callback: () async {
+                      ArtDialogResponse response = await ArtSweetAlert.show(
+                        barrierDismissible: false,
+                        context: context,
+                        artDialogArgs: ArtDialogArgs(
+                          type: ArtSweetAlertType.warning,
+                          denyButtonText: "Cancel",
+                          denyButtonColor: Colors.grey,
+                          title: "Are you sure?",
+                          text:
+                              "This action will permanently delete your account? There's no going back from this!",
+                          confirmButtonText: "Yes, delete my account",
+                          confirmButtonColor: AppColors.danger,
                         ),
                       );
+
+                      if (response.isTapConfirmButton) {
+                        if (!mounted) return;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppRoot(jwt: ''),
+                          ),
+                        );
+                      }
                     }),
               ],
             ),

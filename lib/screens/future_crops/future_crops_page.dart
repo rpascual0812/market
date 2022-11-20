@@ -82,9 +82,9 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
           }));
         }
       }
-
+      products = [];
       var res = await Remote.get('products', {
-        'type': 'product',
+        'type': 'future_crop',
         'year': yearController.text,
         'months': monthsArr.toString(),
       });
@@ -305,7 +305,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                   children: const [
                     Text(
                       'No products found',
-                      style: TextStyle(color: Colors.black, fontSize: 24),
+                      style: TextStyle(color: Colors.black, fontSize: 15),
                     )
                   ],
                 )

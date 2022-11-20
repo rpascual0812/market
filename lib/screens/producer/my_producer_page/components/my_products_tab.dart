@@ -66,7 +66,7 @@ class _MyProductsTabState extends State<MyProductsTab> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.type);
+    // print(widget.type);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

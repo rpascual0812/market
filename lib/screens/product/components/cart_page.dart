@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -71,30 +72,56 @@ class _CartPageState extends State<CartPage> {
 
   Future<void> order() async {
     var selectedProducts = [];
-    print(orders.length);
+
     for (var i = 0; i < orders.length; i++) {
       if (orders[i]['selected']) {
         selectedProducts.add(orders[i]['pk']);
       }
     }
 
-    print(selectedProducts);
-    final url = Uri.parse('${dotenv.get('API')}/orders/update');
-    final headers = {
-      HttpHeaders.authorizationHeader: 'Bearer $token',
-    };
-    var body = {
-      'status': 'Ordered',
-      'order_pks': selectedProducts.join(','),
-    };
+    if (selectedProducts.isEmpty) {
+      ArtSweetAlert.show(
+        context: context,
+        artDialogArgs: ArtDialogArgs(
+          type: ArtSweetAlertType.danger,
+          title: "Oops...",
+          text: "You have not selected any products.",
+        ),
+      );
+    } else {
+      ArtDialogResponse response = await ArtSweetAlert.show(
+        barrierDismissible: false,
+        context: context,
+        artDialogArgs: ArtDialogArgs(
+          type: ArtSweetAlertType.question,
+          denyButtonText: "Not yet!",
+          denyButtonColor: AppColors.danger,
+          title: "Are you sure you want to order the selected products?",
+          confirmButtonText: "Order Now!",
+          confirmButtonColor: AppColors.primary,
+        ),
+      );
 
-    var res = await http.post(url, headers: headers, body: body);
-    print(res.statusCode);
-    if (res.statusCode == 200) {
-      setState(() {
-        fetch();
-      });
+      if (response.isTapConfirmButton) {
+        final url = Uri.parse('${dotenv.get('API')}/orders/update');
+        final headers = {
+          HttpHeaders.authorizationHeader: 'Bearer $token',
+        };
+        var body = {
+          'status': 'Ordered',
+          'order_pks': selectedProducts.join(','),
+        };
+
+        var res = await http.post(url, headers: headers, body: body);
+        // print(res.statusCode);
+        if (res.statusCode == 200) {
+          setState(() {
+            fetch();
+          });
+        }
+      }
     }
+
     return;
   }
 

@@ -116,7 +116,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                             Positioned(
                                               left: 15,
                                               child: Text(
-                                                '${widget.order['seller']['first_name']} ${widget.order['seller']['last_name']}',
+                                                '${widget.order['seller']['user']['first_name']} ${widget.order['seller']['user']['last_name']}',
                                                 style: const TextStyle(
                                                   fontSize:
                                                       AppDefaults.fontSize,

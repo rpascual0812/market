@@ -31,7 +31,7 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
   @override
   Widget build(BuildContext context) {
     var userImage = AppDefaults.userImage(widget.product['user_document']);
-    DateTime date = DateTime.parse(widget.product['date_created'].toString());
+    DateTime date = DateTime.parse(widget.product['date_available'].toString());
     var productImage =
         AppDefaults.productImage(widget.product['product_documents']);
 

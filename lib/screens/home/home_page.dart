@@ -64,19 +64,17 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> loadInitialData() async {
     products = await getNextPageData(page);
-    print('load initial data $products');
+    // print('load initial data $products');
     setState(() {});
   }
 
   Future getNextPageData(int page) async {
-    await Future.delayed(const Duration(seconds: 2));
-    // if (page == 3) return [];
-    // final items = List<String>.generate(6, (i) => "Item $i Page $page");
+    // await Future.delayed(const Duration(seconds: 2));
     return await fetch();
   }
 
   _next() async {
-    print('next');
+    // print('next');
     var newData = await getNextPageData(page++);
     setState(() {
       products += newData;
@@ -204,7 +202,8 @@ class _HomePageState extends State<HomePage> {
                         onChanged: (option) {
                           categoryFilterValue = option as String;
                           setState(() {
-                            fetch();
+                            skip = 0;
+                            loadInitialData();
                           });
                         },
                       ),
@@ -219,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                         onChanged: (option) {
                           filterValue = option as String;
                           setState(() {
-                            fetch();
+                            loadInitialData();
                           });
                         },
                       ),

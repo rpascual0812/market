@@ -252,7 +252,7 @@ class _SoldProductTileState extends State<SoldProductTile> {
                                                 if (response
                                                     .isTapConfirmButton) {
                                                   if (!mounted) return;
-                                                  update('Delivered');
+                                                  update('Fulfilled');
                                                 }
 
                                                 if (response.isTapDenyButton) {

@@ -62,7 +62,7 @@ class _MyOrdersState extends State<MyOrders> {
       final params = {
         'type': type.join(','),
         'user_pk': account['sub'].toString(),
-        // 'status': 'Ordered'
+        'status': 'Ordered'
       };
 
       final url = Uri.parse('${dotenv.get('API')}/orders')

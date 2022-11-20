@@ -5,10 +5,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/screens/product/components/other_products.dart';
+import 'package:market/screens/product/components/product_page_details.dart';
 
 import '../../components/sliders/product_slider.dart';
 import '../../constants/index.dart';
-import 'components/product_page_details.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({
@@ -88,14 +88,14 @@ class _ProductPageState extends State<ProductPage> {
                   userPk: product['user_pk'].toString(),
                   title: 'Products from this producer',
                   theme: 'white',
-                  token: token!,
+                  token: token ?? '',
                   accountPk: accountPk.toString(),
                 ),
               ),
               OtherProducts(
                 title: 'Similar Products',
                 theme: 'primary',
-                token: token!,
+                token: token ?? '',
                 accountPk: accountPk.toString(),
               ),
             ],

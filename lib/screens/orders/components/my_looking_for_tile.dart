@@ -300,8 +300,6 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
                                       ),
                                       Visibility(
                                         visible: widget.order['status_pk'] ==
-                                                    2 ||
-                                                widget.order['status_pk'] ==
                                                     4 ||
                                                 widget.order['status_pk'] == 8
                                             ? true
@@ -387,7 +385,7 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
                                                     if (response
                                                         .isTapConfirmButton) {
                                                       if (!mounted) return;
-                                                      update('Received');
+                                                      update('Ordered');
                                                     }
 
                                                     if (response
@@ -404,7 +402,7 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
                                                         .zero, // and this
                                                   ),
                                                   child: const Text(
-                                                    'Received',
+                                                    'Ordered',
                                                     style: TextStyle(
                                                       fontSize: 10,
                                                       color: Colors.white,

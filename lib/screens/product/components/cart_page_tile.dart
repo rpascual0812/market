@@ -37,14 +37,14 @@ class _CartPageTileState extends State<CartPageTile> {
     }
 
     var sellerAddress = {};
-    if (widget.order['product']['seller_addresses'] != null) {
+    if (widget.order['seller']['seller_addresses'] != null) {
       var defaultFound = false;
       for (var i = 0;
-          i < widget.order['product']['seller_addresses'].length;
+          i < widget.order['seller']['seller_addresses'].length;
           i++) {
-        if (widget.order['product']['seller_addresses'][i]['default']) {
+        if (widget.order['seller']['seller_addresses'][i]['default']) {
           defaultFound = true;
-          sellerAddress = widget.order['product']['seller_addresses'][i];
+          sellerAddress = widget.order['seller']['seller_addresses'][i];
         }
       }
 

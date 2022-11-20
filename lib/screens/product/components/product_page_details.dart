@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:market/components/network_image.dart';
+import 'package:market/screens/auth/login_page.dart';
 import 'package:market/screens/chat/bubble.dart';
 import 'package:market/screens/orders/order_page.dart';
 import 'package:market/screens/producer/producer_page/producer_page.dart';
@@ -49,7 +50,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
     final all = await storage.read(key: 'jwt');
 
     setState(() {
-      token = all!;
+      token = all ?? '';
     });
   }
 
@@ -72,15 +73,23 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
       };
 
       var res = await http.post(url, headers: headers, body: body);
-      print(res.statusCode);
+      // print(res.statusCode);
       if (res.statusCode == 200) {
-        // final result = json.decode(res.body);
-        setState(() {
-          ArtSweetAlert.show(
-              context: context,
-              artDialogArgs: ArtDialogArgs(
-                  type: ArtSweetAlertType.success, title: "Added to Barket!"));
+        ArtDialogResponse response = await ArtSweetAlert.show(
+          barrierDismissible: false,
+          context: context,
+          artDialogArgs: ArtDialogArgs(
+              denyButtonText: "Close",
+              denyButtonColor: Colors.grey,
+              title: "Added to Barket!",
+              text: "",
+              confirmButtonText: "Go to basket",
+              confirmButtonColor: AppColors.primary,
+              type: ArtSweetAlertType.success),
+        );
 
+        if (response.isTapConfirmButton) {
+          if (!mounted) return;
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -89,7 +98,9 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
               },
             ),
           );
-        });
+        }
+        // final result = json.decode(res.body);
+        setState(() {});
       }
       // if (res.statusCode == 200) return res.body;
       return null;
@@ -144,6 +155,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
 
   @override
   Widget build(BuildContext context) {
+    // print('product details $token');
     // print('produc2t ${widget.product}');
     var userImage = '${dotenv.get('API')}/assets/images/user.png';
     for (var i = 0; i < widget.product['user_document'].length; i++) {
@@ -178,7 +190,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
         }
       }
 
-      if (!defaultFound) {
+      if (widget.product['seller_addresses'].length > 0 && !defaultFound) {
         userAddress = widget.product['seller_addresses'][0];
       }
     }
@@ -214,25 +226,53 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(
                         onPressed: () async {
-                          ArtDialogResponse response = await ArtSweetAlert.show(
-                            barrierDismissible: false,
-                            context: context,
-                            artDialogArgs: ArtDialogArgs(
+                          if (token != '') {
+                            ArtDialogResponse response =
+                                await ArtSweetAlert.show(
+                              barrierDismissible: false,
+                              context: context,
+                              artDialogArgs: ArtDialogArgs(
                                 type: ArtSweetAlertType.success,
                                 denyButtonText: "Cancel",
                                 denyButtonColor: Colors.grey,
                                 title: "Are you sure you want to buy this?",
                                 confirmButtonText: "Continue",
-                                confirmButtonColor: AppColors.primary),
-                          );
+                                confirmButtonColor: AppColors.primary,
+                              ),
+                            );
 
-                          if (response.isTapConfirmButton) {
-                            if (!mounted) return;
-                            saveOrder(widget.product['pk']);
-                          }
+                            if (response.isTapConfirmButton) {
+                              if (!mounted) return;
+                              saveOrder(widget.product['pk']);
+                            }
 
-                          if (response.isTapDenyButton) {
-                            return;
+                            if (response.isTapDenyButton) {
+                              return;
+                            }
+                          } else {
+                            ArtDialogResponse response =
+                                await ArtSweetAlert.show(
+                              barrierDismissible: false,
+                              context: context,
+                              artDialogArgs: ArtDialogArgs(
+                                type: ArtSweetAlertType.danger,
+                                denyButtonText: "Cancel",
+                                denyButtonColor: Colors.grey,
+                                title: "You need to log in first!",
+                                confirmButtonText: "Login",
+                                confirmButtonColor: AppColors.primary,
+                              ),
+                            );
+
+                            if (response.isTapConfirmButton) {
+                              if (!mounted) return;
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                              );
+                              return;
+                            }
                           }
                         },
                         style: OutlinedButton.styleFrom(
@@ -258,33 +298,33 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(
                         onPressed: () async {
-                          saveToCart(widget.product['pk']);
+                          if (token != '') {
+                            saveToCart(widget.product['pk']);
+                          } else {
+                            ArtDialogResponse response =
+                                await ArtSweetAlert.show(
+                              barrierDismissible: false,
+                              context: context,
+                              artDialogArgs: ArtDialogArgs(
+                                type: ArtSweetAlertType.danger,
+                                denyButtonText: "Cancel",
+                                denyButtonColor: Colors.grey,
+                                title: "You need to log in first!",
+                                confirmButtonText: "Login",
+                                confirmButtonColor: AppColors.primary,
+                              ),
+                            );
 
-                          // ArtDialogResponse response = await ArtSweetAlert.show(
-                          //     barrierDismissible: false,
-                          //     context: context,
-                          //     artDialogArgs: ArtDialogArgs(
-                          //       type: ArtSweetAlertType.success,
-                          //       denyButtonText: "Ok",
-                          //       denyButtonColor: Colors.grey,
-                          //       title:
-                          //           "This product has been added to your cart",
-                          //       confirmButtonText: "Go to Cart",
-                          //     ));
-
-                          // if (response.isTapConfirmButton) {
-                          //   print('confirmed');
-                          //   ArtSweetAlert.show(
-                          //       context: context,
-                          //       artDialogArgs: ArtDialogArgs(
-                          //           type: ArtSweetAlertType.success,
-                          //           title: "Saved!"));
-                          //   return;
-                          // }
-
-                          // if (response.isTapDenyButton) {
-                          //   return;
-                          // }
+                            if (response.isTapConfirmButton) {
+                              if (!mounted) return;
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                              );
+                              return;
+                            }
+                          }
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: AppColors.primary,
@@ -422,7 +462,9 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                                   visible:
                                       userAddress.isNotEmpty ? true : false,
                                   child: Text(
-                                    '${userAddress['city']['name']}, ${userAddress['province']['name']}',
+                                    userAddress['city'] != null
+                                        ? '${userAddress['city']['name']}, ${userAddress['province']['name']}'
+                                        : '',
                                     style: const TextStyle(
                                       fontSize: 10,
                                       color: AppColors.defaultBlack,
@@ -522,15 +564,40 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                     height: 40.0,
                     padding: EdgeInsets.zero,
                     child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return RateProductPage(product: widget.product);
-                            },
-                          ),
-                        );
+                      onPressed: () async {
+                        if (token != '') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return RateProductPage(product: widget.product);
+                              },
+                            ),
+                          );
+                        } else {
+                          ArtDialogResponse response = await ArtSweetAlert.show(
+                            barrierDismissible: false,
+                            context: context,
+                            artDialogArgs: ArtDialogArgs(
+                              type: ArtSweetAlertType.danger,
+                              denyButtonText: "Cancel",
+                              denyButtonColor: Colors.grey,
+                              title: "You need to log in first!",
+                              confirmButtonText: "Login",
+                              confirmButtonColor: AppColors.primary,
+                            ),
+                          );
+
+                          if (response.isTapConfirmButton) {
+                            if (!mounted) return;
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            );
+                            return;
+                          }
+                        }
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: AppColors.primary,
@@ -682,7 +749,9 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                   Visibility(
                     visible: userAddress.isNotEmpty ? true : false,
                     child: Text(
-                      '${userAddress['city']['name']}, ${userAddress['province']['name']}',
+                      userAddress['city'] != null
+                          ? '${userAddress['city']['name']}, ${userAddress['province']['name']}'
+                          : '',
                       style: const TextStyle(
                           color: Colors.white, fontSize: AppDefaults.fontSize),
                     ),
