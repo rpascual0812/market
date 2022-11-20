@@ -88,8 +88,8 @@ class _SignUpFormState extends State<SignUpForm> {
         final result = json.decode(res.body);
         setState(() {
           provinces = result['data'];
-          provinces.insert(0, {'pk': 0, 'name': 'Select'});
-          cities.insert(0, {'pk': 0, 'name': 'Select'});
+          provinces.insert(0, {'province_code': 0, 'name': 'Select'});
+          cities.insert(0, {'city_code': 0, 'name': 'Select'});
           areas.insert(0, {'pk': 0, 'name': 'Select'});
         });
       }
@@ -105,7 +105,7 @@ class _SignUpFormState extends State<SignUpForm> {
   Future getCities() async {
     try {
       cities = [];
-      final params = {'province_pk': provinceValue};
+      final params = {'province_code': provinceValue};
       final url = Uri.parse('${dotenv.get('API')}/cities')
           .replace(queryParameters: params);
       var res = await http.get(url);
@@ -114,7 +114,7 @@ class _SignUpFormState extends State<SignUpForm> {
         final result = json.decode(res.body);
         setState(() {
           cities = result['data'];
-          cities.insert(0, {'pk': 0, 'name': 'Select'});
+          cities.insert(0, {'city_code': 0, 'name': 'Select'});
           // print(cities);
         });
       }
@@ -130,7 +130,7 @@ class _SignUpFormState extends State<SignUpForm> {
   Future getAreas() async {
     try {
       areas = [];
-      final params = {'city_pk': cityValue};
+      final params = {'city_code': cityValue};
       final url = Uri.parse('${dotenv.get('API')}/areas')
           .replace(queryParameters: params);
       var res = await http.get(url);
@@ -693,6 +693,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                           AppDefaults.outlineInputBorderError,
                                     ),
                                     onChanged: (String? value) {
+                                      print(value);
                                       setState(() {
                                         provinceValue = value!;
                                         getCities();
@@ -701,7 +702,8 @@ class _SignUpFormState extends State<SignUpForm> {
                                     items: provinces
                                         .map<DropdownMenuItem<String>>((value) {
                                       return DropdownMenuItem<String>(
-                                        value: value['pk'].toString(),
+                                        value:
+                                            value['province_code'].toString(),
                                         child: Text('${value['name']}'),
                                       );
                                     }).toList(),
@@ -766,7 +768,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                     items: cities
                                         .map<DropdownMenuItem<String>>((value) {
                                       return DropdownMenuItem<String>(
-                                        value: value['pk'].toString(),
+                                        value: value['city_code'].toString(),
                                         child: Text('${value['name']}'),
                                       );
                                     }).toList(),
