@@ -38,15 +38,14 @@ class _ProducerRegisterState extends State<ProducerRegister> {
   List documents = [];
   List photos = [];
 
-  String provinceValue = 'Metro Manila';
-  String cityValue = 'Pasig';
-  String areaValue = 'Palatiw';
-
   // List of items in our dropdown menu
-  var provinces = ['Metro Manila', 'Rizal', 'Quezon'];
+  var provinces = [];
+  var cities = [];
+  var areas = [];
 
-  var cities = ['Pasig', 'Makati', 'Antipolo'];
-  var areas = ['Palatiw', 'Pinagbuhatan', 'Kapasigan'];
+  String provinceValue = '0';
+  String cityValue = '0';
+  String areaValue = '0';
 
   @override
   void initState() {
@@ -66,11 +65,26 @@ class _ProducerRegisterState extends State<ProducerRegister> {
 
   Future getProvinces() async {
     try {
-      var res = await Remote.get('provinces', {});
-      print('res ${res.statusCode}');
+      final url = Uri.parse('${dotenv.get('API')}/provinces');
+      var res = await http.get(url);
+
       if (res.statusCode == 200) {
-        setState(() {});
+        final result = json.decode(res.body);
+        setState(() {
+          provinces = result['data'];
+
+          cities = [];
+          areas = [];
+
+          provinces.insert(0, {'province_code': 0, 'name': 'Select'});
+          cityValue = '0';
+          areaValue = '0';
+          // cities.add({'city_code': 0, 'name': 'Select'});
+          // areas.add({'pk': 0, 'name': 'Select'});
+        });
       }
+      if (res.statusCode == 200) return res.body;
+      return null;
     } on Exception catch (exception) {
       print('exception $exception');
     } catch (error) {
@@ -80,12 +94,21 @@ class _ProducerRegisterState extends State<ProducerRegister> {
 
   Future getCities() async {
     try {
-      var res =
-          await Remote.get('cities', {'province_pk': provinceValue.toString()});
-      print('res ${res.statusCode}');
+      cities = [];
+      final params = {'province_code': provinceValue};
+      final url = Uri.parse('${dotenv.get('API')}/cities')
+          .replace(queryParameters: params);
+      var res = await http.get(url);
+
       if (res.statusCode == 200) {
-        setState(() {});
+        final result = json.decode(res.body);
+        setState(() {
+          cities = result['data'];
+          cities.insert(0, {'city_code': 0, 'name': 'Select'});
+        });
       }
+      if (res.statusCode == 200) return res.body;
+      return null;
     } on Exception catch (exception) {
       print('exception $exception');
     } catch (error) {
@@ -95,11 +118,22 @@ class _ProducerRegisterState extends State<ProducerRegister> {
 
   Future getAreas() async {
     try {
-      var res = await Remote.get('areas', {});
-      print('res ${res.statusCode}');
+      areas = [];
+      final params = {'city_code': cityValue};
+      final url = Uri.parse('${dotenv.get('API')}/areas')
+          .replace(queryParameters: params);
+      var res = await http.get(url);
+
       if (res.statusCode == 200) {
-        setState(() {});
+        final result = json.decode(res.body);
+        setState(() {
+          areas = result['data'];
+          areas.insert(0, {'pk': 0, 'name': 'Select'});
+          // print(areas);
+        });
       }
+      if (res.statusCode == 200) return res.body;
+      return null;
     } on Exception catch (exception) {
       print('exception $exception');
     } catch (error) {
@@ -334,198 +368,160 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                     width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                child: Column(
-                                  children: [
-                                    const Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Province',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    SizedBox(
-                                      height: AppDefaults.height,
-                                      // padding: EdgeInsets.zero,
-                                      child: DropdownButtonFormField<String>(
-                                        isDense: true,
-                                        value: provinceValue,
-                                        validator: (value) {
-                                          if (value != null && value.isEmpty) {
-                                            return '* Required';
-                                          }
-                                          return null;
-                                        },
-                                        icon: const Icon(
-                                            Icons.keyboard_arrow_down),
-                                        // elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                        decoration: InputDecoration(
-                                          contentPadding: const EdgeInsets.only(
-                                              left: 5, right: 5),
-                                          focusedBorder: AppDefaults
-                                              .outlineInputBorderSuccess,
-                                          enabledBorder: AppDefaults
-                                              .outlineInputBorderSuccess,
-                                          focusedErrorBorder: AppDefaults
-                                              .outlineInputBorderError,
-                                          errorBorder: AppDefaults
-                                              .outlineInputBorderError,
-                                        ),
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            provinceValue = value!;
-                                            getCities();
-                                          });
-                                        },
-                                        items: provinces
-                                            .map<DropdownMenuItem<String>>(
-                                                (value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value.toString(),
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Province',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: AppDefaults.height,
+                          // padding: EdgeInsets.zero,
+                          child: DropdownButtonFormField<String>(
+                            isDense: true,
+                            value: provinceValue,
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            // elevation: 16,
+                            style: const TextStyle(color: Colors.black),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return '* required';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: AppDefaults.edgeInset,
+                              prefixIconConstraints: const BoxConstraints(
+                                  minWidth: 0, minHeight: 0),
+                              focusedBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              enabledBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              focusedErrorBorder:
+                                  AppDefaults.outlineInputBorderError,
+                              errorBorder: AppDefaults.outlineInputBorderError,
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                child: Column(
-                                  children: [
-                                    const Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'City',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    SizedBox(
-                                      height: AppDefaults.height,
-                                      // padding: EdgeInsets.zero,
-                                      child: DropdownButtonFormField<String>(
-                                        isDense: true,
-                                        value: cityValue,
-                                        validator: (value) {
-                                          if (value != null && value.isEmpty) {
-                                            return '* Required';
-                                          }
-                                          return null;
-                                        },
-                                        icon: const Icon(
-                                            Icons.keyboard_arrow_down),
-                                        // elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                        decoration: InputDecoration(
-                                          contentPadding: const EdgeInsets.only(
-                                              left: 5, right: 5),
-                                          focusedBorder: AppDefaults
-                                              .outlineInputBorderSuccess,
-                                          enabledBorder: AppDefaults
-                                              .outlineInputBorderSuccess,
-                                          focusedErrorBorder: AppDefaults
-                                              .outlineInputBorderError,
-                                          errorBorder: AppDefaults
-                                              .outlineInputBorderError,
-                                        ),
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            cityValue = value!;
-                                            getAreas();
-                                          });
-                                        },
-                                        items: cities
-                                            .map<DropdownMenuItem<String>>(
-                                                (value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value.toString(),
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            onChanged: (String? value) {
+                              // print('provinces $value');
+                              setState(() {
+                                provinceValue = value!;
+                                cityValue = '0';
+                                areaValue = '0';
+                                getCities();
+                              });
+                            },
+                            items: provinces
+                                .map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value['province_code'].toString(),
+                                child: Text('${value['name']}'),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        const SizedBox(height: AppDefaults.margin),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'City',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: AppDefaults.height,
+                          // padding: EdgeInsets.zero,
+                          child: DropdownButtonFormField<String>(
+                            isDense: true,
+                            value: cityValue,
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            // elevation: 16,
+                            style: const TextStyle(color: Colors.black),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return '* required';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: AppDefaults.edgeInset,
+                              prefixIconConstraints: const BoxConstraints(
+                                  minWidth: 0, minHeight: 0),
+                              focusedBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              enabledBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              focusedErrorBorder:
+                                  AppDefaults.outlineInputBorderError,
+                              errorBorder: AppDefaults.outlineInputBorderError,
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(1, 0, 0, 0),
-                                child: Column(
-                                  children: [
-                                    const Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Area',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    SizedBox(
-                                      height: AppDefaults.height,
-                                      // padding: EdgeInsets.zero,
-                                      child: DropdownButtonFormField<String>(
-                                        isDense: true,
-                                        value: areaValue,
-                                        validator: (value) {
-                                          if (value != null && value.isEmpty) {
-                                            return '* Required';
-                                          }
-                                          return null;
-                                        },
-                                        icon: const Icon(
-                                            Icons.keyboard_arrow_down),
-                                        // elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                        decoration: InputDecoration(
-                                          contentPadding: const EdgeInsets.only(
-                                              left: 5, right: 5),
-                                          focusedBorder: AppDefaults
-                                              .outlineInputBorderSuccess,
-                                          enabledBorder: AppDefaults
-                                              .outlineInputBorderSuccess,
-                                          focusedErrorBorder: AppDefaults
-                                              .outlineInputBorderError,
-                                          errorBorder: AppDefaults
-                                              .outlineInputBorderError,
-                                        ),
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            areaValue = value!;
-                                          });
-                                        },
-                                        items: areas
-                                            .map<DropdownMenuItem<String>>(
-                                                (value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value.toString(),
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            onChanged: (String? value) {
+                              setState(() {
+                                cityValue = value!;
+                                getAreas();
+                              });
+                            },
+                            items:
+                                cities.map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value['city_code'].toString(),
+                                child: Text('${value['name']}'),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        const SizedBox(height: AppDefaults.margin),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Area',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: AppDefaults.height,
+                          child: DropdownButtonFormField<String>(
+                            isDense: true,
+                            value: areaValue,
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            // elevation: 16,
+                            style: const TextStyle(color: Colors.black),
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return '* required';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: AppDefaults.edgeInset,
+                              prefixIconConstraints: const BoxConstraints(
+                                  minWidth: 0, minHeight: 0),
+                              focusedBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              enabledBorder:
+                                  AppDefaults.outlineInputBorderSuccess,
+                              focusedErrorBorder:
+                                  AppDefaults.outlineInputBorderError,
+                              errorBorder: AppDefaults.outlineInputBorderError,
                             ),
-                          ],
+                            onChanged: (String? value) {
+                              setState(() {
+                                areaValue = value!;
+                              });
+                            },
+                            items: areas.map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value['pk'].toString(),
+                                child: Text('${value['name']}'),
+                              );
+                            }).toList(),
+                          ),
                         ),
                         const SizedBox(height: AppDefaults.margin),
                         const Align(
