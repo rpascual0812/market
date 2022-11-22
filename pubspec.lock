@@ -8,6 +8,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "49.0.0"
+  ably_flutter:
+    dependency: "direct main"
+    description:
+      name: ably_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.15"
   accordion:
     dependency: "direct main"
     description:

@@ -1,10 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/components/select_dropdown.dart';
 import 'package:market/screens/chat/conversation_list.dart';
-import 'package:market/models/chat_user.dart';
 
-import 'package:market/models/order.dart';
+import 'package:http/http.dart' as http;
+
+import '../../constants/index.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -14,66 +20,18 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  List<ChatUsers> chatUsers = [
-    ChatUsers(
-      name: "Jane Russel",
-      messageText: "Awesome Setup",
-      imageURL: "https://i.imgur.com/vavfJqu.gif",
-      time: "Now",
-    ),
-    ChatUsers(
-      name: "Glady's Murphy",
-      messageText: "That's Great",
-      imageURL: "https://i.imgur.com/jG0jrjW.gif",
-      time: "Yesterday",
-    ),
-    ChatUsers(
-      name: "Jorge Henry",
-      messageText: "Hey where are you?",
-      imageURL: "https://i.imgur.com/VocmKXJ.gif",
-      time: "31 Mar",
-    ),
-    ChatUsers(
-      name: "Philip Fox",
-      messageText: "Busy! Call me in 20 mins",
-      imageURL: "https://i.imgur.com/F1oP4Zh.gif",
-      time: "28 Mar",
-    ),
-    ChatUsers(
-      name: "Debra Hawkins",
-      messageText: "Thankyou, It's awesome",
-      imageURL: "https://i.imgur.com/D8hOYEu.gif",
-      time: "23 Mar",
-    ),
-    ChatUsers(
-      name: "Jacob Pena",
-      messageText: "will update you in evening",
-      imageURL: "https://i.imgur.com/BLz5n08.gif",
-      time: "17 Mar",
-    ),
-    ChatUsers(
-      name: "Andrey Jones",
-      messageText: "Can you please share the file?",
-      imageURL: "https://i.imgur.com/NZ7URdO.gif",
-      time: "24 Feb",
-    ),
-    ChatUsers(
-      name: "John Wick",
-      messageText: "How are you?",
-      imageURL: "https://i.imgur.com/BHTKXid.gif",
-      time: "18 Feb",
-    ),
-  ];
+  final storage = const FlutterSecureStorage();
+  String? token = '';
+  List chats = [];
 
   var filterValue = 'Show All';
   var filters = ['Show All', 'Show only unread', 'Mark all as read'];
 
-  late List<Order> orders = [];
-  bool isLoading = false;
-
   @override
   void initState() {
     super.initState();
+
+    getStorage();
   }
 
   @override
@@ -81,10 +39,51 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
+  Future getStorage() async {
+    token = await storage.read(key: 'jwt');
+    print(token);
+    fetch();
+  }
+
+  Future<void> fetch() async {
+    try {
+      final params = {'filter': filterValue};
+      final url = Uri.parse('${dotenv.get('API')}/chats')
+          .replace(queryParameters: params);
+      final headers = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      var res = await http.get(
+        url,
+        headers: headers,
+      );
+
+      if (res.statusCode == 200) {
+        Map<Object, dynamic> dataJson = jsonDecode(res.body);
+        print('chats $dataJson');
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          chats.add(dataJson['data'][i]);
+        }
+
+        setState(() {});
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+      }
+      // if (res.statusCode == 200) return res.body;
+      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -132,17 +131,14 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             ListView.builder(
-              itemCount: chatUsers.length,
+              itemCount: chats.length,
               shrinkWrap: true,
               padding: const EdgeInsets.only(top: 16),
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return ConversationList(
-                  name: chatUsers[index].name,
-                  messageText: chatUsers[index].messageText,
-                  imageUrl: chatUsers[index].imageURL,
-                  time: chatUsers[index].time,
-                  isMessageRead: (index == 0 || index == 3) ? true : false,
+                  token: token ?? '',
+                  chat: chats[index],
                 );
               },
             ),

@@ -1,26 +1,74 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:market/constants/index.dart';
 import 'package:market/screens/chat/bubble.dart';
+import 'package:http/http.dart' as http;
 
 class ConversationList extends StatefulWidget {
-  final String name;
-  final String messageText;
-  final String imageUrl;
-  final String time;
-  final bool isMessageRead;
-
   const ConversationList({
     Key? key,
-    required this.name,
-    required this.messageText,
-    required this.imageUrl,
-    required this.time,
-    required this.isMessageRead,
+    required this.token,
+    required this.chat,
   }) : super(key: key);
+
+  final String token;
+  final Map<String, dynamic> chat;
+
   @override
   State<ConversationList> createState() => _ConversationListState();
 }
 
 class _ConversationListState extends State<ConversationList> {
+  final storage = const FlutterSecureStorage();
+  List chats = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> fetch() async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/chats');
+      final headers = {
+        HttpHeaders.authorizationHeader: 'Bearer ${widget.token}',
+      };
+
+      var res = await http.get(
+        url,
+        headers: headers,
+      );
+
+      if (res.statusCode == 200) {
+        Map<Object, dynamic> dataJson = jsonDecode(res.body);
+        print('chats $dataJson');
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          chats.add(dataJson['data'][i]);
+        }
+
+        setState(() {});
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+      }
+      // if (res.statusCode == 200) return res.body;
+      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -43,7 +91,8 @@ class _ConversationListState extends State<ConversationList> {
               child: Row(
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundImage: NetworkImage(widget.imageUrl),
+                    backgroundImage:
+                        NetworkImage(widget.chat['imageUrl'] ?? ''),
                     maxRadius: 20,
                   ),
                   const SizedBox(
@@ -56,20 +105,25 @@ class _ConversationListState extends State<ConversationList> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            widget.name,
-                            style: const TextStyle(fontSize: 16),
+                            widget.chat['name'] ?? '',
+                            style: const TextStyle(
+                              fontSize: AppDefaults.fontSize + 1,
+                              // fontWeight: !widget.chat['messagesRead']
+                              //     ? FontWeight.bold
+                              //     : FontWeight.normal,
+                            ),
                           ),
                           const SizedBox(
                             height: 6,
                           ),
                           Text(
-                            widget.messageText,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey.shade600,
-                              fontWeight: widget.isMessageRead
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
+                            widget.chat['messageText'] ?? '',
+                            style: const TextStyle(
+                              fontSize: AppDefaults.fontSize - 1,
+                              // color: Colors.grey.shade600,
+                              // fontWeight: !widget.chat['messagesRead']
+                              //     ? FontWeight.bold
+                              //     : FontWeight.normal,
                             ),
                           ),
                         ],
@@ -80,11 +134,12 @@ class _ConversationListState extends State<ConversationList> {
               ),
             ),
             Text(
-              widget.time,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight:
-                    widget.isMessageRead ? FontWeight.bold : FontWeight.normal,
+              widget.chat['time'] ?? '',
+              style: const TextStyle(
+                fontSize: AppDefaults.fontSize - 2,
+                // fontWeight: !widget.chat['messagesRead']
+                //     ? FontWeight.bold
+                //     : FontWeight.normal,
               ),
             ),
           ],
