@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:market/components/product_list_widget_tile_square.dart';
@@ -43,7 +44,7 @@ class _OtherProductsState extends State<OtherProducts> {
     try {
       Map<String, String> filters = {};
       if (widget.userPk != '') {
-        filters = {'user_pk': widget.userPk};
+        filters = {'user_pk': widget.userPk, 'type': 'product'};
       }
 
       var res = await Remote.get('products', filters);
@@ -62,9 +63,9 @@ class _OtherProductsState extends State<OtherProducts> {
       // if (res.statusCode == 200) return res.body;
       return;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 

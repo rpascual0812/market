@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
@@ -46,9 +47,9 @@ class _ArticleListState extends State<ArticleList> {
       // if (res.statusCode == 200) return res.body;
       return;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:art_sweetalert/art_sweetalert.dart';
@@ -53,7 +54,7 @@ class _RateProductPageState extends State<RateProductPage> {
 
   Future fetch() async {
     try {
-      print(token);
+      // print(token);
       // var params = {'product_pk': widget.product['pk'].toString()};
       final url = Uri.parse(
           '${dotenv.get('API')}/products/${widget.product['pk']}/rating');
@@ -75,9 +76,9 @@ class _RateProductPageState extends State<RateProductPage> {
         anonymous.text = 'true';
       });
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -140,7 +141,7 @@ class _RateProductPageState extends State<RateProductPage> {
     }
 
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         child: Container(
           color: Colors.white,

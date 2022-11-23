@@ -70,6 +70,16 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
       }
     }
 
+    var city = '';
+    if (userAddress['city'] != null) {
+      city = userAddress['city']['name'];
+    }
+    var province = '';
+    if (userAddress['province'] != null) {
+      province = userAddress['province']['name'];
+    }
+    var location = '$city $province';
+
     // print('111 ${widget.product['date_created']}');
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.41,
@@ -158,9 +168,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                                 // color: Colors.grey,
                                               ),
                                               Text(
-                                                userAddress['city'] != null
-                                                    ? '${userAddress['city']['name']}, ${userAddress['province']['name']}'
-                                                    : '',
+                                                location.substring(0, 25),
                                                 style: const TextStyle(
                                                   fontSize:
                                                       AppDefaults.fontSize - 5,

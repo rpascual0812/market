@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
@@ -35,7 +36,7 @@ class _RecentlyViewedPageState extends State<RecentlyViewedPage> {
           for (var i = 0; i < dataJson['data'].length; i++) {
             products.add(dataJson['data'][i]);
           }
-          print(products);
+          // print(products);
         });
       } else if (res.statusCode == 401) {
         if (!mounted) return;
@@ -43,9 +44,9 @@ class _RecentlyViewedPageState extends State<RecentlyViewedPage> {
       }
       return;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 

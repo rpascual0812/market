@@ -195,6 +195,7 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
           'display_photo': displayPhoto!['pk'].toString(),
           'id_photo': idPhoto!['pk'].toString(),
         };
+
         // print(Uri.parse('${dotenv.get('API')}/register'));
         var url = widget.user['pk'] != null
             ? '${dotenv.get('API')}/users/update'
@@ -207,7 +208,10 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
           if (!mounted) return;
           // print(AppMessage.getSuccess('REGISTER_SUCCESS'));
           AppDefaults.toast(
-              context, 'success', AppMessage.getSuccess('PROFILE_UPDATE'));
+              context,
+              'success',
+              AppMessage.getSuccess(
+                  widget.user.isEmpty ? 'REGISTER_SUCCESS' : 'PROFILE_UPDATE'));
           Navigator.pop(context);
         }
         return null;

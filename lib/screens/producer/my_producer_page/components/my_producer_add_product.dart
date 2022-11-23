@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:art_sweetalert/art_sweetalert.dart';
@@ -36,6 +37,8 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
   final storage = const FlutterSecureStorage();
   String token = '';
 
+  List measurements = [];
+
   TextEditingController productNameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController stockController = TextEditingController();
@@ -63,7 +66,36 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
 
     setState(() {
       token = all!;
+      getMeasurements();
     });
+  }
+
+  Future getMeasurements() async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/measurements');
+      final headers = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      var res = await http.get(
+        url,
+        headers: headers,
+      );
+
+      if (res.statusCode == 200) {
+        final result = json.decode(res.body);
+        setState(() {
+          measurements = result;
+        });
+      }
+      if (res.statusCode == 200) return res.body;
+
+      return null;
+    } on Exception catch (exception) {
+      log('exception $exception');
+    } catch (error) {
+      log('error $error');
+    }
   }
 
   Future pickFile(List<String> ext) async {
@@ -164,9 +196,9 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
       // if (res.statusCode == 200) return res.body;
       return;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -179,7 +211,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
         }
 
         var body = {
-          'type': widget.type,
+          'type': 'product',
           'name': productNameController.text,
           'price_from': priceController.text,
           'quantity': stockController.text,
@@ -222,9 +254,9 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
         }
         return null;
       } on Exception catch (exception) {
-        print('exception $exception');
+        log('exception $exception');
       } catch (error) {
-        print('error $error');
+        log('error $error');
       }
     } else {
       AppDefaults.toast(context, 'error', AppMessage.getError('FORM_INVALID'));
@@ -322,7 +354,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                             controller: productNameController,
                             validator: (value) {
                               if (value != null && value.isEmpty) {
-                                return 'Last Name is required';
+                                return '* required';
                               }
                               return null;
                             },
@@ -348,6 +380,124 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             Expanded(
+                              child: Column(
+                                children: [
+                                  const Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Estimated Quantity',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                      height: AppDefaults.margin / 2),
+                                  SizedBox(
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller: stockController,
+                                      validator: (value) {
+                                        if (value != null && value.isEmpty) {
+                                          return '* required';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        contentPadding: AppDefaults.edgeInset,
+                                        prefixIconConstraints:
+                                            const BoxConstraints(
+                                                minWidth: 0, minHeight: 0),
+                                        // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                                        focusedBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        enabledBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        focusedErrorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                        errorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                      ),
+                                      style: AppDefaults.formTextStyle,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: Column(
+                                  children: [
+                                    const Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        ' ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                        height: AppDefaults.margin / 2),
+                                    SizedBox(
+                                      height: AppDefaults.height,
+                                      // padding: EdgeInsets.zero,
+                                      child: DropdownButtonFormField<String>(
+                                        isDense: true,
+                                        value: measurementController.text,
+                                        icon: const Icon(
+                                            Icons.keyboard_arrow_down),
+                                        // elevation: 16,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        validator: (value) {
+                                          if (value != null && value.isEmpty) {
+                                            return '* required';
+                                          }
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                          isDense: true,
+                                          contentPadding: AppDefaults.edgeInset,
+                                          prefixIconConstraints:
+                                              const BoxConstraints(
+                                                  minWidth: 0, minHeight: 0),
+                                          focusedBorder: AppDefaults
+                                              .outlineInputBorderSuccess,
+                                          enabledBorder: AppDefaults
+                                              .outlineInputBorderSuccess,
+                                          focusedErrorBorder: AppDefaults
+                                              .outlineInputBorderError,
+                                          errorBorder: AppDefaults
+                                              .outlineInputBorderError,
+                                        ),
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            measurementController.text = value!;
+                                          });
+                                        },
+                                        items: measurements
+                                            .map<DropdownMenuItem<String>>(
+                                                (value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value['pk'].toString(),
+                                            child: Text(
+                                                '${value['name']} (${value['symbol']})'),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: AppDefaults.margin),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                                 child: Column(
@@ -364,10 +514,11 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                                         height: AppDefaults.margin / 2),
                                     SizedBox(
                                       child: TextFormField(
+                                        keyboardType: TextInputType.number,
                                         controller: priceController,
                                         validator: (value) {
                                           if (value != null && value.isEmpty) {
-                                            return 'Last Name is required';
+                                            return '* required';
                                           }
                                           return null;
                                         },
@@ -402,7 +553,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                                     const Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        'Estimated Quantity',
+                                        'Available On',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -410,13 +561,36 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                                     const SizedBox(
                                         height: AppDefaults.margin / 2),
                                     SizedBox(
+                                      // padding: EdgeInsets.zero,
                                       child: TextFormField(
-                                        controller: stockController,
+                                        readOnly: true,
+                                        controller: dateController,
                                         validator: (value) {
                                           if (value != null && value.isEmpty) {
-                                            return 'Last Name is required';
+                                            return '* required';
                                           }
                                           return null;
+                                        },
+                                        onTap: () async {
+                                          DateTime? pickedDate =
+                                              await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(
+                                                1900), //DateTime.now() - not to allow to choose before today.
+                                            lastDate: DateTime(2101),
+                                          );
+                                          if (pickedDate != null) {
+                                            String formattedDate =
+                                                DateFormat('yyyy-MM-dd')
+                                                    .format(pickedDate);
+                                            setState(() {
+                                              dateController.text =
+                                                  formattedDate; //set output date to TextField value.
+                                            });
+                                          } else {
+                                            // print("Date is not selected");
+                                          }
                                         },
                                         decoration: InputDecoration(
                                           isDense: true,
@@ -442,62 +616,6 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                               ),
                             ),
                           ],
-                        ),
-                        const SizedBox(height: AppDefaults.margin),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Available On',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(height: AppDefaults.margin / 2),
-                        SizedBox(
-                          // padding: EdgeInsets.zero,
-                          child: TextFormField(
-                            readOnly: true,
-                            controller: dateController,
-                            validator: (value) {
-                              if (value != null && value.isEmpty) {
-                                return 'Birthday is required';
-                              }
-                              return null;
-                            },
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(
-                                    1900), //DateTime.now() - not to allow to choose before today.
-                                lastDate: DateTime(2101),
-                              );
-                              if (pickedDate != null) {
-                                String formattedDate =
-                                    DateFormat('yyyy-MM-dd').format(pickedDate);
-                                setState(() {
-                                  dateController.text =
-                                      formattedDate; //set output date to TextField value.
-                                });
-                              } else {
-                                // print("Date is not selected");
-                              }
-                            },
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding: AppDefaults.edgeInset,
-                              prefixIconConstraints: const BoxConstraints(
-                                  minWidth: 0, minHeight: 0),
-                              // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                              focusedBorder:
-                                  AppDefaults.outlineInputBorderSuccess,
-                              enabledBorder:
-                                  AppDefaults.outlineInputBorderSuccess,
-                              focusedErrorBorder:
-                                  AppDefaults.outlineInputBorderError,
-                              errorBorder: AppDefaults.outlineInputBorderError,
-                            ),
-                            style: AppDefaults.formTextStyle,
-                          ),
                         ),
                         const SizedBox(height: AppDefaults.margin),
                         const Align(

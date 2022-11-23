@@ -47,21 +47,56 @@ class _LookingForListTileState extends State<LookingForListTile> {
     DateTime date = DateTime.parse(widget.product['date_created'].toString());
 
     var userAddress = {};
-    if (widget.product['user_addresses'] != null) {
+    if (widget.product['user_addresses'].length > 0) {
+      var defaultFound = false;
       for (var i = 0; i < widget.product['user_addresses'].length; i++) {
         if (widget.product['user_addresses'][i]['default']) {
+          defaultFound = true;
           userAddress = widget.product['user_addresses'][i];
         }
+      }
+
+      if (!defaultFound) {
+        userAddress = widget.product['user_addresses'][0];
       }
     }
 
     var sellerAddress = {};
-    if (widget.product['seller_addresses'] != null) {
+    if (widget.product['seller_addresses'].length > 0) {
+      var defaultFound = false;
       for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
         if (widget.product['seller_addresses'][i]['default']) {
+          defaultFound = true;
           sellerAddress = widget.product['seller_addresses'][i];
         }
       }
+
+      if (!defaultFound) {
+        sellerAddress = widget.product['seller_addresses'][0];
+      }
+    }
+
+    var location = '';
+    if (sellerAddress.isNotEmpty) {
+      var city = '';
+      if (sellerAddress['city'] != null) {
+        city = sellerAddress['city']['name'];
+      }
+      var province = '';
+      if (sellerAddress['province'] != null) {
+        province = sellerAddress['province']['name'];
+      }
+      location = '$city, $province';
+    } else {
+      var city = '';
+      if (userAddress['city'] != null) {
+        city = userAddress['city']['name'];
+      }
+      var province = '';
+      if (userAddress['province'] != null) {
+        province = userAddress['province']['name'];
+      }
+      location = '$city, $province';
     }
 
     return GestureDetector(
@@ -132,7 +167,7 @@ class _LookingForListTileState extends State<LookingForListTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 200,
                                                     height: 20,
                                                     child: Text(
                                                       '${widget.product['user']['first_name']} ${widget.product['user']['last_name']}',
@@ -151,7 +186,7 @@ class _LookingForListTileState extends State<LookingForListTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 200,
                                                     height: 12,
                                                     child: Text(
                                                       DateFormat.yMMMd()
@@ -170,7 +205,7 @@ class _LookingForListTileState extends State<LookingForListTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 200,
                                                     height: 15,
                                                     child: Row(
                                                       children: [
@@ -180,10 +215,7 @@ class _LookingForListTileState extends State<LookingForListTile> {
                                                                 2,
                                                             color: Colors.grey),
                                                         Text(
-                                                          userAddress['city'] !=
-                                                                  null
-                                                              ? '${userAddress['city']['name']}, ${userAddress['province']['name']}'
-                                                              : '',
+                                                          location,
                                                           style:
                                                               const TextStyle(
                                                             fontSize: AppDefaults

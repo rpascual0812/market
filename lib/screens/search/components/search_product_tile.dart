@@ -22,8 +22,8 @@ class SearchProductTile extends StatefulWidget {
 class _SearchProductTileState extends State<SearchProductTile> {
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
-  static const IconData chat =
-      IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
+  // static const IconData chat =
+  //     IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
 
   @override
   Widget build(BuildContext context) {

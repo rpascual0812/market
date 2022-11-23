@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }
       return null;
     } on Exception catch (e) {
-      print('ERROR $e');
+      log('ERROR $e');
       return null;
     }
   }
@@ -98,18 +99,18 @@ class _ProfilePageState extends State<ProfilePage> {
 
       return null;
     } on Exception catch (e) {
-      print('ERROR $e');
+      log('ERROR $e');
       return null;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
-    if (account['user'] != null) {
-      userImage = AppDefaults.userImage(account['user']['user_document']);
-    }
+    // var size = MediaQuery.of(context).size;
+    // var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    // if (account['user'] != null) {
+    //   userImage = AppDefaults.userImage(account['user']['user_document']);
+    // }
 
     return Scaffold(
       body: SingleChildScrollView(

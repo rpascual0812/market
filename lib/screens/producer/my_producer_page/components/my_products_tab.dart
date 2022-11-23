@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:market/screens/product/product_page.dart';
@@ -58,9 +59,9 @@ class _MyProductsTabState extends State<MyProductsTab> {
       }
       return;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -137,9 +138,10 @@ class _MyProductsTabState extends State<MyProductsTab> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: const [
+                      SizedBox(height: AppDefaults.margin * 2),
                       Text(
                         'No products found',
-                        style: TextStyle(color: Colors.black, fontSize: 24),
+                        style: TextStyle(color: Colors.black, fontSize: 15),
                       )
                     ],
                   )

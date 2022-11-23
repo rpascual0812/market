@@ -21,7 +21,7 @@ class ArticleTile extends StatelessWidget {
       articleImage =
           '${dotenv.get('API')}/${article['article_document']['document']['path']}';
     }
-
+    print(articleImage);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDefaults.margin / 2),
       child: Column(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:art_sweetalert/art_sweetalert.dart';
@@ -86,9 +87,9 @@ class _ProducerRegisterState extends State<ProducerRegister> {
       if (res.statusCode == 200) return res.body;
       return null;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -110,9 +111,9 @@ class _ProducerRegisterState extends State<ProducerRegister> {
       if (res.statusCode == 200) return res.body;
       return null;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -135,9 +136,9 @@ class _ProducerRegisterState extends State<ProducerRegister> {
       if (res.statusCode == 200) return res.body;
       return null;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -285,9 +286,9 @@ class _ProducerRegisterState extends State<ProducerRegister> {
         }
         return null;
       } on Exception catch (exception) {
-        print('exception $exception');
+        log('exception $exception');
       } catch (error) {
-        print('error $error');
+        log('error $error');
       }
     } else {
       AppDefaults.toast(context, 'error', AppMessage.getError('FORM_INVALID'));

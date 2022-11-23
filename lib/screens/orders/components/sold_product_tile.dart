@@ -121,7 +121,7 @@ class _SoldProductTileState extends State<SoldProductTile> {
                                               padding: const EdgeInsets.all(0),
                                               child: Container(
                                                 alignment: Alignment.centerLeft,
-                                                width: 150,
+                                                width: 200,
                                                 height: 25,
                                                 child: Text(
                                                   widget.order['product']
@@ -140,7 +140,7 @@ class _SoldProductTileState extends State<SoldProductTile> {
                                               padding: const EdgeInsets.all(0),
                                               child: Container(
                                                 alignment: Alignment.centerLeft,
-                                                width: 150,
+                                                width: 200,
                                                 height: 20,
                                                 child: Text(
                                                   '${widget.order['product']['country']['currency_symbol']}${NumberFormat.decimalPattern().format(double.parse(widget.order['product']['price_from']))} x${NumberFormat.decimalPattern().format(double.parse(widget.order['product']['quantity']))}',

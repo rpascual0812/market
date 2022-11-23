@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:market/components/appbar.dart';
@@ -54,9 +55,9 @@ class _SearchPageState extends State<SearchPage> {
       // if (res.statusCode == 200) return res.body;
       return;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -73,7 +74,7 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Appbar(),
+            const Appbar(),
             Padding(
               padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: Row(

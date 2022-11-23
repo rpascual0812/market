@@ -25,19 +25,22 @@ class ProfileEditPage extends StatelessWidget {
               Container(
                 color: Colors.white,
                 child: Column(
-                  children: const [
-                    SizedBox(height: AppDefaults.margin * 1),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "   Registration",
-                        style: TextStyle(
-                            fontSize: AppDefaults.h7,
-                            fontWeight: FontWeight.bold),
-                        // style: Theme.of(context).textTheme.headline6,
+                  children: [
+                    const SizedBox(height: AppDefaults.margin * 1),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          user.isEmpty ? "Registration" : "Edit Profile",
+                          style: const TextStyle(
+                              fontSize: AppDefaults.h7,
+                              fontWeight: FontWeight.bold),
+                          // style: Theme.of(context).textTheme.headline6,
+                        ),
                       ),
                     ),
-                    SizedBox(height: AppDefaults.margin * 1),
+                    const SizedBox(height: AppDefaults.margin * 1),
                   ],
                 ),
               ),

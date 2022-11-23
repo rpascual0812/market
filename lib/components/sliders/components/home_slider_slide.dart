@@ -96,7 +96,7 @@ class HomeSliderSlide extends StatelessWidget {
                 ),
                 const SizedBox(height: AppDefaults.margin),
                 SizedBox(
-                  height: 85.0,
+                  height: 90.0,
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: Text(
                     details,

@@ -25,8 +25,8 @@ class CartPageTile extends StatefulWidget {
 class _CartPageTileState extends State<CartPageTile> {
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
-  static const IconData chat =
-      IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
+  // static const IconData chat =
+  //     IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
 
   @override
   Widget build(BuildContext context) {
@@ -72,22 +72,20 @@ class _CartPageTileState extends State<CartPageTile> {
                   children: [
                     Column(
                       children: <Widget>[
+                        const SizedBox(height: AppDefaults.margin),
                         Container(
                           decoration: const BoxDecoration(
                             color: Colors.white,
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: AppDefaults.margin,
-                              vertical: AppDefaults.margin,
-                            ),
+                            padding: const EdgeInsets.all(0),
                             child: Column(
                               children: [
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     FlutterSwitch(
-                                      width: 40.0,
+                                      width: 35.0,
                                       height: 20.0,
                                       toggleSize: 15.0,
                                       value: widget.order['product']
@@ -126,7 +124,7 @@ class _CartPageTileState extends State<CartPageTile> {
                                           ),
                                           Positioned(
                                             top: 15,
-                                            left: 85,
+                                            left: 70,
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
@@ -139,7 +137,7 @@ class _CartPageTileState extends State<CartPageTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 180,
                                                     height: 18,
                                                     child: Text(
                                                       widget.order['product']
@@ -159,7 +157,7 @@ class _CartPageTileState extends State<CartPageTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 180,
                                                     height: 16,
                                                     child: Row(
                                                       children: [
@@ -172,7 +170,7 @@ class _CartPageTileState extends State<CartPageTile> {
                                                           sellerAddress[
                                                                       'city'] !=
                                                                   null
-                                                              ? '${sellerAddress['address']}, ${sellerAddress['city']['name']} ${sellerAddress['province']['name']}'
+                                                              ? '${sellerAddress['city']['name']} ${sellerAddress['province']['name']}'
                                                               : '',
                                                           style:
                                                               const TextStyle(

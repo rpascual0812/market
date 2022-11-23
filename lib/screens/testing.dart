@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll/infinite_scroll.dart';
@@ -61,7 +62,7 @@ class _GridExampleState extends State<GridExample> {
   }
 
   _next() async {
-    print('next');
+    // print('next');
     var newData = await getNextPageData(page++);
     setState(() {
       products += newData;
@@ -94,9 +95,9 @@ class _GridExampleState extends State<GridExample> {
       // if (res.statusCode == 200) return res.body;
       return;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -127,9 +128,9 @@ class _GridExampleState extends State<GridExample> {
       // if (res.statusCode == 200) return res.body;
       return [];
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
 
     throw Exception();
@@ -233,7 +234,7 @@ class _GridExampleState extends State<GridExample> {
 
   Future<void> loadInitialData() async {
     products = await getNextPageData(page);
-    print('load initial data $products');
+    // print('load initial data $products');
     setState(() {});
   }
 }

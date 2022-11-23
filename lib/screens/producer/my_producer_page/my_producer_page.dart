@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -46,7 +47,7 @@ class _MyProducerPageState extends State<MyProducerPage>
 
   Future fetchUser(String pk) async {
     try {
-      final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
+      final url = Uri.parse('${dotenv.get('API')}/sellers/$pk');
       final headers = {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${widget.token}',
@@ -61,7 +62,7 @@ class _MyProducerPageState extends State<MyProducerPage>
       }
       return null;
     } on Exception catch (e) {
-      print('ERROR $e');
+      log('ERROR $e');
       return null;
     }
   }

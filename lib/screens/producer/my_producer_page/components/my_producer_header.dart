@@ -31,6 +31,19 @@ class _MyProducerHeaderState extends State<MyProducerHeader> {
       userImage = AppDefaults.userImage(widget.user['user_document']);
     }
 
+    var profilePhoto = '';
+    if (widget.user['seller']['seller_document'] != null) {
+      for (var i = 0;
+          i < widget.user['seller']['seller_document'].length;
+          i++) {
+        if (widget.user['seller']['seller_document'][i]['type'] ==
+            'profile_photo') {
+          profilePhoto =
+              '${dotenv.get('API')}/${widget.user['seller']['seller_document'][i]['document']['path']}';
+        }
+      }
+    }
+
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 150,
@@ -40,8 +53,8 @@ class _MyProducerHeaderState extends State<MyProducerHeader> {
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.4), BlendMode.dstATop),
-          image: const NetworkImage(
-            'https://i.imgur.com/CwxDJj8.jpeg',
+          image: NetworkImage(
+            profilePhoto,
           ),
         ),
       ),

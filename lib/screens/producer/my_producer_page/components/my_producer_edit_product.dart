@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:art_sweetalert/art_sweetalert.dart';
@@ -39,7 +40,7 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
 
   TextEditingController productNameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
-  TextEditingController stockController = TextEditingController();
+  TextEditingController quantityController = TextEditingController();
   TextEditingController measurementController =
       TextEditingController(text: '1');
   TextEditingController descriptionController = TextEditingController();
@@ -48,6 +49,7 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
 
   var categoryValue = '2';
   var categories = [];
+  List measurements = [];
 
   List documents = [];
 
@@ -60,7 +62,8 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
 
     productNameController.text = widget.product['name'];
     priceController.text = widget.product['price_from'];
-    stockController.text = widget.product['quantity'];
+    quantityController.text = widget.product['quantity'];
+    measurementController.text = widget.product['measurement_pk'].toString();
     dateController.text = DateFormat('yyyy-MM-dd')
         .format(DateTime.parse(widget.product['date_available']))
         .toString();
@@ -81,7 +84,36 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
 
     setState(() {
       token = all!;
+      getMeasurements();
     });
+  }
+
+  Future getMeasurements() async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/measurements');
+      final headers = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      var res = await http.get(
+        url,
+        headers: headers,
+      );
+
+      if (res.statusCode == 200) {
+        final result = json.decode(res.body);
+        setState(() {
+          measurements = result;
+        });
+      }
+      if (res.statusCode == 200) return res.body;
+
+      return null;
+    } on Exception catch (exception) {
+      log('exception $exception');
+    } catch (error) {
+      log('error $error');
+    }
   }
 
   Future pickFile(List<String> ext) async {
@@ -186,9 +218,9 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
       // if (res.statusCode == 200) return res.body;
       return;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -205,7 +237,7 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
           'type': 'product',
           'name': productNameController.text,
           'price': priceController.text,
-          'stock': stockController.text,
+          'stock': quantityController.text,
           'date_available': dateController.text.toString(),
           'description': descriptionController.text,
           'measurement': measurementController.text,
@@ -238,9 +270,9 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
         }
         return null;
       } on Exception catch (exception) {
-        print('exception $exception');
+        log('exception $exception');
       } catch (error) {
-        print('error $error');
+        log('error $error');
       }
     } else {
       AppDefaults.toast(context, 'error', AppMessage.getError('FORM_INVALID'));
@@ -249,7 +281,7 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.product);
+    // print(widget.product);
     return Scaffold(
       appBar: const Appbar(),
       body: SingleChildScrollView(
@@ -304,7 +336,7 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
                       Row(
                         children: const [
                           Text(
-                            'Upload Product',
+                            'Edit Product',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: AppDefaults.fontSize + 5,
@@ -365,6 +397,124 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             Expanded(
+                              child: Column(
+                                children: [
+                                  const Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Estimated Quantity',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                      height: AppDefaults.margin / 2),
+                                  SizedBox(
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller: quantityController,
+                                      validator: (value) {
+                                        if (value != null && value.isEmpty) {
+                                          return '* required';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        contentPadding: AppDefaults.edgeInset,
+                                        prefixIconConstraints:
+                                            const BoxConstraints(
+                                                minWidth: 0, minHeight: 0),
+                                        // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                                        focusedBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        enabledBorder: AppDefaults
+                                            .outlineInputBorderSuccess,
+                                        focusedErrorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                        errorBorder:
+                                            AppDefaults.outlineInputBorderError,
+                                      ),
+                                      style: AppDefaults.formTextStyle,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: Column(
+                                  children: [
+                                    const Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        ' ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                        height: AppDefaults.margin / 2),
+                                    SizedBox(
+                                      height: AppDefaults.height,
+                                      // padding: EdgeInsets.zero,
+                                      child: DropdownButtonFormField<String>(
+                                        isDense: true,
+                                        value: measurementController.text,
+                                        icon: const Icon(
+                                            Icons.keyboard_arrow_down),
+                                        // elevation: 16,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        validator: (value) {
+                                          if (value != null && value.isEmpty) {
+                                            return '* required';
+                                          }
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                          isDense: true,
+                                          contentPadding: AppDefaults.edgeInset,
+                                          prefixIconConstraints:
+                                              const BoxConstraints(
+                                                  minWidth: 0, minHeight: 0),
+                                          focusedBorder: AppDefaults
+                                              .outlineInputBorderSuccess,
+                                          enabledBorder: AppDefaults
+                                              .outlineInputBorderSuccess,
+                                          focusedErrorBorder: AppDefaults
+                                              .outlineInputBorderError,
+                                          errorBorder: AppDefaults
+                                              .outlineInputBorderError,
+                                        ),
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            measurementController.text = value!;
+                                          });
+                                        },
+                                        items: measurements
+                                            .map<DropdownMenuItem<String>>(
+                                                (value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value['pk'].toString(),
+                                            child: Text(
+                                                '${value['name']} (${value['symbol']})'),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: AppDefaults.margin),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                                 child: Column(
@@ -419,7 +569,7 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
                                     const Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        'Stock',
+                                        'Available On',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -427,13 +577,36 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
                                     const SizedBox(
                                         height: AppDefaults.margin / 2),
                                     SizedBox(
+                                      // padding: EdgeInsets.zero,
                                       child: TextFormField(
-                                        controller: stockController,
+                                        readOnly: true,
+                                        controller: dateController,
                                         validator: (value) {
                                           if (value != null && value.isEmpty) {
-                                            return 'Last Name is required';
+                                            return '* required';
                                           }
                                           return null;
+                                        },
+                                        onTap: () async {
+                                          DateTime? pickedDate =
+                                              await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(
+                                                1900), //DateTime.now() - not to allow to choose before today.
+                                            lastDate: DateTime(2101),
+                                          );
+                                          if (pickedDate != null) {
+                                            String formattedDate =
+                                                DateFormat('yyyy-MM-dd')
+                                                    .format(pickedDate);
+                                            setState(() {
+                                              dateController.text =
+                                                  formattedDate; //set output date to TextField value.
+                                            });
+                                          } else {
+                                            // print("Date is not selected");
+                                          }
                                         },
                                         decoration: InputDecoration(
                                           isDense: true,
@@ -469,62 +642,6 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
                           ),
                         ),
                         const SizedBox(height: AppDefaults.margin / 2),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Available On',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(height: AppDefaults.margin / 2),
-                        SizedBox(
-                          // padding: EdgeInsets.zero,
-                          child: TextFormField(
-                            readOnly: true,
-                            controller: dateController,
-                            validator: (value) {
-                              if (value != null && value.isEmpty) {
-                                return 'Birthday is required';
-                              }
-                              return null;
-                            },
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(
-                                    1900), //DateTime.now() - not to allow to choose before today.
-                                lastDate: DateTime(2101),
-                              );
-                              if (pickedDate != null) {
-                                String formattedDate =
-                                    DateFormat('yyyy-MM-dd').format(pickedDate);
-                                setState(() {
-                                  dateController.text =
-                                      formattedDate; //set output date to TextField value.
-                                });
-                              } else {
-                                // print("Date is not selected");
-                              }
-                            },
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding: AppDefaults.edgeInset,
-                              prefixIconConstraints: const BoxConstraints(
-                                  minWidth: 0, minHeight: 0),
-                              // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                              focusedBorder:
-                                  AppDefaults.outlineInputBorderSuccess,
-                              enabledBorder:
-                                  AppDefaults.outlineInputBorderSuccess,
-                              focusedErrorBorder:
-                                  AppDefaults.outlineInputBorderError,
-                              errorBorder: AppDefaults.outlineInputBorderError,
-                            ),
-                            style: AppDefaults.formTextStyle,
-                          ),
-                        ),
-                        const SizedBox(height: AppDefaults.margin),
                         Container(
                           width: 370.0,
                           height: 120.0,

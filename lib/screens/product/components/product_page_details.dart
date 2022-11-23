@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -56,7 +58,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
 
   Future saveToCart(pk) async {
     final token = await storage.read(key: 'jwt');
-    final user = AppDefaults.jwtDecode(token!);
+    // final user = AppDefaults.jwtDecode(token!);
 
     try {
       final url = Uri.parse('${dotenv.get('API')}/orders');
@@ -111,7 +113,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
 
   Future saveOrder(pk) async {
     final token = await storage.read(key: 'jwt');
-    final user = AppDefaults.jwtDecode(token!);
+    // final user = AppDefaults.jwtDecode(token!);
 
     try {
       final url = Uri.parse('${dotenv.get('API')}/orders');
@@ -147,9 +149,9 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
       // if (res.statusCode == 200) return res.body;
       return null;
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -435,7 +437,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                           padding: const EdgeInsets.only(left: 5),
                           child: Container(
                             alignment: Alignment.centerLeft,
-                            width: 150,
+                            width: 180,
                             height: 20,
                             child: Text(
                               widget.product['user'] != null
@@ -450,13 +452,13 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                           padding: const EdgeInsets.only(left: 5),
                           child: Container(
                             alignment: Alignment.centerLeft,
-                            width: 150,
+                            width: 180,
                             height: 20,
                             child: Row(
                               children: [
                                 const Icon(
                                   ProductPageDetails.pin,
-                                  size: 12,
+                                  size: AppDefaults.fontSize,
                                 ),
                                 Visibility(
                                   visible:

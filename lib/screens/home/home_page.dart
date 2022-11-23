@@ -79,6 +79,8 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       products += newData;
       if (newData.isEmpty) {
+        skip -= take;
+        skip = skip < 0 ? 0 : skip;
         everyThingLoaded = true;
       }
     });
@@ -116,6 +118,7 @@ class _HomePageState extends State<HomePage> {
   Future fetch() async {
     try {
       var res = await Remote.get('products', {
+        'type': 'product',
         'orderBy': filterValue,
         'categoryFilter': categoryFilterValue,
         'skip': skip.toString(),

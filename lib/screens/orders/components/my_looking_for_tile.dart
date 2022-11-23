@@ -60,14 +60,34 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
           widget.order['product']['product_documents']);
     }
 
-    var sellerAddress = {};
-    if (widget.order['seller_addresses'] != null) {
-      for (var i = 0; i < widget.order['seller_addresses'].length; i++) {
-        if (widget.order['seller_addresses'][i]['default']) {
-          sellerAddress = widget.order['seller_addresses'][i];
+    var name =
+        '${widget.order['user']['first_name']} ${widget.order['user']['last_name']}';
+
+    var userAddress = {};
+    if (widget.order['user_addresses'].length > 0) {
+      var defaultFound = false;
+      for (var i = 0; i < widget.order['user_addresses'].length; i++) {
+        if (widget.order['user_addresses'][i]['default']) {
+          defaultFound = true;
+          userAddress = widget.order['user_addresses'][i];
         }
       }
+
+      if (!defaultFound) {
+        userAddress = widget.order['user_addresses'][0];
+      }
     }
+
+    var city = '';
+    if (userAddress['city'] != null) {
+      city = userAddress['city']['name'];
+    }
+
+    var province = '';
+    if (userAddress['province'] != null) {
+      province = userAddress['province']['name'];
+    }
+    var location = '$city, $province';
 
     return GestureDetector(
       child: Padding(
@@ -117,7 +137,7 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
                                             Positioned(
                                               left: 15,
                                               child: Text(
-                                                '${widget.order['seller']['first_name']} ${widget.order['seller']['last_name']}',
+                                                name,
                                                 style: const TextStyle(
                                                   fontSize:
                                                       AppDefaults.fontSize,
@@ -177,7 +197,7 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 200,
                                                     height: 25,
                                                     child: Text(
                                                       widget.order['product']
@@ -199,7 +219,7 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 200,
                                                     height: 16,
                                                     child: Row(
                                                       children: [
@@ -211,11 +231,7 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
                                                           color: Colors.grey,
                                                         ),
                                                         Text(
-                                                          sellerAddress[
-                                                                      'city'] !=
-                                                                  null
-                                                              ? '${sellerAddress['address']}, ${sellerAddress['city']['name']} ${sellerAddress['province']['name']}'
-                                                              : '',
+                                                          location,
                                                           style:
                                                               const TextStyle(
                                                             fontSize: AppDefaults

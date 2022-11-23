@@ -37,7 +37,7 @@ class UserCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: 5),
               child: Container(
                 alignment: Alignment.centerLeft,
-                width: 150,
+                width: 200,
                 height: 20,
                 child: Text(
                   '$firstName $lastName',
@@ -52,7 +52,7 @@ class UserCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: 5),
               child: Container(
                 alignment: Alignment.centerLeft,
-                width: 150,
+                width: 200,
                 height: 20,
                 child: Row(
                   children: [

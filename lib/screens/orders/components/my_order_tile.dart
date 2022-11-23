@@ -176,7 +176,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 200,
                                                     height: 25,
                                                     child: Text(
                                                       widget.order['product']
@@ -198,7 +198,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 200,
                                                     height: 16,
                                                     child: Row(
                                                       children: [
@@ -213,7 +213,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                                           sellerAddress[
                                                                       'city'] !=
                                                                   null
-                                                              ? '${sellerAddress['address']}, ${sellerAddress['city']['name']} ${sellerAddress['province']['name']}'
+                                                              ? '${sellerAddress['city']['name']} ${sellerAddress['province']['name']}'
                                                               : '',
                                                           style:
                                                               const TextStyle(

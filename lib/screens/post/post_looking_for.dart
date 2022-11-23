@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:art_sweetalert/art_sweetalert.dart';
@@ -292,9 +293,9 @@ class _PostLookingForState extends State<PostLookingFor> {
         }
         return null;
       } on Exception catch (exception) {
-        print('exception $exception');
+        log('exception $exception');
       } catch (error) {
-        print('error $error');
+        log('error $error');
       }
     } else {
       AppDefaults.toast(context, 'error', AppMessage.getError('FORM_INVALID'));
@@ -320,10 +321,16 @@ class _PostLookingForState extends State<PostLookingFor> {
 
     var userAddress = {};
     if (account['user'] != null && account['user']['user_addresses'] != null) {
+      var defaultFound = false;
       for (var i = 0; i < account['user']['user_addresses'].length; i++) {
         if (account['user']['user_addresses'][i]['default']) {
+          defaultFound = true;
           userAddress = account['user']['user_addresses'][i];
         }
+      }
+
+      if (!defaultFound) {
+        userAddress = account['user']['user_addresses'][0];
       }
     }
 

@@ -21,7 +21,7 @@ class _ProducerProfileRateState extends State<ProducerProfileRate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: SingleChildScrollView(
         child: Container(
           color: Colors.white,

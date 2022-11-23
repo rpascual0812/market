@@ -55,7 +55,7 @@ class _AppRootState extends State<AppRoot> {
     _allScreen = [
       const HomePage(),
       ProductListPage(index: widget.subIndex),
-      const ChatPage(),
+      widget.jwt != '' ? const ChatPage() : const LoginPage(),
       widget.jwt != '' ? ProfilePage(token: widget.jwt) : const LoginPage(),
     ];
 

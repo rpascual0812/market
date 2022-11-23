@@ -61,7 +61,7 @@ class _MyLookingForState extends State<MyLookingFor> {
 
       final params = {
         'type': type.join(','),
-        'account_pk': account['sub'].toString(),
+        'seller': account['sub'].toString(),
         // 'status': 'Ordered'
       };
 
@@ -79,6 +79,7 @@ class _MyLookingForState extends State<MyLookingFor> {
       if (res.statusCode == 200) {
         setState(() {
           dataJson = jsonDecode(res.body);
+
           for (var i = 0; i < dataJson['data'].length; i++) {
             orders.add(dataJson['data'][i]);
           }
@@ -147,7 +148,6 @@ class _MyLookingForState extends State<MyLookingFor> {
                 padding: const EdgeInsets.only(top: 16),
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  // print(orders[index]);
                   return MyLookingForTile(
                     token: token!,
                     order: orders[index],

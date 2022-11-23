@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -64,9 +65,9 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
         });
       }
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -79,13 +80,25 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
 
     var userAddress = {};
     if (user['user_addresses'] != null) {
-      userAddress = AppDefaults.userAddress(user['user_addresses']);
-    }
+      var defaultFound = false;
+      for (var i = 0; i < user['user_addresses'].length; i++) {
+        if (user['user_addresses'][i]['default']) {
+          defaultFound = true;
+          userAddress = user['user_addresses'][i];
+        }
+      }
 
-    var sellerAddress = {};
-    if (user['seller_addresses'] != null) {
-      sellerAddress = AppDefaults.sellerAddress(user['seller_addresses']);
+      if (!defaultFound) {
+        userAddress = user['user_addresses'][0];
+      }
+
+      // userAddress = AppDefaults.userAddress(user['user_addresses']);
     }
+    print(userAddress);
+    // var sellerAddress = {};
+    // if (user['seller_addresses'] != null) {
+    //   sellerAddress = AppDefaults.sellerAddress(user['seller_addresses']);
+    // }
 
     return Stack(
       children: [

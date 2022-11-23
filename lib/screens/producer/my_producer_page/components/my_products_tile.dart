@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:art_sweetalert/art_sweetalert.dart';
@@ -59,9 +60,9 @@ class _MyProductTileState extends State<MyProductTile> {
         widget.refresh();
       }
     } on Exception catch (exception) {
-      print('exception $exception');
+      log('exception $exception');
     } catch (error) {
-      print('error $error');
+      log('error $error');
     }
   }
 
@@ -132,7 +133,7 @@ class _MyProductTileState extends State<MyProductTile> {
                                               Container(
                                                 alignment: Alignment.centerLeft,
                                                 width: 150,
-                                                height: 18,
+                                                height: 25,
                                                 child: Text(
                                                   widget.product['name'],
                                                   style: const TextStyle(
@@ -165,7 +166,7 @@ class _MyProductTileState extends State<MyProductTile> {
                                                         ),
                                                       ),
                                                       Text(
-                                                        '1${widget.product['measurement']['symbol']}',
+                                                        '${widget.product['quantity']} ${widget.product['measurement']['symbol']}',
                                                         style: const TextStyle(
                                                           fontSize: AppDefaults
                                                               .fontSize,

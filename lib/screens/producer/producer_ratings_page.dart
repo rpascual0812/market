@@ -22,7 +22,7 @@ class _ProducerRatingsPageState extends State<ProducerRatingsPage> {
   Widget build(BuildContext context) {
     // print(' product ratings ${widget.product['product_ratings']}');
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: Container(
         color: AppColors.grey1,
         child: Column(
