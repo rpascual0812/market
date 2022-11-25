@@ -42,6 +42,7 @@ class _ProducerPageState extends State<ProducerPage> {
       if (res.statusCode == 200) {
         setState(() {
           var userJson = jsonDecode(res.body);
+          // print(userJson);
           user = userJson;
         });
       }
@@ -95,7 +96,7 @@ class _ProducerPageState extends State<ProducerPage> {
                           ),
                           Scaffold(
                             body: ProductsTab(
-                                type: 'future_crops', userPk: widget.userPk),
+                                type: 'future_crop', userPk: widget.userPk),
                           ),
                         ],
                       ),
