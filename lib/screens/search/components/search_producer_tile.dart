@@ -4,7 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../constants/index.dart';
 import '../../../components/network_image.dart';
-import '../../chat/bubble.dart';
 
 class SearchProducerTile extends StatefulWidget {
   const SearchProducerTile({
@@ -162,14 +161,14 @@ class _SearchProducerTileState extends State<SearchProducerTile> {
                                                 height: 20,
                                                 child: OutlinedButton(
                                                   onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) {
-                                                          return const Bubble();
-                                                        },
-                                                      ),
-                                                    );
+                                                    // Navigator.push(
+                                                    //   context,
+                                                    //   MaterialPageRoute(
+                                                    //     builder: (context) {
+                                                    //       return const Bubble();
+                                                    //     },
+                                                    //   ),
+                                                    // );
                                                   },
                                                   style:
                                                       OutlinedButton.styleFrom(

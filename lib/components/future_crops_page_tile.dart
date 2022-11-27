@@ -1,7 +1,6 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:market/screens/chat/bubble.dart';
 import 'package:intl/intl.dart';
 
 import '../../constants/index.dart';
@@ -162,11 +161,11 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                                 padding: EdgeInsets.zero,
                                                 child: OutlinedButton(
                                                   onPressed: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                const Bubble()));
+                                                    // Navigator.push(
+                                                    //     context,
+                                                    //     MaterialPageRoute(
+                                                    //         builder: (context) =>
+                                                    //             const Bubble()));
                                                   },
                                                   style:
                                                       OutlinedButton.styleFrom(

@@ -21,8 +21,13 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final storage = const FlutterSecureStorage();
+  final searchController = TextEditingController(text: '');
+
   String? token = '';
   List chats = [];
+
+  int skip = 0;
+  int take = 10;
 
   var filterValue = 'Show All';
   var filters = ['Show All', 'Show only unread', 'Mark all as read'];
@@ -41,13 +46,18 @@ class _ChatPageState extends State<ChatPage> {
 
   Future getStorage() async {
     token = await storage.read(key: 'jwt');
-    print(token);
     fetch();
   }
 
   Future<void> fetch() async {
     try {
-      final params = {'filter': filterValue};
+      chats = [];
+      final params = {
+        'filter': filterValue,
+        'keyword': searchController.text,
+        'skip': skip.toString(),
+        'take': take.toString(),
+      };
       final url = Uri.parse('${dotenv.get('API')}/chats')
           .replace(queryParameters: params);
       final headers = {
@@ -61,7 +71,6 @@ class _ChatPageState extends State<ChatPage> {
 
       if (res.statusCode == 200) {
         Map<Object, dynamic> dataJson = jsonDecode(res.body);
-        print('chats $dataJson');
         for (var i = 0; i < dataJson['data'].length; i++) {
           chats.add(dataJson['data'][i]);
         }
@@ -113,6 +122,8 @@ class _ChatPageState extends State<ChatPage> {
             Padding(
               padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: TextField(
+                controller: searchController,
+                onChanged: (value) => fetch(),
                 decoration: InputDecoration(
                   hintText: "Search...",
                   hintStyle: TextStyle(color: Colors.grey.shade600),

@@ -1,49 +1,72 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/constants/index.dart';
-import 'package:market/models/chat_message.dart';
 import 'package:market/screens/producer/producer_profile/producer_profile.dart';
+import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:http/http.dart' as http;
 
 class Bubble extends StatefulWidget {
-  const Bubble({Key? key}) : super(key: key);
+  const Bubble({
+    Key? key,
+    required this.chat,
+    required this.token,
+  }) : super(key: key);
+
+  final Map<String, dynamic> chat;
+  final String token;
 
   @override
   State<Bubble> createState() => _BubbleState();
 }
 
 class _BubbleState extends State<Bubble> {
+  var chatId = '';
+
   TextEditingController messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   // bool _firstAutoscrollExecuted = false;
   // bool _shouldAutoscroll = false;
+  Map<String, dynamic> account = {};
+  List messages = [];
 
-  List<ChatMessage> messages = [
-    ChatMessage(pk: 1, messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(
-        pk: 2, messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        pk: 3,
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(
-        pk: 4, messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        pk: 5,
-        messageContent: "Is there any thing wrong?",
-        messageType: "sender"),
-    ChatMessage(pk: 1, messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(
-        pk: 2, messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        pk: 3,
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(
-        pk: 4, messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        pk: 5,
-        messageContent: "Is there any thing wrong?",
-        messageType: "sender"),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    var token = AppDefaults.jwtDecode(widget.token);
+    fetchUser(token['sub']);
+    _scrollController.addListener(_scrollListener);
+    initAbly();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    super.dispose();
+  }
+
+  Future fetchUser(int pk) async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${widget.token}',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        setState(() {
+          account = json.decode(res.body);
+        });
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
+  }
 
   void _scrollToBottom() {
     // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
@@ -66,28 +89,65 @@ class _BubbleState extends State<Bubble> {
     // }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_scrollListener);
+  void initAbly() {
+    chatId = widget.chat['uuid'];
+
+    // Create an instance of ClientOptions with Ably key
+    final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
+
+    // Use ClientOptions to create Realtime or REST instance
+    ably.Realtime realtime = ably.Realtime(options: clientOptions);
+
+    realtime.connection.on().listen(
+      (ably.ConnectionStateChange stateChange) async {
+        // Handle connection state change events
+        // print('realtime connection');
+        AppDefaults.toast(context, 'success', 'Realtime Connection');
+      },
+    );
+
+    ably.RealtimeChannel channel = realtime.channels.get(chatId);
+    channel.on().listen((ably.ChannelStateChange stateChange) async {
+      // Handle channel state change events
+      // print('RealtimeChannel');
+      AppDefaults.toast(context, 'success', 'RealtimeChannel');
+    });
+
+    StreamSubscription<ably.Message> subscription =
+        channel.subscribe(name: chatId).listen((ably.Message message) {
+      // Handle channel messages with name 'event1'
+      // print('StreamSubscription');
+      // print(message.data);
+      // print(account['user']['pk']);
+      messages.insert(messages.length, message.data);
+      // print(messages);
+    });
   }
 
-  @override
-  void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    super.dispose();
-  }
+  void sendChat() async {
+    // print('sending chat');
+    final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
+    ably.Realtime realtime = ably.Realtime(options: clientOptions);
+    ably.RealtimeChannel channel = realtime.channels.get(chatId);
 
-  void sendChat() {
+    await channel.publish(
+      name: chatId,
+      data: {
+        'pk': messages.length + 1,
+        'messageContent': messageController.text,
+        'userPk': account['user']['pk'].toString(),
+      },
+    );
+
     setState(() {
-      messages.insert(
-        messages.length,
-        ChatMessage(
-          pk: messages.length + 1,
-          messageContent: messageController.text,
-          messageType: "sender",
-        ),
-      );
+      // messages.insert(
+      //   messages.length,
+      //   {
+      //     'pk': messages.length + 1,
+      //     'messageContent': messageController.text,
+      //     'messageType': "sender",
+      //   },
+      // );
 
       messageController.text = '';
       _scrollToBottom();
@@ -237,22 +297,25 @@ class _BubbleState extends State<Bubble> {
                       bottom: 10,
                     ),
                     child: Align(
-                      alignment: (messages[index].messageType == "receiver"
-                          ? Alignment.topLeft
-                          : Alignment.topRight),
+                      alignment: (messages[index]['userPk'].toString() ==
+                              account['user']['pk'].toString()
+                          ? Alignment.topRight
+                          : Alignment.topLeft),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: (messages[index].messageType == "receiver"
+                          color: (messages[index]['userPk'].toString() ==
+                                  account['user']['pk'].toString()
                               ? Colors.grey.shade200
                               : AppColors.third),
                         ),
                         padding: const EdgeInsets.all(16),
                         child: Text(
-                          messages[index].messageContent,
+                          messages[index]['messageContent'],
                           style: TextStyle(
                             fontSize: 15,
-                            color: messages[index].messageType == "receiver"
+                            color: messages[index]['userPk'].toString() ==
+                                    account['user']['pk'].toString()
                                 ? Colors.black
                                 : Colors.white,
                           ),

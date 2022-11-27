@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
-import 'package:market/screens/chat/bubble.dart';
 import 'package:market/screens/profile/components/follower_list.dart';
 import 'package:market/screens/profile/components/following_list.dart';
 import 'package:http/http.dart' as http;
@@ -199,14 +198,14 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                               const EdgeInsets.only(left: 5),
                                           child: OutlinedButton(
                                             onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return const Bubble();
-                                                  },
-                                                ),
-                                              );
+                                              // Navigator.push(
+                                              //   context,
+                                              //   MaterialPageRoute(
+                                              //     builder: (context) {
+                                              //       return const Bubble();
+                                              //     },
+                                              //   ),
+                                              // );
                                             },
                                             style: OutlinedButton.styleFrom(
                                               side: const BorderSide(

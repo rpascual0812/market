@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 
 import '../../constants/index.dart';
 import '../../components/network_image.dart';
-import 'package:market/screens/chat/bubble.dart';
 
 class LookingForListTile extends StatefulWidget {
   static const IconData chat =
@@ -239,14 +238,14 @@ class _LookingForListTileState extends State<LookingForListTile> {
                                               padding: EdgeInsets.zero,
                                               child: OutlinedButton(
                                                 onPressed: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return const Bubble();
-                                                      },
-                                                    ),
-                                                  );
+                                                  // Navigator.push(
+                                                  //   context,
+                                                  //   MaterialPageRoute(
+                                                  //     builder: (context) {
+                                                  //       return const Bubble();
+                                                  //     },
+                                                  //   ),
+                                                  // );
                                                 },
                                                 style: OutlinedButton.styleFrom(
                                                   side: const BorderSide(

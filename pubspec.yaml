@@ -79,6 +79,7 @@ dependencies:
   sticky_headers: ^0.3.0+2
   infinite_scroll: ^1.1.1
   ably_flutter: ^1.2.15
+  time_elapsed: ^0.2.6
   
   
 
