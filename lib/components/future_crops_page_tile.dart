@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:market/screens/chat/bubble.dart';
 
 import '../../constants/index.dart';
 import '../../components/network_image.dart';
@@ -15,10 +16,14 @@ class FutureCropsPageTile extends StatefulWidget {
 
   const FutureCropsPageTile({
     Key? key,
+    required this.token,
+    required this.account,
     required this.product,
     this.onTap,
   }) : super(key: key);
 
+  final String token;
+  final Map<String, dynamic> account;
   final Map<String, dynamic> product;
   final void Function()? onTap;
 
@@ -155,31 +160,49 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                           right: 0,
                                           child: Row(
                                             children: [
-                                              Container(
-                                                width: 35.0,
-                                                height: 35.0,
-                                                padding: EdgeInsets.zero,
-                                                child: OutlinedButton(
-                                                  onPressed: () {
-                                                    // Navigator.push(
-                                                    //     context,
-                                                    //     MaterialPageRoute(
-                                                    //         builder: (context) =>
-                                                    //             const Bubble()));
-                                                  },
-                                                  style:
-                                                      OutlinedButton.styleFrom(
-                                                    side: const BorderSide(
-                                                      width: 1,
-                                                      color: AppColors.primary,
+                                              Visibility(
+                                                visible: widget.product[
+                                                            'user_pk'] ==
+                                                        widget.account['user']
+                                                            ['pk']
+                                                    ? false
+                                                    : true,
+                                                child: Container(
+                                                  width: 35.0,
+                                                  height: 35.0,
+                                                  padding: EdgeInsets.zero,
+                                                  child: OutlinedButton(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              Bubble(
+                                                            token: widget.token,
+                                                            userPk: widget
+                                                                .account['user']
+                                                                    ['pk']
+                                                                .toString(),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    style: OutlinedButton
+                                                        .styleFrom(
+                                                      side: const BorderSide(
+                                                        width: 1,
+                                                        color:
+                                                            AppColors.primary,
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              0),
                                                     ),
-                                                    padding:
-                                                        const EdgeInsets.all(0),
-                                                  ),
-                                                  child: const Icon(
-                                                    FutureCropsPageTile.chat,
-                                                    color: AppColors.primary,
-                                                    size: 15,
+                                                    child: const Icon(
+                                                      FutureCropsPageTile.chat,
+                                                      color: AppColors.primary,
+                                                      size: 15,
+                                                    ),
                                                   ),
                                                 ),
                                               ),

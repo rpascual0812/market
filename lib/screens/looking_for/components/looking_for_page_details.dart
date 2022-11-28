@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:market/components/network_image.dart';
 import 'package:market/components/sliders/product_slider.dart';
+import 'package:market/screens/chat/bubble.dart';
 import 'package:market/screens/orders/order_page.dart';
 import 'package:market/screens/producer/producer_page/producer_page.dart';
 import 'package:market/screens/product/components/cart_page.dart';
@@ -22,9 +23,11 @@ class LookingForPageDetails extends StatefulWidget {
   const LookingForPageDetails({
     Key? key,
     required this.product,
+    required this.account,
   }) : super(key: key);
 
   final Map<String, dynamic> product;
+  final Map<String, dynamic> account;
 
   @override
   State<LookingForPageDetails> createState() => _LookingForPageDetailsState();
@@ -213,7 +216,7 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
                           padding: const EdgeInsets.only(left: 5),
                           child: Container(
                             alignment: Alignment.centerLeft,
-                            width: 150,
+                            width: 200,
                             height: 20,
                             child: Text(
                               widget.product['user'] != null
@@ -228,7 +231,7 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
                           padding: const EdgeInsets.only(left: 5),
                           child: Container(
                             alignment: Alignment.centerLeft,
-                            width: 150,
+                            width: 200,
                             height: 20,
                             child: Row(
                               children: [
@@ -257,38 +260,48 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
                 ),
                 Row(
                   children: [
-                    Container(
-                      width: 35.0,
-                      height: 30.0,
-                      padding: EdgeInsets.zero,
-                      child: OutlinedButton(
-                        onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) {
-                          //       return const Bubble();
-                          //     },
-                          //   ),
-                          // );
-                        },
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
-                            width: 1,
-                            color: AppColors.primary,
+                    Visibility(
+                      visible: widget.product['user_pk'] ==
+                              widget.account['user']['pk']
+                          ? false
+                          : true,
+                      child: Container(
+                        width: 35.0,
+                        height: 30.0,
+                        padding: EdgeInsets.zero,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return Bubble(
+                                    userPk:
+                                        widget.product['user_pk'].toString(),
+                                    token: token,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                              width: 1,
+                              color: AppColors.primary,
+                            ),
+                            padding: const EdgeInsets.all(5),
                           ),
-                          padding: const EdgeInsets.all(5),
-                        ),
-                        child: const Icon(
-                          LookingForPageDetails.chat,
-                          color: AppColors.primary,
-                          size: 20,
+                          child: const Icon(
+                            LookingForPageDetails.chat,
+                            color: AppColors.primary,
+                            size: 20,
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(width: 5),
                     Container(
-                      width: 90.0,
+                      width: 70.0,
                       height: 30.0,
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(

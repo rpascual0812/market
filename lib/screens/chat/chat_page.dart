@@ -141,18 +141,30 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
             ),
-            ListView.builder(
-              itemCount: chats.length,
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 16),
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return ConversationList(
-                  token: token ?? '',
-                  chat: chats[index],
-                );
-              },
-            ),
+            chats.isNotEmpty
+                ? ListView.builder(
+                    itemCount: chats.length,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(top: 16),
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return ConversationList(
+                        token: token ?? '',
+                        chat: chats[index],
+                      );
+                    },
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      SizedBox(height: AppDefaults.margin * 6),
+                      Text(
+                        'No conversations found',
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      )
+                    ],
+                  ),
           ],
         ),
       ),

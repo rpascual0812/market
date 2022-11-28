@@ -119,6 +119,8 @@ class _RecentlyViewedPageState extends State<RecentlyViewedPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return LookingForListTile(
+                    token: '',
+                    account: const {},
                     product: products[index],
                     onTap: () {
                       // Navigator.of(context).push(

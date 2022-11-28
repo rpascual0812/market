@@ -1,9 +1,14 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:market/constants/index.dart';
 import 'package:market/screens/chat/bubble.dart';
 import 'package:time_elapsed/time_elapsed.dart';
+import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:http/http.dart' as http;
 
 class ConversationList extends StatefulWidget {
   const ConversationList({
@@ -22,10 +27,13 @@ class ConversationList extends StatefulWidget {
 class _ConversationListState extends State<ConversationList> {
   final storage = const FlutterSecureStorage();
   List chats = [];
+  Map<String, dynamic> account = {};
 
   @override
   void initState() {
     super.initState();
+    var pk = AppDefaults.jwtDecode(widget.token);
+    fetchUser(pk['sub']);
   }
 
   @override
@@ -33,12 +41,71 @@ class _ConversationListState extends State<ConversationList> {
     super.dispose();
   }
 
+  Future fetchUser(int pk) async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${widget.token}',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        setState(() {
+          account = json.decode(res.body);
+          initAbly();
+          // print(account);
+        });
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
+  }
+
+  void initAbly() {
+    print('conversation list initAbly');
+    String chatId = 'user-${account['user']['pk'].toString()}';
+    // Create an instance of ClientOptions with Ably key
+    final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
+
+    // Use ClientOptions to create Realtime or REST instance
+    ably.Realtime realtime = ably.Realtime(options: clientOptions);
+
+    realtime.connection.on().listen(
+      (ably.ConnectionStateChange stateChange) async {
+        // Handle connection state change events
+        // print('realtime connection');
+        // AppDefaults.toast(context, 'success', 'Realtime Connection');
+      },
+    );
+
+    ably.RealtimeChannel channel = realtime.channels.get(chatId);
+    channel.on().listen((ably.ChannelStateChange stateChange) async {
+      // Handle channel state change events
+      // print('RealtimeChannel');
+      // AppDefaults.toast(context, 'success', 'RealtimeChannel');
+    });
+
+    StreamSubscription<ably.Message> subscription =
+        channel.subscribe(name: chatId).listen((ably.Message message) {
+      // Handle channel messages with name 'event1'
+      print('StreamSubscription');
+      print(message.data);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var image =
-        '${dotenv.get('API')}/${widget.chat['chat_participants'][0]['user']['user_document']['document']['path']}';
-    var name =
-        '${widget.chat['chat_participants'][0]['user']['first_name']} ${widget.chat['chat_participant']['user']['last_name']}';
+    var image = widget.chat.isNotEmpty &&
+            widget.chat['chat_participants'].length > 0
+        ? '${dotenv.get('API')}/${widget.chat['chat_participants'][0]['user']['user_document']['document']['path']}'
+        : '';
+    var name = widget.chat.isNotEmpty &&
+            widget.chat['chat_participants'].length > 0
+        ? '${widget.chat['chat_participants'][0]['user']['first_name']} ${widget.chat['chat_participant']['user']['last_name']}'
+        : '';
     var date = TimeElapsed.fromDateStr(widget.chat['last_message_date']);
 
     return GestureDetector(
@@ -47,7 +114,10 @@ class _ConversationListState extends State<ConversationList> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return Bubble(chat: widget.chat, token: widget.token);
+              return Bubble(
+                userPk: widget.chat['chat_participants'][0]['pk'].toString(),
+                token: widget.token,
+              );
             },
           ),
         );

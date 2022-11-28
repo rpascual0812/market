@@ -10,7 +10,14 @@ import '../../constants/remote.dart';
 import '../product/product_page.dart';
 
 class FutureCropsPage extends StatefulWidget {
-  const FutureCropsPage({Key? key}) : super(key: key);
+  const FutureCropsPage({
+    Key? key,
+    required this.token,
+    required this.account,
+  }) : super(key: key);
+
+  final String token;
+  final Map<String, dynamic> account;
 
   @override
   State<FutureCropsPage> createState() => _FutureCropsPageState();
@@ -274,7 +281,8 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                               child: Text(
                                                 months[index]['name'],
                                                 style: const TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize:
+                                                        AppDefaults.fontSize,
                                                     color: Colors.white),
                                               ),
                                             ),
@@ -316,6 +324,8 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                       products.isNotEmpty ? dataJson['data'].length : 0,
                       (index) {
                     return FutureCropsPageTile(
+                      token: widget.token,
+                      account: widget.account,
                       product: products[index],
                       onTap: () {
                         Navigator.of(context).push(

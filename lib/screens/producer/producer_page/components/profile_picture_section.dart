@@ -356,7 +356,9 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                         SizedBox(
                           width: 320,
                           child: Text(
-                            widget.user['seller']['mobile_number'],
+                            widget.user['seller'] != null
+                                ? widget.user['seller']['mobile_number']
+                                : '',
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 11),
                           ),

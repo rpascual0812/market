@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:market/components/network_image.dart';
 import 'package:market/screens/auth/login_page.dart';
+import 'package:market/screens/chat/bubble.dart';
 import 'package:market/screens/orders/order_page.dart';
 import 'package:market/screens/producer/producer_page/producer_page.dart';
 import 'package:market/screens/product/components/cart_page.dart';
@@ -488,14 +489,17 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(
                         onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) {
-                          //       return const Bubble();
-                          //     },
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return Bubble(
+                                  userPk: widget.product['user_pk'].toString(),
+                                  token: token,
+                                );
+                              },
+                            ),
+                          );
                         },
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(

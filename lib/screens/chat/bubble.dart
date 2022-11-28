@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/constants/index.dart';
+import 'package:market/screens/producer/producer_page/producer_page.dart';
 import 'package:market/screens/producer/producer_profile/producer_profile.dart';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:http/http.dart' as http;
@@ -11,11 +12,11 @@ import 'package:http/http.dart' as http;
 class Bubble extends StatefulWidget {
   const Bubble({
     Key? key,
-    required this.chat,
+    required this.userPk,
     required this.token,
   }) : super(key: key);
 
-  final Map<String, dynamic> chat;
+  final String userPk;
   final String token;
 
   @override
@@ -24,21 +25,23 @@ class Bubble extends StatefulWidget {
 
 class _BubbleState extends State<Bubble> {
   var chatId = '';
+  String image = '';
+  String name = '';
 
   TextEditingController messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   // bool _firstAutoscrollExecuted = false;
   // bool _shouldAutoscroll = false;
   Map<String, dynamic> account = {};
+  Map<String, dynamic> chat = {};
   List messages = [];
 
   @override
   void initState() {
     super.initState();
     var token = AppDefaults.jwtDecode(widget.token);
-    fetchUser(token['sub']);
+    fetchAccount(token['sub']);
     _scrollController.addListener(_scrollListener);
-    initAbly();
   }
 
   @override
@@ -47,7 +50,7 @@ class _BubbleState extends State<Bubble> {
     super.dispose();
   }
 
-  Future fetchUser(int pk) async {
+  Future fetchAccount(int pk) async {
     try {
       final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
       final headers = {
@@ -59,6 +62,29 @@ class _BubbleState extends State<Bubble> {
       if (res.statusCode == 200) {
         setState(() {
           account = json.decode(res.body);
+          fetchChat();
+        });
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
+  }
+
+  Future fetchChat() async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/chats/user/${widget.userPk}');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${widget.token}',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        setState(() {
+          chat = json.decode(res.body);
+          initAbly();
         });
       }
       return null;
@@ -90,7 +116,7 @@ class _BubbleState extends State<Bubble> {
   }
 
   void initAbly() {
-    chatId = widget.chat['uuid'];
+    chatId = chat['uuid'] ?? '';
 
     // Create an instance of ClientOptions with Ably key
     final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
@@ -102,7 +128,7 @@ class _BubbleState extends State<Bubble> {
       (ably.ConnectionStateChange stateChange) async {
         // Handle connection state change events
         // print('realtime connection');
-        AppDefaults.toast(context, 'success', 'Realtime Connection');
+        // AppDefaults.toast(context, 'success', 'Realtime Connection');
       },
     );
 
@@ -110,7 +136,7 @@ class _BubbleState extends State<Bubble> {
     channel.on().listen((ably.ChannelStateChange stateChange) async {
       // Handle channel state change events
       // print('RealtimeChannel');
-      AppDefaults.toast(context, 'success', 'RealtimeChannel');
+      // AppDefaults.toast(context, 'success', 'RealtimeChannel');
     });
 
     StreamSubscription<ably.Message> subscription =
@@ -128,10 +154,20 @@ class _BubbleState extends State<Bubble> {
     // print('sending chat');
     final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
     ably.Realtime realtime = ably.Realtime(options: clientOptions);
-    ably.RealtimeChannel channel = realtime.channels.get(chatId);
+    ably.RealtimeChannel channel =
+        realtime.channels.get('user-${widget.userPk.toString()}');
+
+    // await channel.publish(
+    //   name: chatId,
+    //   data: {
+    //     'pk': messages.length + 1,
+    //     'messageContent': messageController.text,
+    //     'userPk': account['user']['pk'].toString(),
+    //   },
+    // );
 
     await channel.publish(
-      name: chatId,
+      name: 'user-${widget.userPk.toString()}',
       data: {
         'pk': messages.length + 1,
         'messageContent': messageController.text,
@@ -163,6 +199,31 @@ class _BubbleState extends State<Bubble> {
 
   @override
   Widget build(BuildContext context) {
+    if (chat.isNotEmpty) {
+      var found = false;
+      for (var i = 0; i < chat['chat_participants'].length; i++) {
+        if (chat['chat_participants'][i]['user']['pk'] !=
+            account['user']['pk']) {
+          found = true;
+          image = chat['chat_participants'] != null
+              ? '${dotenv.get('API')}/${chat['chat_participants'][i]['user']['user_document']['document']['path']}'
+              : '';
+          name = chat['chat_participants'] != null
+              ? '${chat['chat_participants'][i]['user']['first_name']} ${chat['chat_participants'][i]['user']['last_name']}'
+              : '';
+        }
+      }
+
+      if (!found) {
+        image = chat['chat_participants'] != null
+            ? '${dotenv.get('API')}/${chat['chat_participants'][0]['user']['user_document']['document']['path']}'
+            : '';
+        name = chat['chat_participants'] != null
+            ? '${chat['chat_participants'][0]['user']['first_name']} ${chat['chat_participants'][0]['user']['last_name']}'
+            : '';
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -184,9 +245,9 @@ class _BubbleState extends State<Bubble> {
                     color: Colors.white,
                   ),
                 ),
-                const Text(
-                  "Kriss Benwat",
-                  style: TextStyle(
+                Text(
+                  name,
+                  style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Colors.white),
@@ -199,14 +260,17 @@ class _BubbleState extends State<Bubble> {
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) {
-                        //       return const ProducerPage(user: chat['user']);
-                        //     },
-                        //   ),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ProducerPage(
+                                userPk: chat['chat_participants'][0]['user']
+                                    ['pk'],
+                              );
+                            },
+                          ),
+                        );
                       },
                     ),
                     // const VerticalDivider(),
@@ -221,11 +285,9 @@ class _BubbleState extends State<Bubble> {
                           ),
                         );
                       },
-                      child: const CircleAvatar(
-                        backgroundImage:
-                            NetworkImage("https://i.imgur.com/vavfJqu.gif"),
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(image),
                         maxRadius: 20,
-                        // size: 25,
                       ),
                     ),
                   ],

@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/screens/looking_for/components/looking_for_page_details.dart';
 
 import '../../constants/index.dart';
+import 'package:http/http.dart' as http;
 
 class LookingForPage extends StatefulWidget {
   const LookingForPage({
@@ -23,6 +25,7 @@ class LookingForPage extends StatefulWidget {
 class _LookingForPageState extends State<LookingForPage> {
   final storage = const FlutterSecureStorage();
   String? token = '';
+  Map<String, dynamic> account = {};
 
   Map<String, dynamic> product = <String, dynamic>{};
   @override
@@ -37,7 +40,31 @@ class _LookingForPageState extends State<LookingForPage> {
 
     setState(() {
       token = all;
+      var pk = AppDefaults.jwtDecode(token);
+      fetchUser(pk['sub']);
     });
+  }
+
+  Future fetchUser(int pk) async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        setState(() {
+          account = json.decode(res.body);
+          // print(account);
+        });
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
   }
 
   Future fetch() async {
@@ -96,7 +123,8 @@ class _LookingForPageState extends State<LookingForPage> {
               // ),
               Visibility(
                 visible: product['name'] != null ? true : false,
-                child: LookingForPageDetails(product: product),
+                child:
+                    LookingForPageDetails(product: product, account: account),
               ),
             ],
           ),

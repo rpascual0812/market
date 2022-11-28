@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
+import 'package:market/screens/chat/bubble.dart';
 
 import '../../constants/index.dart';
 import '../../components/network_image.dart';
@@ -13,10 +14,14 @@ class LookingForListTile extends StatefulWidget {
 
   const LookingForListTile({
     Key? key,
+    required this.token,
+    required this.account,
     required this.product,
     this.onTap,
   }) : super(key: key);
 
+  final String token;
+  final Map<String, dynamic> account;
   final Map<String, dynamic> product;
   final void Function()? onTap;
 
@@ -230,36 +235,50 @@ class _LookingForListTileState extends State<LookingForListTile> {
                                               ],
                                             ),
                                           ),
-                                          Positioned(
-                                            right: 0,
-                                            child: Container(
-                                              width: 30.0,
-                                              height: 30.0,
-                                              padding: EdgeInsets.zero,
-                                              child: OutlinedButton(
-                                                onPressed: () {
-                                                  // Navigator.push(
-                                                  //   context,
-                                                  //   MaterialPageRoute(
-                                                  //     builder: (context) {
-                                                  //       return const Bubble();
-                                                  //     },
-                                                  //   ),
-                                                  // );
-                                                },
-                                                style: OutlinedButton.styleFrom(
-                                                  side: const BorderSide(
-                                                    width: 1,
-                                                    color: AppColors.primary,
+                                          Visibility(
+                                            visible: widget
+                                                        .product['user_pk'] ==
+                                                    widget.account['user']['pk']
+                                                ? false
+                                                : true,
+                                            child: Positioned(
+                                              right: 0,
+                                              child: Container(
+                                                width: 30.0,
+                                                height: 30.0,
+                                                padding: EdgeInsets.zero,
+                                                child: OutlinedButton(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) {
+                                                          return Bubble(
+                                                            token: widget.token,
+                                                            userPk: widget
+                                                                .product[
+                                                                    'user_pk']
+                                                                .toString(),
+                                                          );
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                  style:
+                                                      OutlinedButton.styleFrom(
+                                                    side: const BorderSide(
+                                                      width: 1,
+                                                      color: AppColors.primary,
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(0),
                                                   ),
-                                                  padding:
-                                                      const EdgeInsets.all(0),
-                                                ),
-                                                child: const Icon(
-                                                  chat,
-                                                  color: AppColors.primary,
-                                                  size:
-                                                      AppDefaults.fontSize + 10,
+                                                  child: const Icon(
+                                                    chat,
+                                                    color: AppColors.primary,
+                                                    size: AppDefaults.fontSize +
+                                                        10,
+                                                  ),
                                                 ),
                                               ),
                                             ),

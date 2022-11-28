@@ -7,7 +7,14 @@ import 'package:market/screens/looking_for/looking_for_page.dart';
 import '../../constants/index.dart';
 
 class LookingForList extends StatefulWidget {
-  const LookingForList({Key? key}) : super(key: key);
+  const LookingForList({
+    Key? key,
+    required this.token,
+    required this.account,
+  }) : super(key: key);
+
+  final String token;
+  final Map<String, dynamic> account;
 
   @override
   State<LookingForList> createState() => _LookingForListState();
@@ -76,6 +83,8 @@ class _LookingForListState extends State<LookingForList> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return LookingForListTile(
+                    token: widget.token,
+                    account: widget.account,
                     product: products[index],
                     onTap: () {
                       Navigator.of(context).push(
