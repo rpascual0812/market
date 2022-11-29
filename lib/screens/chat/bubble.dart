@@ -24,6 +24,8 @@ class Bubble extends StatefulWidget {
 }
 
 class _BubbleState extends State<Bubble> {
+  final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
+
   var chatId = '';
   String image = '';
   String name = '';
@@ -119,18 +121,18 @@ class _BubbleState extends State<Bubble> {
     chatId = chat['uuid'] ?? '';
 
     // Create an instance of ClientOptions with Ably key
-    final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
+    // final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
 
     // Use ClientOptions to create Realtime or REST instance
     ably.Realtime realtime = ably.Realtime(options: clientOptions);
 
-    realtime.connection.on().listen(
-      (ably.ConnectionStateChange stateChange) async {
-        // Handle connection state change events
-        // print('realtime connection');
-        // AppDefaults.toast(context, 'success', 'Realtime Connection');
-      },
-    );
+    // realtime.connection.on().listen(
+    //   (ably.ConnectionStateChange stateChange) async {
+    //     // Handle connection state change events
+    //     // print('realtime connection');
+    //     // AppDefaults.toast(context, 'success', 'Realtime Connection');
+    //   },
+    // );
 
     ably.RealtimeChannel channel = realtime.channels.get(chatId);
     channel.on().listen((ably.ChannelStateChange stateChange) async {
@@ -152,23 +154,23 @@ class _BubbleState extends State<Bubble> {
 
   void sendChat() async {
     // print('sending chat');
-    final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
+    // final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
     ably.Realtime realtime = ably.Realtime(options: clientOptions);
-    ably.RealtimeChannel channel =
+    ably.RealtimeChannel conversationChannel =
         realtime.channels.get('user-${widget.userPk.toString()}');
 
-    // await channel.publish(
-    //   name: chatId,
-    //   data: {
-    //     'pk': messages.length + 1,
-    //     'messageContent': messageController.text,
-    //     'userPk': account['user']['pk'].toString(),
-    //   },
-    // );
-    print(messageController.text);
-    print(account['user']['pk'].toString());
-    await channel.publish(
+    await conversationChannel.publish(
       name: 'user-${widget.userPk.toString()}',
+      data: {
+        'pk': messages.length + 1,
+        'messageContent': messageController.text,
+        'userPk': account['user']['pk'].toString(),
+      },
+    );
+
+    ably.RealtimeChannel bubbleChannel = realtime.channels.get(chatId);
+    await bubbleChannel.publish(
+      name: chatId,
       data: {
         'pk': messages.length + 1,
         'messageContent': messageController.text,
