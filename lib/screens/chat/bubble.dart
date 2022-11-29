@@ -165,7 +165,8 @@ class _BubbleState extends State<Bubble> {
     //     'userPk': account['user']['pk'].toString(),
     //   },
     // );
-
+    print(messageController.text);
+    print(account['user']['pk'].toString());
     await channel.publish(
       name: 'user-${widget.userPk.toString()}',
       data: {
@@ -223,6 +224,8 @@ class _BubbleState extends State<Bubble> {
             : '';
       }
     }
+
+    image = image != '' ? image : '${dotenv.get('API')}/assets/images/user.png';
 
     return Scaffold(
       appBar: AppBar(
