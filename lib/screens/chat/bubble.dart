@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/constants/index.dart';
@@ -85,8 +88,36 @@ class _BubbleState extends State<Bubble> {
       var res = await http.get(url, headers: headers);
       if (res.statusCode == 200) {
         setState(() {
+          image = '';
+          name = '';
           chat = json.decode(res.body);
+          fetchMessages();
+          // print(chat);
           initAbly();
+        });
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
+  }
+
+  Future fetchMessages() async {
+    try {
+      final url =
+          Uri.parse('${dotenv.get('API')}/chats/${chat['pk']}/messages');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${widget.token}',
+      };
+
+      var res = await http.get(url, headers: headers);
+      log(res.statusCode.toString());
+      if (res.statusCode == 200) {
+        setState(() {
+          var data = json.decode(res.body);
+          messages = data['data'];
         });
       }
       return null;
@@ -147,57 +178,93 @@ class _BubbleState extends State<Bubble> {
       // print('StreamSubscription');
       // print(message.data);
       // print(account['user']['pk']);
+
+      final player = AudioPlayer();
+      if (message.data != null) {
+        var newMessage = message.data;
+        if (newMessage != null &&
+            account['user']['pk'].toString() ==
+                (newMessage as dynamic)['user_pk'].toString()) {
+          player.play(AssetSource('sent.mp3'));
+        } else {
+          player.play(AssetSource('received.mp3'));
+        }
+      }
+
       messages.insert(messages.length, message.data);
       // print(messages);
     });
   }
 
   void sendChat() async {
+    if (messageController.text != '') {
+      try {
+        var body = {
+          'uuid': chat['uuid'],
+          'message': messageController.text,
+          'user_pk': account['user']['pk'].toString(),
+        };
+        // print('saving chat');
+        // print(widget.token);
+        // print(widget.userPk.toString());
+        final url = Uri.parse('${dotenv.get('API')}/chats/messages');
+        final headers = {
+          HttpHeaders.authorizationHeader: 'Bearer ${widget.token}',
+        };
+
+        var res = await http.post(url, headers: headers, body: body);
+        if (res.statusCode == 200) {
+          var ablyData = {
+            'pk': messages.length + 1,
+            'message': messageController.text,
+            'user_pk': account['user']['pk'].toString(),
+          };
+
+          ably.Realtime realtime = ably.Realtime(options: clientOptions);
+          ably.RealtimeChannel conversationChannel =
+              realtime.channels.get('user-${widget.userPk.toString()}');
+          await conversationChannel.publish(
+            name: 'user-${widget.userPk.toString()}',
+            data: ablyData,
+          );
+
+          ably.RealtimeChannel bubbleChannel = realtime.channels.get(chatId);
+          await bubbleChannel.publish(
+            name: chatId,
+            data: ablyData,
+          );
+
+          setState(() {
+            // messages.insert(
+            //   messages.length,
+            //   {
+            //     'pk': messages.length + 1,
+            //     'messageContent': messageController.text,
+            //     'messageType': "sender",
+            //   },
+            // );
+
+            messageController.text = '';
+            _scrollToBottom();
+            // if (_scrollController.hasClients && _shouldAutoscroll) {
+            //   _scrollToBottom();
+            // }
+
+            // if (!_firstAutoscrollExecuted && _scrollController.hasClients) {
+            //   _scrollToBottom();
+            // }
+          });
+        }
+        return null;
+      } on Exception catch (exception) {
+        log('exception $exception');
+      } catch (error) {
+        log('error $error');
+      }
+    }
+
     // print('sending chat');
     // final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
-    ably.Realtime realtime = ably.Realtime(options: clientOptions);
-    ably.RealtimeChannel conversationChannel =
-        realtime.channels.get('user-${widget.userPk.toString()}');
-
-    await conversationChannel.publish(
-      name: 'user-${widget.userPk.toString()}',
-      data: {
-        'pk': messages.length + 1,
-        'messageContent': messageController.text,
-        'userPk': account['user']['pk'].toString(),
-      },
-    );
-
-    ably.RealtimeChannel bubbleChannel = realtime.channels.get(chatId);
-    await bubbleChannel.publish(
-      name: chatId,
-      data: {
-        'pk': messages.length + 1,
-        'messageContent': messageController.text,
-        'userPk': account['user']['pk'].toString(),
-      },
-    );
-
-    setState(() {
-      // messages.insert(
-      //   messages.length,
-      //   {
-      //     'pk': messages.length + 1,
-      //     'messageContent': messageController.text,
-      //     'messageType': "sender",
-      //   },
-      // );
-
-      messageController.text = '';
-      _scrollToBottom();
-      // if (_scrollController.hasClients && _shouldAutoscroll) {
-      //   _scrollToBottom();
-      // }
-
-      // if (!_firstAutoscrollExecuted && _scrollController.hasClients) {
-      //   _scrollToBottom();
-      // }
-    });
   }
 
   @override
@@ -364,24 +431,24 @@ class _BubbleState extends State<Bubble> {
                       bottom: 10,
                     ),
                     child: Align(
-                      alignment: (messages[index]['userPk'].toString() ==
+                      alignment: (messages[index]['user_pk'].toString() ==
                               account['user']['pk'].toString()
                           ? Alignment.topRight
                           : Alignment.topLeft),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: (messages[index]['userPk'].toString() ==
+                          color: (messages[index]['user_pk'].toString() ==
                                   account['user']['pk'].toString()
                               ? Colors.grey.shade200
                               : AppColors.third),
                         ),
                         padding: const EdgeInsets.all(16),
                         child: Text(
-                          messages[index]['messageContent'],
+                          messages[index]['message'] ?? '',
                           style: TextStyle(
                             fontSize: 15,
-                            color: messages[index]['userPk'].toString() ==
+                            color: messages[index]['user_pk'].toString() ==
                                     account['user']['pk'].toString()
                                 ? Colors.black
                                 : Colors.white,

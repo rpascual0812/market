@@ -80,6 +80,7 @@ dependencies:
   infinite_scroll: ^1.1.1
   ably_flutter: ^1.2.15
   time_elapsed: ^0.2.6
+  audioplayers: ^1.1.1
   
   
 
@@ -126,8 +127,10 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - .env
+    - assets/
     - assets/images/
     - assets/icons/
+    - assets/sounds/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

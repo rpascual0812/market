@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,6 +10,7 @@ import 'package:market/components/appbar.dart';
 import 'package:market/components/select_dropdown.dart';
 import 'package:market/screens/chat/conversation_list.dart';
 
+import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:http/http.dart' as http;
 
 import '../../constants/index.dart';
@@ -24,6 +27,7 @@ class _ChatPageState extends State<ChatPage> {
   final searchController = TextEditingController(text: '');
 
   String? token = '';
+  Map<String, dynamic> account = {};
   List chats = [];
 
   int skip = 0;
@@ -46,7 +50,32 @@ class _ChatPageState extends State<ChatPage> {
 
   Future getStorage() async {
     token = await storage.read(key: 'jwt');
+    var pk = AppDefaults.jwtDecode(token);
+    fetchUser(pk['sub']);
     fetch();
+  }
+
+  Future fetchUser(int pk) async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        setState(() {
+          account = json.decode(res.body);
+          initAbly();
+          // print(account);
+        });
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
   }
 
   Future<void> fetch() async {
@@ -87,6 +116,49 @@ class _ChatPageState extends State<ChatPage> {
     } catch (error) {
       print('error $error');
     }
+  }
+
+  void initAbly() {
+    String chatId = 'user-${account['user']['pk'].toString()}';
+    print('listening to $chatId');
+    // Create an instance of ClientOptions with Ably key
+    final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
+
+    // Use ClientOptions to create Realtime or REST instance
+    ably.Realtime realtime = ably.Realtime(options: clientOptions);
+
+    realtime.connection.on().listen(
+      (ably.ConnectionStateChange stateChange) async {
+        // Handle connection state change events
+        // print('realtime connection');
+        // AppDefaults.toast(context, 'success', 'Realtime Connection');
+      },
+    );
+
+    ably.RealtimeChannel channel = realtime.channels.get(chatId);
+    channel.on().listen((ably.ChannelStateChange stateChange) async {
+      // Handle channel state change events
+      // print('RealtimeChannel');
+      // AppDefaults.toast(context, 'success', 'RealtimeChannel');
+    });
+
+    StreamSubscription<ably.Message> subscription =
+        channel.subscribe(name: chatId).listen((ably.Message message) {
+      print('chatpage message received');
+      // Handle channel messages with name 'event1'
+      // final player = AudioPlayer();
+      // player.play(AssetSource('chat.mp3'));
+
+      // print('StreamSubscription');
+      // print(message.data);
+      fetch();
+    });
+  }
+
+  Future playLocal() async {
+    print('playing local');
+    final player = AudioPlayer();
+    player.play(AssetSource('sounds/chat.mp3'));
   }
 
   @override
