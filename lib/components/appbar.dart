@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:market/constants/app_icons.dart';
-import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/notifications/notification_page.dart';
 import 'package:market/screens/product/components/cart_page.dart';
 import 'package:market/screens/search/search_page.dart';
@@ -44,11 +43,11 @@ class _AppbarState extends State<Appbar> {
         children: [
           InkWell(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => AppRoot(jwt: token ?? ''),
-                ),
-              );
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (context) => AppRoot(jwt: token ?? ''),
+              //   ),
+              // );
             },
             child: Image.asset(
               'assets/images/logo.png',
@@ -61,11 +60,11 @@ class _AppbarState extends State<Appbar> {
           ),
           InkWell(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const AppRoot(jwt: ''),
-                ),
-              );
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (context) => const AppRoot(jwt: ''),
+              //   ),
+              // );
             },
             child: const Text(
               'Samdhana Community Market',

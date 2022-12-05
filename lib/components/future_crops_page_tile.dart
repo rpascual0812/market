@@ -161,10 +161,13 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                           child: Row(
                                             children: [
                                               Visibility(
-                                                visible: widget.product[
-                                                            'user_pk'] ==
-                                                        widget.account['user']
-                                                            ['pk']
+                                                visible: widget.account[
+                                                                'user'] !=
+                                                            null &&
+                                                        widget.product[
+                                                                'user_pk'] ==
+                                                            widget.account[
+                                                                'user']['pk']
                                                     ? false
                                                     : true,
                                                 child: Container(

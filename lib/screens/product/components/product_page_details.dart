@@ -493,6 +493,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
+                                // print(widget.product['user_pk'].toString());
                                 return Bubble(
                                   userPk: widget.product['user_pk'].toString(),
                                   token: token,

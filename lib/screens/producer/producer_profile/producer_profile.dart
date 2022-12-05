@@ -1,12 +1,23 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/components/network_image.dart';
-import 'package:market/constants/app_colors.dart';
-import 'package:market/models/ratings.dart';
+import 'package:market/constants/index.dart';
+import 'package:http/http.dart' as http;
+import 'package:market/screens/producer/producer_profile/producer_rating_tile.dart';
 
 class ProducerProfile extends StatefulWidget {
-  const ProducerProfile({Key? key}) : super(key: key);
+  const ProducerProfile({
+    Key? key,
+    required this.token,
+    required this.userPk,
+  }) : super(key: key);
+
+  final String token;
+  final int userPk;
 
   @override
   State<ProducerProfile> createState() => _ProducerProfileState();
@@ -16,46 +27,106 @@ class _ProducerProfileState extends State<ProducerProfile> {
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
-  TextEditingController messageController = TextEditingController();
+  Map<String, dynamic> user = {};
 
-  List<Ratings> ratings = [
-    Ratings(
-      pk: 1,
-      userId: 1,
-      userFirstName: 'Ferdinand',
-      userLastName: 'Dela Cruz',
-      userImage: 'https://i.imgur.com/vavfJqu.gif',
-      rating: 4,
-      comment:
-          'With the price I paid, it was worth it. What I ordered was perfect. Although delivery is late, ordered April 29th, received on the 3rd of May. Overall, I did not regret it.',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Ratings(
-      pk: 2,
-      userId: 2,
-      userFirstName: 'Mia',
-      userLastName: 'Sue',
-      userImage: 'https://i.imgur.com/jG0jrjW.gif',
-      rating: 4,
-      comment:
-          'Seller was super accomodating! Appreciate her help so much \'cause she answered all my questions. Hopefully, she sells more!',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-    Ratings(
-      pk: 3,
-      userId: 3,
-      userFirstName: 'Jone',
-      userLastName: 'Doe',
-      userImage: 'https://i.imgur.com/VocmKXJ.gif',
-      rating: 4,
-      comment:
-          'Supersatisfied with my order! The item was in great condition and I loved it. Thank you so much!',
-      dateCreated: DateTime(2022, 08, 12, 13, 25),
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    fetch();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future fetch() async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/sellers/${widget.userPk}');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${widget.token}',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        setState(() {
+          var account = json.decode(res.body);
+          user = account['user'];
+        });
+      }
+    } on Exception catch (exception) {
+      log('exception $exception');
+    } catch (error) {
+      log('error $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    var name = '${user['first_name']} ${user['last_name']}';
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    if (user['user_document'] != null) {
+      for (var i = 0; i < user['user_document'].length; i++) {
+        if (user['user_document'][i]['document']['path'] != null &&
+            user['user_document'][i]['type'] == 'profile_photo') {
+          userImage =
+              '${dotenv.get('API')}/${user['user_document'][i]['document']['path']}';
+        }
+      }
+    }
+
+    var userAddress = {};
+    if (user['user_addresses'] != null) {
+      var defaultFound = false;
+      for (var i = 0; i < user['user_addresses'].length; i++) {
+        if (user['user_addresses'][i]['default']) {
+          defaultFound = true;
+          userAddress = user['user_addresses'][i];
+        }
+      }
+
+      if (!defaultFound) {
+        userAddress = user['user_addresses'][0];
+      }
+    }
+
+    var sellerAddress = {};
+    if (user['seller_addresses'] != null) {
+      var defaultFound = false;
+      for (var i = 0; i < user['seller_addresses'].length; i++) {
+        if (user['seller_addresses'][i]['default']) {
+          defaultFound = true;
+          sellerAddress = user['seller_addresses'][i];
+        }
+      }
+
+      if (!defaultFound) {
+        userAddress = user['seller_addresses'][0];
+      }
+    }
+
+    var city = '';
+    var province = '';
+    if (sellerAddress.isNotEmpty) {
+      if (sellerAddress['city'] != null) {
+        city = sellerAddress['city']['name'];
+      }
+      if (sellerAddress['province'] != null) {
+        province = sellerAddress['province']['name'];
+      }
+    } else {
+      if (userAddress['city'] != null) {
+        city = userAddress['city']['name'];
+      }
+      if (userAddress['province'] != null) {
+        province = userAddress['province']['name'];
+      }
+    }
+
+    var location = '$city $province';
+
+    print(user);
     return Scaffold(
       appBar: const Appbar(),
       body: SingleChildScrollView(
@@ -102,45 +173,50 @@ class _ProducerProfileState extends State<ProducerProfile> {
                                 ),
                               ),
                             ),
-                            const CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  "https://i.imgur.com/vavfJqu.gif"),
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(userImage),
                               radius: 90,
                             ),
                             const SizedBox(height: 20),
-                            const Text(
-                              'Juan Dela Cruz',
-                              style: TextStyle(
+                            Text(
+                              name,
+                              style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: AppDefaults.fontSize + 5,
                               ),
                             ),
-                            const Text(
-                              'seller of Almonds',
-                              style: TextStyle(
+                            const SizedBox(height: 5),
+                            Text(
+                              user['about'] ?? '',
+                              style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: AppDefaults.fontSize,
                               ),
                             ),
+                            const SizedBox(height: 5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Icon(
+                              children: [
+                                const Icon(
                                   pin,
-                                  size: 12,
+                                  size: AppDefaults.fontSize,
                                   color: Colors.white,
                                 ),
+                                const SizedBox(width: 5),
                                 Text(
-                                  'Imus, Cavite',
-                                  style: TextStyle(
-                                    fontSize: 15,
+                                  location,
+                                  style: const TextStyle(
+                                    fontSize: AppDefaults.fontSize,
                                     color: Colors.white,
                                   ),
                                 ),
                               ],
                             ),
                             RatingBarIndicator(
-                              rating: 4,
+                              rating: user['product_rating_total'] != null
+                                  ? double.parse(
+                                      user['product_rating_total'].toString())
+                                  : 0.00,
                               itemBuilder: (context, index) => const Icon(
                                 Icons.star,
                                 color: Colors.amber,
@@ -184,59 +260,16 @@ class _ProducerProfileState extends State<ProducerProfile> {
                 // color: Colors.white,
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ListView.builder(
-                  itemCount: ratings.length,
+                  itemCount: user['user_ratings'] != null
+                      ? user['user_ratings'].length
+                      : 0,
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
                     // return Text('asdf');
-                    return Container(
-                      padding: const EdgeInsets.all(10),
-                      color: Colors.white,
-                      margin: const EdgeInsets.only(bottom: 5),
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 45,
-                            child: AspectRatio(
-                              aspectRatio: 1 / 1,
-                              child: NetworkImageWithLoader(
-                                  ratings[index].userImage, true),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(ratings[index].userFirstName),
-                              RatingBarIndicator(
-                                rating: 4,
-                                itemBuilder: (context, index) => const Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                ),
-                                itemCount: 5,
-                                itemSize: 15.0,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                color: Colors.white,
-                                width: 310,
-                                child: Row(
-                                  children: <Widget>[
-                                    Flexible(
-                                      child: Text(ratings[index].comment),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
+                    return ProducerRatingTile(
+                        rating: user['user_ratings'][index]);
                   },
                 ),
               ),

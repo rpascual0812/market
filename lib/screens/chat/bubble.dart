@@ -41,9 +41,13 @@ class _BubbleState extends State<Bubble> {
   Map<String, dynamic> chat = {};
   List messages = [];
 
+  int skip = 0;
+  int take = 10;
+
   @override
   void initState() {
     super.initState();
+
     var token = AppDefaults.jwtDecode(widget.token);
     fetchAccount(token['sub']);
     _scrollController.addListener(_scrollListener);
@@ -67,6 +71,7 @@ class _BubbleState extends State<Bubble> {
       if (res.statusCode == 200) {
         setState(() {
           account = json.decode(res.body);
+          // print('account $account');
           fetchChat();
         });
       }
@@ -91,8 +96,9 @@ class _BubbleState extends State<Bubble> {
           image = '';
           name = '';
           chat = json.decode(res.body);
+          // print('chat $chat');
+          readMessages();
           fetchMessages();
-          // print(chat);
           initAbly();
         });
       }
@@ -105,8 +111,9 @@ class _BubbleState extends State<Bubble> {
 
   Future fetchMessages() async {
     try {
-      final url =
-          Uri.parse('${dotenv.get('API')}/chats/${chat['pk']}/messages');
+      final params = {'skip': skip.toString(), 'take': take.toString()};
+      final url = Uri.parse('${dotenv.get('API')}/chats/${chat['pk']}/messages')
+          .replace(queryParameters: params);
       final headers = {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${widget.token}',
@@ -118,6 +125,7 @@ class _BubbleState extends State<Bubble> {
         setState(() {
           var data = json.decode(res.body);
           messages = data['data'];
+          _scrollToBottom();
         });
       }
       return null;
@@ -127,13 +135,19 @@ class _BubbleState extends State<Bubble> {
     }
   }
 
-  void _scrollToBottom() {
+  void _scrollToBottom() async {
+    // print('Scrollling to bottom');
     // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      curve: Curves.easeOut,
-      duration: const Duration(milliseconds: 300),
-    );
+    Future.delayed(const Duration(milliseconds: 500), () {
+      // print('Scrolled to bottom');
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
+
+    // _scrollController.animateTo(
+    //   _scrollController.position.maxScrollExtent,
+    //   duration: const Duration(milliseconds: 300),
+    //   curve: Curves.fastOutSlowIn,
+    // );
   }
 
   void _scrollListener() {
@@ -267,6 +281,27 @@ class _BubbleState extends State<Bubble> {
     // final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
   }
 
+  void readMessages() async {
+    // print('read messages $chat');
+    try {
+      final url =
+          Uri.parse('${dotenv.get('API')}/chats/${chat['pk']}/messages/read');
+      final headers = {
+        HttpHeaders.authorizationHeader: 'Bearer ${widget.token}',
+      };
+
+      var res = await http.post(url, headers: headers);
+      if (res.statusCode == 200) {
+        setState(() {});
+      }
+      return null;
+    } on Exception catch (exception) {
+      log('exception $exception');
+    } catch (error) {
+      log('error $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (chat.isNotEmpty) {
@@ -352,7 +387,11 @@ class _BubbleState extends State<Bubble> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const ProducerProfile();
+                              return ProducerProfile(
+                                token: widget.token,
+                                userPk: chat['chat_participants'][0]['user']
+                                    ['pk'],
+                              );
                             },
                           ),
                         );
@@ -364,47 +403,6 @@ class _BubbleState extends State<Bubble> {
                     ),
                   ],
                 ),
-                // IconButton(
-                //   onPressed: () {
-                //     Navigator.pop(context);
-                //   },
-                //   icon: const Icon(
-                //     Icons.arrow_back,
-                //     color: Colors.black,
-                //   ),
-                // ),
-                // const SizedBox(
-                //   width: 2,
-                // ),
-                // const CircleAvatar(
-                //   backgroundImage:
-                //       NetworkImage("https://i.imgur.com/vavfJqu.gif"),
-                //   maxRadius: 20,
-                // ),
-                // const SizedBox(
-                //   width: 12,
-                // ),
-                // Expanded(
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: <Widget>[
-                //       const Text(
-                //         "Kriss Benwat",
-                //         style: TextStyle(
-                //             fontSize: 16, fontWeight: FontWeight.w600),
-                //       ),
-                //       const SizedBox(
-                //         height: 6,
-                //       ),
-                //       Text(
-                //         "Online",
-                //         style: TextStyle(
-                //             color: Colors.grey.shade600, fontSize: 13),
-                //       ),
-                //     ],
-                //   ),
-                // ),
               ],
             ),
           ),

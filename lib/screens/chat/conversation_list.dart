@@ -9,10 +9,12 @@ class ConversationList extends StatefulWidget {
   const ConversationList({
     Key? key,
     required this.token,
+    required this.account,
     required this.chat,
   }) : super(key: key);
 
   final String token;
+  final Map<String, dynamic> account;
   final Map<String, dynamic> chat;
 
   @override
@@ -35,15 +37,19 @@ class _ConversationListState extends State<ConversationList> {
 
   @override
   Widget build(BuildContext context) {
+    // print(widget.chat['chat_participants'].length);
+    // print(widget.chat['chat_participants']);
     var image = widget.chat.isNotEmpty &&
             widget.chat['chat_participants'].length > 0
         ? '${dotenv.get('API')}/${widget.chat['chat_participants'][0]['user']['user_document']['document']['path']}'
         : '';
     var name = widget.chat.isNotEmpty &&
             widget.chat['chat_participants'].length > 0
-        ? '${widget.chat['chat_participants'][0]['user']['first_name']} ${widget.chat['chat_participant']['user']['last_name']}'
+        ? '${widget.chat['chat_participants'][0]['user']['first_name']} ${widget.chat['chat_participants'][0]['user']['last_name']}'
         : '';
     var date = TimeElapsed.fromDateStr(widget.chat['last_message_date']);
+
+    var unread = widget.chat['chat_participants'][0]['unread'];
 
     return GestureDetector(
       onTap: () {
@@ -51,6 +57,8 @@ class _ConversationListState extends State<ConversationList> {
           context,
           MaterialPageRoute(
             builder: (context) {
+              unread = false;
+              // print('${widget.chat['pk']} $unread');
               return Bubble(
                 userPk: widget.chat['chat_participants'][0]['user']['pk']
                     .toString(),
@@ -83,25 +91,23 @@ class _ConversationListState extends State<ConversationList> {
                         children: <Widget>[
                           Text(
                             name,
-                            style: const TextStyle(
-                              fontSize: AppDefaults.fontSize + 1,
-                              // fontWeight: !widget.chat['messagesRead']
-                              //     ? FontWeight.bold
-                              //     : FontWeight.normal,
-                            ),
+                            style: TextStyle(
+                                fontSize: AppDefaults.fontSize + 1,
+                                fontWeight: unread != null && unread
+                                    ? FontWeight.bold
+                                    : FontWeight.normal),
                           ),
                           const SizedBox(
                             height: 6,
                           ),
                           Text(
                             widget.chat['last_message'] ?? '',
-                            style: const TextStyle(
-                              fontSize: AppDefaults.fontSize - 1,
-                              // color: Colors.grey.shade600,
-                              // fontWeight: !widget.chat['messagesRead']
-                              //     ? FontWeight.bold
-                              //     : FontWeight.normal,
-                            ),
+                            style: TextStyle(
+                                fontSize: AppDefaults.fontSize - 1,
+                                // color: Colors.grey.shade600,
+                                fontWeight: unread != null && unread
+                                    ? FontWeight.bold
+                                    : FontWeight.normal),
                           ),
                         ],
                       ),
@@ -113,11 +119,11 @@ class _ConversationListState extends State<ConversationList> {
             ),
             Text(
               widget.chat['time'] ?? '',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: AppDefaults.fontSize - 2,
-                // fontWeight: !widget.chat['messagesRead']
-                //     ? FontWeight.bold
-                //     : FontWeight.normal,
+                fontWeight: unread != null && unread
+                    ? FontWeight.bold
+                    : FontWeight.normal,
               ),
             ),
           ],

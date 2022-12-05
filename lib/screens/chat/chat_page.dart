@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:infinite_scroll/infinite_scroll_list.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/components/select_dropdown.dart';
 import 'package:market/screens/chat/conversation_list.dart';
@@ -23,6 +23,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  final ScrollController _scrollController = ScrollController();
   final storage = const FlutterSecureStorage();
   final searchController = TextEditingController(text: '');
 
@@ -30,17 +31,29 @@ class _ChatPageState extends State<ChatPage> {
   Map<String, dynamic> account = {};
   List chats = [];
 
+  int page = 0;
   int skip = 0;
   int take = 10;
 
   var filterValue = 'Show All';
   var filters = ['Show All', 'Show only unread', 'Mark all as read'];
 
+  bool everyThingLoaded = false;
+
   @override
   void initState() {
     super.initState();
 
     getStorage();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
+        skip += take;
+        _next();
+      }
+    });
   }
 
   @override
@@ -48,11 +61,30 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
+  Future<void> loadInitialData() async {
+    chats = await getNextPageData(page);
+    // print('load initial data $products');
+    setState(() {});
+  }
+
+  _next() async {
+    // print('next');
+    var newData = await getNextPageData(page++);
+    setState(() {
+      chats += newData;
+      if (newData.isEmpty) {
+        skip -= take;
+        skip = skip < 0 ? 0 : skip;
+        everyThingLoaded = true;
+      }
+    });
+  }
+
   Future getStorage() async {
     token = await storage.read(key: 'jwt');
     var pk = AppDefaults.jwtDecode(token);
     fetchUser(pk['sub']);
-    fetch();
+    loadInitialData();
   }
 
   Future fetchUser(int pk) async {
@@ -78,9 +110,8 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  Future<void> fetch() async {
+  Future fetch() async {
     try {
-      chats = [];
       final params = {
         'filter': filterValue,
         'keyword': searchController.text,
@@ -99,12 +130,18 @@ class _ChatPageState extends State<ChatPage> {
       );
 
       if (res.statusCode == 200) {
-        Map<Object, dynamic> dataJson = jsonDecode(res.body);
-        for (var i = 0; i < dataJson['data'].length; i++) {
-          chats.add(dataJson['data'][i]);
-        }
+        // Map<Object, dynamic> dataJson = jsonDecode(res.body);
+        // for (var i = 0; i < dataJson['data'].length; i++) {
+        //   chats.add(dataJson['data'][i]);
+        // }
+        var dataJson = jsonDecode(res.body);
 
-        setState(() {});
+        var data = [];
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          data.add(dataJson['data'][i]);
+        }
+        // print('chats $data');
+        return data;
       } else if (res.statusCode == 401) {
         if (!mounted) return;
         AppDefaults.logout(context);
@@ -155,10 +192,8 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
-  Future playLocal() async {
-    print('playing local');
-    final player = AudioPlayer();
-    player.play(AssetSource('sounds/chat.mp3'));
+  Future getNextPageData(int page) async {
+    return await fetch();
   }
 
   @override
@@ -166,6 +201,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: const Appbar(),
       body: SingleChildScrollView(
+        controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,17 +250,23 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             chats.isNotEmpty
-                ? ListView.builder(
-                    itemCount: chats.length,
+                ? InfiniteScrollList(
+                    physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    padding: const EdgeInsets.only(top: 16),
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return ConversationList(
-                        token: token ?? '',
-                        chat: chats[index],
-                      );
+                    onLoadingStart: (page) async {
+                      // List<String> newData = await getNextPageData(page);
+                      // setState(() {
+                      //   // data += newData;
+                      //   if (newData.isEmpty) {
+                      //     everyThingLoaded = true;
+                      //   }
+                      // });
                     },
+                    everythingLoaded: everyThingLoaded,
+                    children: chats
+                        .map((chat) => ListItem(
+                            token: token ?? '', account: account, chat: chat))
+                        .toList(),
                   )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -237,9 +279,54 @@ class _ChatPageState extends State<ChatPage> {
                       )
                     ],
                   ),
+            // chats.isNotEmpty
+            //     ? ListView.builder(
+            //         itemCount: chats.length,
+            //         shrinkWrap: true,
+            //         padding: const EdgeInsets.only(top: 16),
+            //         physics: const NeverScrollableScrollPhysics(),
+            //         itemBuilder: (context, index) {
+            //           return ConversationList(
+            //             token: token ?? '',
+            //             chat: chats[index],
+            //           );
+            //         },
+            //       )
+            //     : Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         crossAxisAlignment: CrossAxisAlignment.center,
+            //         children: const [
+            //           SizedBox(height: AppDefaults.margin * 6),
+            //           Text(
+            //             'No conversations found',
+            //             style: TextStyle(color: Colors.black, fontSize: 15),
+            //           )
+            //         ],
+            //       ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ListItem extends StatelessWidget {
+  final String token;
+  final Map<String, dynamic> account;
+  final Map<String, dynamic> chat;
+  const ListItem({
+    Key? key,
+    required this.token,
+    required this.account,
+    required this.chat,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ConversationList(
+      token: token,
+      account: account,
+      chat: chat,
     );
   }
 }
