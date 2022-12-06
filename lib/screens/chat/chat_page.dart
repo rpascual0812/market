@@ -140,6 +140,10 @@ class _ChatPageState extends State<ChatPage> {
         for (var i = 0; i < dataJson['data'].length; i++) {
           data.add(dataJson['data'][i]);
         }
+
+        if (data.length < take) {
+          everyThingLoaded = true;
+        }
         // print('chats $data');
         return data;
       } else if (res.statusCode == 401) {

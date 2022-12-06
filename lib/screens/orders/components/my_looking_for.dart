@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:infinite_scroll/infinite_scroll_list.dart';
 import 'package:market/screens/orders/components/my_looking_for_tile.dart';
 
 import '../../../constants/index.dart';
@@ -25,6 +26,7 @@ class MyLookingFor extends StatefulWidget {
 }
 
 class _MyLookingForState extends State<MyLookingFor> {
+  final ScrollController _scrollController = ScrollController();
   final storage = const FlutterSecureStorage();
   String? token = '';
 
@@ -34,11 +36,26 @@ class _MyLookingForState extends State<MyLookingFor> {
 
   bool includeFutureCrops = false;
 
+  bool everyThingLoaded = false;
+  int page = 0;
+  int skip = 0;
+  int take = 5;
+
   @override
   void initState() {
     super.initState();
     readStorage();
-    fetch();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
+        skip += take;
+        _next();
+      }
+    });
+
+    loadInitialData();
   }
 
   Future<void> readStorage() async {
@@ -49,10 +66,10 @@ class _MyLookingForState extends State<MyLookingFor> {
     });
   }
 
-  Future<void> fetch() async {
+  Future fetch() async {
     final token = await storage.read(key: 'jwt');
     var account = AppDefaults.jwtDecode(token);
-    orders = [];
+
     try {
       var type = ['looking_for'];
       if (includeFutureCrops) {
@@ -62,6 +79,8 @@ class _MyLookingForState extends State<MyLookingFor> {
       final params = {
         'type': type.join(','),
         'seller': account['sub'].toString(),
+        'skip': skip.toString(),
+        'take': take.toString(),
         // 'status': 'Ordered'
       };
 
@@ -77,13 +96,13 @@ class _MyLookingForState extends State<MyLookingFor> {
       );
 
       if (res.statusCode == 200) {
-        setState(() {
-          dataJson = jsonDecode(res.body);
+        dataJson = jsonDecode(res.body);
+        var data = [];
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          data.add(dataJson['data'][i]);
+        }
 
-          for (var i = 0; i < dataJson['data'].length; i++) {
-            orders.add(dataJson['data'][i]);
-          }
-        });
+        return data;
       }
       // else if (res.statusCode == 401) {
       //   if (!mounted) return;
@@ -98,9 +117,33 @@ class _MyLookingForState extends State<MyLookingFor> {
     }
   }
 
+  Future<void> loadInitialData() async {
+    orders = await getNextPageData(page);
+    // print('load initial data $products');
+    setState(() {});
+  }
+
+  Future getNextPageData(int page) async {
+    return await fetch();
+  }
+
+  _next() async {
+    // print('next');
+    var newData = await getNextPageData(page++);
+    setState(() {
+      orders += newData;
+      if (newData.isEmpty) {
+        skip -= take;
+        skip = skip < 0 ? 0 : skip;
+        everyThingLoaded = true;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: _scrollController,
       child: Column(
         children: [
           const SizedBox(height: 5),
@@ -142,34 +185,84 @@ class _MyLookingForState extends State<MyLookingFor> {
             physics: const BouncingScrollPhysics(),
             child: Visibility(
               visible: orders.isNotEmpty ? true : false,
-              child: ListView.builder(
-                itemCount: orders.length,
+              child: InfiniteScrollList(
+                physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 16),
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return MyLookingForTile(
-                    token: token!,
-                    order: orders[index],
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ProductPage(
-                            productPk: orders[index]['pk'],
-                          ),
-                        ),
-                      );
-                    },
-                    refresh: () {
-                      fetch();
-                    },
-                  );
-                },
+                onLoadingStart: (page) async {},
+                everythingLoaded: everyThingLoaded,
+                children: orders
+                    .map(
+                      (order) => ListItem(
+                        token: token!,
+                        order: order,
+                        refresh: () {
+                          _next();
+                        },
+                      ),
+                    )
+                    .toList(),
               ),
+              // child: ListView.builder(
+              //   itemCount: orders.length,
+              //   shrinkWrap: true,
+              //   padding: const EdgeInsets.only(top: 16),
+              //   physics: const NeverScrollableScrollPhysics(),
+              //   itemBuilder: (context, index) {
+              //     return MyLookingForTile(
+              //       token: token!,
+              //       order: orders[index],
+              //       onTap: () {
+              //         Navigator.of(context).push(
+              //           MaterialPageRoute(
+              //             builder: (context) => ProductPage(
+              //               productPk: orders[index]['pk'],
+              //             ),
+              //           ),
+              //         );
+              //       },
+              //       refresh: () {
+              //         fetch();
+              //       },
+              //     );
+              //   },
+              // ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class ListItem extends StatelessWidget {
+  final String token;
+  final Map<String, dynamic> order;
+  final void Function()? refresh;
+
+  const ListItem({
+    Key? key,
+    required this.token,
+    required this.order,
+    this.refresh,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MyLookingForTile(
+      token: token,
+      order: order,
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ProductPage(
+              productPk: order['pk'],
+            ),
+          ),
+        );
+      },
+      refresh: () {
+        refresh!();
+      },
     );
   }
 }

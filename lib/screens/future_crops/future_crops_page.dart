@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll/infinite_scroll_list.dart';
 import 'package:intl/intl.dart';
 import 'package:market/components/future_crops_page_tile.dart';
 import 'package:market/constants/app_colors.dart';
@@ -24,6 +25,8 @@ class FutureCropsPage extends StatefulWidget {
 }
 
 class _FutureCropsPageState extends State<FutureCropsPage> {
+  final ScrollController _scrollController = ScrollController();
+
   // late List<Order> orders = [];
   bool isLoading = false;
 
@@ -55,6 +58,11 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
     {'name': 'December', 'selected': false},
   ];
 
+  bool everyThingLoaded = false;
+  int page = 0;
+  int skip = 0;
+  int take = 5;
+
   @override
   void initState() {
     isLoading = true;
@@ -66,7 +74,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
       }
     }
 
-    getProducts();
+    _scrollController.addListener(() {
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
+        skip += take;
+        _next();
+      }
+    });
+
+    loadInitialData();
   }
 
   @override
@@ -76,7 +93,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
     super.dispose();
   }
 
-  Future<void> getProducts() async {
+  Future fetch() async {
     try {
       // products = [];
 
@@ -89,20 +106,23 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
           }));
         }
       }
-      products = [];
+      // products = [];
       var res = await Remote.get('products', {
         'type': 'future_crop',
         'year': yearController.text,
         'months': monthsArr.toString(),
+        'skip': skip.toString(),
+        'take': take.toString()
       });
       // print('res $res');
       if (res.statusCode == 200) {
-        setState(() {
-          dataJson = jsonDecode(res.body);
-          for (var i = 0; i < dataJson['data'].length; i++) {
-            products.add(dataJson['data'][i]);
-          }
-        });
+        dataJson = jsonDecode(res.body);
+        var data = [];
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          data.add(dataJson['data'][i]);
+        }
+
+        return data;
       } else if (res.statusCode == 401) {
         if (!mounted) return;
         AppDefaults.logout(context);
@@ -131,6 +151,29 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
             )));
   }
 
+  Future<void> loadInitialData() async {
+    products = await getNextPageData(page);
+    // print('load initial data $products');
+    setState(() {});
+  }
+
+  Future getNextPageData(int page) async {
+    return await fetch();
+  }
+
+  _next() async {
+    // print('next');
+    var newData = await getNextPageData(page++);
+    setState(() {
+      products += newData;
+      if (newData.isEmpty) {
+        skip -= take;
+        skip = skip < 0 ? 0 : skip;
+        everyThingLoaded = true;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -151,6 +194,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
   }
 
   Widget buildOrders() => ListView(
+        controller: _scrollController,
         // shrinkWrap: true,
         padding: EdgeInsets.zero,
         children: [
@@ -205,7 +249,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                                       1)
                                                   .toString();
 
-                                              getProducts();
+                                              loadInitialData();
                                             });
                                           },
                                         ),
@@ -236,7 +280,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                                       1)
                                                   .toString();
 
-                                              getProducts();
+                                              loadInitialData();
                                             });
                                           },
                                         ),
@@ -265,7 +309,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                                   months[index]['selected'] =
                                                       !months[index]
                                                           ['selected'];
-                                                  getProducts();
+                                                  loadInitialData();
                                                 });
                                               },
                                               style: TextButton.styleFrom(
@@ -317,28 +361,73 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                     )
                   ],
                 )
-              : ListView(
+              : InfiniteScrollList(
+                  physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  children: List.generate(
-                      products.isNotEmpty ? dataJson['data'].length : 0,
-                      (index) {
-                    return FutureCropsPageTile(
-                      token: widget.token,
-                      account: widget.account,
-                      product: products[index],
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ProductPage(
-                              productPk: products[index]['pk'],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  }),
-                ),
+                  onLoadingStart: (page) async {},
+                  everythingLoaded: everyThingLoaded,
+                  children: products
+                      .map(
+                        (product) => ListItem(
+                          token: widget.token,
+                          account: widget.account,
+                          product: product,
+                        ),
+                      )
+                      .toList(),
+                )
+          // ListView(
+          //     shrinkWrap: true,
+          //     physics: const ClampingScrollPhysics(),
+          //     children: List.generate(
+          //         products.isNotEmpty ? dataJson['data'].length : 0,
+          //         (index) {
+          //       return FutureCropsPageTile(
+          //         token: widget.token,
+          //         account: widget.account,
+          //         product: products[index],
+          //         onTap: () {
+          //           Navigator.of(context).push(
+          //             MaterialPageRoute(
+          //               builder: (context) => ProductPage(
+          //                 productPk: products[index]['pk'],
+          //               ),
+          //             ),
+          //           );
+          //         },
+          //       );
+          //     }),
+          //   ),
         ],
       );
+}
+
+class ListItem extends StatelessWidget {
+  final String token;
+  final Map<String, dynamic> account;
+  final Map<String, dynamic> product;
+  const ListItem({
+    Key? key,
+    required this.token,
+    required this.account,
+    required this.product,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureCropsPageTile(
+      token: token,
+      account: account,
+      product: product,
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ProductPage(
+              productPk: product['pk'],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
