@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll/infinite_scroll_list.dart';
+import 'package:market/screens/profile/components/follower_list_tile.dart';
 
 import '../../../constants/index.dart';
-import 'follower_list_tile.dart';
 
 class FollowerList extends StatefulWidget {
   const FollowerList({Key? key, required this.userPk, required this.token})
@@ -18,17 +19,22 @@ class FollowerList extends StatefulWidget {
 
 class FollowerListState extends State<FollowerList>
     with SingleTickerProviderStateMixin {
+  final ScrollController _scrollController = ScrollController();
   static const IconData close = IconData(0xe16a, fontFamily: 'MaterialIcons');
   AnimationController? controller;
   Animation<double>? scaleAnimation;
 
   List followers = [];
 
+  bool everyThingLoaded = false;
+  int page = 0;
+  int skip = 0;
+  int take = 10;
+
   @override
   void initState() {
     super.initState();
 
-    fetch();
     controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
     scaleAnimation =
@@ -39,26 +45,68 @@ class FollowerListState extends State<FollowerList>
     });
 
     controller!.forward();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
+        skip += take;
+        _next();
+      }
+    });
+
+    loadInitialData();
   }
 
   Future fetch() async {
     try {
       final user = AppDefaults.jwtDecode(widget.token);
-      var res = await Remote.get('users/${widget.userPk}/followers',
-          {'account_pk': user != null ? user['sub'].toString() : '0'});
+      var res = await Remote.get('users/${widget.userPk}/followers', {
+        'account_pk': user != null ? user['sub'].toString() : '0',
+        'skip': skip.toString(),
+        'take': take.toString(),
+      });
       if (res.statusCode == 200) {
-        setState(() {
-          var dataJson = json.decode(res.body);
-          for (var i = 0; i < dataJson['data'].length; i++) {
-            followers.add(dataJson['data'][i]);
-          }
-        });
+        Map<Object, dynamic> dataJson = jsonDecode(res.body);
+        var data = [];
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          data.add(dataJson['data'][i]);
+        }
+
+        if (data.length < take) {
+          everyThingLoaded = true;
+        }
+
+        return data;
       }
       // if (res.statusCode == 200) return res.body;
       return null;
     } on Exception {
       return null;
     }
+  }
+
+  Future<void> loadInitialData() async {
+    followers = await getNextPageData(page);
+    // print('load initial data $products');
+    setState(() {});
+  }
+
+  Future getNextPageData(int page) async {
+    return await fetch();
+  }
+
+  _next() async {
+    // print('next');
+    var newData = await getNextPageData(page++);
+    setState(() {
+      followers += newData;
+      if (newData.isEmpty) {
+        skip -= take;
+        skip = skip < 0 ? 0 : skip;
+        everyThingLoaded = true;
+      }
+    });
   }
 
   @override
@@ -120,20 +168,37 @@ class FollowerListState extends State<FollowerList>
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: SingleChildScrollView(
+                  controller: _scrollController,
                   child: Column(
                     children: <Widget>[
-                      ListView.builder(
-                        itemCount: followers.length,
+                      InfiniteScrollList(
+                        physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        padding: const EdgeInsets.only(top: 16),
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return FollowerListTile(
-                            follower: followers[index],
-                            onTap: () {},
-                          );
-                        },
+                        onLoadingStart: (page) async {},
+                        everythingLoaded: everyThingLoaded,
+                        children: followers
+                            .map(
+                              (follower) => ListItem(
+                                follower: follower,
+                                refresh: () {
+                                  _next();
+                                },
+                              ),
+                            )
+                            .toList(),
                       ),
+                      // ListView.builder(
+                      //   itemCount: followers.length,
+                      //   shrinkWrap: true,
+                      //   padding: const EdgeInsets.only(top: 16),
+                      //   physics: const NeverScrollableScrollPhysics(),
+                      //   itemBuilder: (context, index) {
+                      //     return FollowerListTile(
+                      //       follower: followers[index],
+                      //       onTap: () {},
+                      //     );
+                      //   },
+                      // ),
                     ],
                   ),
                 ),
@@ -142,6 +207,25 @@ class FollowerListState extends State<FollowerList>
           ),
         ),
       ),
+    );
+  }
+}
+
+class ListItem extends StatelessWidget {
+  final Map<String, dynamic> follower;
+  final void Function()? refresh;
+
+  const ListItem({
+    Key? key,
+    required this.follower,
+    this.refresh,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FollowerListTile(
+      follower: follower,
+      onTap: () {},
     );
   }
 }

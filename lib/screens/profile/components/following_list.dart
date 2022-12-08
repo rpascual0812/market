@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll/infinite_scroll_list.dart';
 import 'package:market/screens/profile/components/following_list_tile.dart';
 
 import '../../../constants/index.dart';
@@ -18,17 +19,22 @@ class FollowingList extends StatefulWidget {
 
 class FollowingListState extends State<FollowingList>
     with SingleTickerProviderStateMixin {
+  final ScrollController _scrollController = ScrollController();
   static const IconData close = IconData(0xe16a, fontFamily: 'MaterialIcons');
   AnimationController? controller;
   Animation<double>? scaleAnimation;
 
   List followings = [];
 
+  bool everyThingLoaded = false;
+  int page = 0;
+  int skip = 0;
+  int take = 10;
+
   @override
   void initState() {
     super.initState();
 
-    fetch();
     controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
     scaleAnimation =
@@ -39,26 +45,69 @@ class FollowingListState extends State<FollowingList>
     });
 
     controller!.forward();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
+        skip += take;
+        _next();
+      }
+    });
+
+    loadInitialData();
   }
 
   Future fetch() async {
     try {
       final user = AppDefaults.jwtDecode(widget.token);
-      var res = await Remote.get('users/${widget.userPk}/followings',
-          {'account_pk': user != null ? user['sub'].toString() : '0'});
+      var res = await Remote.get('users/${widget.userPk}/followings', {
+        'account_pk': user != null ? user['sub'].toString() : '0',
+        'skip': skip.toString(),
+        'take': take.toString(),
+      });
+
       if (res.statusCode == 200) {
-        setState(() {
-          var dataJson = json.decode(res.body);
-          for (var i = 0; i < dataJson['data'].length; i++) {
-            followings.add(dataJson['data'][i]);
-          }
-        });
+        Map<Object, dynamic> dataJson = jsonDecode(res.body);
+        var data = [];
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          data.add(dataJson['data'][i]);
+        }
+
+        if (data.length < take) {
+          everyThingLoaded = true;
+        }
+
+        return data;
       }
       // if (res.statusCode == 200) return res.body;
       return null;
     } on Exception {
       return null;
     }
+  }
+
+  Future<void> loadInitialData() async {
+    followings = await getNextPageData(page);
+    // print('load initial data $products');
+    setState(() {});
+  }
+
+  Future getNextPageData(int page) async {
+    return await fetch();
+  }
+
+  _next() async {
+    // print('next');
+    var newData = await getNextPageData(page++);
+    setState(() {
+      followings += newData;
+      if (newData.isEmpty) {
+        skip -= take;
+        skip = skip < 0 ? 0 : skip;
+        everyThingLoaded = true;
+      }
+    });
   }
 
   @override
@@ -117,20 +166,37 @@ class FollowingListState extends State<FollowingList>
               SizedBox(
                 height: 615,
                 child: SingleChildScrollView(
+                  controller: _scrollController,
                   child: Column(
                     children: <Widget>[
-                      ListView.builder(
-                        itemCount: followings.length,
+                      InfiniteScrollList(
+                        physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        padding: const EdgeInsets.only(top: 16),
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return FollowingListTile(
-                            following: followings[index],
-                            onTap: () {},
-                          );
-                        },
+                        onLoadingStart: (page) async {},
+                        everythingLoaded: everyThingLoaded,
+                        children: followings
+                            .map(
+                              (following) => ListItem(
+                                following: following,
+                                refresh: () {
+                                  _next();
+                                },
+                              ),
+                            )
+                            .toList(),
                       ),
+                      // ListView.builder(
+                      //   itemCount: followings.length,
+                      //   shrinkWrap: true,
+                      //   padding: const EdgeInsets.only(top: 16),
+                      //   physics: const NeverScrollableScrollPhysics(),
+                      //   itemBuilder: (context, index) {
+                      //     return FollowingListTile(
+                      //       following: followings[index],
+                      //       onTap: () {},
+                      //     );
+                      //   },
+                      // ),
                     ],
                   ),
                 ),
@@ -139,6 +205,25 @@ class FollowingListState extends State<FollowingList>
           ),
         ),
       ),
+    );
+  }
+}
+
+class ListItem extends StatelessWidget {
+  final Map<String, dynamic> following;
+  final void Function()? refresh;
+
+  const ListItem({
+    Key? key,
+    required this.following,
+    this.refresh,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FollowingListTile(
+      following: following,
+      onTap: () {},
     );
   }
 }
