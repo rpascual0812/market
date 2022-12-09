@@ -122,7 +122,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const RecentlyViewedPage(),
+                          builder: (context) =>
+                              RecentlyViewedPage(token: widget.token),
                         ),
                       );
                     }),

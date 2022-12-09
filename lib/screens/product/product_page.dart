@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:market/components/appbar.dart';
@@ -10,6 +11,7 @@ import 'package:market/screens/product/components/product_page_details.dart';
 
 import '../../components/sliders/product_slider.dart';
 import '../../constants/index.dart';
+import 'package:http/http.dart' as http;
 
 class ProductPage extends StatefulWidget {
   const ProductPage({
@@ -32,15 +34,33 @@ class _ProductPageState extends State<ProductPage> {
   void initState() {
     super.initState();
     readStorage();
-    fetch();
   }
 
   Future<void> readStorage() async {
     final all = await storage.read(key: 'jwt');
 
-    setState(() {
-      token = all;
-    });
+    token = all;
+    fetch();
+    seen();
+  }
+
+  Future seen() async {
+    try {
+      final url =
+          Uri.parse('${dotenv.get('API')}/products/${widget.productPk}/seen');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      await http.post(url, headers: headers);
+
+      await Remote.post('products/${widget.productPk}/seen', {});
+    } on Exception catch (exception) {
+      log('exception $exception');
+    } catch (error) {
+      log('error $error');
+    }
   }
 
   Future fetch() async {
