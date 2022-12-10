@@ -2,14 +2,16 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:infinite_scroll/infinite_scroll_list.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/index.dart';
 
 import 'package:market/models/order.dart';
+import 'package:market/screens/search/components/search_producer_tile.dart';
 import 'package:market/screens/search/components/search_product_tile.dart';
 
 import '../product/product_page.dart';
-import 'components/search_producer_tile.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -19,6 +21,11 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  final storage = const FlutterSecureStorage();
+  String? token = '';
+
   var filterValue = 'All';
   TextEditingController searchController = TextEditingController();
 
@@ -29,25 +36,56 @@ class _SearchPageState extends State<SearchPage> {
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
 
+  bool everyThingLoaded = false;
+  int page = 0;
+  int skip = 0;
+  int take = 5;
+
   @override
   void initState() {
     super.initState();
-    fetch();
+    readStorage();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
+        skip += take;
+        _next();
+      }
+    });
+
+    loadInitialData();
   }
 
-  Future<void> fetch() async {
+  Future<void> readStorage() async {
+    final all = await storage.read(key: 'jwt');
+
+    token = all;
+  }
+
+  Future fetch() async {
     try {
-      var res = await Remote.get('products',
-          {'keyword': searchController.text, 'filter': filterValue});
+      var res =
+          await Remote.get(filterValue == 'Shops' ? 'sellers' : 'products', {
+        'keyword': searchController.text,
+        'filter': filterValue,
+        'skip': skip.toString(),
+        'take': take.toString(),
+      });
       // print('res $res');
       if (res.statusCode == 200) {
-        setState(() {
-          products = [];
-          dataJson = jsonDecode(res.body);
-          for (var i = 0; i < dataJson['data'].length; i++) {
-            products.add(dataJson['data'][i]);
-          }
-        });
+        Map<Object, dynamic> dataJson = jsonDecode(res.body);
+        var data = [];
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          data.add(dataJson['data'][i]);
+        }
+
+        if (data.length < take) {
+          everyThingLoaded = true;
+        }
+
+        return data;
       } else if (res.statusCode == 401) {
         if (!mounted) return;
         AppDefaults.logout(context);
@@ -66,10 +104,34 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
+  Future<void> loadInitialData() async {
+    products = await getNextPageData(page);
+    // print('load initial data $products');
+    setState(() {});
+  }
+
+  Future getNextPageData(int page) async {
+    return await fetch();
+  }
+
+  _next() async {
+    // print('next');
+    var newData = await getNextPageData(page++);
+    setState(() {
+      products += newData;
+      if (newData.isEmpty) {
+        skip -= take;
+        skip = skip < 0 ? 0 : skip;
+        everyThingLoaded = true;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +145,7 @@ class _SearchPageState extends State<SearchPage> {
                     child: SizedBox(
                       child: TextFormField(
                         controller: searchController,
-                        onChanged: (value) => fetch(),
+                        onChanged: (value) => loadInitialData(),
                         decoration: InputDecoration(
                           hintText: "Search...",
                           hintStyle: TextStyle(
@@ -132,7 +194,7 @@ class _SearchPageState extends State<SearchPage> {
                     onPressed: () {
                       setState(() {
                         filterValue = 'All';
-                        fetch();
+                        loadInitialData();
                       });
                     },
                     style: TextButton.styleFrom(
@@ -165,7 +227,7 @@ class _SearchPageState extends State<SearchPage> {
                     onPressed: () {
                       setState(() {
                         filterValue = 'Location';
-                        fetch();
+                        loadInitialData();
                       });
                     },
                     style: TextButton.styleFrom(
@@ -198,7 +260,7 @@ class _SearchPageState extends State<SearchPage> {
                     onPressed: () {
                       setState(() {
                         filterValue = 'Products';
-                        fetch();
+                        loadInitialData();
                       });
                     },
                     style: TextButton.styleFrom(
@@ -223,7 +285,7 @@ class _SearchPageState extends State<SearchPage> {
                     onPressed: () {
                       setState(() {
                         filterValue = 'Shops';
-                        fetch();
+                        loadInitialData();
                       });
                     },
                     style: TextButton.styleFrom(
@@ -245,42 +307,78 @@ class _SearchPageState extends State<SearchPage> {
             ),
             Visibility(
               visible: products.isNotEmpty ? true : false,
-              child: ListView.builder(
-                  itemCount: products.length,
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.only(top: 16),
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return filterValue == 'Shops'
-                        ? SearchProducerTile(
-                            product: products[index],
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ProductPage(
-                                    productPk: products[index]['pk'],
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                        : SearchProductTile(
-                            product: products[index],
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ProductPage(
-                                    productPk: products[index]['pk'],
-                                  ),
-                                ),
-                              );
-                            },
+              child: InfiniteScrollList(
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                onLoadingStart: (page) async {},
+                everythingLoaded: everyThingLoaded,
+                children: products
+                    .map(
+                      (product) => ListItem(
+                        token: token!,
+                        product: product,
+                        filterValue: filterValue,
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ProductPage(
+                                productPk: product['pk'],
+                              ),
+                            ),
                           );
-                  }),
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+class ListItem extends StatelessWidget {
+  final String token;
+  final Map<String, dynamic> product;
+  final String filterValue;
+  final void Function()? onTap;
+
+  const ListItem({
+    Key? key,
+    required this.token,
+    required this.product,
+    required this.filterValue,
+    this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return filterValue == 'Shops'
+        ? SearchProducerTile(
+            user: product['user'],
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ProductPage(
+                    productPk: product['pk'],
+                  ),
+                ),
+              );
+            },
+          )
+        : SearchProductTile(
+            product: product,
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ProductPage(
+                    productPk: product['pk'],
+                  ),
+                ),
+              );
+            },
+          );
   }
 }

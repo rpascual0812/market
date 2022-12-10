@@ -8,11 +8,11 @@ import '../../../components/network_image.dart';
 class SearchProducerTile extends StatefulWidget {
   const SearchProducerTile({
     Key? key,
-    required this.product,
+    required this.user,
     this.onTap,
   }) : super(key: key);
 
-  final Map<String, dynamic> product;
+  final Map<String, dynamic> user;
   final void Function()? onTap;
 
   @override
@@ -27,16 +27,18 @@ class _SearchProducerTileState extends State<SearchProducerTile> {
 
   @override
   Widget build(BuildContext context) {
-    var userImage = '${dotenv.get('API')}/assets/images/user.jpg';
-    if (widget.product['user_document'] != null) {
-      userImage = AppDefaults.userImage(widget.product['user_document']);
+    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    if (widget.user['seller']['seller_document'] != null) {
+      userImage = AppDefaults.userImage(widget.user['user_document']);
     }
 
     var sellerAddress = {};
-    if (widget.product['seller_addresses'] != null) {
-      for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
-        if (widget.product['seller_addresses'][i]['default']) {
-          sellerAddress = widget.product['seller_addresses'][i];
+    if (widget.user['seller']['seller_addresses'] != null) {
+      for (var i = 0;
+          i < widget.user['seller']['seller_addresses'].length;
+          i++) {
+        if (widget.user['seller']['seller_addresses'][i]['default']) {
+          sellerAddress = widget.user['seller']['seller_addresses'][i];
         }
       }
     }
@@ -86,7 +88,7 @@ class _SearchProducerTileState extends State<SearchProducerTile> {
                                             ),
                                           ),
                                           Positioned(
-                                            top: 15,
+                                            top: 0,
                                             left: 75,
                                             child: Column(
                                               mainAxisAlignment:
@@ -100,10 +102,10 @@ class _SearchProducerTileState extends State<SearchProducerTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 200,
                                                     height: 18,
                                                     child: Text(
-                                                      '${widget.product['user']['first_name']} ${widget.product['user']['last_name']}',
+                                                      '${widget.user['first_name']} ${widget.user['last_name']}',
                                                       style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
@@ -112,13 +114,14 @@ class _SearchProducerTileState extends State<SearchProducerTile> {
                                                     ),
                                                   ),
                                                 ),
+                                                const SizedBox(height: 2),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.all(0),
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 200,
                                                     height: 16,
                                                     child: Row(
                                                       children: [

@@ -34,10 +34,12 @@ class _SearchProductTileState extends State<SearchProductTile> {
     }
 
     var sellerAddress = {};
-    if (widget.product['seller_addresses'] != null) {
-      for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
-        if (widget.product['seller_addresses'][i]['default']) {
-          sellerAddress = widget.product['seller_addresses'][i];
+    if (widget.product['user']['seller']['seller_address'] != null) {
+      for (var i = 0;
+          i < widget.product['user']['seller']['seller_address'].length;
+          i++) {
+        if (widget.product['user']['seller']['seller_address'][i]['default']) {
+          sellerAddress = widget.product['user']['seller']['seller_address'][i];
         }
       }
     }
@@ -101,7 +103,7 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 200,
                                                     height: 18,
                                                     child: Text(
                                                       widget.product['name'] ??
@@ -120,7 +122,7 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                                   child: Container(
                                                     alignment:
                                                         Alignment.centerLeft,
-                                                    width: 150,
+                                                    width: 200,
                                                     height: 16,
                                                     child: Row(
                                                       children: [
@@ -149,7 +151,7 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                             ),
                                           ),
                                           Positioned(
-                                            top: 15,
+                                            top: 0,
                                             right: 0,
                                             child: Container(
                                               width: 100.0,
@@ -172,7 +174,10 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                                         .zero, // and this
                                                   ),
                                                   child: Text(
-                                                    '${widget.product['country']['currency_symbol']}${double.parse(widget.product['price_from']).toStringAsFixed(2)}',
+                                                    widget.product['country'] !=
+                                                            null
+                                                        ? '${widget.product['country']['currency_symbol']}${double.parse(widget.product['price_from']).toStringAsFixed(2)}'
+                                                        : '',
                                                     style: const TextStyle(
                                                       fontFamily: '',
                                                       fontSize: 10,
