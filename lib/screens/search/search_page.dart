@@ -81,7 +81,7 @@ class _SearchPageState extends State<SearchPage> {
           data.add(dataJson['data'][i]);
         }
 
-        if (data.length < take) {
+        if (data.length <= take) {
           everyThingLoaded = true;
         }
 

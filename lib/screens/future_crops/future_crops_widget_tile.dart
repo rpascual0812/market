@@ -29,6 +29,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
   Widget build(BuildContext context) {
     // var userImage =
     //     '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
+
     var userImage = '${dotenv.get('API')}/assets/images/user.png';
     for (var i = 0; i < widget.product['user_document'].length; i++) {
       if (widget.product['user_document'][i]['document']['path'] != null &&
@@ -41,7 +42,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
     DateTime date = DateTime.parse(widget.product['date_created'].toString());
 
     var userAddress = {};
-    if (widget.product['user_addresses'] != null) {
+    if (widget.product['user_addresses'].length > 0) {
       var defaultFound = false;
       for (var i = 0; i < widget.product['user_addresses'].length; i++) {
         if (widget.product['user_addresses'][i]['default']) {
@@ -56,7 +57,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
     }
 
     var sellerAddress = {};
-    if (widget.product['seller_addresses'] != null) {
+    if (widget.product['seller_addresses'].length > 0) {
       var defaultFound = false;
       for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
         if (widget.product['seller_addresses'][i]['default']) {
@@ -66,7 +67,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
       }
 
       if (!defaultFound) {
-        userAddress = widget.product['seller_addresses'][0];
+        sellerAddress = widget.product['seller_addresses'][0];
       }
     }
 
@@ -80,7 +81,6 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
     }
     var location = '$city $province';
 
-    // print('111 ${widget.product['date_created']}');
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.41,
       height: 125,
@@ -153,7 +153,8 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                         children: [
                                           Text(
                                             widget.product['user']
-                                                ['first_name'],
+                                                    ['first_name'] ??
+                                                '',
                                             style: const TextStyle(
                                               fontSize:
                                                   AppDefaults.fontSize - 3,
@@ -168,7 +169,9 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                                 // color: Colors.grey,
                                               ),
                                               Text(
-                                                location.substring(0, 25),
+                                                location.length >= 23
+                                                    ? location.substring(0, 23)
+                                                    : location,
                                                 style: const TextStyle(
                                                   fontSize:
                                                       AppDefaults.fontSize - 5,
@@ -238,59 +241,8 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                             ),
                           ),
                         )
-
-                        // SizedBox(
-                        //   height: 180,
-                        //   child: AspectRatio(
-                        //     aspectRatio: 1 / 1,
-                        //     child: Hero(
-                        //       tag: imageLink,
-                        //       child: NetworkImageWithLoader(
-                        //         imageLink,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 8),
-                        // Column(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     Text(
-                        //       name,
-                        //       style: Theme.of(context).textTheme.bodyText2,
-                        //       maxLines: 2,
-                        //     ),
-                        //     const SizedBox(height: 8),
-                        //     Text(
-                        //       // '\$${product.toInt()}',
-                        //       product,
-                        //       style: Theme.of(context).textTheme.bodyText1,
-                        //       maxLines: 1,
-                        //     )
-                        //   ],
-                        // )
                       ],
                     ),
-
-                    /// This will show only when hasFavourite parameter is true
-                    // if (widget.hasFavourite)
-                    //   Positioned(
-                    //     top: 8,
-                    //     right: 8,
-                    //     child: Container(
-                    //       padding: const EdgeInsets.all(8.0),
-                    //       decoration: const BoxDecoration(
-                    //         shape: BoxShape.circle,
-                    //         color: Colors.white,
-                    //       ),
-                    //       child: Icon(
-                    //         widget.isFavourite
-                    //             ? IconlyBold.heart
-                    //             : IconlyLight.heart,
-                    //         color: Colors.red,
-                    //       ),
-                    //     ),
-                    //   ),
                   ],
                 ),
               ),

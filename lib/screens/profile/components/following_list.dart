@@ -74,9 +74,11 @@ class FollowingListState extends State<FollowingList>
           data.add(dataJson['data'][i]);
         }
 
-        if (data.length < take) {
-          everyThingLoaded = true;
-        }
+        setState(() {
+          if (data.length <= take) {
+            everyThingLoaded = true;
+          }
+        });
 
         return data;
       }
@@ -169,22 +171,35 @@ class FollowingListState extends State<FollowingList>
                   controller: _scrollController,
                   child: Column(
                     children: <Widget>[
-                      InfiniteScrollList(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        onLoadingStart: (page) async {},
-                        everythingLoaded: everyThingLoaded,
-                        children: followings
-                            .map(
-                              (following) => ListItem(
-                                following: following,
-                                refresh: () {
-                                  _next();
-                                },
-                              ),
+                      followings.isEmpty
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: const [
+                                SizedBox(height: 100),
+                                Text(
+                                  'No followings found',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15),
+                                )
+                              ],
                             )
-                            .toList(),
-                      ),
+                          : InfiniteScrollList(
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              onLoadingStart: (page) async {},
+                              everythingLoaded: everyThingLoaded,
+                              children: followings
+                                  .map(
+                                    (following) => ListItem(
+                                      following: following,
+                                      refresh: () {
+                                        _next();
+                                      },
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
                       // ListView.builder(
                       //   itemCount: followings.length,
                       //   shrinkWrap: true,

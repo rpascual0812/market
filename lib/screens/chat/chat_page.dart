@@ -141,7 +141,7 @@ class _ChatPageState extends State<ChatPage> {
           data.add(dataJson['data'][i]);
         }
 
-        if (data.length < take) {
+        if (data.length <= take) {
           everyThingLoaded = true;
         }
         // print('chats $data');

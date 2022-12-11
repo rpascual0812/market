@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:market/screens/approot/app_root.dart';
+import 'package:market/screens/future_crops/future_crops_widget_tile.dart';
+import 'package:market/screens/product/product_page.dart';
 import '../../components/section_divider_title.dart';
 import '../../constants/index.dart';
-import 'future_crops_widget_tile.dart';
 // import '../../product/product_page.dart';
-import 'package:market/screens/product/product_page.dart';
 
 class FutureCropsWidget extends StatefulWidget {
   const FutureCropsWidget({
@@ -116,28 +116,35 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
                   );
                 },
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(
-                      dataJson['data'] != null ? dataJson['data'].length : 0,
-                      (index) {
-                    return FutureCropsWidgetTile(
-                      product: products[index],
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ProductPage(
-                              productPk: products[index]['pk'],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  }),
-                ),
-              ),
+              products.isNotEmpty
+                  ? SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(
+                          dataJson['data'] != null
+                              ? dataJson['data'].length
+                              : 0,
+                          (index) {
+                            return FutureCropsWidgetTile(
+                              product: products[index] ?? [],
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductPage(
+                                      productPk: products.isEmpty
+                                          ? 0
+                                          : products[index]['pk'],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  : const Text('List is empty'),
               const SizedBox(
                 height: AppDefaults.height / 4,
               )

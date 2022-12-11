@@ -67,7 +67,7 @@ class _RecentlyViewedPageState extends State<RecentlyViewedPage> {
           data.add(dataJson['data'][i]);
         }
 
-        if (data.length < take) {
+        if (data.length <= take) {
           everyThingLoaded = true;
         }
 
