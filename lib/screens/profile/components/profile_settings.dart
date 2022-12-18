@@ -173,7 +173,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const TermsPage(),
+                          builder: (context) =>
+                              const TermsPage(location: 'settings'),
                         ),
                       );
                     }),

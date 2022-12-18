@@ -1103,7 +1103,8 @@ class _SignUpFormState extends State<SignUpForm> {
                                   if (accept) {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (context) => const TermsPage(),
+                                        builder: (context) =>
+                                            const TermsPage(location: 'signup'),
                                       ),
                                     );
                                   }

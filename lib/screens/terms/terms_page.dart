@@ -1,5 +1,7 @@
 // import 'dart:html';
 
+import 'dart:convert';
+
 import 'package:animations/animations.dart';
 import 'package:market/components/appbar.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +12,9 @@ import 'package:accordion/controllers.dart';
 import '../../constants/index.dart';
 
 class TermsPage extends StatefulWidget {
-  const TermsPage({
-    Key? key,
-    // this.backButton,
-  }) : super(key: key);
+  const TermsPage({Key? key, required this.location}) : super(key: key);
+
+  final String location;
 
   // final Widget? backButton;
   @override
@@ -28,9 +29,46 @@ class _TermsPageState extends State<TermsPage> {
   final _loremIpsum =
       '''Lorem ipsum is typically a corrupted version of 'De finibus bonorum et malorum', a 1st century BC text by the Roman statesman and philosopher Cicero, with words altered, added, and removed to make it nonsensical and improper Latin.''';
 
+  Map<String, dynamic> disclaimer = {};
+  Map<String, dynamic> legal = {};
+  Map<String, dynamic> terms = {};
+
   @override
   void initState() {
     super.initState();
+
+    fetch();
+  }
+
+  Future fetch() async {
+    try {
+      var res = await Remote.get('configuration', {
+        'group': 'agreement',
+      });
+
+      if (res.statusCode == 200) {
+        var dataJson = jsonDecode(res.body);
+        var data = [];
+
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          if (dataJson['data'][i]['name'] == 'disclaimer') {
+            disclaimer = dataJson['data'][i];
+          } else if (dataJson['data'][i]['name'] == 'legal') {
+            legal = dataJson['data'][i];
+          } else if (dataJson['data'][i]['name'] == 'terms') {
+            terms = dataJson['data'][i];
+          }
+        }
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+      }
+      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
   }
 
   @override
@@ -71,7 +109,8 @@ class _TermsPageState extends State<TermsPage> {
                       headerBackgroundColor: Colors.white,
                       headerBackgroundColorOpened: AppColors.primary,
                       header: const Text('Disclaimer'),
-                      content: Text(_loremIpsum, style: _contentStyle),
+                      content:
+                          Text(disclaimer['value'] ?? '', style: _contentStyle),
                       contentHorizontalPadding: 20,
                       contentBorderColor: AppColors.primary,
                     ),
@@ -80,7 +119,7 @@ class _TermsPageState extends State<TermsPage> {
                       headerBackgroundColor: Colors.white,
                       headerBackgroundColorOpened: AppColors.primary,
                       header: const Text('Legal Conditions'),
-                      content: Text(_loremIpsum, style: _contentStyle),
+                      content: Text(legal['value'] ?? '', style: _contentStyle),
                       contentHorizontalPadding: 20,
                       contentBorderColor: AppColors.primary,
                     ),
@@ -89,29 +128,32 @@ class _TermsPageState extends State<TermsPage> {
                       headerBackgroundColor: Colors.white,
                       headerBackgroundColorOpened: AppColors.primary,
                       header: const Text('Terms and Conditions'),
-                      content: Text(_loremIpsum, style: _contentStyle),
+                      content: Text(terms['value'] ?? '', style: _contentStyle),
                       contentHorizontalPadding: 20,
                       contentBorderColor: AppColors.primary,
                     ),
                   ],
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  height: AppDefaults.height,
-                  child: Padding(
-                    padding: const EdgeInsets.all(1),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(AppDefaults.radius - 10),
+                Visibility(
+                  visible: widget.location == 'settings' ? false : true,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: AppDefaults.height,
+                    child: Padding(
+                      padding: const EdgeInsets.all(1),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(AppDefaults.radius - 10),
+                          ),
                         ),
+                        child: const Text('I Agree!'),
                       ),
-                      child: const Text('I Agree!'),
                     ),
                   ),
                 ),

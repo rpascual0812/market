@@ -94,7 +94,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
 
       // userAddress = AppDefaults.userAddress(user['user_addresses']);
     }
-    print(userAddress);
+    // print(userAddress);
     // var sellerAddress = {};
     // if (user['seller_addresses'] != null) {
     //   sellerAddress = AppDefaults.sellerAddress(user['seller_addresses']);
