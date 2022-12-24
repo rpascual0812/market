@@ -56,6 +56,8 @@ class AppMessage {
         return "Your account has been updated.";
       case "PRODUCT_LOOKING_SAVED":
         return "The product you are looking for has been posted.";
+      case "FEEDBACK_SAVE":
+        return "Your feedback has been successfully sent.";
       default:
         return "SUCCESS!";
     }

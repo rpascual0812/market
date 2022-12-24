@@ -153,7 +153,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const GiveUsFeedback(),
+                          builder: (context) =>
+                              GiveUsFeedback(token: widget.token),
                         ),
                       );
                     }),

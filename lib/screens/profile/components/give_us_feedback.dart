@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:market/constants/app_colors.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:market/constants/index.dart';
 
 class GiveUsFeedback extends StatefulWidget {
-  const GiveUsFeedback({Key? key}) : super(key: key);
+  const GiveUsFeedback({
+    Key? key,
+    required this.token,
+  }) : super(key: key);
+
+  final String token;
 
   @override
   State<StatefulWidget> createState() => GiveUsFeedbackState();
@@ -13,6 +20,11 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
   static const IconData close = IconData(0xe16a, fontFamily: 'MaterialIcons');
   AnimationController? controller;
   Animation<double>? scaleAnimation;
+
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  TextEditingController messageController = TextEditingController(text: '');
+
+  var body = {'message': ''};
 
   @override
   void initState() {
@@ -30,12 +42,45 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
     controller!.forward();
   }
 
+  Future save() async {
+    if (_key.currentState!.validate()) {
+      try {
+        body = {
+          'message': messageController.text,
+        };
+
+        final url = Uri.parse('${dotenv.get('API')}/feedbacks');
+        final headers = {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${widget.token}',
+        };
+
+        var res = await http.post(url, headers: headers, body: body);
+
+        if (res.statusCode == 201) {
+          if (!mounted) return;
+          AppDefaults.toast(
+            context,
+            'success',
+            AppMessage.getSuccess('FEEDBACK_SAVE'),
+          );
+          Navigator.pop(context);
+        }
+        return null;
+      } on Exception {
+        return null;
+      }
+    } else {
+      AppDefaults.toast(context, 'error', AppMessage.getError('FORM_INVALID'));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withOpacity(0.5),
+      color: Colors.black.withOpacity(0.3),
       child: Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.5),
+        backgroundColor: Colors.black.withOpacity(0.3),
         body: Container(
           margin:
               const EdgeInsets.only(top: 100, right: 20, bottom: 0, left: 20),
@@ -90,133 +135,32 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
                   // padding: const EdgeInsets.only(
                   //     top: 10, right: 10, bottom: 0, left: 10),
                   padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                            'Please let us know how to make Farm House better for you!'),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        onTap: () async {},
-                        maxLines: 8,
-                        decoration: const InputDecoration(
-                          hintText: 'Type a message...',
-                          // prefixIcon: IconWithBackground(iconData: IconlyBold.calendar),
-                          // labelText: 'Birthday',
-                          border: OutlineInputBorder(),
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                  child: Form(
+                    key: _key,
+                    child: Column(
+                      children: [
+                        const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                              'Please let us know how to make Farm House better for you!'),
                         ),
-                      ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.end,
-                      //   crossAxisAlignment: CrossAxisAlignment.end,
-                      //   children: [
-                      //     Padding(
-                      //       // used padding just for demo purpose to separate from the appbar and the main content
-                      //       padding: const EdgeInsets.all(0),
-                      //       child: Container(
-                      //         alignment: Alignment.topCenter,
-                      //         child: Container(
-                      //           height: 50,
-                      //           padding: const EdgeInsets.all(3.5),
-                      //           width: MediaQuery.of(context).size.width,
-                      //           decoration: const BoxDecoration(
-                      //             color: Colors.grey,
-                      //             borderRadius: BorderRadius.only(
-                      //               bottomLeft: Radius.circular(12),
-                      //               bottomRight: Radius.circular(12),
-                      //             ),
-                      //           ),
-                      //           child: Row(
-                      //             children: <Widget>[
-                      //               Expanded(
-                      //                 child: InkWell(
-                      //                   onTap: () {},
-                      //                   child: Container(
-                      //                     alignment: Alignment.center,
-                      //                     decoration: const BoxDecoration(
-                      //                       // color: Colors.white,
-                      //                       borderRadius: BorderRadius.only(
-                      //                         bottomLeft: Radius.circular(12),
-                      //                         topLeft: Radius.circular(12),
-                      //                       ),
-                      //                     ),
-                      //                     child: const Text(
-                      //                       "Cancel",
-                      //                       style: TextStyle(
-                      //                         color: Colors.blue,
-                      //                         fontSize: 17,
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //               Expanded(
-                      //                 child: InkWell(
-                      //                   onTap: () {},
-                      //                   child: Container(
-                      //                     alignment: Alignment.center,
-                      //                     child: const Text(
-                      //                       "Send",
-                      //                       style: TextStyle(
-                      //                           color: Colors.white,
-                      //                           fontSize: 17),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //               )
-                      //             ],
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     // OutlinedButton(
-                      //     //   onPressed: () {
-                      //     //     Navigator.of(context, rootNavigator: true)
-                      //     //         .pop('dialog');
-                      //     //   },
-                      //     //   style: OutlinedButton.styleFrom(
-                      //     //     shape: RoundedRectangleBorder(
-                      //     //       borderRadius: BorderRadius.circular(18.0),
-                      //     //     ),
-                      //     //     side: const BorderSide(
-                      //     //       width: 2,
-                      //     //       color: Colors.grey,
-                      //     //     ),
-                      //     //   ),
-                      //     //   child: const Text(
-                      //     //     'Cancel',
-                      //     //     style: TextStyle(
-                      //     //       color: AppColors.secondary,
-                      //     //     ),
-                      //     //   ),
-                      //     // ),
-                      //     // const SizedBox(width: 5),
-                      //     // OutlinedButton(
-                      //     //   onPressed: () {},
-                      //     //   style: OutlinedButton.styleFrom(
-                      //     //     shape: RoundedRectangleBorder(
-                      //     //       borderRadius: BorderRadius.circular(18.0),
-                      //     //     ),
-                      //     //     side: const BorderSide(
-                      //     //       width: 2,
-                      //     //       color: Colors.grey,
-                      //     //     ),
-                      //     //   ),
-                      //     //   child: const Text(
-                      //     //     'Send',
-                      //     //     style: TextStyle(
-                      //     //       color: Colors.grey,
-                      //     //     ),
-                      //     //   ),
-                      //     // ),
-                      //   ],
-                      // ),
-                    ],
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: messageController,
+                          onTap: () async {},
+                          maxLines: 8,
+                          decoration: const InputDecoration(
+                            hintText: 'Type a message...',
+                            // prefixIcon: IconWithBackground(iconData: IconlyBold.calendar),
+                            // labelText: 'Birthday',
+                            border: OutlineInputBorder(),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -259,7 +203,10 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
                             children: <Widget>[
                               Expanded(
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop('dialog');
+                                  },
                                   child: Container(
                                     alignment: Alignment.center,
                                     decoration: const BoxDecoration(
@@ -281,7 +228,10 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
                               ),
                               Expanded(
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () async {
+                                    var data = await save();
+                                    if (data != null) {}
+                                  },
                                   child: Container(
                                     alignment: Alignment.center,
                                     child: const Text(
