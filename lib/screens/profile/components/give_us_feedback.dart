@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:market/constants/app_colors.dart';
-import 'package:market/models/follower.dart';
-import 'package:market/screens/profile/components/follower_list_tile.dart';
 
 class GiveUsFeedback extends StatefulWidget {
   const GiveUsFeedback({Key? key}) : super(key: key);
@@ -35,19 +33,19 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: Colors.black.withOpacity(0.5),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black.withOpacity(0.5),
         body: Container(
           margin:
-              const EdgeInsets.only(top: 20, right: 20, bottom: 0, left: 20),
+              const EdgeInsets.only(top: 100, right: 20, bottom: 0, left: 20),
           // padding: const EdgeInsets.all(15.0),
-          height: 300.0,
+          height: 360.0,
           decoration: ShapeDecoration(
             // color: const Color.fromRGBO(41, 167, 77, 10),
             color: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.circular(20.0),
             ),
           ),
           child: Column(
@@ -87,10 +85,11 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
                 ),
               ),
               SizedBox(
-                height: 228,
+                height: 238,
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10, right: 10, bottom: 0, left: 10),
+                  // padding: const EdgeInsets.only(
+                  //     top: 10, right: 10, bottom: 0, left: 10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     children: [
                       const Align(
@@ -103,7 +102,7 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
                       ),
                       TextField(
                         onTap: () async {},
-                        maxLines: 5,
+                        maxLines: 8,
                         decoration: const InputDecoration(
                           hintText: 'Type a message...',
                           // prefixIcon: IconWithBackground(iconData: IconlyBold.calendar),
@@ -112,54 +111,193 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop('dialog');
-                            },
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              side: const BorderSide(
-                                width: 2,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            child: const Text(
-                              'Cancel',
-                              style: TextStyle(
-                                color: AppColors.secondary,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          OutlinedButton(
-                            onPressed: () {},
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              side: const BorderSide(
-                                width: 2,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            child: const Text(
-                              'Send',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.end,
+                      //   crossAxisAlignment: CrossAxisAlignment.end,
+                      //   children: [
+                      //     Padding(
+                      //       // used padding just for demo purpose to separate from the appbar and the main content
+                      //       padding: const EdgeInsets.all(0),
+                      //       child: Container(
+                      //         alignment: Alignment.topCenter,
+                      //         child: Container(
+                      //           height: 50,
+                      //           padding: const EdgeInsets.all(3.5),
+                      //           width: MediaQuery.of(context).size.width,
+                      //           decoration: const BoxDecoration(
+                      //             color: Colors.grey,
+                      //             borderRadius: BorderRadius.only(
+                      //               bottomLeft: Radius.circular(12),
+                      //               bottomRight: Radius.circular(12),
+                      //             ),
+                      //           ),
+                      //           child: Row(
+                      //             children: <Widget>[
+                      //               Expanded(
+                      //                 child: InkWell(
+                      //                   onTap: () {},
+                      //                   child: Container(
+                      //                     alignment: Alignment.center,
+                      //                     decoration: const BoxDecoration(
+                      //                       // color: Colors.white,
+                      //                       borderRadius: BorderRadius.only(
+                      //                         bottomLeft: Radius.circular(12),
+                      //                         topLeft: Radius.circular(12),
+                      //                       ),
+                      //                     ),
+                      //                     child: const Text(
+                      //                       "Cancel",
+                      //                       style: TextStyle(
+                      //                         color: Colors.blue,
+                      //                         fontSize: 17,
+                      //                       ),
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               Expanded(
+                      //                 child: InkWell(
+                      //                   onTap: () {},
+                      //                   child: Container(
+                      //                     alignment: Alignment.center,
+                      //                     child: const Text(
+                      //                       "Send",
+                      //                       style: TextStyle(
+                      //                           color: Colors.white,
+                      //                           fontSize: 17),
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               )
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     // OutlinedButton(
+                      //     //   onPressed: () {
+                      //     //     Navigator.of(context, rootNavigator: true)
+                      //     //         .pop('dialog');
+                      //     //   },
+                      //     //   style: OutlinedButton.styleFrom(
+                      //     //     shape: RoundedRectangleBorder(
+                      //     //       borderRadius: BorderRadius.circular(18.0),
+                      //     //     ),
+                      //     //     side: const BorderSide(
+                      //     //       width: 2,
+                      //     //       color: Colors.grey,
+                      //     //     ),
+                      //     //   ),
+                      //     //   child: const Text(
+                      //     //     'Cancel',
+                      //     //     style: TextStyle(
+                      //     //       color: AppColors.secondary,
+                      //     //     ),
+                      //     //   ),
+                      //     // ),
+                      //     // const SizedBox(width: 5),
+                      //     // OutlinedButton(
+                      //     //   onPressed: () {},
+                      //     //   style: OutlinedButton.styleFrom(
+                      //     //     shape: RoundedRectangleBorder(
+                      //     //       borderRadius: BorderRadius.circular(18.0),
+                      //     //     ),
+                      //     //     side: const BorderSide(
+                      //     //       width: 2,
+                      //     //       color: Colors.grey,
+                      //     //     ),
+                      //     //   ),
+                      //     //   child: const Text(
+                      //     //     'Send',
+                      //     //     style: TextStyle(
+                      //     //       color: Colors.grey,
+                      //     //     ),
+                      //     //   ),
+                      //     // ),
+                      //   ],
+                      // ),
                     ],
                   ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                width: double.infinity,
+                height: 62,
+                decoration: BoxDecoration(
+                  color: const Color(0xffeaeaea),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                  border: Border.all(
+                    color: const Color(0xffeaeaea),
+                    width: 1,
+                    style: BorderStyle.solid,
+                  ),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  fit: StackFit.loose,
+                  clipBehavior: Clip.hardEdge,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(0),
+                      child: Container(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          height: 60,
+                          padding: const EdgeInsets.all(0),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(12),
+                              bottomRight: Radius.circular(12),
+                            ),
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: const BoxDecoration(
+                                      // color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(12),
+                                        topLeft: Radius.circular(12),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      "Cancel",
+                                      style: TextStyle(
+                                        color: AppColors.secondary,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: const Text(
+                                      "Send",
+                                      style: TextStyle(
+                                          color: Colors.black54, fontSize: 17),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ],

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/index.dart';
 
@@ -171,43 +172,22 @@ class _FaqPageState extends State<FaqPage> {
                 ),
               ),
             ),
-            // InfiniteScrollList(
-            //   physics: const NeverScrollableScrollPhysics(),
-            //   shrinkWrap: true,
-            //   onLoadingStart: (page) async {},
-            //   everythingLoaded: everyThingLoaded,
-            //   children: faqs
-            //       .map(
-            //         (faq) => ListItem(faq: faq),
-            //       )
-            //       .toList(),
-            // ),
-            Accordion(
-              maxOpenSections: 1,
-              headerBackgroundColorOpened: Colors.black54,
-              scaleWhenAnimating: true,
-              openAndCloseAnimation: true,
-              headerPadding:
-                  const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
-              sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
-              sectionClosingHapticFeedback: SectionHapticFeedback.light,
-              children: [
-                for (var faq in faqs)
-                  AccordionSection(
-                    isOpen: true,
-                    // leftIcon: const Icon(Icons.insights_rounded,
-                    //     color: Colors.white),
-                    headerBackgroundColor: AppColors.primary,
-                    headerBackgroundColorOpened: AppColors.primary,
-                    header: Text(faq['question']),
-                    content: Text(faq['answer']),
-                    contentHorizontalPadding: 20,
-                    contentBorderWidth: 1,
-                    // onOpenSection: () => print('onOpenSection ...'),
-                    // onCloseSection: () => print('onCloseSection ...'),
-                  ),
-              ],
-            ),
+            const SizedBox(height: 50),
+            for (var faq in faqs)
+              GFAccordion(
+                title: faq['question'],
+                content: faq['answer'],
+                collapsedTitleBackgroundColor: Colors.white,
+                expandedTitleBackgroundColor: AppColors.primary,
+                titleBorder: Border.all(
+                  color: const Color(0xFF000000),
+                  width: 1,
+                  style: BorderStyle.solid,
+                ),
+                titleBorderRadius: const BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
           ],
         ),
       ),
