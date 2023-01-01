@@ -82,6 +82,7 @@ dependencies:
   time_elapsed: ^0.2.6
   audioplayers: ^1.1.1
   getwidget: ^3.0.1
+  pin_code_fields: ^7.4.0
   
   
   

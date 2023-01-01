@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:market/db/market_db.dart';
 import 'package:market/models/config.dart';
+import 'package:market/screens/auth/forgot_password_page.dart';
 import '../../../components/custom_animation.dart';
 import '../../../constants/index.dart';
 import 'package:http/http.dart' as http;
@@ -159,7 +160,13 @@ class _LoginFormState extends State<LoginForm> {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ForgotPasswordPage(),
+                      ),
+                    );
+                  },
                   child: const Text(
                     'Forgot Password?',
                     style: TextStyle(
@@ -184,7 +191,7 @@ class _LoginFormState extends State<LoginForm> {
                     var username = usernameController.text;
                     var password = passwordController.text;
                     var result = await submit(username, password);
-                    print(result);
+                    // print(result);
                     if (result != null) {
                       var jwtJson = jsonDecode(result);
                       var jwt = jwtJson['user']['access_token'];

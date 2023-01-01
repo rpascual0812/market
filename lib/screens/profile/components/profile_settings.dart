@@ -164,7 +164,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const Complaint(),
+                          builder: (context) => Complaint(token: widget.token),
                         ),
                       );
                     }),
