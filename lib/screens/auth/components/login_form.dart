@@ -67,8 +67,11 @@ class _LoginFormState extends State<LoginForm> {
 
   Future submit(String username, String password) async {
     try {
-      var res = await http.post(Uri.parse('${dotenv.get('API')}/login'),
-          body: {"username": username, "password": password});
+      var res = await http.post(Uri.parse('${dotenv.get('API')}/login'), body: {
+        "username": username,
+        "password": password,
+        'role': 'end-user'
+      });
       if (res.statusCode == 200) return res.body;
       return null;
     } on Exception {

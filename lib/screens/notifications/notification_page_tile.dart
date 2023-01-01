@@ -11,13 +11,11 @@ class NotificationPageTile extends StatelessWidget {
 
   const NotificationPageTile({
     Key? key,
-    required this.message,
-    required this.read,
+    required this.notification,
     this.onTap,
   }) : super(key: key);
 
-  final String message;
-  final bool read;
+  final Map<String, dynamic> notification;
   final void Function()? onTap;
 
   @override
@@ -80,12 +78,12 @@ class NotificationPageTile extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          message,
+                                          notification['details'],
                                           style: TextStyle(
                                               fontSize:
                                                   AppDefaults.fontSize + 2,
                                               color: AppColors.defaultBlack,
-                                              fontWeight: read
+                                              fontWeight: notification['read']
                                                   ? FontWeight.normal
                                                   : FontWeight.bold),
                                         ),

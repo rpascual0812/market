@@ -49,7 +49,7 @@ class SendCodeForm extends StatefulWidget {
 
 class _SendCodeFormState extends State<SendCodeForm> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final emailController = TextEditingController(text: 'rpascual0812@gmail.com');
+  final emailController = TextEditingController(text: '');
   String errorMessage = '';
   bool isLoading = false;
   bool sent = false;
