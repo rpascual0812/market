@@ -7,13 +7,11 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/constants/index.dart';
-import 'package:market/screens/producer/producer_page/producer_page.dart';
-import 'package:market/screens/producer/producer_profile/producer_profile.dart';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:http/http.dart' as http;
 
-class Bubble extends StatefulWidget {
-  const Bubble({
+class ModeratorBubble extends StatefulWidget {
+  const ModeratorBubble({
     Key? key,
     required this.userPk,
     required this.token,
@@ -23,10 +21,10 @@ class Bubble extends StatefulWidget {
   final String token;
 
   @override
-  State<Bubble> createState() => _BubbleState();
+  State<ModeratorBubble> createState() => _ModeratorBubbleState();
 }
 
-class _BubbleState extends State<Bubble> {
+class _ModeratorBubbleState extends State<ModeratorBubble> {
   final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
 
   var chatId = '';
@@ -84,7 +82,7 @@ class _BubbleState extends State<Bubble> {
 
   Future fetchChat() async {
     try {
-      final params = {'type': 'chat'};
+      final params = {'type': 'support'};
       final url = Uri.parse('${dotenv.get('API')}/chats/user/${widget.userPk}')
           .replace(queryParameters: params);
       final headers = {
@@ -98,7 +96,7 @@ class _BubbleState extends State<Bubble> {
           image = '';
           name = '';
           chat = json.decode(res.body);
-          // print('chat $chat');
+          print('chat $chat');
           readMessages();
           fetchMessages();
           initAbly();
@@ -244,8 +242,9 @@ class _BubbleState extends State<Bubble> {
             data: ablyData,
           );
 
-          ably.RealtimeChannel bubbleChannel = realtime.channels.get(chatId);
-          await bubbleChannel.publish(
+          ably.RealtimeChannel ModeratorbubbleChannel =
+              realtime.channels.get(chatId);
+          await ModeratorbubbleChannel.publish(
             name: chatId,
             data: ablyData,
           );
@@ -343,7 +342,7 @@ class _BubbleState extends State<Bubble> {
             color: AppColors.third,
             padding: const EdgeInsets.only(right: 16),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 IconButton(
                   onPressed: () {
@@ -354,56 +353,12 @@ class _BubbleState extends State<Bubble> {
                     color: Colors.white,
                   ),
                 ),
-                Text(
-                  name,
-                  style: const TextStyle(
+                const Text(
+                  'Chat Support',
+                  style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Colors.white),
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.storefront,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return ProducerPage(
-                                userPk: chat['chat_participants'][0]['user']
-                                    ['pk'],
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                    // const VerticalDivider(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return ProducerProfile(
-                                token: widget.token,
-                                userPk: chat['chat_participants'][0]['user']
-                                    ['pk'],
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(image),
-                        maxRadius: 20,
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),

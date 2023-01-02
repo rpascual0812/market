@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:time_elapsed/time_elapsed.dart';
 
 import '../../constants/index.dart';
 
@@ -21,6 +22,7 @@ class NotificationPageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var date = TimeElapsed.fromDateStr(notification['date_created']);
 
     return Material(
       color: AppColors.fourth,
@@ -87,7 +89,9 @@ class NotificationPageTile extends StatelessWidget {
                                                   ? FontWeight.normal
                                                   : FontWeight.bold),
                                         ),
-                                        const Text('1d'),
+                                        Text(date == 'Now'
+                                            ? 'Just $date'
+                                            : '$date ago'),
                                       ],
                                     ),
                                     // Positioned(

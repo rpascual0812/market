@@ -115,6 +115,7 @@ class _ChatPageState extends State<ChatPage> {
       final params = {
         'filter': filterValue,
         'keyword': searchController.text,
+        'type': 'chat',
         'skip': skip.toString(),
         'take': take.toString(),
       };
