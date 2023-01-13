@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:market/components/appbar.dart';
+import 'package:http/http.dart' as http;
 
 class ModeratorStartForm extends StatefulWidget {
   const ModeratorStartForm({
@@ -28,6 +30,29 @@ class _ModeratorStartFormState extends State<ModeratorStartForm> {
     super.dispose();
   }
 
+  Future findUser() async {
+    try {
+      final params = {'type': 'support'};
+      final url = Uri.parse('${dotenv.get('API')}/chats/user/${widget.userPk}')
+          .replace(queryParameters: params);
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${widget.token}',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        setState(() {
+          widget.callback!(true);
+        });
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +66,7 @@ class _ModeratorStartFormState extends State<ModeratorStartForm> {
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
                   onPressed: () {
-                    widget.callback!(true);
+                    findUser();
                   },
                   child: const Text('Start!'),
                 ),

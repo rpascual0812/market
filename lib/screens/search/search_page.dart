@@ -169,7 +169,12 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        searchController.text = '';
+                        loadInitialData();
+                      });
+                    },
                     child: const Text('Clear'),
                   ),
                 ],

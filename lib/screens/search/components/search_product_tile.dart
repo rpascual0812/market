@@ -34,7 +34,8 @@ class _SearchProductTileState extends State<SearchProductTile> {
     }
 
     var sellerAddress = {};
-    if (widget.product['user']['seller']['seller_address'] != null) {
+    if (widget.product['user']['seller'] != null &&
+        widget.product['user']['seller']['seller_address'] != null) {
       for (var i = 0;
           i < widget.product['user']['seller']['seller_address'].length;
           i++) {

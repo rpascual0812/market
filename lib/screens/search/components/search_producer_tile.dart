@@ -28,12 +28,14 @@ class _SearchProducerTileState extends State<SearchProducerTile> {
   @override
   Widget build(BuildContext context) {
     var userImage = '${dotenv.get('API')}/assets/images/user.png';
-    if (widget.user['seller']['seller_document'] != null) {
+    if (widget.user['seller'] != null &&
+        widget.user['seller']['seller_document'] != null) {
       userImage = AppDefaults.userImage(widget.user['user_document']);
     }
 
     var sellerAddress = {};
-    if (widget.user['seller']['seller_addresses'] != null) {
+    if (widget.user['seller'] != null &&
+        widget.user['seller']['seller_addresses'] != null) {
       for (var i = 0;
           i < widget.user['seller']['seller_addresses'].length;
           i++) {

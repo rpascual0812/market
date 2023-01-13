@@ -96,7 +96,7 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
           image = '';
           name = '';
           chat = json.decode(res.body);
-          print('chat $chat');
+          // print('chat $chat');
           readMessages();
           fetchMessages();
           initAbly();
@@ -120,10 +120,11 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
       };
 
       var res = await http.get(url, headers: headers);
-      log(res.statusCode.toString());
+      // log(res.statusCode.toString());
       if (res.statusCode == 200) {
         setState(() {
           var data = json.decode(res.body);
+          // print('messages ${data['data']}');
           messages = data['data'];
           _scrollToBottom();
         });
@@ -136,7 +137,7 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
   }
 
   void _scrollToBottom() async {
-    // print('Scrollling to bottom');
+    print('Scrollling to bottom');
     // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     Future.delayed(const Duration(milliseconds: 500), () {
       // print('Scrolled to bottom');
@@ -178,7 +179,7 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
     //     // AppDefaults.toast(context, 'success', 'Realtime Connection');
     //   },
     // );
-
+    // print('initAbly $chatId');
     ably.RealtimeChannel channel = realtime.channels.get(chatId);
     channel.on().listen((ably.ChannelStateChange stateChange) async {
       // Handle channel state change events
@@ -203,10 +204,12 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
         } else {
           player.play(AssetSource('received.mp3'));
         }
-      }
 
-      messages.insert(messages.length, message.data);
-      // print(messages);
+        setState(() {
+          messages.insert(messages.length, newMessage);
+        });
+        _scrollToBottom();
+      }
     });
   }
 
@@ -228,8 +231,12 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
 
         var res = await http.post(url, headers: headers, body: body);
         if (res.statusCode == 200) {
+          var body = json.decode(res.body);
+
           var ablyData = {
-            'pk': messages.length + 1,
+            'pk': body['data']['pk'],
+            'uuid': chatId,
+            'length': messages.length + 1,
             'message': messageController.text,
             'user_pk': account['user']['pk'].toString(),
           };

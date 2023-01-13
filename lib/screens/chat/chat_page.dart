@@ -116,6 +116,7 @@ class _ChatPageState extends State<ChatPage> {
         'filter': filterValue,
         'keyword': searchController.text,
         'type': 'chat',
+        'role': 'end-user',
         'skip': skip.toString(),
         'take': take.toString(),
       };
@@ -136,7 +137,7 @@ class _ChatPageState extends State<ChatPage> {
         //   chats.add(dataJson['data'][i]);
         // }
         var dataJson = jsonDecode(res.body);
-
+        // print(dataJson);
         var data = [];
         for (var i = 0; i < dataJson['data'].length; i++) {
           data.add(dataJson['data'][i]);
@@ -186,7 +187,7 @@ class _ChatPageState extends State<ChatPage> {
 
     StreamSubscription<ably.Message> subscription =
         channel.subscribe(name: chatId).listen((ably.Message message) {
-      print('chatpage message received');
+      // print('chatpage message received');
       // Handle channel messages with name 'event1'
       // final player = AudioPlayer();
       // player.play(AssetSource('chat.mp3'));

@@ -69,7 +69,7 @@ class _ModeratorState extends State<Moderator> {
 
   Future fetch() async {
     try {
-      final params = {'type': 'support'};
+      final params = {'type': 'support', 'role': 'end-user'};
       final url = Uri.parse('${dotenv.get('API')}/chats')
           .replace(queryParameters: params);
       final headers = {
@@ -83,7 +83,7 @@ class _ModeratorState extends State<Moderator> {
 
       if (res.statusCode == 200) {
         var dataJson = jsonDecode(res.body);
-
+        // print(dataJson);
         var data = [];
         for (var i = 0; i < dataJson['data'].length; i++) {
           data.add(dataJson['data'][i]);
