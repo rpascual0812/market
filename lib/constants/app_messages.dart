@@ -14,7 +14,7 @@ class AppMessage {
         return "Invalid email or password.";
       case "ERROR_USER_NOT_FOUND":
       case "user-not-found":
-        return "No account was found matching the username and password";
+        return "No account was found matching the email address and password";
       case "ERROR_USER_DISABLED":
       case "user-disabled":
         return "User disabled.";

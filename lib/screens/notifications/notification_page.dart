@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll/infinite_scroll_list.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/constants/index.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:market/screens/notifications/notification_page_tile.dart';
@@ -46,7 +45,7 @@ class _NotificationPageState extends State<NotificationPage> {
       }
     });
 
-    loadInitialData();
+    getStorage();
   }
 
   @override
@@ -56,10 +55,11 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Future getStorage() async {
     token = await storage.read(key: 'jwt');
-    fetch();
+    loadInitialData();
   }
 
   Future fetch() async {
+    print(token);
     try {
       final url = Uri.parse('${dotenv.get('API')}/notifications');
       final headers = {
@@ -83,7 +83,7 @@ class _NotificationPageState extends State<NotificationPage> {
         return data;
       } else if (res.statusCode == 401) {
         if (!mounted) return;
-        AppDefaults.logout(context);
+        // AppDefaults.logout(context);
       }
       return;
     } on Exception catch (exception) {
