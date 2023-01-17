@@ -60,6 +60,8 @@ class AppMessage {
         return "Your feedback has been successfully sent.";
       case "PASSWORD_RESET":
         return "Your password has been updated.";
+      case "EMAIL_SENT":
+        return "An email has been sent to your registered email address.";
       default:
         return "SUCCESS!";
     }
