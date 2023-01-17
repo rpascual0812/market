@@ -39,7 +39,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
       }
     }
 
-    DateTime date = DateTime.parse(widget.product['date_created'].toString());
+    DateTime date = DateTime.parse(widget.product['date_available'].toString());
 
     var userAddress = {};
     if (widget.product['user_addresses'].length > 0) {
@@ -211,7 +211,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                                       padding:
                                           const EdgeInsets.fromLTRB(5, 0, 0, 0),
                                       child: Text(
-                                        'Quantity: ${widget.product['quantity'].toString()}',
+                                        'Quantity: ${widget.product['quantity'].toString()} ${widget.product['measurement']['symbol']}',
                                         style: const TextStyle(
                                           fontSize: AppDefaults.fontSize - 2,
                                           color: AppColors.defaultBlack,

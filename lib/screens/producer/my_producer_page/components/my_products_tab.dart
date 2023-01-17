@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll/infinite_scroll_list.dart';
 import 'package:market/screens/product/product_page.dart';
 
 import '../../../../components/select_dropdown.dart';
@@ -24,22 +25,40 @@ class MyProductsTab extends StatefulWidget {
 }
 
 class _MyProductsTabState extends State<MyProductsTab> {
+  final ScrollController _scrollController = ScrollController();
   bool includeFutureCrops = false;
 
-  var filterValue = 'Sort by Date';
-  var filters = ['Sort by Category', 'Sort by Name', 'Sort by Date'];
-
+  bool isLoading = false;
   List products = [];
   Map<Object, dynamic> dataJson = {};
   int intialIndex = 0;
 
+  var filterValue = 'Sort by Date';
+  var filters = ['Sort by Category', 'Sort by Name', 'Sort by Date'];
+
+  bool everyThingLoaded = false;
+  int page = 0;
+  int skip = 0;
+  int take = 5;
+
   @override
   void initState() {
     super.initState();
-    fetch();
+    // fetch();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
+        skip += take;
+        _next();
+      }
+    });
+
+    loadInitialData();
   }
 
-  Future<void> fetch() async {
+  Future fetch() async {
     try {
       products = [];
       // var res = await Remote.get(
@@ -47,12 +66,17 @@ class _MyProductsTabState extends State<MyProductsTab> {
       var res = await Remote.get('sellers/${widget.userPk}/products',
           {'orderBy': filterValue, 'type': widget.type});
       if (res.statusCode == 200) {
-        setState(() {
-          dataJson = jsonDecode(res.body);
-          for (var i = 0; i < dataJson['data'].length; i++) {
-            products.add(dataJson['data'][i]);
-          }
-        });
+        dataJson = jsonDecode(res.body);
+        var data = [];
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          data.add(dataJson['data'][i]);
+        }
+
+        if (products.length >= skip) {
+          everyThingLoaded = true;
+        }
+
+        return data;
       } else if (res.statusCode == 401) {
         if (!mounted) return;
         AppDefaults.logout(context);
@@ -63,6 +87,32 @@ class _MyProductsTabState extends State<MyProductsTab> {
     } catch (error) {
       log('error $error');
     }
+  }
+
+  Future refreshOrders() async {
+    setState(() => isLoading = true);
+  }
+
+  Future<void> loadInitialData() async {
+    products = await getNextPageData(page);
+    setState(() {});
+  }
+
+  Future getNextPageData(int page) async {
+    return await fetch();
+  }
+
+  _next() async {
+    // print('next');
+    var newData = await getNextPageData(page++);
+    setState(() {
+      products += newData;
+      if (newData.isEmpty) {
+        skip -= take;
+        skip = skip < 0 ? 0 : skip;
+        everyThingLoaded = true;
+      }
+    });
   }
 
   @override
@@ -98,7 +148,7 @@ class _MyProductsTabState extends State<MyProductsTab> {
                     onChanged: (option) {
                       filterValue = option as String;
                       setState(() {
-                        fetch();
+                        loadInitialData();
                       });
                     },
                     width: 160,
@@ -145,36 +195,99 @@ class _MyProductsTabState extends State<MyProductsTab> {
                       )
                     ],
                   )
-                : ListView.builder(
-                    itemCount: products.length,
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      return MyProductTile(
-                        type: widget.type,
-                        product: products[index],
-                        onEdit: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ProductPage(
-                                productPk: products[index]['pk'],
-                              ),
-                            ),
-                          );
-                        },
-                        refresh: () {
-                          // print('deleted');
-                          fetch();
-                        },
-                      );
-                    }
-                    // children: List.generate(
-                    //     products.isNotEmpty ? dataJson['data'].length : 0,
-                    //     (index) {
-                    //   return MyProductTile(product: products[index]);
-                    // }),
+                : SingleChildScrollView(
+                    controller: _scrollController,
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Visibility(
+                          visible: products.isNotEmpty ? true : false,
+                          child: InfiniteScrollList(
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            onLoadingStart: (page) async {},
+                            everythingLoaded: everyThingLoaded,
+                            children: products
+                                .map(
+                                  (product) => ListItem(
+                                    type: widget.type,
+                                    product: product,
+                                    onEdit: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => ProductPage(
+                                            productPk: products[index]['pk'],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    refresh: () {
+                                      loadInitialData();
+                                    },
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+            // ListView.builder(
+            //     itemCount: products.length,
+            //     shrinkWrap: true,
+            //     physics: const ClampingScrollPhysics(),
+            //     itemBuilder: (BuildContext context, int index) {
+            //       return MyProductTile(
+            //         type: widget.type,
+            //         product: products[index],
+            //         onEdit: () {
+            //           Navigator.of(context).push(
+            //             MaterialPageRoute(
+            //               builder: (context) => ProductPage(
+            //                 productPk: products[index]['pk'],
+            //               ),
+            //             ),
+            //           );
+            //         },
+            //         refresh: () {
+            //           // print('deleted');
+            //           fetch();
+            //         },
+            //       );
+            //     }
+            //     // children: List.generate(
+            //     //     products.isNotEmpty ? dataJson['data'].length : 0,
+            //     //     (index) {
+            //     //   return MyProductTile(product: products[index]);
+            //     // }),
+            //     ),
           ],
         );
       });
+}
+
+class ListItem extends StatelessWidget {
+  final String type;
+  final Map<String, dynamic> product;
+  final void Function() onEdit;
+  final void Function() refresh;
+
+  const ListItem({
+    Key? key,
+    required this.type,
+    required this.product,
+    required this.onEdit,
+    required this.refresh,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MyProductTile(
+      type: type,
+      product: product,
+      onEdit: onEdit,
+      refresh: refresh,
+    );
+  }
 }

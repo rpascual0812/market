@@ -180,9 +180,9 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                                   color: Colors.white),
                                             ),
                                             child: Text(
-                                              isFollowed.isEmpty
-                                                  ? '+ Follow'
-                                                  : 'Following',
+                                              isFollowed.isNotEmpty
+                                                  ? 'Following'
+                                                  : '+ Follow',
                                               style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize:

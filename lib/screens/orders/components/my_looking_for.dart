@@ -165,7 +165,8 @@ class _MyLookingForState extends State<MyLookingFor> {
                     onChanged: (value) {
                       setState(() {
                         includeFutureCrops = value;
-                        fetch();
+                        orders = [];
+                        loadInitialData();
                       });
                     },
                   ),
@@ -200,7 +201,7 @@ class _MyLookingForState extends State<MyLookingFor> {
                         token: token!,
                         order: order,
                         refresh: () {
-                          _next();
+                          loadInitialData();
                         },
                       ),
                     )

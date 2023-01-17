@@ -59,7 +59,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Future fetch() async {
-    print(token);
+    // print(token);
     try {
       final url = Uri.parse('${dotenv.get('API')}/notifications');
       final headers = {
@@ -97,7 +97,7 @@ class _NotificationPageState extends State<NotificationPage> {
     setState(() => isLoading = true);
 
     // orders = await HipposDatabase.instance.getAllOrders();
-    setState(() => isLoading = false);
+    // setState(() => isLoading = false);
   }
 
   Future<void> loadInitialData() async {

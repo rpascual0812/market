@@ -57,7 +57,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
         'Authorization': 'Bearer $token',
       };
 
-      String follow = isFollowed.isEmpty ? 'follow' : 'unfollow';
+      String follow = isFollowed.isNotEmpty ? 'unfollow' : 'follow';
       final body = {'user_pk': widget.user['pk'].toString(), 'follow': follow};
 
       var res = await http.post(url, headers: headers, body: body);
@@ -90,10 +90,11 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
         var res = await http.post(url, headers: headers, body: body);
         // print(token);
         // print(res.statusCode);
+        // print(res.body);
         if (res.statusCode == 201) {
           final result = json.decode(res.body);
           setState(() {
-            isFollowed = result;
+            isFollowed = result[0];
           });
         }
         // if (res.statusCode == 200) return res.body;
@@ -146,6 +147,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // Text(isFollowed.toString()),
                                   Text(
                                     '${widget.user['first_name']} ${widget.user['last_name']}',
                                     style: const TextStyle(color: Colors.white),
@@ -174,9 +176,9 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                               width: 1, color: Colors.white),
                                         ),
                                         child: Text(
-                                          isFollowed.isEmpty
-                                              ? '+ Follow'
-                                              : 'Following',
+                                          isFollowed.isNotEmpty
+                                              ? 'Following'
+                                              : '+ Follow',
                                           style: const TextStyle(
                                               color: Colors.white,
                                               fontSize:

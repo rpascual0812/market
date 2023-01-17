@@ -179,7 +179,8 @@ class _LookingForWidgetState extends State<LookingForWidget> {
                             DataCell(Text(products[index]['name'],
                                 style: const TextStyle(
                                     fontSize: AppDefaults.fontSize - 2))),
-                            DataCell(Text(products[index]['quantity'],
+                            DataCell(Text(
+                                '${products[index]['quantity']} ${products[index]['measurement']['symbol']}',
                                 style: const TextStyle(
                                     fontSize: AppDefaults.fontSize - 2))),
                             DataCell(Text(DateFormat.yMMMd().format(date),

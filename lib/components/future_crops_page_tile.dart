@@ -35,14 +35,63 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
   @override
   Widget build(BuildContext context) {
     var userImage = AppDefaults.userImage(widget.product['user_document']);
+
     DateTime date = DateTime.parse(widget.product['date_available'].toString());
     var productImage =
         AppDefaults.productImage(widget.product['product_documents']);
 
-    // var userAddress = {};
-    var userAddress = AppDefaults.userAddress(widget.product['user_addresses']);
-    var sellerAddress =
-        AppDefaults.sellerAddress(widget.product['user_addresses']);
+    var userAddress = {};
+    if (widget.product['user_addresses'].length > 0) {
+      var defaultFound = false;
+      for (var i = 0; i < widget.product['user_addresses'].length; i++) {
+        if (widget.product['user_addresses'][i]['default']) {
+          defaultFound = true;
+          userAddress = widget.product['user_addresses'][i];
+        }
+      }
+
+      if (!defaultFound) {
+        userAddress = widget.product['user_addresses'][0];
+      }
+    }
+
+    var sellerAddress = {};
+    if (widget.product['seller_addresses'].length > 0) {
+      var defaultFound = false;
+      for (var i = 0; i < widget.product['seller_addresses'].length; i++) {
+        if (widget.product['seller_addresses'][i]['default']) {
+          defaultFound = true;
+          sellerAddress = widget.product['seller_addresses'][i];
+        }
+      }
+
+      if (!defaultFound) {
+        sellerAddress = widget.product['seller_addresses'][0];
+      }
+    }
+
+    var location = '';
+    if (sellerAddress.isNotEmpty) {
+      var city = '';
+      if (sellerAddress['city'] != null) {
+        city = sellerAddress['city']['name'];
+      }
+      var province = '';
+      if (sellerAddress['province'] != null) {
+        province = sellerAddress['province']['name'];
+      }
+      location = '$city, $province';
+    } else {
+      var city = '';
+      if (userAddress['city'] != null) {
+        city = userAddress['city']['name'];
+      }
+      var province = '';
+      if (userAddress['province'] != null) {
+        province = userAddress['province']['name'];
+      }
+      location = '$city, $province';
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -108,7 +157,7 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                                 child: Container(
                                                   alignment:
                                                       Alignment.centerLeft,
-                                                  width: 150,
+                                                  width: 200,
                                                   height: 15,
                                                   child: Text(
                                                     '${widget.product['user']['first_name']} ${widget.product['user']['last_name']}',
@@ -126,7 +175,7 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                                 child: Container(
                                                   alignment:
                                                       Alignment.centerLeft,
-                                                  width: 150,
+                                                  width: 200,
                                                   height: 20,
                                                   child: Row(
                                                     children: [
@@ -138,9 +187,10 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                                         color: Colors.grey,
                                                       ),
                                                       Text(
-                                                        sellerAddress['city'] !=
-                                                                null
-                                                            ? '${sellerAddress['city']['name']}, ${sellerAddress['province']['name']}'
+                                                        location.isNotEmpty
+                                                            ? location
+                                                                .substring(
+                                                                    0, 28)
                                                             : '',
                                                         style: const TextStyle(
                                                           fontSize: AppDefaults
@@ -283,7 +333,7 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  'Estimated date: ${DateFormat.MMMM().format(date)} ${DateFormat.y().format(date)}',
+                                  'Estimated date: $date ${DateFormat.MMMM().format(date)} ${DateFormat.y().format(date)}',
                                   style: const TextStyle(
                                     fontSize: AppDefaults.fontSize,
                                     color: AppColors.defaultBlack,
