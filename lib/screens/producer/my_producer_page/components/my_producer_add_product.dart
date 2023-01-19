@@ -55,6 +55,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
 
   @override
   void initState() {
+    dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
     super.initState();
 
     getCategories();
@@ -576,9 +577,10 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                                               await showDatePicker(
                                             context: context,
                                             initialDate: DateTime.now(),
-                                            firstDate: DateTime(
-                                                1900), //DateTime.now() - not to allow to choose before today.
-                                            lastDate: DateTime(2101),
+                                            firstDate: DateTime.now().subtract(
+                                                const Duration(days: 0)),
+                                            lastDate: DateTime.now().add(
+                                                const Duration(days: 3650)),
                                           );
                                           if (pickedDate != null) {
                                             String formattedDate =
