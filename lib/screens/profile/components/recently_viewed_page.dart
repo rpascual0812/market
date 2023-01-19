@@ -181,7 +181,7 @@ class _RecentlyViewedPageState extends State<RecentlyViewedPage> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => ProductPage(
-                                productPk: product['pk'],
+                                productPk: product['product']['pk'],
                               ),
                             ),
                           );
