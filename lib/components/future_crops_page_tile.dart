@@ -188,9 +188,12 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                                       ),
                                                       Text(
                                                         location.isNotEmpty
-                                                            ? location
-                                                                .substring(
-                                                                    0, 28)
+                                                            ? (location.length >
+                                                                    27
+                                                                ? location
+                                                                    .substring(
+                                                                        0, 28)
+                                                                : location)
                                                             : '',
                                                         style: const TextStyle(
                                                           fontSize: AppDefaults
