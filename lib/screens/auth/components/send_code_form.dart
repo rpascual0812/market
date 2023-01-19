@@ -82,6 +82,7 @@ class _SendCodeFormState extends State<SendCodeForm> {
         // print(res.statusCode);
         if (res.statusCode == 200) {
           var data = json.decode(res.body);
+
           EasyLoading.dismiss();
           if (!mounted) return;
           AppDefaults.toast(
@@ -90,6 +91,7 @@ class _SendCodeFormState extends State<SendCodeForm> {
             'status': true,
             'data': {
               'email_address': emailController.text,
+              'token': data['data']['password_reset']['token']
             }
           });
         }

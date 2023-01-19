@@ -62,6 +62,9 @@ class _SoldProductTileState extends State<SoldProductTile> {
     // print('product ${widget.product['user_addresses']}');
 
     DateTime date = DateTime.parse(widget.order['date_created'].toString());
+    DateTime dateAvailable =
+        DateTime.parse(widget.order['product']['date_available'].toString());
+
     var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
     if (widget.order['product']['product_documents'] != null) {
       productImage = AppDefaults.productImage(
@@ -230,38 +233,55 @@ class _SoldProductTileState extends State<SoldProductTile> {
                                                 0.18,
                                             height: 20,
                                             child: ElevatedButton(
-                                              onPressed: () async {
-                                                ArtDialogResponse response =
-                                                    await ArtSweetAlert.show(
-                                                  barrierDismissible: false,
-                                                  context: context,
-                                                  artDialogArgs: ArtDialogArgs(
-                                                      type: ArtSweetAlertType
-                                                          .question,
-                                                      denyButtonText: "Cancel",
-                                                      denyButtonColor:
-                                                          Colors.grey,
-                                                      title:
-                                                          "Are you sure you want to update the status of this order?",
-                                                      confirmButtonText:
-                                                          "Update",
-                                                      confirmButtonColor:
-                                                          AppColors.primary),
-                                                );
+                                              onPressed:
+                                                  dateAvailable.compareTo(
+                                                              DateTime.now()) >
+                                                          0
+                                                      ? null
+                                                      : () async {
+                                                          ArtDialogResponse
+                                                              response =
+                                                              await ArtSweetAlert
+                                                                  .show(
+                                                            barrierDismissible:
+                                                                false,
+                                                            context: context,
+                                                            artDialogArgs: ArtDialogArgs(
+                                                                type: ArtSweetAlertType
+                                                                    .question,
+                                                                denyButtonText:
+                                                                    "Cancel",
+                                                                denyButtonColor:
+                                                                    Colors.grey,
+                                                                title:
+                                                                    "Are you sure you want to update the status of this order?",
+                                                                confirmButtonText:
+                                                                    "Update",
+                                                                confirmButtonColor:
+                                                                    AppColors
+                                                                        .primary),
+                                                          );
 
-                                                if (response
-                                                    .isTapConfirmButton) {
-                                                  if (!mounted) return;
-                                                  update('Fulfilled');
-                                                }
+                                                          if (response
+                                                              .isTapConfirmButton) {
+                                                            if (!mounted) {
+                                                              return;
+                                                            }
+                                                            update('Fulfilled');
+                                                          }
 
-                                                if (response.isTapDenyButton) {
-                                                  return;
-                                                }
-                                              },
+                                                          if (response
+                                                              .isTapDenyButton) {
+                                                            return;
+                                                          }
+                                                        },
                                               style: TextButton.styleFrom(
-                                                backgroundColor:
-                                                    AppColors.primary,
+                                                backgroundColor: dateAvailable
+                                                            .compareTo(DateTime
+                                                                .now()) >
+                                                        0
+                                                    ? Colors.grey
+                                                    : AppColors.primary,
                                                 minimumSize:
                                                     Size.zero, // Set this
                                                 padding:

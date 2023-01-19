@@ -100,6 +100,10 @@ class _SoldProductsState extends State<SoldProducts> {
           data.add(dataJson['data'][i]);
         }
 
+        if (data.length <= take) {
+          everyThingLoaded = true;
+        }
+
         return data;
       }
       // else if (res.statusCode == 401) {
