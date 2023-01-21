@@ -33,6 +33,21 @@ class _SearchProductTileState extends State<SearchProductTile> {
           AppDefaults.productImage(widget.product['product_documents']);
     }
 
+    var userAddress = {};
+    if (widget.product['user_addresses'].length > 0) {
+      var defaultFound = false;
+      for (var i = 0; i < widget.product['user_addresses'].length; i++) {
+        if (widget.product['user_addresses'][i]['default']) {
+          defaultFound = true;
+          userAddress = widget.product['user_addresses'][i];
+        }
+      }
+
+      if (!defaultFound) {
+        userAddress = widget.product['user_addresses'][0];
+      }
+    }
+
     var sellerAddress = {};
     if (widget.product['user']['seller'] != null &&
         widget.product['user']['seller']['seller_address'] != null) {

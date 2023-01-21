@@ -3,7 +3,8 @@
 import 'dart:convert';
 
 import 'package:animations/animations.dart';
-import 'package:getwidget/components/accordion/gf_accordion.dart';
+import 'package:expansion_tile_card/expansion_tile_card.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:market/components/appbar.dart';
 import 'package:flutter/material.dart';
 
@@ -89,140 +90,128 @@ class _TermsPageState extends State<TermsPage> {
         },
         child: SafeArea(
           child: SingleChildScrollView(
-            child: Visibility(
-              visible: disclaimer.isNotEmpty ? true : false,
-              child: Column(
-                children: [
-                  const Appbar(),
-                  Visibility(
-                    visible: disclaimer['value'] != '' ? true : false,
-                    child: GFAccordion(
-                      title: 'Disclaimer',
-                      content: disclaimer['value'],
-                      collapsedTitleBackgroundColor: Colors.white,
-                      expandedTitleBackgroundColor: AppColors.primary,
-                      titleBorder: Border.all(
-                        color: const Color(0xFF000000),
-                        width: 1,
-                        style: BorderStyle.solid,
-                      ),
-                      titleBorderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                  ),
-
-                  Visibility(
-                    visible: legal['value'] != '' ? true : false,
-                    child: GFAccordion(
-                      title: 'Legal Conditions',
-                      content: legal['value'],
-                      collapsedTitleBackgroundColor: Colors.white,
-                      expandedTitleBackgroundColor: AppColors.primary,
-                      titleBorder: Border.all(
-                        color: const Color(0xFF000000),
-                        width: 1,
-                        style: BorderStyle.solid,
-                      ),
-                      titleBorderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: terms['value'] != '' ? true : false,
-                    child: GFAccordion(
-                      title: 'Terms and Conditions',
-                      content: terms['value'],
-                      collapsedTitleBackgroundColor: Colors.white,
-                      expandedTitleBackgroundColor: AppColors.primary,
-                      titleBorder: Border.all(
-                        color: const Color(0xFF000000),
-                        width: 1,
-                        style: BorderStyle.solid,
-                      ),
-                      titleBorderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                  ),
-
-                  Visibility(
-                    visible: widget.location == 'settings' ? false : true,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: AppDefaults.height,
-                      child: Padding(
-                        padding: const EdgeInsets.all(1),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            Navigator.of(context).pop();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  AppDefaults.radius - 10),
+            child: Column(
+              children: [
+                const Appbar(),
+                Visibility(
+                  visible: disclaimer['value'] != '' ? true : false,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: ExpansionTileCard(
+                          expandedColor: Colors.white,
+                          shadowColor: Colors.black,
+                          title: const Text('Disclaimer'),
+                          children: <Widget>[
+                            const Divider(
+                              thickness: 1.0,
+                              height: 1.0,
                             ),
-                          ),
-                          child: const Text('I Agree!'),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 8.0,
+                                ),
+                                child: Html(data: disclaimer['value'] ?? ''),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                  // Accordion(
-                  //   maxOpenSections: 1,
-                  //   headerBackgroundColorOpened: Colors.black54,
-                  //   scaleWhenAnimating: true,
-                  //   openAndCloseAnimation: true,
-                  //   headerPadding:
-                  //       const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
-                  //   sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
-                  //   sectionClosingHapticFeedback: SectionHapticFeedback.light,
-                  //   children: [
-                  //     AccordionSection(
-                  //       isOpen: true,
-                  //       // leftIcon: const Icon(Icons.insights_rounded,
-                  //       //     color: Colors.white),
-                  //       headerBackgroundColor: AppColors.primary,
-                  //       headerBackgroundColorOpened: AppColors.primary,
-                  //       header: Text('Disclaimer', style: _headerStyle),
-                  //       content: Text(_loremIpsum, style: _contentStyle),
-                  //       contentHorizontalPadding: 20,
-                  //       contentBorderWidth: 1,
-                  //       // onOpenSection: () => print('onOpenSection ...'),
-                  //       // onCloseSection: () => print('onCloseSection ...'),
-                  //     ),
-                  //     AccordionSection(
-                  //       isOpen: true,
-                  //       // leftIcon: const Icon(Icons.insights_rounded,
-                  //       //     color: Colors.white),
-                  //       headerBackgroundColor: AppColors.primary,
-                  //       headerBackgroundColorOpened: AppColors.primary,
-                  //       header: Text('Legal Conditions', style: _headerStyle),
-                  //       content: Text(_loremIpsum, style: _contentStyle),
-                  //       contentHorizontalPadding: 20,
-                  //       contentBorderWidth: 1,
-                  //       // onOpenSection: () => print('onOpenSection ...'),
-                  //       // onCloseSection: () => print('onCloseSection ...'),
-                  //     ),
-                  //     AccordionSection(
-                  //       isOpen: true,
-                  //       // leftIcon: const Icon(Icons.insights_rounded,
-                  //       //     color: Colors.white),
-                  //       headerBackgroundColor: AppColors.primary,
-                  //       headerBackgroundColorOpened: AppColors.primary,
-                  //       header: Text('Terms and Conditions', style: _headerStyle),
-                  //       content: Text(_loremIpsum, style: _contentStyle),
-                  //       contentHorizontalPadding: 20,
-                  //       contentBorderWidth: 1,
-                  //       // onOpenSection: () => print('onOpenSection ...'),
-                  //       // onCloseSection: () => print('onCloseSection ...'),
-                  //     ),
-                  //   ],
-                  // ),
-                ],
-              ),
+                ),
+                Visibility(
+                  visible: legal['value'] != '' ? true : false,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: ExpansionTileCard(
+                          title: const Text('Legal Conditions'),
+                          children: <Widget>[
+                            const Divider(
+                              thickness: 1.0,
+                              height: 1.0,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 8.0,
+                                ),
+                                child: Html(data: legal['value'] ?? ''),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: terms['value'] != '' ? true : false,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: ExpansionTileCard(
+                          title: const Text('Terms and Conditions'),
+                          children: <Widget>[
+                            const Divider(
+                              thickness: 1.0,
+                              height: 1.0,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 8.0,
+                                ),
+                                child: Html(data: terms['value'] ?? ''),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: widget.location == 'settings' ? false : true,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: AppDefaults.height,
+                    child: Padding(
+                      padding: const EdgeInsets.all(1),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(AppDefaults.radius - 10),
+                          ),
+                        ),
+                        child: const Text('I Agree!'),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
