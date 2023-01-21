@@ -94,6 +94,10 @@ class _SendCodeFormState extends State<SendCodeForm> {
               'token': data['data']['password_reset']['token']
             }
           });
+        } else {
+          if (!mounted) return;
+          AppDefaults.toast(
+              context, 'error', AppMessage.getError('EMAIL_NOT_FOUND'));
         }
 
         EasyLoading.dismiss();

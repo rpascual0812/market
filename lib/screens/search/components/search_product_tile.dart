@@ -60,6 +60,29 @@ class _SearchProductTileState extends State<SearchProductTile> {
       }
     }
 
+    var location = '';
+    if (sellerAddress.isNotEmpty) {
+      var city = '';
+      if (sellerAddress['city'] != null) {
+        city = sellerAddress['city']['name'];
+      }
+      var province = '';
+      if (sellerAddress['province'] != null) {
+        province = sellerAddress['province']['name'];
+      }
+      location = '$city, $province';
+    } else {
+      var city = '';
+      if (userAddress['city'] != null) {
+        city = userAddress['city']['name'];
+      }
+      var province = '';
+      if (userAddress['province'] != null) {
+        province = userAddress['province']['name'];
+      }
+      location = '$city, $province';
+    }
+
     return GestureDetector(
       onTap: widget.onTap,
       child: Padding(
@@ -148,11 +171,7 @@ class _SearchProductTileState extends State<SearchProductTile> {
                                                           color: Colors.grey,
                                                         ),
                                                         Text(
-                                                          sellerAddress[
-                                                                      'city'] !=
-                                                                  null
-                                                              ? '${sellerAddress['address']}, ${sellerAddress['city']['name']} ${sellerAddress['province']['name']}'
-                                                              : '',
+                                                          location,
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 10,

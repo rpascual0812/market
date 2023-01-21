@@ -419,12 +419,15 @@ class _SignUpFormState extends State<SignUpForm> {
                           return null;
                         },
                         onTap: () async {
+                          final today = DateTime.now();
                           DateTime? pickedDate = await showDatePicker(
                             context: context,
-                            initialDate: DateTime.now(),
+                            initialDate: DateTime(
+                                today.year - 18, today.month, today.day),
                             firstDate: DateTime(
                                 1900), //DateTime.now() - not to allow to choose before today.
-                            lastDate: DateTime(2101),
+                            lastDate: DateTime(
+                                today.year - 18, today.month, today.day),
                           );
                           if (pickedDate != null) {
                             String formattedDate =

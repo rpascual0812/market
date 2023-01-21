@@ -45,7 +45,6 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    readStorage();
 
     _scrollController.addListener(() {
       if (_scrollController.offset >=
@@ -57,12 +56,6 @@ class _SearchPageState extends State<SearchPage> {
     });
 
     loadInitialData();
-  }
-
-  Future<void> readStorage() async {
-    final all = await storage.read(key: 'jwt');
-
-    token = all;
   }
 
   Future fetch() async {
@@ -321,7 +314,6 @@ class _SearchPageState extends State<SearchPage> {
                 children: products
                     .map(
                       (product) => ListItem(
-                        token: token!,
                         product: product,
                         filterValue: filterValue,
                         onTap: () {
@@ -346,14 +338,12 @@ class _SearchPageState extends State<SearchPage> {
 }
 
 class ListItem extends StatelessWidget {
-  final String token;
   final Map<String, dynamic> product;
   final String filterValue;
   final void Function()? onTap;
 
   const ListItem({
     Key? key,
-    required this.token,
     required this.product,
     required this.filterValue,
     this.onTap,

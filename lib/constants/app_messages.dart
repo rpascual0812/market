@@ -26,7 +26,9 @@ class AppMessage {
       //   return "Server error, please try again later.";
       case "ERROR_INVALID_EMAIL":
       case "invalid-email":
-        return "Email address is invalid.";
+        return "Invalid Email Address.";
+      case "EMAIL_NOT_FOUND":
+        return "Email Address not found.";
       case "ERROR_IMAGE_FAILED":
         return "Failed to fetch your image.";
       case "ERROR_FILE_FAILED":
