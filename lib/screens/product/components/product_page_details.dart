@@ -488,30 +488,37 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       height: 30.0,
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                // print(widget.product['user_pk'].toString());
-                                return Bubble(
-                                  userPk: widget.product['user_pk'].toString(),
-                                  token: token,
+                        onPressed: token != ''
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      // print(widget.product['user_pk'].toString());
+                                      return Bubble(
+                                        userPk: widget.product['user_pk']
+                                            .toString(),
+                                        token: token,
+                                      );
+                                    },
+                                  ),
                                 );
-                              },
-                            ),
-                          );
-                        },
+                              }
+                            : null,
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
+                          side: BorderSide(
                             width: 1,
-                            color: AppColors.primary,
+                            color: (token != ''
+                                ? AppColors.primary
+                                : AppColors.grey2),
                           ),
                           padding: const EdgeInsets.all(5),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           ProductPageDetails.chat,
-                          color: AppColors.primary,
+                          color: (token != ''
+                              ? AppColors.primary
+                              : AppColors.grey2),
                           size: 20,
                         ),
                       ),
