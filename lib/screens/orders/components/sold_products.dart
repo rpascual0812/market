@@ -199,7 +199,8 @@ class _SoldProductsState extends State<SoldProducts> {
                             token: token!,
                             order: order,
                             refresh: () {
-                              _next();
+                              // _next();
+                              loadInitialData();
                             },
                           ),
                         )

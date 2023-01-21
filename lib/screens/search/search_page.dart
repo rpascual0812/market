@@ -8,6 +8,7 @@ import 'package:market/components/appbar.dart';
 import 'package:market/constants/index.dart';
 
 import 'package:market/models/order.dart';
+import 'package:market/screens/producer/producer_page/producer_page.dart';
 import 'package:market/screens/search/components/search_producer_tile.dart';
 import 'package:market/screens/search/components/search_product_tile.dart';
 
@@ -366,8 +367,8 @@ class ListItem extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => ProductPage(
-                    productPk: product['pk'],
+                  builder: (context) => ProducerPage(
+                    userPk: product['user']['pk'],
                   ),
                 ),
               );
