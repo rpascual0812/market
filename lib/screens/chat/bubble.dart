@@ -47,7 +47,6 @@ class _BubbleState extends State<Bubble> {
   @override
   void initState() {
     super.initState();
-
     var token = AppDefaults.jwtDecode(widget.token);
     fetchAccount(token['sub']);
     _scrollController.addListener(_scrollListener);
@@ -98,7 +97,7 @@ class _BubbleState extends State<Bubble> {
           image = '';
           name = '';
           chat = json.decode(res.body);
-          // print('chat $chat');
+
           readMessages();
           fetchMessages();
           initAbly();
@@ -122,7 +121,7 @@ class _BubbleState extends State<Bubble> {
       };
 
       var res = await http.get(url, headers: headers);
-      log(res.statusCode.toString());
+      // log(res.statusCode.toString());
       if (res.statusCode == 200) {
         setState(() {
           var data = json.decode(res.body);

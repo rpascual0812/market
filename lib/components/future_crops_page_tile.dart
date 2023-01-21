@@ -236,8 +236,8 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                                               Bubble(
                                                             token: widget.token,
                                                             userPk: widget
-                                                                .account['user']
-                                                                    ['pk']
+                                                                .product[
+                                                                    'user_pk']
                                                                 .toString(),
                                                           ),
                                                         ),

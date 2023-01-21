@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:market/components/product_list_widget_tile_square.dart';
@@ -205,9 +204,6 @@ class _ProductListState extends State<ProductList> {
         ),
         itemCount: products.length,
         itemBuilder: (BuildContext context, int index) {
-          if (products[index]['pk'] == 33) {
-            log(products[index].toString());
-          }
           return ProductListWidgetTileSquare(
             product: products[index],
             onTap: () {
