@@ -12,6 +12,7 @@ import '../../../constants/index.dart';
 
 import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({
@@ -23,6 +24,7 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  PhoneCountryData? _initialCountryData;
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   TextEditingController firstNameController = TextEditingController(text: '');
   TextEditingController lastNameController = TextEditingController(text: '');
@@ -74,6 +76,17 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   void initState() {
+    PhoneInputFormatter.replacePhoneMask(
+      countryCode: 'PH',
+      newMask: '+00 (000) 000 0000',
+    );
+    PhoneInputFormatter.addAlternativePhoneMasks(
+      countryCode: 'PH',
+      alternativeMasks: [
+        '+00 (000) 000 0000',
+      ],
+    );
+
     getProvinces();
 
     super.initState();
@@ -508,7 +521,16 @@ class _SignUpFormState extends State<SignUpForm> {
                         controller: mobileController,
                         validator: validateMobile,
                         keyboardType: TextInputType.phone,
+                        autocorrect: false,
+                        inputFormatters: [
+                          PhoneInputFormatter(
+                            allowEndlessPhone: false,
+                            defaultCountryCode: 'PH',
+                          ),
+                        ],
                         decoration: InputDecoration(
+                          hintText:
+                              _initialCountryData?.phoneMaskWithoutCountryCode,
                           isDense: true,
                           contentPadding: AppDefaults.edgeInset,
                           prefixIconConstraints:

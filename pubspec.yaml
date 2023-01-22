@@ -85,6 +85,7 @@ dependencies:
   pin_code_fields: ^7.4.0
   flutter_html: ^2.0.0-nullsafety.1
   expansion_tile_card: ^2.0.0
+  flutter_multi_formatter: ^2.2.1
   
   
   
