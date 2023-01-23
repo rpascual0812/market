@@ -63,6 +63,7 @@ class _SearchPageState extends State<SearchPage> {
       var res =
           await Remote.get(filterValue == 'Shops' ? 'sellers' : 'products', {
         'keyword': searchController.text,
+        'type': 'product',
         'filter': filterValue,
         'skip': skip.toString(),
         'take': take.toString(),

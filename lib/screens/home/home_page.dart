@@ -263,7 +263,7 @@ class GridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 500,
+      height: 600,
       child: ProductListWidgetTileSquare(
         product: product,
         onTap: () {

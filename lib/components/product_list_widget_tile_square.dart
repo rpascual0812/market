@@ -70,7 +70,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.all(10),
                 width: (MediaQuery.of(context).size.width),
-                height: 150,
+                height: 140,
                 child: AspectRatio(
                   aspectRatio: 1 / 1,
                   child: NetworkImageWithLoader(image, false),
@@ -78,7 +78,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
               ),
               // const SizedBox(height: 8),
               Container(
-                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [

@@ -34,7 +34,8 @@ class _SearchProductTileState extends State<SearchProductTile> {
     }
 
     var userAddress = {};
-    if (widget.product['user_addresses'].length > 0) {
+    if (widget.product['user_addresses'] != null &&
+        widget.product['user_addresses'].length > 0) {
       var defaultFound = false;
       for (var i = 0; i < widget.product['user_addresses'].length; i++) {
         if (widget.product['user_addresses'][i]['default']) {
