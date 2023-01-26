@@ -49,7 +49,7 @@ class _ConversationListState extends State<ConversationList> {
         : '';
     var date = TimeElapsed.fromDateStr(widget.chat['last_message_date']);
 
-    var unread = widget.chat['chat_participants'][0]['unread'];
+    var read = widget.chat['read'];
 
     return GestureDetector(
       onTap: () {
@@ -57,8 +57,7 @@ class _ConversationListState extends State<ConversationList> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              unread = false;
-              // print('${widget.chat['pk']} $unread');
+              print('${widget.chat['pk']} $read');
               return Bubble(
                 userPk: widget.chat['chat_participants'][0]['user']['pk']
                     .toString(),
@@ -93,9 +92,8 @@ class _ConversationListState extends State<ConversationList> {
                             name,
                             style: TextStyle(
                                 fontSize: AppDefaults.fontSize + 1,
-                                fontWeight: unread != null && unread
-                                    ? FontWeight.bold
-                                    : FontWeight.normal),
+                                fontWeight:
+                                    read ? FontWeight.normal : FontWeight.bold),
                           ),
                           const SizedBox(
                             height: 6,
@@ -105,9 +103,8 @@ class _ConversationListState extends State<ConversationList> {
                             style: TextStyle(
                                 fontSize: AppDefaults.fontSize - 1,
                                 // color: Colors.grey.shade600,
-                                fontWeight: unread != null && unread
-                                    ? FontWeight.bold
-                                    : FontWeight.normal),
+                                fontWeight:
+                                    read ? FontWeight.normal : FontWeight.bold),
                           ),
                         ],
                       ),
@@ -121,9 +118,7 @@ class _ConversationListState extends State<ConversationList> {
               widget.chat['time'] ?? '',
               style: TextStyle(
                 fontSize: AppDefaults.fontSize - 2,
-                fontWeight: unread != null && unread
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+                fontWeight: read ? FontWeight.normal : FontWeight.bold,
               ),
             ),
           ],

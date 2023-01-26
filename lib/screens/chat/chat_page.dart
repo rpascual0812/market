@@ -132,12 +132,8 @@ class _ChatPageState extends State<ChatPage> {
       );
 
       if (res.statusCode == 200) {
-        // Map<Object, dynamic> dataJson = jsonDecode(res.body);
-        // for (var i = 0; i < dataJson['data'].length; i++) {
-        //   chats.add(dataJson['data'][i]);
-        // }
         var dataJson = jsonDecode(res.body);
-        // print(dataJson);
+
         var data = [];
         for (var i = 0; i < dataJson['data'].length; i++) {
           data.add(dataJson['data'][i]);
@@ -163,7 +159,7 @@ class _ChatPageState extends State<ChatPage> {
 
   void initAbly() {
     String chatId = 'user-${account['user']['pk'].toString()}';
-    print('listening to $chatId');
+    // print('listening to chat page $chatId');
     // Create an instance of ClientOptions with Ably key
     final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
 
@@ -193,8 +189,7 @@ class _ChatPageState extends State<ChatPage> {
       // player.play(AssetSource('chat.mp3'));
 
       // print('StreamSubscription');
-      // print(message.data);
-      fetch();
+      loadInitialData();
     });
   }
 

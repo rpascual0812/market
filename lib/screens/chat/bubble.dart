@@ -32,6 +32,7 @@ class _BubbleState extends State<Bubble> {
   var chatId = '';
   String image = '';
   String name = '';
+  int userPk = 0;
 
   TextEditingController messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -44,11 +45,14 @@ class _BubbleState extends State<Bubble> {
   int skip = 0;
   int take = 10;
 
+  bool _keyboardVisible = false;
+
   @override
   void initState() {
     super.initState();
     var token = AppDefaults.jwtDecode(widget.token);
     fetchAccount(token['sub']);
+    setRead();
     _scrollController.addListener(_scrollListener);
   }
 
@@ -82,6 +86,7 @@ class _BubbleState extends State<Bubble> {
   }
 
   Future fetchChat() async {
+    // print('fetching chat');
     try {
       final params = {'type': 'chat'};
       final url = Uri.parse('${dotenv.get('API')}/chats/user/${widget.userPk}')
@@ -92,12 +97,14 @@ class _BubbleState extends State<Bubble> {
       };
 
       var res = await http.get(url, headers: headers);
+      // print('res ${res.statusCode}');
+      // print('res body ${res.body}');
       if (res.statusCode == 200) {
         setState(() {
           image = '';
           name = '';
           chat = json.decode(res.body);
-
+          // print('fetchchat $chat');
           readMessages();
           fetchMessages();
           initAbly();
@@ -165,6 +172,7 @@ class _BubbleState extends State<Bubble> {
 
   void initAbly() {
     chatId = chat['uuid'] ?? '';
+    print('listening to bubble chat id: $chatId');
 
     // Create an instance of ClientOptions with Ably key
     // final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
@@ -207,19 +215,38 @@ class _BubbleState extends State<Bubble> {
       }
 
       messages.insert(messages.length, message.data);
+      _scrollToBottom();
       // print(messages);
     });
+  }
+
+  void setRead() async {
+    try {
+      final url =
+          Uri.parse('${dotenv.get('API')}/chats/${chat['pk']}/message/read');
+      final headers = {
+        HttpHeaders.authorizationHeader: 'Bearer ${widget.token}',
+      };
+
+      var res = await http.post(url, headers: headers);
+      if (res.statusCode == 200) {}
+    } on Exception catch (exception) {
+      log('exception $exception');
+    } catch (error) {
+      log('error $error');
+    }
   }
 
   void sendChat() async {
     if (messageController.text != '') {
       try {
+        // print('account pk ${chat['uuid']} ${messageController.text}');
         var body = {
           'uuid': chat['uuid'],
           'message': messageController.text,
           'user_pk': account['user']['pk'].toString(),
         };
-        // print('saving chat');
+        // print('saving $body');
         // print(widget.token);
         // print(widget.userPk.toString());
         final url = Uri.parse('${dotenv.get('API')}/chats/messages');
@@ -237,12 +264,12 @@ class _BubbleState extends State<Bubble> {
 
           ably.Realtime realtime = ably.Realtime(options: clientOptions);
           ably.RealtimeChannel conversationChannel =
-              realtime.channels.get('user-${widget.userPk.toString()}');
+              realtime.channels.get('user-${userPk.toString()}');
           await conversationChannel.publish(
-            name: 'user-${widget.userPk.toString()}',
+            name: 'user-${userPk.toString()}',
             data: ablyData,
           );
-
+          // print('chatId $chatId');
           ably.RealtimeChannel bubbleChannel = realtime.channels.get(chatId);
           await bubbleChannel.publish(
             name: chatId,
@@ -305,6 +332,12 @@ class _BubbleState extends State<Bubble> {
 
   @override
   Widget build(BuildContext context) {
+    _keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
+
+    if (_keyboardVisible) {
+      _scrollToBottom();
+    }
+
     if (chat.isNotEmpty) {
       var found = false;
       for (var i = 0; i < chat['chat_participants'].length; i++) {
@@ -314,6 +347,9 @@ class _BubbleState extends State<Bubble> {
           image = chat['chat_participants'] != null
               ? '${dotenv.get('API')}/${chat['chat_participants'][i]['user']['user_document']['document']['path']}'
               : '';
+          userPk = chat['chat_participants'] != null
+              ? chat['chat_participants'][i]['user']['pk']
+              : 0;
           name = chat['chat_participants'] != null
               ? '${chat['chat_participants'][i]['user']['first_name']} ${chat['chat_participants'][i]['user']['last_name']}'
               : '';
@@ -324,12 +360,15 @@ class _BubbleState extends State<Bubble> {
         image = chat['chat_participants'] != null
             ? '${dotenv.get('API')}/${chat['chat_participants'][0]['user']['user_document']['document']['path']}'
             : '';
+        userPk = chat['chat_participants'] != null
+            ? chat['chat_participants'][0]['user']['first_name']
+            : 0;
         name = chat['chat_participants'] != null
             ? '${chat['chat_participants'][0]['user']['first_name']} ${chat['chat_participants'][0]['user']['last_name']}'
             : '';
       }
     }
-
+    // print('userPK $userPk $name');
     image = image != '' ? image : '${dotenv.get('API')}/assets/images/user.png';
 
     return Scaffold(
@@ -373,8 +412,7 @@ class _BubbleState extends State<Bubble> {
                           MaterialPageRoute(
                             builder: (context) {
                               return ProducerPage(
-                                userPk: chat['chat_participants'][0]['user']
-                                    ['pk'],
+                                userPk: userPk,
                               );
                             },
                           ),
@@ -390,8 +428,7 @@ class _BubbleState extends State<Bubble> {
                             builder: (context) {
                               return ProducerProfile(
                                 token: widget.token,
-                                userPk: chat['chat_participants'][0]['user']
-                                    ['pk'],
+                                userPk: userPk,
                               );
                             },
                           ),

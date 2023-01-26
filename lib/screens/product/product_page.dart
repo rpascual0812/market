@@ -81,7 +81,7 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    log(widget.productPk.toString());
+    // log(widget.productPk.toString());
     var accountPk = '';
     if (product['user'] != null && product['user']['account'] != null) {
       accountPk = product['user']['account']['pk'].toString();
