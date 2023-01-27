@@ -62,7 +62,9 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<void> loadInitialData() async {
+    chats = [];
     chats = await getNextPageData(page);
+    print(chats);
     // print('load initial data $products');
     setState(() {});
   }
@@ -223,6 +225,13 @@ class _ChatPageState extends State<ChatPage> {
                       height: 55,
                       options: filters,
                       defaultValue: filterValue,
+                      onChanged: (option) {
+                        searchController.text = '';
+                        filterValue = option as String;
+                        setState(() {
+                          loadInitialData();
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -230,9 +239,12 @@ class _ChatPageState extends State<ChatPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-              child: TextField(
+              child: TextFormField(
                 controller: searchController,
-                onChanged: (value) => fetch(),
+                onChanged: (value) {
+                  filterValue = 'Show All';
+                  loadInitialData();
+                },
                 decoration: InputDecoration(
                   hintText: "Search...",
                   hintStyle: TextStyle(color: Colors.grey.shade600),
