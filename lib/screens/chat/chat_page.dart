@@ -159,6 +159,34 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+  Future markAllasRead() async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/chats/messages/read');
+      final headers = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      var res = await http.post(
+        url,
+        headers: headers,
+      );
+      print(res.statusCode);
+      loadInitialData();
+      if (res.statusCode == 200) {
+        loadInitialData();
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+      }
+      // if (res.statusCode == 200) return res.body;
+      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
+
   void initAbly() {
     String chatId = 'user-${account['user']['pk'].toString()}';
     // print('listening to chat page $chatId');
@@ -226,11 +254,13 @@ class _ChatPageState extends State<ChatPage> {
                       options: filters,
                       defaultValue: filterValue,
                       onChanged: (option) {
-                        searchController.text = '';
-                        filterValue = option as String;
-                        setState(() {
+                        if (option == 'Mark all as read') {
+                          markAllasRead();
+                        } else {
+                          searchController.text = '';
+                          filterValue = option as String;
                           loadInitialData();
-                        });
+                        }
                       },
                     ),
                   ],
