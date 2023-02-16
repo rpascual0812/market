@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-import 'package:accordion/accordion.dart';
-import 'package:accordion/controllers.dart';
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:market/components/appbar.dart';
 import 'package:market/constants/index.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class FaqPage extends StatefulWidget {
   const FaqPage({Key? key}) : super(key: key);
@@ -174,20 +173,54 @@ class _FaqPageState extends State<FaqPage> {
             ),
             const SizedBox(height: 50),
             for (var faq in faqs)
-              GFAccordion(
-                title: faq['question'],
-                content: faq['answer'],
-                collapsedTitleBackgroundColor: Colors.white,
-                expandedTitleBackgroundColor: AppColors.primary,
-                titleBorder: Border.all(
-                  color: const Color(0xFF000000),
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
-                titleBorderRadius: const BorderRadius.all(
-                  Radius.circular(10),
+              Visibility(
+                visible: faq['answer'] != '' ? true : false,
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: ExpansionTileCard(
+                        expandedTextColor: AppColors.primary,
+                        expandedColor: Colors.white,
+                        shadowColor: Colors.black,
+                        title: Text(faq['question']),
+                        children: <Widget>[
+                          const Divider(
+                            thickness: 1.0,
+                            height: 1.0,
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 8.0,
+                              ),
+                              child: Html(data: faq['answer'] ?? ''),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
+            // GFAccordion(
+            //   title: faq['question'],
+            //   content: faq['answer'],
+            //   collapsedTitleBackgroundColor: Colors.white,
+            //   expandedTitleBackgroundColor: AppColors.primary,
+            //   titleBorder: Border.all(
+            //     color: const Color(0xFF000000),
+            //     width: 1,
+            //     style: BorderStyle.solid,
+            //   ),
+            //   titleBorderRadius: const BorderRadius.all(
+            //     Radius.circular(10),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -211,29 +244,63 @@ class ListItem extends StatelessWidget {
     const contentStyle = TextStyle(
         color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.normal);
 
-    return Accordion(
-      maxOpenSections: 0,
-      headerBackgroundColorOpened: Colors.black54,
-      scaleWhenAnimating: true,
-      openAndCloseAnimation: false,
-      headerPadding: const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
-      sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
-      sectionClosingHapticFeedback: SectionHapticFeedback.light,
-      children: [
-        AccordionSection(
-          isOpen: true,
-          // leftIcon: const Icon(Icons.insights_rounded,
-          //     color: Colors.white),
-          headerBackgroundColor: AppColors.primary,
-          headerBackgroundColorOpened: AppColors.primary,
-          header: Text(faq['question'], style: headerStyle),
-          content: Text(faq['answer'], style: contentStyle),
-          contentHorizontalPadding: 20,
-          contentBorderWidth: 1,
-          // onOpenSection: () => print('onOpenSection ...'),
-          // onCloseSection: () => print('onCloseSection ...'),
+    return Visibility(
+      visible: faq['answer'] != '' ? true : false,
+      child: Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: ExpansionTileCard(
+              expandedTextColor: AppColors.primary,
+              expandedColor: Colors.white,
+              shadowColor: Colors.black,
+              title: faq['question'],
+              children: <Widget>[
+                const Divider(
+                  thickness: 1.0,
+                  height: 1.0,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                    child: Html(data: faq['answer'] ?? ''),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-      ],
+      ),
     );
+    // return Accordion(
+    //   maxOpenSections: 0,
+    //   headerBackgroundColorOpened: Colors.black54,
+    //   scaleWhenAnimating: true,
+    //   openAndCloseAnimation: false,
+    //   headerPadding: const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
+    //   sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
+    //   sectionClosingHapticFeedback: SectionHapticFeedback.light,
+    //   children: [
+    //     AccordionSection(
+    //       isOpen: true,
+    //       // leftIcon: const Icon(Icons.insights_rounded,
+    //       //     color: Colors.white),
+    //       headerBackgroundColor: AppColors.primary,
+    //       headerBackgroundColorOpened: AppColors.primary,
+    //       header: Text(faq['question'], style: headerStyle),
+    //       content: Text(faq['answer'], style: contentStyle),
+    //       contentHorizontalPadding: 20,
+    //       contentBorderWidth: 1,
+    //       // onOpenSection: () => print('onOpenSection ...'),
+    //       // onCloseSection: () => print('onCloseSection ...'),
+    //     ),
+    //   ],
+    // );
   }
 }

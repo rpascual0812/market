@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
+import 'package:market/screens/orders/components/my_looking_for_interested.dart';
 import 'package:market/screens/producer/my_producer_page/components/my_producer_edit_product.dart';
 
 import '../../../constants/index.dart';
@@ -260,7 +260,7 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
                                             top: 0,
                                             right: 0,
                                             child: Container(
-                                                width: 120.0,
+                                                width: 150.0,
                                                 height: 70.0,
                                                 padding: EdgeInsets.zero,
                                                 child: Column(
@@ -269,16 +269,6 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.end,
                                                   children: [
-                                                    // Text(
-                                                    //   'Delivered',
-                                                    //   style: TextStyle(
-                                                    //     fontSize: 12,
-                                                    //     color:
-                                                    //         AppColors.primary,
-                                                    //     fontWeight:
-                                                    //         FontWeight.bold,
-                                                    //   ),
-                                                    // ),
                                                     const SizedBox(height: 5),
                                                     Text(
                                                       'Order Total: ${widget.order['product']['country']['currency_symbol']}${NumberFormat.decimalPattern().format(double.parse(widget.order['product']['price_from']) * double.parse(widget.order['product']['quantity']))}',
@@ -369,121 +359,95 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
                                               ),
                                               const VerticalDivider(),
                                               SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.18,
+                                                width: 125,
                                                 height: 20,
                                                 child: ElevatedButton(
                                                   onPressed: () async {
-                                                    ArtDialogResponse response =
-                                                        await ArtSweetAlert
-                                                            .show(
-                                                      barrierDismissible: false,
-                                                      context: context,
-                                                      artDialogArgs: ArtDialogArgs(
-                                                          type:
-                                                              ArtSweetAlertType
-                                                                  .question,
-                                                          denyButtonText:
-                                                              "Cancel",
-                                                          denyButtonColor:
-                                                              Colors.grey,
-                                                          title:
-                                                              "Are you sure you want to update the status of this order?",
-                                                          confirmButtonText:
-                                                              "Update",
-                                                          confirmButtonColor:
-                                                              AppColors
-                                                                  .primary),
-                                                    );
-
-                                                    if (response
-                                                        .isTapConfirmButton) {
-                                                      if (!mounted) return;
-                                                      update('Ordered');
-                                                    }
-
-                                                    if (response
-                                                        .isTapDenyButton) {
-                                                      return;
-                                                    }
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (_) =>
+                                                            MyLookingForInterested(
+                                                                productPk: widget
+                                                                            .order[
+                                                                        'product']
+                                                                    ['pk'],
+                                                                token: widget
+                                                                    .token));
                                                   },
                                                   style: TextButton.styleFrom(
                                                     backgroundColor:
                                                         AppColors.primary,
-                                                    minimumSize:
-                                                        Size.zero, // Set this
-                                                    padding: EdgeInsets
-                                                        .zero, // and this
+                                                    minimumSize: Size.zero,
+                                                    padding: EdgeInsets.zero,
                                                   ),
                                                   child: const Text(
-                                                    'Ordered',
+                                                    'See List of Interested',
                                                     style: TextStyle(
-                                                      fontSize: 10,
+                                                      fontSize:
+                                                          AppDefaults.fontSize,
                                                       color: Colors.white,
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                              const VerticalDivider(),
-                                              SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.18,
-                                                height: 20,
-                                                child: ElevatedButton(
-                                                  onPressed: () async {
-                                                    ArtDialogResponse response =
-                                                        await ArtSweetAlert
-                                                            .show(
-                                                      barrierDismissible: false,
-                                                      context: context,
-                                                      artDialogArgs: ArtDialogArgs(
-                                                          type:
-                                                              ArtSweetAlertType
-                                                                  .danger,
-                                                          denyButtonText:
-                                                              "Close",
-                                                          denyButtonColor:
-                                                              Colors.grey,
-                                                          title:
-                                                              "Are you sure you want to cancel this order?",
-                                                          confirmButtonText:
-                                                              "Yes, cancel",
-                                                          confirmButtonColor:
-                                                              AppColors.danger),
-                                                    );
+                                              // const VerticalDivider(),
+                                              // SizedBox(
+                                              //   width: MediaQuery.of(context)
+                                              //           .size
+                                              //           .width *
+                                              //       0.18,
+                                              //   height: 20,
+                                              //   child: ElevatedButton(
+                                              //     onPressed: () async {
+                                              //       ArtDialogResponse response =
+                                              //           await ArtSweetAlert
+                                              //               .show(
+                                              //         barrierDismissible: false,
+                                              //         context: context,
+                                              //         artDialogArgs: ArtDialogArgs(
+                                              //             type:
+                                              //                 ArtSweetAlertType
+                                              //                     .danger,
+                                              //             denyButtonText:
+                                              //                 "Close",
+                                              //             denyButtonColor:
+                                              //                 Colors.grey,
+                                              //             title:
+                                              //                 "Are you sure you want to cancel this order?",
+                                              //             confirmButtonText:
+                                              //                 "Yes, cancel",
+                                              //             confirmButtonColor:
+                                              //                 AppColors.danger),
+                                              //       );
 
-                                                    if (response
-                                                        .isTapConfirmButton) {
-                                                      if (!mounted) return;
-                                                      update('Cancelled');
-                                                    }
+                                              //       if (response
+                                              //           .isTapConfirmButton) {
+                                              //         if (!mounted) return;
+                                              //         update('Cancelled');
+                                              //       }
 
-                                                    if (response
-                                                        .isTapDenyButton) {
-                                                      return;
-                                                    }
-                                                  },
-                                                  style: TextButton.styleFrom(
-                                                    backgroundColor:
-                                                        AppColors.danger,
-                                                    minimumSize:
-                                                        Size.zero, // Set this
-                                                    padding: EdgeInsets
-                                                        .zero, // and this
-                                                  ),
-                                                  child: const Text(
-                                                    'Cancel',
-                                                    style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
+                                              //       if (response
+                                              //           .isTapDenyButton) {
+                                              //         return;
+                                              //       }
+                                              //     },
+                                              //     style: TextButton.styleFrom(
+                                              //       backgroundColor:
+                                              //           AppColors.danger,
+                                              //       minimumSize:
+                                              //           Size.zero, // Set this
+                                              //       padding: EdgeInsets
+                                              //           .zero, // and this
+                                              //     ),
+                                              //     child: const Text(
+                                              //       'Cancel',
+                                              //       style: TextStyle(
+                                              //         fontSize: 10,
+                                              //         color: Colors.white,
+                                              //       ),
+                                              //     ),
+                                              //   ),
+                                              // ),
                                             ],
                                           ),
                                         ),

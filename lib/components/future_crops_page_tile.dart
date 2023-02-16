@@ -232,14 +232,15 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              Bubble(
-                                                            token: widget.token,
-                                                            userPk: widget
-                                                                .product[
-                                                                    'user_pk']
-                                                                .toString(),
-                                                          ),
+                                                          builder: (context) => Bubble(
+                                                              token:
+                                                                  widget.token,
+                                                              userPk: widget
+                                                                  .product[
+                                                                      'user_pk']
+                                                                  .toString(),
+                                                              callback:
+                                                                  (status) {}),
                                                         ),
                                                       );
                                                     },

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +7,7 @@ import 'package:market/screens/chat/bubble.dart';
 
 import '../../constants/index.dart';
 import '../../components/network_image.dart';
+import 'package:http/http.dart' as http;
 
 class LookingForListTile extends StatefulWidget {
   static const IconData chat =
@@ -34,6 +37,35 @@ class _LookingForListTileState extends State<LookingForListTile> {
       IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
+
+  Future setInterest() async {
+    try {
+      final url = Uri.parse(
+          '${dotenv.get('API')}/products/${widget.product['pk'].toString()}/interested');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${widget.token}',
+      };
+
+      var res = await http.post(url, headers: headers);
+
+      if (res.statusCode == 200) {
+        if (!mounted) return;
+
+        final dataJson = jsonDecode(res.body);
+        AppDefaults.toast(
+            context, 'success', AppMessage.getSuccess('INTERESTED'));
+
+        setState(() {
+          widget.product['interested'] = dataJson['data']['data'];
+        });
+      }
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -236,6 +268,63 @@ class _LookingForListTileState extends State<LookingForListTile> {
                                             ),
                                           ),
                                           Visibility(
+                                            visible:
+                                                (widget.product['user_pk'] ==
+                                                        widget.account['user']
+                                                            ['pk'])
+                                                    ? false
+                                                    : true,
+                                            child: Positioned(
+                                              right: 35,
+                                              child: Container(
+                                                width: 100.0,
+                                                height: 30.0,
+                                                padding: EdgeInsets.zero,
+                                                child: OutlinedButton(
+                                                  onPressed: () {
+                                                    setInterest();
+                                                  },
+                                                  style:
+                                                      OutlinedButton.styleFrom(
+                                                          side: BorderSide(
+                                                            width: 1,
+                                                            color: widget.product[
+                                                                            'interested'] !=
+                                                                        null &&
+                                                                    widget
+                                                                            .product[
+                                                                                'interested']
+                                                                            .length >
+                                                                        0
+                                                                ? Colors.grey
+                                                                : AppColors
+                                                                    .primary,
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(0),
+                                                          backgroundColor: widget
+                                                                              .product[
+                                                                          'interested'] !=
+                                                                      null &&
+                                                                  widget
+                                                                          .product[
+                                                                              'interested']
+                                                                          .length >
+                                                                      0
+                                                              ? Colors.grey
+                                                              : AppColors
+                                                                  .primary),
+                                                  child: const Text(
+                                                    'I\'m Interested',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Visibility(
                                             visible: widget
                                                         .product['user_pk'] ==
                                                     widget.account['user']['pk']
@@ -254,12 +343,14 @@ class _LookingForListTileState extends State<LookingForListTile> {
                                                       MaterialPageRoute(
                                                         builder: (context) {
                                                           return Bubble(
-                                                            token: widget.token,
-                                                            userPk: widget
-                                                                .product[
-                                                                    'user_pk']
-                                                                .toString(),
-                                                          );
+                                                              token:
+                                                                  widget.token,
+                                                              userPk: widget
+                                                                  .product[
+                                                                      'user_pk']
+                                                                  .toString(),
+                                                              callback:
+                                                                  (status) {});
                                                         },
                                                       ),
                                                     );

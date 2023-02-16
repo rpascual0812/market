@@ -73,9 +73,9 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
   List cities = [];
   List areas = [];
 
-  String provinceValue = '0';
-  String cityValue = '0';
-  String areaValue = '0';
+  String provinceValue = 'select';
+  String cityValue = 'select';
+  String areaValue = 'select';
 
   @override
   void initState() {
@@ -99,7 +99,7 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
       // userAddress = AppDefaults.userAddress(user['user_addresses']);
     }
 
-    getProvinces();
+    getProvinces(true);
 
     if (widget.user.isNotEmpty) {
       firstNameController.text = widget.user['first_name'] ?? '';
@@ -123,7 +123,7 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
     super.initState();
   }
 
-  Future getProvinces() async {
+  Future getProvinces(firstLoad) async {
     try {
       final url = Uri.parse('${dotenv.get('API')}/provinces');
       var res = await http.get(url);
@@ -135,14 +135,14 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
           areas = [];
 
           provinces = result['data'];
-          provinces.insert(0, {'province_code': 0, 'name': 'Select'});
-          cityValue = '0';
-          areaValue = '0';
+          provinces.insert(0, {'province_code': 'select', 'name': 'Select'});
+          cityValue = 'select';
+          areaValue = 'select';
 
-          if (userAddress.isNotEmpty) {
+          if (firstLoad && userAddress.isNotEmpty) {
             provinceValue = userAddress['province_code'].toString();
 
-            getCities();
+            getCities(true);
           }
         });
       }
@@ -155,7 +155,7 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
     }
   }
 
-  Future getCities() async {
+  Future getCities(firstLoad) async {
     try {
       cities = [];
       final params = {'province_code': provinceValue};
@@ -167,12 +167,11 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
         final result = json.decode(res.body);
         setState(() {
           cities = result['data'];
-          cities.insert(0, {'city_code': 0, 'name': 'Select'});
-          // print(cities);
+          cities.insert(0, {'city_code': 'select', 'name': 'Select'});
 
-          if (userAddress.isNotEmpty) {
+          if (firstLoad && userAddress.isNotEmpty) {
             cityValue = userAddress['city_code'].toString();
-            getAreas();
+            getAreas(true);
           }
         });
       }
@@ -185,7 +184,7 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
     }
   }
 
-  Future getAreas() async {
+  Future getAreas(firstLoad) async {
     try {
       areas = [];
       final params = {'city_code': cityValue};
@@ -197,10 +196,10 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
         final result = json.decode(res.body);
         setState(() {
           areas = result['data'];
-          areas.insert(0, {'pk': 0, 'name': 'Select'});
+          areas.insert(0, {'pk': 'select', 'name': 'Select'});
           // print(areas);
 
-          if (userAddress.isNotEmpty) {
+          if (firstLoad && userAddress.isNotEmpty) {
             areaValue = userAddress['area_pk'].toString();
           }
         });
@@ -782,13 +781,13 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
                             errorBorder: AppDefaults.outlineInputBorderError,
                           ),
                           onChanged: (String? value) {
-                            // print(value);
                             setState(() {
                               provinceValue = value!;
-                              cityValue = '0';
-                              areaValue = '0';
-                              getCities();
+                              cityValue = 'select';
+                              areaValue = 'select';
                             });
+
+                            getCities(false);
                           },
                           items:
                               provinces.map<DropdownMenuItem<String>>((value) {
@@ -842,8 +841,9 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
                           onChanged: (String? value) {
                             setState(() {
                               cityValue = value!;
-                              getAreas();
+                              areaValue = 'select';
                             });
+                            getAreas(false);
                           },
                           items: cities.map<DropdownMenuItem<String>>((value) {
                             return DropdownMenuItem<String>(

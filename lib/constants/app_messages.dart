@@ -64,6 +64,8 @@ class AppMessage {
         return "Your password has been updated.";
       case "EMAIL_SENT":
         return "An email has been sent to your registered email address.";
+      case "INTERESTED":
+        return "Interest successfully saved.";
       default:
         return "SUCCESS!";
     }

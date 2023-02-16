@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -88,10 +90,16 @@ class HomeSliderSlide extends StatelessWidget {
                     child: const SizedBox(height: 120)),
                 const SizedBox(height: AppDefaults.margin),
                 SizedBox(
-                  height: 35.0,
-                  child: Text(
-                    title,
-                    style: const TextStyle(color: Colors.white, fontSize: 35),
+                  height: AppDefaults.fontSize + 18,
+                  width: MediaQuery.of(context).size.width,
+                  child: Center(
+                    child: Text(
+                      '${title.substring(0, min(title.toString().length, 18))} ${title.toString().length > 18 ? '...' : ''}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: AppDefaults.fontSize + 18,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: AppDefaults.margin),
@@ -99,7 +107,7 @@ class HomeSliderSlide extends StatelessWidget {
                   height: 90.0,
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: Text(
-                    details,
+                    '${details.substring(0, min(details.toString().length, 355))} ${details.toString().length > 355 ? '...' : ''}',
                     style: const TextStyle(
                         color: Colors.white, fontSize: AppDefaults.fontSize),
                     textAlign: TextAlign.justify,

@@ -496,10 +496,10 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                                     builder: (context) {
                                       // print(widget.product['user_pk'].toString());
                                       return Bubble(
-                                        userPk: widget.product['user_pk']
-                                            .toString(),
-                                        token: token,
-                                      );
+                                          userPk: widget.product['user_pk']
+                                              .toString(),
+                                          token: token,
+                                          callback: (status) {});
                                     },
                                   ),
                                 );

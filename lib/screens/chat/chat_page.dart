@@ -64,7 +64,6 @@ class _ChatPageState extends State<ChatPage> {
   Future<void> loadInitialData() async {
     chats = [];
     chats = await getNextPageData(page);
-    print(chats);
     // print('load initial data $products');
     setState(() {});
   }

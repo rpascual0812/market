@@ -93,15 +93,17 @@ class _TermsPageState extends State<TermsPage> {
             child: Column(
               children: [
                 const Appbar(),
+                const SizedBox(height: 30),
                 Visibility(
                   visible: disclaimer['value'] != '' ? true : false,
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(0.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20.0),
                       child: Container(
                         alignment: Alignment.center,
                         child: ExpansionTileCard(
+                          expandedTextColor: AppColors.primary,
                           expandedColor: Colors.white,
                           shadowColor: Colors.black,
                           title: const Text('Disclaimer'),
@@ -129,12 +131,13 @@ class _TermsPageState extends State<TermsPage> {
                 Visibility(
                   visible: legal['value'] != '' ? true : false,
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(0.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20.0),
                       child: Container(
                         alignment: Alignment.center,
                         child: ExpansionTileCard(
+                          expandedTextColor: AppColors.primary,
                           title: const Text('Legal Conditions'),
                           children: <Widget>[
                             const Divider(
@@ -160,12 +163,13 @@ class _TermsPageState extends State<TermsPage> {
                 Visibility(
                   visible: terms['value'] != '' ? true : false,
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(0.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20.0),
                       child: Container(
                         alignment: Alignment.center,
                         child: ExpansionTileCard(
+                          expandedTextColor: AppColors.primary,
                           title: const Text('Terms and Conditions'),
                           children: <Widget>[
                             const Divider(

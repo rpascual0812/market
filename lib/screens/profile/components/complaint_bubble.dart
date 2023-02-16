@@ -6,35 +6,31 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:market/constants/index.dart';
-import 'package:market/screens/producer/producer_page/producer_page.dart';
-import 'package:market/screens/producer/producer_profile/producer_profile.dart';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:http/http.dart' as http;
 
-class Bubble extends StatefulWidget {
-  const Bubble({
+class ComplaintBubble extends StatefulWidget {
+  const ComplaintBubble({
     Key? key,
-    required this.userPk,
+    required this.complaint,
     required this.token,
-    required this.callback,
   }) : super(key: key);
 
-  final String userPk;
+  final Map<String, dynamic> complaint;
   final String token;
-  final void Function(bool)? callback;
 
   @override
-  State<Bubble> createState() => _BubbleState();
+  State<ComplaintBubble> createState() => _ComplaintBubbleState();
 }
 
-class _BubbleState extends State<Bubble> {
+class _ComplaintBubbleState extends State<ComplaintBubble> {
   final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
 
-  var chatId = '';
+  var complaintPk = '';
   String image = '';
   String name = '';
-  int userPk = 0;
 
   TextEditingController messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -47,15 +43,16 @@ class _BubbleState extends State<Bubble> {
   int skip = 0;
   int take = 10;
 
-  bool _keyboardVisible = false;
-
   @override
   void initState() {
     super.initState();
+    complaintPk = widget.complaint['pk'].toString();
+
     var token = AppDefaults.jwtDecode(widget.token);
     fetchAccount(token['sub']);
-    setRead();
     _scrollController.addListener(_scrollListener);
+
+    initAbly();
   }
 
   @override
@@ -73,43 +70,11 @@ class _BubbleState extends State<Bubble> {
       };
 
       var res = await http.get(url, headers: headers);
+
       if (res.statusCode == 200) {
         setState(() {
           account = json.decode(res.body);
-          // print('account $account');
-          fetchChat();
-        });
-      }
-      return null;
-    } on Exception catch (e) {
-      print('ERROR $e');
-      return null;
-    }
-  }
-
-  Future fetchChat() async {
-    // print('fetching chat');
-    try {
-      final params = {'type': 'chat'};
-      final url = Uri.parse('${dotenv.get('API')}/chats/user/${widget.userPk}')
-          .replace(queryParameters: params);
-      final headers = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${widget.token}',
-      };
-
-      var res = await http.get(url, headers: headers);
-      // print('res ${res.statusCode}');
-      // print('res body ${res.body}');
-      if (res.statusCode == 200) {
-        setState(() {
-          image = '';
-          name = '';
-          chat = json.decode(res.body);
-          // print('fetchchat $chat');
-          readMessages();
           fetchMessages();
-          initAbly();
         });
       }
       return null;
@@ -122,7 +87,8 @@ class _BubbleState extends State<Bubble> {
   Future fetchMessages() async {
     try {
       final params = {'skip': skip.toString(), 'take': take.toString()};
-      final url = Uri.parse('${dotenv.get('API')}/chats/${chat['pk']}/messages')
+      final url = Uri.parse(
+              '${dotenv.get('API')}/complaints/${widget.complaint['pk']}/messages')
           .replace(queryParameters: params);
       final headers = {
         'Accept': 'application/json',
@@ -130,10 +96,11 @@ class _BubbleState extends State<Bubble> {
       };
 
       var res = await http.get(url, headers: headers);
-      // log(res.statusCode.toString());
+      log(res.statusCode.toString());
       if (res.statusCode == 200) {
         setState(() {
           var data = json.decode(res.body);
+          // print('messages ${data['data']}');
           messages = data['data'];
           _scrollToBottom();
         });
@@ -146,7 +113,7 @@ class _BubbleState extends State<Bubble> {
   }
 
   void _scrollToBottom() async {
-    // print('Scrollling to bottom');
+    print('Scrollling to bottom');
     // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     Future.delayed(const Duration(milliseconds: 500), () {
       // print('Scrolled to bottom');
@@ -173,9 +140,8 @@ class _BubbleState extends State<Bubble> {
   }
 
   void initAbly() {
-    chatId = chat['uuid'] ?? '';
-    print('listening to bubble chat id: $chatId');
-
+    final channelId = 'complaint-${widget.complaint['pk'].toString()}';
+    print('channelId $channelId');
     // Create an instance of ClientOptions with Ably key
     // final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
 
@@ -189,8 +155,8 @@ class _BubbleState extends State<Bubble> {
     //     // AppDefaults.toast(context, 'success', 'Realtime Connection');
     //   },
     // );
-
-    ably.RealtimeChannel channel = realtime.channels.get(chatId);
+    // print('initAbly $complaintPk');
+    ably.RealtimeChannel channel = realtime.channels.get(channelId);
     channel.on().listen((ably.ChannelStateChange stateChange) async {
       // Handle channel state change events
       // print('RealtimeChannel');
@@ -198,11 +164,11 @@ class _BubbleState extends State<Bubble> {
     });
 
     StreamSubscription<ably.Message> subscription =
-        channel.subscribe(name: chatId).listen((ably.Message message) {
+        channel.subscribe(name: channelId).listen((ably.Message message) {
       // Handle channel messages with name 'event1'
-      // print('StreamSubscription');
-      // print(message.data);
-      // print(account['user']['pk']);
+      print('StreamSubscription');
+      print(message.data);
+      print(account['user']['pk']);
 
       final player = AudioPlayer();
       if (message.data != null) {
@@ -214,67 +180,59 @@ class _BubbleState extends State<Bubble> {
         } else {
           player.play(AssetSource('received.mp3'));
         }
-      }
 
-      messages.insert(messages.length, message.data);
-      _scrollToBottom();
-      // print(messages);
+        setState(() {
+          messages.insert(messages.length, newMessage);
+        });
+        _scrollToBottom();
+      }
     });
   }
 
-  void setRead() async {
-    try {
-      final url =
-          Uri.parse('${dotenv.get('API')}/chats/${chat['pk']}/message/read');
-      final headers = {
-        HttpHeaders.authorizationHeader: 'Bearer ${widget.token}',
-      };
-
-      var res = await http.post(url, headers: headers);
-      widget.callback!(true);
-    } on Exception catch (exception) {
-      log('exception $exception');
-    } catch (error) {
-      log('error $error');
-    }
-  }
-
   void sendChat() async {
+    final channelId = 'complaint-${widget.complaint['pk'].toString()}';
+
     if (messageController.text != '') {
       try {
-        // print('account pk ${chat['uuid']} ${messageController.text}');
         var body = {
-          'uuid': chat['uuid'],
+          'pk': widget.complaint['pk'].toString(),
+          'uuid': channelId,
           'message': messageController.text,
           'user_pk': account['user']['pk'].toString(),
         };
-        // print('saving $body');
+
         // print(widget.token);
         // print(widget.userPk.toString());
-        final url = Uri.parse('${dotenv.get('API')}/chats/messages');
+        final url = Uri.parse(
+            '${dotenv.get('API')}/complaints/${widget.complaint['pk']}/messages');
         final headers = {
           HttpHeaders.authorizationHeader: 'Bearer ${widget.token}',
         };
 
         var res = await http.post(url, headers: headers, body: body);
-        if (res.statusCode == 200) {
+        if (res.statusCode == 201) {
+          var body = json.decode(res.body);
+
           var ablyData = {
-            'pk': messages.length + 1,
+            'pk': body['data']['pk'].toString(),
+            'uuid': 'complaint-${widget.complaint['pk'].toString()}',
+            'length': (messages.length + 1).toString(),
             'message': messageController.text,
             'user_pk': account['user']['pk'].toString(),
           };
 
           ably.Realtime realtime = ably.Realtime(options: clientOptions);
-          ably.RealtimeChannel conversationChannel =
-              realtime.channels.get('user-${userPk.toString()}');
-          await conversationChannel.publish(
-            name: 'user-${userPk.toString()}',
-            data: ablyData,
-          );
-          // print('chatId $chatId');
-          ably.RealtimeChannel bubbleChannel = realtime.channels.get(chatId);
-          await bubbleChannel.publish(
-            name: chatId,
+          // ably.RealtimeChannel conversationChannel =
+          //     realtime.channels.get(channelId);
+          // await conversationChannel.publish(
+          //   name: channelId,
+          //   data: ablyData,
+          // );
+
+          ably.RealtimeChannel ComplaintbubbleChannel =
+              realtime.channels.get(channelId);
+          await ComplaintbubbleChannel.publish(
+            name: channelId,
             data: ablyData,
           );
 
@@ -334,12 +292,6 @@ class _BubbleState extends State<Bubble> {
 
   @override
   Widget build(BuildContext context) {
-    _keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
-
-    if (_keyboardVisible) {
-      _scrollToBottom();
-    }
-
     if (chat.isNotEmpty) {
       var found = false;
       for (var i = 0; i < chat['chat_participants'].length; i++) {
@@ -349,9 +301,6 @@ class _BubbleState extends State<Bubble> {
           image = chat['chat_participants'] != null
               ? '${dotenv.get('API')}/${chat['chat_participants'][i]['user']['user_document']['document']['path']}'
               : '';
-          userPk = chat['chat_participants'] != null
-              ? chat['chat_participants'][i]['user']['pk']
-              : 0;
           name = chat['chat_participants'] != null
               ? '${chat['chat_participants'][i]['user']['first_name']} ${chat['chat_participants'][i]['user']['last_name']}'
               : '';
@@ -362,15 +311,12 @@ class _BubbleState extends State<Bubble> {
         image = chat['chat_participants'] != null
             ? '${dotenv.get('API')}/${chat['chat_participants'][0]['user']['user_document']['document']['path']}'
             : '';
-        userPk = chat['chat_participants'] != null
-            ? chat['chat_participants'][0]['user']['first_name']
-            : 0;
         name = chat['chat_participants'] != null
             ? '${chat['chat_participants'][0]['user']['first_name']} ${chat['chat_participants'][0]['user']['last_name']}'
             : '';
       }
     }
-    // print('userPK $userPk $name');
+
     image = image != '' ? image : '${dotenv.get('API')}/assets/images/user.png';
 
     return Scaffold(
@@ -383,7 +329,7 @@ class _BubbleState extends State<Bubble> {
             color: AppColors.third,
             padding: const EdgeInsets.only(right: 16),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 IconButton(
                   onPressed: () {
@@ -395,53 +341,11 @@ class _BubbleState extends State<Bubble> {
                   ),
                 ),
                 Text(
-                  name,
+                  widget.complaint['subject'],
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Colors.white),
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.storefront,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return ProducerPage(
-                                userPk: userPk,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                    // const VerticalDivider(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return ProducerProfile(
-                                token: widget.token,
-                                userPk: userPk,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(image),
-                        maxRadius: 20,
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),
@@ -482,16 +386,17 @@ class _BubbleState extends State<Bubble> {
                               : AppColors.third),
                         ),
                         padding: const EdgeInsets.all(16),
-                        child: Text(
-                          messages[index]['message'] ?? '',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: messages[index]['user_pk'].toString() ==
-                                    account['user']['pk'].toString()
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                        ),
+                        child: Html(data: messages[index]['message'] ?? ''),
+                        // child: Text(
+                        //   messages[index]['message'] ?? '',
+                        //   style: TextStyle(
+                        //     fontSize: 15,
+                        //     color: messages[index]['user_pk'].toString() ==
+                        //             account['user']['pk'].toString()
+                        //         ? Colors.black
+                        //         : Colors.white,
+                        //   ),
+                        // ),
                       ),
                     ),
                   );

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -142,6 +144,35 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
     }
   }
 
+  Future setInterest() async {
+    try {
+      final url = Uri.parse(
+          '${dotenv.get('API')}/products/${widget.product['pk'].toString()}/interested');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      var res = await http.post(url, headers: headers);
+
+      if (res.statusCode == 200) {
+        if (!mounted) return;
+
+        final dataJson = jsonDecode(res.body);
+        AppDefaults.toast(
+            context, 'success', AppMessage.getSuccess('INTERESTED'));
+
+        setState(() {
+          widget.product['interested'] = dataJson['data']['data'];
+        });
+      }
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // print('produc2t ${widget.product}');
@@ -261,8 +292,9 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
                 Row(
                   children: [
                     Visibility(
-                      visible: widget.product['user_pk'] ==
-                              widget.account['user']['pk']
+                      visible: widget.account['user'] != null &&
+                              widget.product['user_pk'] ==
+                                  widget.account['user']['pk']
                           ? false
                           : true,
                       child: Container(
@@ -276,10 +308,10 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
                               MaterialPageRoute(
                                 builder: (context) {
                                   return Bubble(
-                                    userPk:
-                                        widget.product['user_pk'].toString(),
-                                    token: token,
-                                  );
+                                      userPk:
+                                          widget.product['user_pk'].toString(),
+                                      token: token,
+                                      callback: (status) {});
                                 },
                               ),
                             );
@@ -339,7 +371,46 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
             ),
           ),
           // const Spacer(),
+          // const SizedBox(height: AppDefaults.margin * 2),
+
+          Visibility(
+            visible: (widget.product['user_pk'] == widget.account['user']['pk'])
+                ? false
+                : true,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 30.0,
+              margin: const EdgeInsets.all(10),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: OutlinedButton(
+                  onPressed: () {
+                    setInterest();
+                  },
+                  style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        width: 1,
+                        color: widget.product['interested'] != null &&
+                                widget.product['interested'].length > 0
+                            ? Colors.grey
+                            : AppColors.primary,
+                      ),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      backgroundColor: widget.product['interested'] != null &&
+                              widget.product['interested'].length > 0
+                          ? Colors.grey
+                          : AppColors.primary),
+                  child: const Text(
+                    'I\'m Interested',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
           const SizedBox(height: AppDefaults.margin * 2),
+
           // Title And Pricing
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),

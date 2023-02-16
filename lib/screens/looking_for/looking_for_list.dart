@@ -58,6 +58,9 @@ class _LookingForListState extends State<LookingForList> {
         'type': 'looking_for',
         'skip': skip.toString(),
         'take': take.toString(),
+        'interest_user_pk': widget.account.isNotEmpty
+            ? widget.account['user']['pk'].toString()
+            : '',
       });
 
       if (res.statusCode == 200) {

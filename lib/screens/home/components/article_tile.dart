@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -21,7 +23,7 @@ class ArticleTile extends StatelessWidget {
       articleImage =
           '${dotenv.get('API')}/${article['article_document']['document']['path']}';
     }
-    print(articleImage);
+    // print(articleImage);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDefaults.margin / 2),
       child: Column(
@@ -96,7 +98,7 @@ class ArticleTile extends StatelessWidget {
           ),
           const SizedBox(height: AppDefaults.margin / 4),
           Text(
-            article['title'],
+            '${article['title'].substring(0, min(article['title'].toString().length, 18))} ${article['title'].toString().length > 18 ? '...' : ''}',
             style: const TextStyle(
               fontSize: AppDefaults.fontSize,
               color: AppColors.primary,
