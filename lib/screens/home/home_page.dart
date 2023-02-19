@@ -18,6 +18,8 @@ import 'package:market/screens/product/product_page.dart';
 // import 'package:market/screens/product_list/product_list_widget.dart';
 import 'package:market/size_config.dart';
 
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+
 import 'components/article_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,6 +35,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late TutorialCoachMark tutorialCoachMark;
+  GlobalKey keyButton = GlobalKey();
+  GlobalKey keyBottomNavigation1 = GlobalKey();
+
   final ScrollController _scrollController = ScrollController();
 
   int page = 0;
@@ -51,6 +57,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     getCategories();
+    createTutorial();
 
     _scrollController.addListener(() {
       if (_scrollController.offset >=
@@ -149,6 +156,65 @@ class _HomePageState extends State<HomePage> {
     }
 
     throw Exception();
+  }
+
+  void createTutorial() {
+    tutorialCoachMark = TutorialCoachMark(
+      targets: _createTargets(),
+      colorShadow: Colors.red,
+      textSkip: "SKIP",
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {
+        print("finish");
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print(
+            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
+  List<TargetFocus> _createTargets() {
+    List<TargetFocus> targets = [];
+    targets.add(
+      TargetFocus(
+        identify: "keyBottomNavigation1",
+        keyTarget: keyBottomNavigation1,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  Text(
+                    "Titulo lorem ipsum",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    return targets;
   }
 
   @override

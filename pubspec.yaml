@@ -86,6 +86,7 @@ dependencies:
   flutter_html: ^2.0.0-nullsafety.1
   expansion_tile_card: ^2.0.0
   flutter_multi_formatter: ^2.2.1
+  tutorial_coach_mark: ^1.2.6
   
   
 
