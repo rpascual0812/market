@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
   Future fetch() async {
     try {
       var res = await Remote.get('products', {
-        'type': 'product,future_crop',
+        'type': 'product,all',
         'orderBy': filterValue,
         'categoryFilter': categoryFilterValue,
         'skip': skip.toString(),

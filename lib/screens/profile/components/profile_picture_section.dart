@@ -147,7 +147,11 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                ProfileEditPage(user: user),
+                                                ProfileEditPage(
+                                                    user: user,
+                                                    callback: () {
+                                                      fetch();
+                                                    }),
                                           ),
                                         );
                                       },

@@ -197,6 +197,13 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
       }
     }
 
+    var isAvailable = true;
+    if (DateTime.parse(widget.product['date_available'])
+            .compareTo(DateTime.now()) >
+        0) {
+      isAvailable = false;
+    }
+
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -577,46 +584,52 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                     height: 40.0,
                     padding: EdgeInsets.zero,
                     child: OutlinedButton(
-                      onPressed: () async {
-                        if (token != '') {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return RateProductPage(product: widget.product);
-                              },
-                            ),
-                          );
-                        } else {
-                          ArtDialogResponse response = await ArtSweetAlert.show(
-                            barrierDismissible: false,
-                            context: context,
-                            artDialogArgs: ArtDialogArgs(
-                              type: ArtSweetAlertType.danger,
-                              denyButtonText: "Cancel",
-                              denyButtonColor: Colors.grey,
-                              title: "You need to log in first!",
-                              confirmButtonText: "Login",
-                              confirmButtonColor: AppColors.primary,
-                            ),
-                          );
+                      onPressed: isAvailable
+                          ? () async {
+                              if (token != '') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return RateProductPage(
+                                          product: widget.product);
+                                    },
+                                  ),
+                                );
+                              } else {
+                                ArtDialogResponse response =
+                                    await ArtSweetAlert.show(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  artDialogArgs: ArtDialogArgs(
+                                    type: ArtSweetAlertType.danger,
+                                    denyButtonText: "Cancel",
+                                    denyButtonColor: Colors.grey,
+                                    title: "You need to log in first!",
+                                    confirmButtonText: "Login",
+                                    confirmButtonColor: AppColors.primary,
+                                  ),
+                                );
 
-                          if (response.isTapConfirmButton) {
-                            if (!mounted) return;
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginPage(),
-                              ),
-                            );
-                            return;
-                          }
-                        }
-                      },
+                                if (response.isTapConfirmButton) {
+                                  if (!mounted) return;
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginPage(),
+                                    ),
+                                  );
+                                  return;
+                                }
+                              }
+                            }
+                          : null,
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        side: const BorderSide(
+                        backgroundColor:
+                            isAvailable ? AppColors.primary : Colors.black45,
+                        side: BorderSide(
                           width: 1,
-                          color: AppColors.primary,
+                          color:
+                              isAvailable ? AppColors.primary : Colors.black45,
                         ),
                         padding: const EdgeInsets.all(5),
                       ),

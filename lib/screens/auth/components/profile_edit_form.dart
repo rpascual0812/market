@@ -17,9 +17,11 @@ class ProfileEditForm extends StatefulWidget {
   const ProfileEditForm({
     Key? key,
     required this.user,
+    required this.callback,
   }) : super(key: key);
 
   final Map<String, dynamic> user;
+  final void Function() callback;
 
   @override
   State<ProfileEditForm> createState() => _ProfileEditFormState();
@@ -251,6 +253,8 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
               AppMessage.getSuccess(
                   widget.user.isEmpty ? 'REGISTER_SUCCESS' : 'PROFILE_UPDATE'));
           Navigator.pop(context);
+
+          widget.callback();
         }
         return null;
       } on Exception {

@@ -9,9 +9,11 @@ class ProfileEditPage extends StatelessWidget {
   const ProfileEditPage({
     Key? key,
     required this.user,
+    required this.callback,
   }) : super(key: key);
 
   final Map<String, dynamic> user;
+  final void Function() callback;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,11 @@ class ProfileEditPage extends StatelessWidget {
                   ],
                 ),
               ),
-              ProfileEditForm(user: user),
+              ProfileEditForm(
+                  user: user,
+                  callback: () {
+                    callback();
+                  }),
               Visibility(
                 visible: user.isNotEmpty ? false : true,
                 child: Container(
