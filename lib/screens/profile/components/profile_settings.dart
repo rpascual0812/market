@@ -2,13 +2,14 @@
 
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:market/components/setting_tile.dart';
+import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/post/post_looking_for.dart';
 import 'package:market/screens/profile/components/recently_viewed_page.dart';
 
 import '../../../constants/index.dart';
-import '../../approot/app_root.dart';
 import '../../chat/moderator.dart';
 import '../../producer/my_producer_page/my_producer_page.dart';
 import '../../producer/producer_register/producer_register.dart';
@@ -16,6 +17,8 @@ import '../../terms/terms_page.dart';
 import 'complaint.dart';
 import 'faq_page.dart';
 import 'give_us_feedback.dart';
+
+import 'package:http/http.dart' as http;
 
 class ProfileSettings extends StatefulWidget {
   const ProfileSettings({
@@ -58,8 +61,32 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
     setState(() {
       producerPk = pk!;
-      // print('producerPk $producerPk');
     });
+  }
+
+  Future<void> delete() async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/users');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${widget.token}',
+      };
+
+      var res = await http.delete(url, headers: headers);
+      if (res.statusCode == 200) {
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AppRoot(jwt: ''),
+          ),
+        );
+      }
+
+      return;
+    } on Exception {
+      return;
+    }
   }
 
   @override
@@ -199,12 +226,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
                       if (response.isTapConfirmButton) {
                         if (!mounted) return;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AppRoot(jwt: ''),
-                          ),
-                        );
+                        delete();
                       }
                     }),
               ],
