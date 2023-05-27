@@ -80,12 +80,12 @@ class _SignUpFormState extends State<SignUpForm> {
       countryCode: 'PH',
       newMask: '+00 (000) 000 0000',
     );
-    PhoneInputFormatter.addAlternativePhoneMasks(
-      countryCode: 'PH',
-      alternativeMasks: [
-        '+00 (000) 000 0000',
-      ],
-    );
+    // PhoneInputFormatter.addAlternativePhoneMasks(
+    //   countryCode: 'PH',
+    //   alternativeMasks: [
+    //     '+00 (000) 000 0000',
+    //   ],
+    // );
 
     getProvinces();
 
@@ -1211,11 +1211,11 @@ String? validateMobile(String? formMobile) {
     return 'Mobile Number is required.';
   }
 
-  String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-  RegExp regex = RegExp(pattern);
-  if (!regex.hasMatch(formMobile)) {
-    return 'Mobile Number is invalid.';
-  }
+  // String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+  // RegExp regex = RegExp(pattern);
+  // if (!regex.hasMatch(formMobile)) {
+  //   return 'Mobile Number is invalid.';
+  // }
 
   return null;
 }
