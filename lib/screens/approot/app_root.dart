@@ -414,7 +414,7 @@ class _AppRootState extends State<AppRoot> {
                             softWrap: false,
                             maxLines: 5,
                             overflow: TextOverflow.ellipsis,
-                            "Messages for your future transactions on other users",
+                            "Messages for your future transactions with other users",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: AppDefaults.fontSize + 2,
@@ -598,6 +598,7 @@ class _AppRootState extends State<AppRoot> {
                       key: profileKey,
                     )
                   : Icon(
+                      key: profileKey,
                       _currentIndex == 3
                           ? IconlyBold.profile
                           : IconlyLight.profile,

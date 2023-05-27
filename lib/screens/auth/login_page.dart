@@ -20,13 +20,26 @@ class LoginPage extends StatelessWidget {
             const Spacer(),
             Image.asset(
               AppImages.logo,
-              height: 100,
+              height: 200,
             ),
             const Spacer(),
             // Header
-            Text(
-              "Community Market",
-              style: Theme.of(context).textTheme.headline6,
+            const Text(
+              "LAMBO",
+              style: TextStyle(
+                fontFamily: 'RobotoSlabRegular',
+                fontSize: 45,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff0a5028),
+              ),
+            ),
+            const Text(
+              "MAG-UUMA",
+              style: TextStyle(
+                fontFamily: 'RobotoSlabRegular',
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const Spacer(),
 

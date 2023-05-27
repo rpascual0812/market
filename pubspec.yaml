@@ -164,6 +164,12 @@ flutter:
     - family: Roboto
       fonts:
         - asset: assets/fonts/Roboto/Roboto-Condensed.ttf
+    - family: RobotoSlabRegular
+      fonts:
+        - asset: assets/fonts/RobotoSlab/RobotoSlab-Regular.ttf
+    - family: RobotoSlabSemiBold
+      fonts:
+        - asset: assets/fonts/RobotoSlab/RobotoSlab-SemiBold.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
