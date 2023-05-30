@@ -172,6 +172,12 @@ class _SignUpFormState extends State<SignUpForm> {
 
   Future save() async {
     if (_key.currentState!.validate()) {
+      if (displayPhoto == null || idPhoto == null) {
+        AppDefaults.toast(
+            context, 'error', 'Please upload a Photo and/or scan an ID');
+        return false;
+      }
+
       try {
         body = {
           'first_name': firstNameController.text,
@@ -189,6 +195,7 @@ class _SignUpFormState extends State<SignUpForm> {
           'display_photo': displayPhoto!['pk'].toString(),
           'id_photo': idPhoto!['pk'].toString(),
         };
+
         // print(Uri.parse('${dotenv.get('API')}/register'));
         var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
             body: body);
@@ -198,7 +205,7 @@ class _SignUpFormState extends State<SignUpForm> {
           if (!mounted) return;
           // print(AppMessage.getSuccess('REGISTER_SUCCESS'));
           AppDefaults.toast(
-              context, 'success', AppMessage.getSuccess('PROFILE_UPDATE'));
+              context, 'success', AppMessage.getSuccess('REGISTER_SUCCESS'));
           Navigator.pop(context);
         }
         return null;
