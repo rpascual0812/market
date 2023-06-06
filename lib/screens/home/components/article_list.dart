@@ -72,7 +72,7 @@ class _ArticleListState extends State<ArticleList> {
                           artDialogArgs: ArtDialogArgs(
                             denyButtonText: "Cancel",
                             title:
-                                "You are about to leave Samdhana Community Market. Do you want to continue?",
+                                "You are about to leave Lambo Mag-uuma. Do you want to continue?",
                             confirmButtonText: "Continue",
                           ));
 

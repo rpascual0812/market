@@ -268,7 +268,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                 type: ArtSweetAlertType.success,
                 title: "Success!",
                 text:
-                    "You are now producer. You will be redirected to the producer's page."),
+                    "You are now a producer. You will be redirected to the producer's page."),
           );
 
           if (response.isTapConfirmButton) {

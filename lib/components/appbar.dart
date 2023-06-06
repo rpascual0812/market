@@ -354,7 +354,7 @@ class _AppbarState extends State<Appbar> {
               // );
             },
             child: const Text(
-              'Samdhana Community Market',
+              'Lambo Mag-uuma',
               style: TextStyle(fontSize: 15, color: Colors.white),
             ),
           )

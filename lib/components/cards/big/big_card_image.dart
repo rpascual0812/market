@@ -67,7 +67,7 @@ class BigCardImage extends StatelessWidget {
                   height: 85.0,
                   width: 360,
                   child: Text(
-                    'Samdhana Community Market sit amet, consectuta adipising elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud execitation ullamco laboris',
+                    'Lambo Mag-uuma sit amet, consectuta adipising elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud execitation ullamco laboris',
                     style: TextStyle(color: Colors.white, fontSize: 12),
                     textAlign: TextAlign.justify,
                   ),

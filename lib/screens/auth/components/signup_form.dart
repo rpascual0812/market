@@ -760,6 +760,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         onChanged: (String? value) {
                           setState(() {
                             cityValue = value!;
+                            areaValue = '0';
                             getAreas();
                           });
                         },

@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       // showPerformanceOverlay: true,
-      title: 'Samdhana Community Market',
+      title: 'LAMBO MAG-UUMA',
       theme: AppTheme(context).lightTheme,
       home: welcome != '' ? AppRoot(jwt: jwt) : const OnboardingPage(),
       builder: EasyLoading.init(),
