@@ -14,3 +14,13 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## Development
+
+./android/local.properties
+ - flutter.minSdkVersion=21
+ - flutter.compileSdkVersion=33
+
+./android/app/build.gradle
+ - compileSdkVersion localProperties.getProperty('flutter.compileSdkVersion').toInteger()
+ - minSdkVersion localProperties.getProperty('flutter.minSdkVersion').toInteger()
