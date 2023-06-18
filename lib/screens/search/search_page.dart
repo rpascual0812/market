@@ -331,6 +331,16 @@ class _SearchPageState extends State<SearchPage> {
                     .toList(),
               ),
             ),
+            const SizedBox(height: 30),
+            Visibility(
+              visible: products.isNotEmpty ? false : true,
+              child: Center(
+                child: Text(
+                  'Your search \'${searchController.text}\' returns 0 results',
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ),
+            ),
           ],
         ),
       ),
