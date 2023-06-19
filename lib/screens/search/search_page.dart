@@ -72,6 +72,7 @@ class _SearchPageState extends State<SearchPage> {
       if (res.statusCode == 200) {
         Map<Object, dynamic> dataJson = jsonDecode(res.body);
         var data = [];
+
         for (var i = 0; i < dataJson['data'].length; i++) {
           data.add(dataJson['data'][i]);
         }
@@ -100,7 +101,8 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> loadInitialData() async {
-    products = await getNextPageData(page);
+    var product = await getNextPageData(page);
+    products = product ?? [];
     // print('load initial data $products');
     setState(() {});
   }

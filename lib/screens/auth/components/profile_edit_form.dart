@@ -199,7 +199,6 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
         setState(() {
           areas = result['data'];
           areas.insert(0, {'pk': 'select', 'name': 'Select'});
-          // print(areas);
 
           if (firstLoad && userAddress.isNotEmpty) {
             areaValue = userAddress['area_pk'].toString();
