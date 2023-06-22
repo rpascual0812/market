@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 // import 'package:intl/intl.dart';
 
 import '../../../constants/index.dart';
 import '../../../components/network_image.dart';
+
+import 'package:http/http.dart' as http;
 
 class CartPageTile extends StatefulWidget {
   const CartPageTile({
@@ -12,11 +15,13 @@ class CartPageTile extends StatefulWidget {
     required this.order,
     this.onTap,
     required this.onToggle,
+    required this.callback,
   }) : super(key: key);
 
   final Map<String, dynamic> order;
   final void Function()? onTap;
   final void Function() onToggle;
+  final Function(Map<String, dynamic>) callback;
 
   @override
   State<CartPageTile> createState() => _CartPageTileState();
@@ -27,6 +32,41 @@ class _CartPageTileState extends State<CartPageTile> {
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
   // static const IconData chat =
   //     IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
+  final storage = const FlutterSecureStorage();
+  String? token = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    getStorage();
+  }
+
+  Future getStorage() async {
+    token = await storage.read(key: 'jwt');
+    print(token);
+  }
+
+  Future delete(product) async {
+    try {
+      final url =
+          Uri.parse('${dotenv.get('API')}/orders/cart/${widget.order['pk']}');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      var res = await http.delete(url, headers: headers);
+      if (res.statusCode == 200) {
+        widget.callback(product);
+        if (!mounted) return;
+      }
+
+      return;
+    } on Exception {
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +226,7 @@ class _CartPageTileState extends State<CartPageTile> {
                                             ),
                                           ),
                                           Positioned(
-                                            top: 15,
+                                            top: 0,
                                             right: 0,
                                             child: Container(
                                               width: 70.0,
@@ -211,6 +251,44 @@ class _CartPageTileState extends State<CartPageTile> {
                                                   child: Text(
                                                     '${widget.order['product']['country']['currency_symbol']}${double.parse(widget.order['product']['price_from']).toStringAsFixed(2)}',
                                                     style: const TextStyle(
+                                                      fontFamily: '',
+                                                      fontSize: 10,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 30,
+                                            right: 0,
+                                            child: Container(
+                                              width: 70.0,
+                                              height: 25.0,
+                                              padding: EdgeInsets.zero,
+                                              child: SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.18,
+                                                height: 20,
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    delete(widget
+                                                        .order['product']);
+                                                  },
+                                                  style: TextButton.styleFrom(
+                                                    backgroundColor:
+                                                        AppColors.danger,
+                                                    minimumSize:
+                                                        Size.zero, // Set this
+                                                    padding: EdgeInsets
+                                                        .zero, // and this
+                                                  ),
+                                                  child: const Text(
+                                                    'Remove',
+                                                    style: TextStyle(
                                                       fontFamily: '',
                                                       fontSize: 10,
                                                       color: Colors.white,

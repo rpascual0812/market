@@ -39,13 +39,13 @@ class ProductPageDetails extends StatefulWidget {
 class _ProductPageDetailsState extends State<ProductPageDetails> {
   final storage = const FlutterSecureStorage();
   String token = '';
+  int accountPk = 0;
 
   @override
   void initState() {
     super.initState();
 
     readStorage();
-    // Timer(const Duration(seconds: 2), () => getMeasurements());
   }
 
   Future<void> readStorage() async {
@@ -53,6 +53,8 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
 
     setState(() {
       token = all ?? '';
+      var account = AppDefaults.jwtDecode(token);
+      accountPk = account != null ? account['sub'] : 0;
     });
   }
 
@@ -236,27 +238,30 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       child: OutlinedButton(
                         onPressed: () async {
                           if (token != '') {
-                            ArtDialogResponse response =
-                                await ArtSweetAlert.show(
-                              barrierDismissible: false,
-                              context: context,
-                              artDialogArgs: ArtDialogArgs(
-                                type: ArtSweetAlertType.success,
-                                denyButtonText: "Cancel",
-                                denyButtonColor: Colors.grey,
-                                title: "Are you sure you want to buy this?",
-                                confirmButtonText: "Continue",
-                                confirmButtonColor: AppColors.primary,
-                              ),
-                            );
+                            if (accountPk !=
+                                widget.product['user']['account']['pk']) {
+                              ArtDialogResponse response =
+                                  await ArtSweetAlert.show(
+                                barrierDismissible: false,
+                                context: context,
+                                artDialogArgs: ArtDialogArgs(
+                                  type: ArtSweetAlertType.success,
+                                  denyButtonText: "Cancel",
+                                  denyButtonColor: Colors.grey,
+                                  title: "Are you sure you want to buy this?",
+                                  confirmButtonText: "Continue",
+                                  confirmButtonColor: AppColors.primary,
+                                ),
+                              );
 
-                            if (response.isTapConfirmButton) {
-                              if (!mounted) return;
-                              saveOrder(widget.product['pk']);
-                            }
+                              if (response.isTapConfirmButton) {
+                                if (!mounted) return;
+                                saveOrder(widget.product['pk']);
+                              }
 
-                            if (response.isTapDenyButton) {
-                              return;
+                              if (response.isTapDenyButton) {
+                                return;
+                              }
                             }
                           } else {
                             ArtDialogResponse response =
@@ -285,16 +290,22 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                           }
                         },
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
+                          side: BorderSide(
                             width: 1,
-                            color: AppColors.primary,
+                            color: accountPk !=
+                                    widget.product['user']['account']['pk']
+                                ? AppColors.primary
+                                : Colors.black12,
                           ),
                           padding: const EdgeInsets.all(5),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Order Now',
                           style: TextStyle(
-                            color: AppColors.primary,
+                            color: accountPk !=
+                                    widget.product['user']['account']['pk']
+                                ? AppColors.primary
+                                : Colors.black12,
                             fontSize: 13,
                           ),
                         ),
@@ -308,7 +319,10 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       child: OutlinedButton(
                         onPressed: () async {
                           if (token != '') {
-                            saveToCart(widget.product['pk']);
+                            if (accountPk !=
+                                widget.product['user']['account']['pk']) {
+                              saveToCart(widget.product['pk']);
+                            }
                           } else {
                             ArtDialogResponse response =
                                 await ArtSweetAlert.show(
@@ -336,10 +350,16 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                           }
                         },
                         style: OutlinedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          side: const BorderSide(
+                          backgroundColor: accountPk !=
+                                  widget.product['user']['account']['pk']
+                              ? AppColors.primary
+                              : Colors.black12,
+                          side: BorderSide(
                             width: 1,
-                            color: AppColors.primary,
+                            color: accountPk !=
+                                    widget.product['user']['account']['pk']
+                                ? AppColors.primary
+                                : Colors.black12,
                           ),
                           padding: const EdgeInsets.all(5),
                         ),
@@ -497,26 +517,32 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       child: OutlinedButton(
                         onPressed: token != ''
                             ? () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      // print(widget.product['user_pk'].toString());
-                                      return Bubble(
-                                          userPk: widget.product['user_pk']
-                                              .toString(),
-                                          token: token,
-                                          callback: (status) {});
-                                    },
-                                  ),
-                                );
+                                if (accountPk !=
+                                    widget.product['user']['account']['pk']) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        // print(widget.product['user_pk'].toString());
+                                        return Bubble(
+                                            userPk: widget.product['user_pk']
+                                                .toString(),
+                                            token: token,
+                                            callback: (status) {});
+                                      },
+                                    ),
+                                  );
+                                }
                               }
                             : null,
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(
                             width: 1,
                             color: (token != ''
-                                ? AppColors.primary
+                                ? (accountPk !=
+                                        widget.product['user']['account']['pk']
+                                    ? AppColors.primary
+                                    : Colors.black12)
                                 : AppColors.grey2),
                           ),
                           padding: const EdgeInsets.all(5),
@@ -524,7 +550,10 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                         child: Icon(
                           ProductPageDetails.chat,
                           color: (token != ''
-                              ? AppColors.primary
+                              ? (accountPk !=
+                                      widget.product['user']['account']['pk']
+                                  ? AppColors.primary
+                                  : Colors.black12)
                               : AppColors.grey2),
                           size: 20,
                         ),
@@ -537,27 +566,36 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       padding: EdgeInsets.zero,
                       child: OutlinedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return ProducerPage(
-                                    userPk: widget.product['user']['pk']);
-                              },
-                            ),
-                          );
+                          if (accountPk !=
+                              widget.product['user']['account']['pk']) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ProducerPage(
+                                      userPk: widget.product['user']['pk']);
+                                },
+                              ),
+                            );
+                          }
                         },
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
+                          side: BorderSide(
                             width: 1,
-                            color: AppColors.primary,
+                            color: accountPk !=
+                                    widget.product['user']['account']['pk']
+                                ? AppColors.primary
+                                : Colors.black12,
                           ),
                           padding: const EdgeInsets.all(0),
                         ),
-                        child: const Text(
+                        child: Text(
                           'View Shop',
                           style: TextStyle(
-                            color: AppColors.primary,
+                            color: accountPk !=
+                                    widget.product['user']['account']['pk']
+                                ? AppColors.primary
+                                : Colors.black12,
                             fontSize: 13,
                           ),
                         ),
@@ -587,15 +625,18 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                       onPressed: isAvailable
                           ? () async {
                               if (token != '') {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return RateProductPage(
-                                          product: widget.product);
-                                    },
-                                  ),
-                                );
+                                if (accountPk !=
+                                    widget.product['user']['account']['pk']) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return RateProductPage(
+                                            product: widget.product);
+                                      },
+                                    ),
+                                  );
+                                }
                               } else {
                                 ArtDialogResponse response =
                                     await ArtSweetAlert.show(
@@ -624,12 +665,20 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                             }
                           : null,
                       style: OutlinedButton.styleFrom(
-                        backgroundColor:
-                            isAvailable ? AppColors.primary : Colors.black45,
+                        backgroundColor: isAvailable
+                            ? (accountPk !=
+                                    widget.product['user']['account']['pk']
+                                ? AppColors.primary
+                                : Colors.black12)
+                            : Colors.black45,
                         side: BorderSide(
                           width: 1,
-                          color:
-                              isAvailable ? AppColors.primary : Colors.black45,
+                          color: isAvailable
+                              ? (accountPk !=
+                                      widget.product['user']['account']['pk']
+                                  ? AppColors.primary
+                                  : Colors.black12)
+                              : Colors.black45,
                         ),
                         padding: const EdgeInsets.all(5),
                       ),

@@ -1346,11 +1346,11 @@ String? validateMobile(String? formMobile) {
     return 'Mobile Number is required.';
   }
 
-  String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-  RegExp regex = RegExp(pattern);
-  if (!regex.hasMatch(formMobile)) {
-    return 'Mobile Number is invalid.';
-  }
+  // String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+  // RegExp regex = RegExp(pattern);
+  // if (!regex.hasMatch(formMobile)) {
+  //   return 'Mobile Number is invalid.';
+  // }
 
   return null;
 }

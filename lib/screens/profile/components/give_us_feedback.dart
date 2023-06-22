@@ -143,7 +143,7 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
                           const Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                                'Please let us know how to make Farm House better for you!'),
+                                'Please let us know how to make Lambo Mag-uuma better for you!'),
                           ),
                           const SizedBox(
                             height: 10,

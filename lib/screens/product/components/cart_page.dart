@@ -201,20 +201,22 @@ class _CartPageState extends State<CartPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return CartPageTile(
-                    order: orders[index],
-                    onToggle: () {
-                      orders[index]['selected'] = !orders[index]['selected'];
-                    },
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ProductPage(
-                            productPk: orders[index]['product']['pk'],
+                      order: orders[index],
+                      onToggle: () {
+                        orders[index]['selected'] = !orders[index]['selected'];
+                      },
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProductPage(
+                              productPk: orders[index]['product']['pk'],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  );
+                        );
+                      },
+                      callback: (product) {
+                        fetch();
+                      });
                 },
               ),
             ),
