@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 
 import '../../../components/network_image.dart';
-import '../../../constants/index.dart';
-import '../data/onboarding_data.dart';
+import '../../../constants/app_defaults.dart';
 
-class OnboardingContentView extends StatelessWidget {
+class OnboardingContentView extends StatefulWidget {
   const OnboardingContentView({
     Key? key,
     required this.board,
@@ -13,12 +13,21 @@ class OnboardingContentView extends StatelessWidget {
     required this.onNext,
   }) : super(key: key);
 
-  final OnboardingModel board;
+  final Map<String, dynamic> board;
   final int currentIndex;
   final void Function() onNext;
 
   @override
+  State<OnboardingContentView> createState() => _OnboardingContentViewState();
+}
+
+class _OnboardingContentViewState extends State<OnboardingContentView> {
+  @override
   Widget build(BuildContext context) {
+    var image = widget.board['onboarding_document'] != null
+        ? '${dotenv.get('API')}/${widget.board['onboarding_document']['document']['path']}'
+        : '${dotenv.get('API')}/assets/images/no-image.jpg';
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -27,7 +36,7 @@ class OnboardingContentView extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 1 / 1,
             child: NetworkImageWithLoader(
-              board.imageLink,
+              image,
               true,
               fit: BoxFit.cover,
             ),
@@ -40,12 +49,12 @@ class OnboardingContentView extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                board.title,
+                widget.board['title'],
                 style: Theme.of(context).textTheme.headline6,
               ),
               const SizedBox(height: AppDefaults.margin),
               Text(
-                board.subtitle,
+                widget.board['description'],
                 style: Theme.of(context).textTheme.bodyText2,
                 textAlign: TextAlign.center,
               ),
@@ -57,7 +66,7 @@ class OnboardingContentView extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.5,
           child: ElevatedButton(
-              onPressed: onNext,
+              onPressed: widget.onNext,
               style: ElevatedButton.styleFrom(
                 shape: const StadiumBorder(),
                 padding: const EdgeInsets.all(16),
@@ -69,10 +78,10 @@ class OnboardingContentView extends StatelessWidget {
                   const Text('Next'),
                   Row(
                     children: List.generate(
-                      currentIndex + 1,
+                      widget.currentIndex + 1,
                       (index) => Icon(
                         IconlyLight.arrowRight2,
-                        color: currentIndex == index
+                        color: widget.currentIndex == index
                             ? Colors.white
                             : Colors.white54,
                         size: 16,
