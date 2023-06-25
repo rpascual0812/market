@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/onboarding/onboarding_page.dart';
 import 'theme.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -46,8 +47,12 @@ class _MyAppState extends State<MyApp> {
       // showPerformanceOverlay: true,
       title: 'LAMBO MAG-UUMA',
       theme: AppTheme(context).lightTheme,
-      // home: welcome != '' ? AppRoot(jwt: jwt) : const OnboardingPage(),
-      home: OnboardingPage(jwt: jwt),
+      home: welcome != ''
+          ? AppRoot(jwt: jwt)
+          : OnboardingPage(
+              jwt: jwt,
+            ),
+      // home: OnboardingPage(jwt: jwt),
       builder: EasyLoading.init(),
     );
   }

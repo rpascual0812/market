@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +43,7 @@ class ComplaintNewState extends State<ComplaintNew>
     'message': '',
   };
 
-  Map<String, dynamic> productPhoto = {};
+  List productPhotos = [];
 
   @override
   void initState() {
@@ -71,7 +72,7 @@ class ComplaintNewState extends State<ComplaintNew>
       Map<String, dynamic> json = jsonDecode(document);
       // print('document $document');
 
-      productPhoto = json['document'];
+      productPhotos.add(json['document']);
     } on Exception {
       AppDefaults.toast(
           context, 'error', AppMessage.getError('ERROR_IMAGE_FAILED'));
@@ -108,11 +109,16 @@ class ComplaintNewState extends State<ComplaintNew>
   Future save() async {
     if (_key.currentState!.validate()) {
       try {
+        var productPhotoIds = [];
+        for (var i = 0; i < productPhotos.length; i++) {
+          productPhotoIds.add(productPhotos[i]['pk']);
+        }
+
         body = {
           'subject': subjectController.text,
           'message': messageController.text,
           'product_photo':
-              productPhoto.isNotEmpty ? productPhoto['pk'].toString() : '',
+              productPhotoIds.isNotEmpty ? productPhotoIds.join(",") : '',
           'type': type.toString()
         };
 
@@ -140,6 +146,12 @@ class ComplaintNewState extends State<ComplaintNew>
     } else {
       AppDefaults.toast(context, 'error', AppMessage.getError('FORM_INVALID'));
     }
+  }
+
+  remove(int index) {
+    setState(() {
+      productPhotos.removeAt(index);
+    });
   }
 
   @override
@@ -341,22 +353,68 @@ class ComplaintNewState extends State<ComplaintNew>
                             ),
                           ),
                           const SizedBox(height: AppDefaults.margin),
-                          productPhoto.isNotEmpty
-                              ? Align(
-                                  alignment: Alignment.center,
-                                  child: Container(
-                                    margin: const EdgeInsets.only(
-                                        right: 5, bottom: 5),
-                                    height: 75,
-                                    child: AspectRatio(
-                                      aspectRatio: 1 / 1,
-                                      child: NetworkImageWithLoader(
-                                          '${dotenv.get('API')}/${productPhoto['path']}',
-                                          false),
-                                    ),
-                                  ),
-                                )
-                              : const SizedBox(),
+                          // productPhotos.isNotEmpty
+                          //     ? Align(
+                          //         alignment: Alignment.center,
+                          //         child: Container(
+                          //           margin: const EdgeInsets.only(
+                          //               right: 5, bottom: 5),
+                          //           height: 75,
+                          //           child: AspectRatio(
+                          //             aspectRatio: 1 / 1,
+                          //             child: NetworkImageWithLoader(
+                          //                 '${dotenv.get('API')}/${productPhoto['path']}',
+                          //                 false),
+                          //           ),
+                          //         ),
+                          //       )
+                          //     : const SizedBox(),
+                          Visibility(
+                            visible: productPhotos.isNotEmpty ? true : false,
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Wrap(
+                                alignment: WrapAlignment.start,
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                children: List.generate(
+                                  productPhotos.length,
+                                  (index) {
+                                    return InkWell(
+                                      onTap: () async {
+                                        ArtDialogResponse response =
+                                            await ArtSweetAlert.show(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          artDialogArgs: ArtDialogArgs(
+                                            showCancelBtn: true,
+                                            title:
+                                                "Do you want to remove ${productPhotos[index]['original_name']}?",
+                                            confirmButtonText: "Remove",
+                                          ),
+                                        );
+
+                                        if (response.isTapConfirmButton) {
+                                          remove(index);
+                                          return;
+                                        }
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.only(
+                                            right: 5, bottom: 5),
+                                        height: 75,
+                                        child: AspectRatio(
+                                          aspectRatio: 1 / 1,
+                                          child: NetworkImageWithLoader(
+                                              '${dotenv.get('API')}/${productPhotos[index]['path']}',
+                                              false),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

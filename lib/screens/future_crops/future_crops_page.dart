@@ -44,18 +44,18 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
   var monthNow = DateFormat.MMMM().format(DateTime.now());
 
   final List months = [
-    {'name': 'January', 'selected': false},
-    {'name': 'February', 'selected': false},
-    {'name': 'March', 'selected': false},
-    {'name': 'April', 'selected': false},
-    {'name': 'May', 'selected': false},
-    {'name': 'June', 'selected': false},
-    {'name': 'July', 'selected': false},
-    {'name': 'August', 'selected': false},
-    {'name': 'September', 'selected': false},
-    {'name': 'October', 'selected': false},
-    {'name': 'November', 'selected': false},
-    {'name': 'December', 'selected': false},
+    {'name': 'January', 'selected': false, 'count': 0},
+    {'name': 'February', 'selected': false, 'count': 0},
+    {'name': 'March', 'selected': false, 'count': 0},
+    {'name': 'April', 'selected': false, 'count': 0},
+    {'name': 'May', 'selected': false, 'count': 0},
+    {'name': 'June', 'selected': false, 'count': 0},
+    {'name': 'July', 'selected': false, 'count': 0},
+    {'name': 'August', 'selected': false, 'count': 0},
+    {'name': 'September', 'selected': false, 'count': 0},
+    {'name': 'October', 'selected': false, 'count': 0},
+    {'name': 'November', 'selected': false, 'count': 0},
+    {'name': 'December', 'selected': false, 'count': 0},
   ];
 
   bool everyThingLoaded = false;
@@ -65,6 +65,8 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
 
   @override
   void initState() {
+    monthlyCount();
+
     isLoading = true;
     super.initState();
 
@@ -91,6 +93,43 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
     // MarketDatabase.instance.close();
     // yearController.dispose();
     super.dispose();
+  }
+
+  Future monthlyCount() async {
+    try {
+      var monthsArr = [];
+      for (var month in months) {
+        monthsArr.add(jsonEncode(<String, String>{
+          'name': month['name'],
+        }));
+      }
+
+      var res = await Remote.get('products', {
+        'type': 'future_crop',
+        'year': yearController.text,
+        'months': monthsArr.toString(),
+        'skip': skip.toString(),
+        'take': take.toString()
+      });
+
+      if (res.statusCode == 200) {
+        dataJson = jsonDecode(res.body);
+        for (var i = 0; i < dataJson['data'].length; i++) {
+          var month = dataJson['data'][i]['date_available_formatted'];
+          months[month]['count']++;
+        }
+      } else if (res.statusCode == 401) {
+        if (!mounted) return;
+        AppDefaults.logout(context);
+      }
+      isLoading = false;
+      // if (res.statusCode == 200) return res.body;
+      return;
+    } on Exception catch (exception) {
+      print('exception $exception');
+    } catch (error) {
+      print('error $error');
+    }
   }
 
   Future fetch() async {
@@ -316,14 +355,16 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                                 backgroundColor: months[index]
                                                         ['selected']
                                                     ? AppColors.primary
-                                                    : Colors.grey,
+                                                    : months[index]['count'] > 0
+                                                        ? AppColors.secondary
+                                                        : Colors.grey,
                                                 minimumSize:
                                                     Size.zero, // Set this
                                                 padding:
                                                     EdgeInsets.zero, // and this
                                               ),
                                               child: Text(
-                                                months[index]['name'],
+                                                '${months[index]['name']}',
                                                 style: const TextStyle(
                                                     fontSize:
                                                         AppDefaults.fontSize,

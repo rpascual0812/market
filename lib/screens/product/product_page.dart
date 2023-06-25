@@ -70,6 +70,7 @@ class _ProductPageState extends State<ProductPage> {
         setState(() {
           var productJson = jsonDecode(res.body);
           product = productJson['data'];
+          print(product['product_rating_total']);
         });
       }
     } on Exception catch (exception) {
@@ -102,7 +103,12 @@ class _ProductPageState extends State<ProductPage> {
               ),
               Visibility(
                 visible: product['name'] != null ? true : false,
-                child: ProductPageDetails(product: product),
+                child: ProductPageDetails(
+                  product: product,
+                  callback: () {
+                    fetch();
+                  },
+                ),
               ),
               Visibility(
                 visible: product['name'] != null ? true : false,

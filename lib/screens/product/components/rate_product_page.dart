@@ -18,9 +18,11 @@ class RateProductPage extends StatefulWidget {
   const RateProductPage({
     Key? key,
     required this.product,
+    required this.callback,
   }) : super(key: key);
 
   final Map<String, dynamic> product;
+  final void Function() callback;
 
   @override
   State<RateProductPage> createState() => _RateProductPageState();
@@ -108,6 +110,8 @@ class _RateProductPageState extends State<RateProductPage> {
             confirmButtonText: "Ok",
           ),
         );
+
+        widget.callback();
 
         setState(() {
           message = TextEditingController(text: '');

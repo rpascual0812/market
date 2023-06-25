@@ -28,9 +28,11 @@ class ProductPageDetails extends StatefulWidget {
   const ProductPageDetails({
     Key? key,
     required this.product,
+    required this.callback,
   }) : super(key: key);
 
   final Map<String, dynamic> product;
+  final void Function() callback;
 
   @override
   State<ProductPageDetails> createState() => _ProductPageDetailsState();
@@ -528,7 +530,9 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                                             userPk: widget.product['user_pk']
                                                 .toString(),
                                             token: token,
-                                            callback: (status) {});
+                                            callback: (status) {
+                                              widget.callback();
+                                            });
                                       },
                                     ),
                                   );
@@ -632,7 +636,10 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
                                     MaterialPageRoute(
                                       builder: (context) {
                                         return RateProductPage(
-                                            product: widget.product);
+                                            product: widget.product,
+                                            callback: () {
+                                              widget.callback();
+                                            });
                                       },
                                     ),
                                   );
