@@ -29,6 +29,7 @@ class ProfilePictureSection extends StatefulWidget {
 class _ProfilePictureSectionState extends State<ProfilePictureSection> {
   Map<String, dynamic> isFollowed = {};
   String? token = '';
+  Map<String, dynamic> account = {};
 
   @override
   void initState() {
@@ -45,6 +46,30 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
 
   Future getStorage() async {
     token = await storage.read(key: 'jwt');
+    var user = AppDefaults.jwtDecode(token);
+    fetchAccount(user['sub']);
+  }
+
+  Future fetchAccount(int pk) async {
+    try {
+      final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      var res = await http.get(url, headers: headers);
+      if (res.statusCode == 200) {
+        setState(() {
+          account = json.decode(res.body);
+          print('account ${account['user']}');
+        });
+      }
+      return null;
+    } on Exception catch (e) {
+      print('ERROR $e');
+      return null;
+    }
   }
 
   Future follow() async {
@@ -94,7 +119,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
         if (res.statusCode == 201) {
           final result = json.decode(res.body);
           setState(() {
-            isFollowed = result[0];
+            isFollowed = result.isNotEmpty ? result[0] : {};
           });
         }
         // if (res.statusCode == 200) return res.body;
@@ -112,6 +137,9 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
     var userAddress = AppDefaults.userAddress(widget.user['user_addresses']);
     var sellerAddress =
         AppDefaults.sellerAddress(widget.user['seller_addresses']);
+
+    var selfPk = account.isNotEmpty ? account['user']['pk'] : 0;
+
     // print(userImage);
     return Stack(
       children: [
@@ -155,7 +183,9 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                   const SizedBox(
                                       height: AppDefaults.margin / 2),
                                   Visibility(
-                                    visible: true,
+                                    visible: widget.user['pk'] != selfPk
+                                        ? true
+                                        : false,
                                     maintainSize: true, //NEW
                                     maintainAnimation: true, //NEW
                                     maintainState: true, //NEW

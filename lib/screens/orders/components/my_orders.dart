@@ -197,7 +197,7 @@ class _MyOrdersState extends State<MyOrders> {
                         token: token!,
                         order: order,
                         refresh: () {
-                          _next();
+                          loadInitialData();
                         },
                       ),
                     )
