@@ -65,7 +65,7 @@ class HomeSliderSlide extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(
-                  height: 20.0,
+                  height: 10.0,
                   child: Text(
                     ' ',
                     style: TextStyle(color: Colors.white, fontSize: 45),
@@ -90,7 +90,7 @@ class HomeSliderSlide extends StatelessWidget {
                     child: const SizedBox(height: 120)),
                 const SizedBox(height: AppDefaults.margin),
                 SizedBox(
-                  height: AppDefaults.fontSize + 18,
+                  height: AppDefaults.fontSize + 23,
                   width: MediaQuery.of(context).size.width,
                   child: Center(
                     child: Text(

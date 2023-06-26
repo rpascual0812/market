@@ -87,7 +87,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
           artDialogArgs: ArtDialogArgs(
               denyButtonText: "Close",
               denyButtonColor: Colors.grey,
-              title: "Added to Barket!",
+              title: "Added to Basket!",
               text: "",
               confirmButtonText: "Go to basket",
               confirmButtonColor: AppColors.primary,
