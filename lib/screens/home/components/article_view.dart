@@ -53,7 +53,7 @@ class ArticleViewState extends State<ArticleView>
             margin:
                 const EdgeInsets.only(top: 100, right: 20, bottom: 0, left: 20),
             // padding: const EdgeInsets.all(15.0),
-            height: 460.0,
+            height: 400.0,
             decoration: ShapeDecoration(
               // color: const Color.fromRGBO(41, 167, 77, 10),
               color: Colors.white,
@@ -98,7 +98,7 @@ class ArticleViewState extends State<ArticleView>
                   ),
                 ),
                 SizedBox(
-                  height: 338,
+                  height: 278,
                   child: Padding(
                     // padding: const EdgeInsets.only(
                     //     top: 10, right: 10, bottom: 0, left: 10),
@@ -108,12 +108,14 @@ class ArticleViewState extends State<ArticleView>
                       child: Column(
                         children: [
                           Wrap(
-                            direction: Axis.vertical, //Vertical || Horizontal
+                            //Vertical || Horizontal
                             children: <Widget>[
                               Text(
                                 widget.article['title'],
                                 style: const TextStyle(fontSize: 20),
                                 overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                softWrap: true,
                               ),
                             ],
                           ),
