@@ -14,9 +14,11 @@ class ComplaintNew extends StatefulWidget {
   const ComplaintNew({
     Key? key,
     required this.token,
+    required this.callback,
   }) : super(key: key);
 
   final String token;
+  final void Function() callback;
 
   @override
   State<StatefulWidget> createState() => ComplaintNewState();
@@ -129,13 +131,13 @@ class ComplaintNewState extends State<ComplaintNew>
         };
 
         var res = await http.post(url, headers: headers, body: body);
-
         if (res.statusCode == 201) {
+          widget.callback();
           if (!mounted) return;
           AppDefaults.toast(
             context,
             'success',
-            AppMessage.getSuccess('FEEDBACK_SAVE'),
+            AppMessage.getSuccess('COMPLAINT_SAVE'),
           );
           Navigator.pop(context);
         }
@@ -269,7 +271,7 @@ class ComplaintNewState extends State<ComplaintNew>
                           const Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'What\'s your complain?',
+                              'What\'s your complaint?',
                               style: TextStyle(
                                 fontSize: AppDefaults.fontSize + 3,
                                 color: Colors.black54,
@@ -485,8 +487,7 @@ class ComplaintNewState extends State<ComplaintNew>
                                 Expanded(
                                   child: InkWell(
                                     onTap: () async {
-                                      var data = await save();
-                                      if (data != null) {}
+                                      await save();
                                     },
                                     child: Container(
                                       alignment: Alignment.center,

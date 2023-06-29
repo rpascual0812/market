@@ -7,9 +7,11 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:market/components/network_image.dart';
 import 'package:market/constants/index.dart';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:http/http.dart' as http;
+import 'package:market/screens/profile/components/complaint_view_image.dart';
 
 class ComplaintBubble extends StatefulWidget {
   const ComplaintBubble({
@@ -113,7 +115,6 @@ class _ComplaintBubbleState extends State<ComplaintBubble> {
   }
 
   void _scrollToBottom() async {
-    print('Scrollling to bottom');
     // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     Future.delayed(const Duration(milliseconds: 500), () {
       // print('Scrolled to bottom');
@@ -357,6 +358,49 @@ class _ComplaintBubbleState extends State<ComplaintBubble> {
         height: MediaQuery.of(context).size.height,
         child: Column(
           children: <Widget>[
+            Visibility(
+              visible: widget.complaint['complaint_document'].isNotEmpty
+                  ? true
+                  : false,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    children: List.generate(
+                      widget.complaint['complaint_document'].length,
+                      (index) {
+                        return InkWell(
+                          onTap: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ComplaintViewImage(
+                                    document:
+                                        widget.complaint['complaint_document']
+                                            [index]['document'],
+                                  ),
+                                ));
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 5, bottom: 5),
+                            height: 75,
+                            child: AspectRatio(
+                              aspectRatio: 1 / 1,
+                              child: NetworkImageWithLoader(
+                                  '${dotenv.get('API')}/${widget.complaint['complaint_document'][index]['document']['path']}',
+                                  false),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,

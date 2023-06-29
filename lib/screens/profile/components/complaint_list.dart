@@ -72,6 +72,7 @@ class _ComplaintListState extends State<ComplaintList> {
 
       if (res.statusCode == 200) {
         var dataJson = jsonDecode(res.body);
+
         var data = [];
         for (var i = 0; i < dataJson['data'].length; i++) {
           data.add(dataJson['data'][i]);
@@ -174,8 +175,12 @@ class _ComplaintListState extends State<ComplaintList> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        ComplaintNew(token: widget.token),
+                                    builder: (context) => ComplaintNew(
+                                      token: widget.token,
+                                      callback: () {
+                                        loadInitialData();
+                                      },
+                                    ),
                                   ),
                                 );
                               },

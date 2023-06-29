@@ -60,6 +60,8 @@ class AppMessage {
         return "The product you are looking for has been posted.";
       case "FEEDBACK_SAVE":
         return "Your feedback has been successfully sent.";
+      case "COMPLAINT_SAVE":
+        return "Your complaint has been successfully sent.";
       case "PASSWORD_RESET":
         return "Your password has been updated.";
       case "EMAIL_SENT":
