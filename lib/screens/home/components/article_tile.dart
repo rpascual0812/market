@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:market/screens/home/components/article_view.dart';
 
 import '../../../components/network_image.dart';
 import '../../../constants/index.dart';
@@ -36,7 +37,7 @@ class ArticleTile extends StatelessWidget {
             //   borderRadius: AppDefaults.borderRadius,
             // ),
             child: InkWell(
-              onTap: onTap,
+              // onTap: onTap,
               // borderRadius: AppDefaults.borderRadius,
               child: Container(
                 decoration: const BoxDecoration(
@@ -51,15 +52,29 @@ class ArticleTile extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        SizedBox(
-                          width: 110,
-                          height: 230,
-                          child: AspectRatio(
-                            aspectRatio: 1 / 1,
-                            child: NetworkImageWithLoader(
-                              articleImage,
-                              true,
-                              fit: BoxFit.cover,
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ArticleView(
+                                    article: article,
+                                    callback: () {
+                                      onTap();
+                                    }),
+                              ),
+                            );
+                          },
+                          child: SizedBox(
+                            width: 110,
+                            height: 230,
+                            child: AspectRatio(
+                              aspectRatio: 1 / 1,
+                              child: NetworkImageWithLoader(
+                                articleImage,
+                                true,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
@@ -78,14 +93,17 @@ class ArticleTile extends StatelessWidget {
                           ),
                           color: Colors.black45,
                         ),
-                        child: Container(
-                          padding: const EdgeInsets.only(
-                              left: 25, right: 10, top: 5, bottom: 5),
-                          child: const Text(
-                            'Read Article',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: AppDefaults.fontSize,
+                        child: InkWell(
+                          onTap: onTap,
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                left: 25, right: 10, top: 5, bottom: 5),
+                            child: const Text(
+                              'Read Article',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: AppDefaults.fontSize,
+                              ),
                             ),
                           ),
                         ),
