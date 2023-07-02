@@ -61,7 +61,6 @@ class _ConversationListState extends State<ConversationList> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              // print('${widget.chat['pk']} $read');
               return Bubble(
                   userPk: widget.chat['chat_participants'][0]['user']['pk']
                       .toString(),

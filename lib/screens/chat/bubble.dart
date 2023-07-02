@@ -88,7 +88,7 @@ class _BubbleState extends State<Bubble> {
   }
 
   Future fetchChat() async {
-    // print('fetching chat');
+    // print('fetching chat ${widget.userPk}');
     try {
       final params = {'type': 'chat'};
       final url = Uri.parse('${dotenv.get('API')}/chats/user/${widget.userPk}')

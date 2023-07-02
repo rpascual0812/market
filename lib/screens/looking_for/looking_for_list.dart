@@ -70,6 +70,10 @@ class _LookingForListState extends State<LookingForList> {
           data.add(dataJson['data'][i]);
         }
 
+        if (data.length <= take) {
+          everyThingLoaded = true;
+        }
+
         return data;
       } else if (res.statusCode == 401) {
         if (!mounted) return;

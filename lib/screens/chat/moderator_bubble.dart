@@ -268,6 +268,7 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
 
             messageController.text = '';
             _scrollToBottom();
+
             // if (_scrollController.hasClients && _shouldAutoscroll) {
             //   _scrollToBottom();
             // }

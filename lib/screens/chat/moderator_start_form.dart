@@ -23,6 +23,7 @@ class _ModeratorStartFormState extends State<ModeratorStartForm> {
   @override
   void initState() {
     super.initState();
+    findUser();
   }
 
   @override
@@ -32,6 +33,7 @@ class _ModeratorStartFormState extends State<ModeratorStartForm> {
 
   Future findUser() async {
     try {
+      // print('moderator start ${widget.userPk} -');
       final params = {'type': 'support'};
       final url = Uri.parse('${dotenv.get('API')}/chats/user/${widget.userPk}')
           .replace(queryParameters: params);
@@ -41,6 +43,7 @@ class _ModeratorStartFormState extends State<ModeratorStartForm> {
       };
 
       var res = await http.get(url, headers: headers);
+      // print(res.statusCode);
       if (res.statusCode == 200) {
         setState(() {
           widget.callback!(true);

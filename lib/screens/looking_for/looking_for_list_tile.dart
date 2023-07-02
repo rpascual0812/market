@@ -53,10 +53,12 @@ class _LookingForListTileState extends State<LookingForListTile> {
         if (!mounted) return;
 
         final dataJson = jsonDecode(res.body);
+
         AppDefaults.toast(
             context, 'success', AppMessage.getSuccess('INTERESTED'));
 
         setState(() {
+          // print(dataJson['data']['data']);
           widget.product['interested'] = dataJson['data']['data'];
         });
       }
@@ -69,7 +71,7 @@ class _LookingForListTileState extends State<LookingForListTile> {
 
   @override
   Widget build(BuildContext context) {
-    // print('product ${widget.product['user_addresses']}');
+    // print('product ${widget.product['pk']} ${widget.product['interested']}');
     var userImage = '${dotenv.get('API')}/assets/images/user.png';
     for (var i = 0; i < widget.product['user_document'].length; i++) {
       // print(product['product_documents'][i]['document']['path']);
@@ -315,9 +317,17 @@ class _LookingForListTileState extends State<LookingForListTile> {
                                                               ? Colors.grey
                                                               : AppColors
                                                                   .primary),
-                                                  child: const Text(
-                                                    'I\'m Interested',
-                                                    style: TextStyle(
+                                                  child: Text(
+                                                    widget.product['interested'] !=
+                                                                null &&
+                                                            widget
+                                                                    .product[
+                                                                        'interested']
+                                                                    .length >
+                                                                0
+                                                        ? 'Interested'
+                                                        : 'I\'m Interested',
+                                                    style: const TextStyle(
                                                         color: Colors.white),
                                                   ),
                                                 ),

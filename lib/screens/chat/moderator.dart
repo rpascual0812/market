@@ -83,7 +83,6 @@ class _ModeratorState extends State<Moderator> {
 
       if (res.statusCode == 200) {
         var dataJson = jsonDecode(res.body);
-        // print(dataJson);
         var data = [];
         for (var i = 0; i < dataJson['data'].length; i++) {
           data.add(dataJson['data'][i]);
@@ -113,6 +112,7 @@ class _ModeratorState extends State<Moderator> {
             userPk: userPk ?? '',
             token: token ?? '',
             callback: (status) {
+              // print('callback $status');
               fetch();
             })
         : ModeratorBubble(
