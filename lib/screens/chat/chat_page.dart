@@ -169,8 +169,8 @@ class _ChatPageState extends State<ChatPage> {
         url,
         headers: headers,
       );
-      print(res.statusCode);
-      loadInitialData();
+      // print(res.statusCode);
+      // loadInitialData();
       if (res.statusCode == 200) {
         loadInitialData();
       } else if (res.statusCode == 401) {
@@ -258,7 +258,9 @@ class _ChatPageState extends State<ChatPage> {
                         } else {
                           searchController.text = '';
                           filterValue = option as String;
-                          loadInitialData();
+                          setState(() {
+                            loadInitialData();
+                          });
                         }
                       },
                     ),

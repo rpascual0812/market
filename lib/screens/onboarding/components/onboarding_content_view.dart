@@ -54,6 +54,9 @@ class _OnboardingContentViewState extends State<OnboardingContentView> {
               ),
               const SizedBox(height: AppDefaults.margin),
               Text(
+                // widget.board['description'].length > 280
+                //     ? widget.board['description'].substring(1, 280) + '...'
+                //     : widget.board['description'],
                 widget.board['description'],
                 style: Theme.of(context).textTheme.bodyText2,
                 textAlign: TextAlign.center,
