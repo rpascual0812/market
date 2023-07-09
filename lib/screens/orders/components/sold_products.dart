@@ -82,6 +82,7 @@ class _SoldProductsState extends State<SoldProducts> {
         'skip': skip.toString(),
         'take': take.toString(),
       };
+
       final url = Uri.parse('${dotenv.get('API')}/orders')
           .replace(queryParameters: params);
       final headers = {
@@ -120,6 +121,7 @@ class _SoldProductsState extends State<SoldProducts> {
   }
 
   Future<void> loadInitialData() async {
+    reset();
     orders = await getNextPageData(page);
     // print('load initial data $products');
     setState(() {});
@@ -139,6 +141,14 @@ class _SoldProductsState extends State<SoldProducts> {
         skip = skip < 0 ? 0 : skip;
         everyThingLoaded = true;
       }
+    });
+  }
+
+  reset() {
+    setState(() {
+      page = 0;
+      skip = 0;
+      take = 5;
     });
   }
 
@@ -173,6 +183,7 @@ class _SoldProductsState extends State<SoldProducts> {
                   onTap: () {
                     setState(() {
                       includeFutureCrops = !includeFutureCrops;
+                      loadInitialData();
                     });
                   },
                 )

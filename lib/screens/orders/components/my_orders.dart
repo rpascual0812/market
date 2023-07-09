@@ -122,6 +122,7 @@ class _MyOrdersState extends State<MyOrders> {
   }
 
   Future<void> loadInitialData() async {
+    reset();
     orders = await getNextPageData(page);
     // print('load initial data $products');
     setState(() {});
@@ -141,6 +142,14 @@ class _MyOrdersState extends State<MyOrders> {
         skip = skip < 0 ? 0 : skip;
         everyThingLoaded = true;
       }
+    });
+  }
+
+  reset() {
+    setState(() {
+      page = 0;
+      skip = 0;
+      take = 5;
     });
   }
 

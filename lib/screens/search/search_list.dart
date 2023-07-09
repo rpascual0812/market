@@ -105,6 +105,7 @@ class _SearchListState extends State<SearchList> {
   }
 
   Future<void> loadInitialData() async {
+    reset();
     var product = await getNextPageData(page);
     products = product ?? [];
     setState(() {});
@@ -124,6 +125,14 @@ class _SearchListState extends State<SearchList> {
         skip = skip < 0 ? 0 : skip;
         everyThingLoaded = true;
       }
+    });
+  }
+
+  reset() {
+    setState(() {
+      page = 0;
+      skip = 0;
+      take = 5;
     });
   }
 
