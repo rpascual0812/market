@@ -94,10 +94,10 @@ class _AppbarState extends State<Appbar> {
       onClickOverlay: (target) {
         print('onClickOverlay: $target');
       },
-      onSkip: () {
-        setHeaderGuide();
-        print("skip");
-      },
+      // onSkip: () {
+      //   setHeaderGuide();
+      //   print("skip");
+      // },
     );
   }
 

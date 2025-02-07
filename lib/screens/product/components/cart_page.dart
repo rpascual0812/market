@@ -222,10 +222,10 @@ class _CartPageState extends State<CartPage> {
             ),
             Visibility(
                 visible: orders.isEmpty ? true : false,
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
+                  children: [
                     SizedBox(height: AppDefaults.margin * 2),
                     Text(
                       'Your basket is empty',

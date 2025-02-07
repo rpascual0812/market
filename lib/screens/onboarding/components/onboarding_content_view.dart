@@ -50,7 +50,7 @@ class _OnboardingContentViewState extends State<OnboardingContentView> {
             children: [
               Text(
                 widget.board['title'],
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: AppDefaults.margin),
               Text(
@@ -58,7 +58,7 @@ class _OnboardingContentViewState extends State<OnboardingContentView> {
                 //     ? widget.board['description'].substring(1, 280) + '...'
                 //     : widget.board['description'],
                 widget.board['description'],
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppDefaults.margin),

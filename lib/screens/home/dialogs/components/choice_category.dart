@@ -30,7 +30,7 @@ class ChoiceCategory extends StatelessWidget {
               name,
               style: Theme.of(context)
                   .textTheme
-                  .bodyText1
+                  .bodyLarge
                   ?.copyWith(color: isActive ? Colors.white : Colors.black),
             ),
           ),

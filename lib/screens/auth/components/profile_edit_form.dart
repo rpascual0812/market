@@ -1215,7 +1215,7 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
                             'I have read and agree to the Terms',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1
+                                .bodyLarge
                                 ?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     fontSize: AppDefaults.fontSize),

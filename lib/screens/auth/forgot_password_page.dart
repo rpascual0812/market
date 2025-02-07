@@ -33,8 +33,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             children: [
               Container(
                 color: Colors.white,
-                child: Column(
-                  children: const [
+                child: const Column(
+                  children: [
                     SizedBox(height: AppDefaults.margin * 1),
                     Align(
                       alignment: Alignment.topLeft,
@@ -89,9 +89,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 color: Colors.white,
                 child: Column(
                   children: [
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
+                      children: [
                         HorizontalLine(width: 100),
                         Text(
                           'Or',

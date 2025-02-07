@@ -154,8 +154,8 @@ class _RecentlyViewedPageState extends State<RecentlyViewedPage> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Row(
-                        children: const [
+                      const Row(
+                        children: [
                           Text(
                             'Recently viewed Products',
                             style: TextStyle(fontWeight: FontWeight.bold),

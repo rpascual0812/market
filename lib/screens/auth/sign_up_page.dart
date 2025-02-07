@@ -21,8 +21,8 @@ class SignupPage extends StatelessWidget {
             children: [
               Container(
                 color: Colors.white,
-                child: Column(
-                  children: const [
+                child: const Column(
+                  children: [
                     SizedBox(height: AppDefaults.margin * 1),
                     Align(
                       alignment: Alignment.topLeft,
@@ -43,9 +43,9 @@ class SignupPage extends StatelessWidget {
                 color: Colors.white,
                 child: Column(
                   children: [
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
+                      children: [
                         HorizontalLine(width: 100),
                         Text(
                           'Or',

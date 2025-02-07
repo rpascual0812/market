@@ -84,9 +84,9 @@ class _RatingsPageState extends State<RatingsPage> {
                 color: Colors.white,
                 margin: const EdgeInsets.only(bottom: 5),
                 width: MediaQuery.of(context).size.width,
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [Text('No Ratings found.')],
+                  children: [Text('No Ratings found.')],
                 ),
               ),
             ),

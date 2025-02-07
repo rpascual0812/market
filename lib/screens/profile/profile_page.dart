@@ -162,13 +162,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
                       Timer(
                         const Duration(seconds: 1),
-                        () => {
+                        () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const AppRoot(jwt: ''),
                             ),
-                          )
+                          );
                         },
                       );
                     }

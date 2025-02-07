@@ -392,10 +392,10 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
             height: AppDefaults.margin * 2,
           ),
           products.isEmpty
-              ? Row(
+              ? const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       'No products found',
                       style: TextStyle(color: Colors.black, fontSize: 15),

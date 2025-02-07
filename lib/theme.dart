@@ -21,7 +21,7 @@ class AppTheme {
           ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          primary: AppColors.primary,
+          backgroundColor: AppColors.primary,
           minimumSize: const Size(double.infinity, 40),
           elevation: 0,
           shape: const StadiumBorder(),
@@ -29,7 +29,7 @@ class AppTheme {
         ),
       ),
       textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(primary: AppColors.primary),
+        style: TextButton.styleFrom(foregroundColor: AppColors.primary),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -49,7 +49,7 @@ class AppTheme {
         centerTitle: true,
         titleTextStyle: Theme.of(context)
             .textTheme
-            .headline6!
+            .titleLarge!
             .copyWith(fontFamily: 'Roboto'),
         iconTheme: const IconThemeData(color: AppColors.defaultBlack),
       ),

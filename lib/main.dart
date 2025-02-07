@@ -19,7 +19,7 @@ Future main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       // showPerformanceOverlay: true,
       title: 'LAMBO MAG-UUMA',
-      theme: AppTheme(context).lightTheme,
+      // theme: AppTheme(context).lightTheme,
       home: welcome != ''
           ? AppRoot(jwt: jwt)
           : OnboardingPage(

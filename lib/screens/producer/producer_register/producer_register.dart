@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:art_sweetalert/art_sweetalert.dart';
-import 'package:badges/badges.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -177,6 +176,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
         // User canceled the picker
       }
     } on Exception {
+      if (!context.mounted) return;
       AppDefaults.toast(
           context, 'error', AppMessage.getError('ERROR_FILE_FAILED'));
     }
@@ -221,6 +221,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
       //     ? '${dotenv.get('API')}/${res['document']['path'].toString()}'
       //     : '';
     } on Exception {
+      if (!context.mounted) return;
       AppDefaults.toast(
           context, 'error', AppMessage.getSuccess('ERROR_IMAGE_FAILED'));
       return null;
@@ -262,6 +263,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
           storage.write(
               key: "producer", value: result['data']['pk'].toString());
 
+          if (!context.mounted) return;
           ArtDialogResponse response = await ArtSweetAlert.show(
             context: context,
             artDialogArgs: ArtDialogArgs(
@@ -348,8 +350,8 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Row(
-                        children: const [
+                      const Row(
+                        children: [
                           Text(
                             'Registration as Producer',
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -641,63 +643,63 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                             children: List.generate(
                               documents.length,
                               (index) {
-                                return Row(
+                                return const Row(
                                   children: [
-                                    Badge(
-                                      toAnimate: false,
-                                      shape: BadgeShape.square,
-                                      badgeColor: Colors.grey,
-                                      borderRadius: BorderRadius.circular(8),
-                                      badgeContent: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.attach_file,
-                                            size: AppDefaults.fontSize,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                            child: TextButton(
-                                              style: TextButton.styleFrom(
-                                                padding:
-                                                    const EdgeInsets.all(0),
-                                                textStyle: const TextStyle(
-                                                    fontSize:
-                                                        AppDefaults.fontSize),
-                                              ),
-                                              onPressed: () async {
-                                                ArtDialogResponse response =
-                                                    await ArtSweetAlert.show(
-                                                  barrierDismissible: false,
-                                                  context: context,
-                                                  artDialogArgs: ArtDialogArgs(
-                                                    showCancelBtn: true,
-                                                    title:
-                                                        "Do you want to remove ${documents[index]['original_name']}?",
-                                                    confirmButtonText: "Remove",
-                                                  ),
-                                                );
+                                    // Badge(
+                                    //   toAnimate: false,
+                                    //   shape: BadgeShape.square,
+                                    //   badgeColor: Colors.grey,
+                                    //   borderRadius: BorderRadius.circular(8),
+                                    //   badgeContent: Row(
+                                    //     children: [
+                                    //       const Icon(
+                                    //         Icons.attach_file,
+                                    //         size: AppDefaults.fontSize,
+                                    //         color: Colors.white,
+                                    //       ),
+                                    //       SizedBox(
+                                    //         height: 20,
+                                    //         child: TextButton(
+                                    //           style: TextButton.styleFrom(
+                                    //             padding:
+                                    //                 const EdgeInsets.all(0),
+                                    //             textStyle: const TextStyle(
+                                    //                 fontSize:
+                                    //                     AppDefaults.fontSize),
+                                    //           ),
+                                    //           onPressed: () async {
+                                    //             ArtDialogResponse response =
+                                    //                 await ArtSweetAlert.show(
+                                    //               barrierDismissible: false,
+                                    //               context: context,
+                                    //               artDialogArgs: ArtDialogArgs(
+                                    //                 showCancelBtn: true,
+                                    //                 title:
+                                    //                     "Do you want to remove ${documents[index]['original_name']}?",
+                                    //                 confirmButtonText: "Remove",
+                                    //               ),
+                                    //             );
 
-                                                if (response
-                                                    .isTapConfirmButton) {
-                                                  remove('documents', index);
-                                                  return;
-                                                }
-                                              },
-                                              child: Text(
-                                                documents[index]
-                                                        ['original_name'] ??
-                                                    '',
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 35),
+                                    //             if (response
+                                    //                 .isTapConfirmButton) {
+                                    //               remove('documents', index);
+                                    //               return;
+                                    //             }
+                                    //           },
+                                    //           child: Text(
+                                    //             documents[index]
+                                    //                     ['original_name'] ??
+                                    //                 '',
+                                    //             style: const TextStyle(
+                                    //               color: Colors.white,
+                                    //             ),
+                                    //           ),
+                                    //         ),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    SizedBox(height: 35),
                                   ],
                                 );
                               },

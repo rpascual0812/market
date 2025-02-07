@@ -338,8 +338,8 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    Row(
-                      children: const [
+                    const Row(
+                      children: [
                         SizedBox(
                           width: 320,
                           child: Text(

@@ -7,13 +7,13 @@ import 'package:market/constants/app_defaults.dart';
 //ignore: must_be_immutable
 class SelectDropdownObj extends StatefulWidget {
   SelectDropdownObj({
-    Key? key,
+    super.key,
     required this.width,
     required this.height,
     required this.options,
     required this.defaultValue,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   final double width;
   final double height;
@@ -73,32 +73,32 @@ class _SelectDropdownObjState extends State<SelectDropdownObj> {
                 widget.onChanged!(option);
               });
             },
-            icon: const Icon(
-              Icons.keyboard_arrow_down,
-            ),
-            iconSize: 14,
-            iconEnabledColor: Colors.white,
-            iconDisabledColor: Colors.grey,
-            buttonHeight: 30,
-            buttonWidth: 150,
-            buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-            buttonDecoration: const BoxDecoration(
-              color: AppColors.third,
-            ),
-            buttonElevation: 2,
-            itemHeight: 30,
-            itemPadding: const EdgeInsets.only(left: 14, right: 14),
-            dropdownMaxHeight: 200,
-            dropdownWidth: 180,
-            dropdownPadding: null,
-            dropdownDecoration: const BoxDecoration(
-              color: AppColors.third,
-            ),
-            dropdownElevation: 8,
-            scrollbarRadius: const Radius.circular(40),
-            scrollbarThickness: 6,
-            scrollbarAlwaysShow: true,
-            offset: const Offset(-20, 0),
+            // icon: const Icon(
+            //   Icons.keyboard_arrow_down,
+            // ),
+            // iconSize: 14,
+            // iconEnabledColor: Colors.white,
+            // iconDisabledColor: Colors.grey,
+            // buttonHeight: 30,
+            // buttonWidth: 150,
+            // buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+            // buttonDecoration: const BoxDecoration(
+            //   color: AppColors.third,
+            // ),
+            // buttonElevation: 2,
+            // itemHeight: 30,
+            // itemPadding: const EdgeInsets.only(left: 14, right: 14),
+            // dropdownMaxHeight: 200,
+            // dropdownWidth: 180,
+            // dropdownPadding: null,
+            // dropdownDecoration: const BoxDecoration(
+            //   color: AppColors.third,
+            // ),
+            // dropdownElevation: 8,
+            // scrollbarRadius: const Radius.circular(40),
+            // scrollbarThickness: 6,
+            // scrollbarAlwaysShow: true,
+            // offset: const Offset(-20, 0),
           ),
         ),
       ),

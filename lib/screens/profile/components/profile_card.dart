@@ -62,7 +62,7 @@ class ProfileCard extends StatelessWidget {
                 const SizedBox(height: 5),
                 Text(
                   statusName,
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: statusName == 'My Products' && producerPk == '0'
                           ? Colors.black12
                           : Colors.black54),

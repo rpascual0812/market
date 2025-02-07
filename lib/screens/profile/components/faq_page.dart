@@ -154,9 +154,9 @@ class _FaqPageState extends State<FaqPage> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Text(
                           'Frequently Asked Questions',
                           style: TextStyle(

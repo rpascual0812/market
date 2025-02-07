@@ -416,9 +416,9 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Column(
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
                       'LOOKING FOR',
                       style: TextStyle(
@@ -434,7 +434,7 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
                   children: [
                     Text(
                       widget.product['name'] ?? '',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     // Row(
                     //   children: [
@@ -617,10 +617,10 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
                   documents: widget.product['product_documents'] ?? []),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10),
+          const Padding(
+            padding: EdgeInsets.all(10),
             child: Row(
-              children: const [
+              children: [
                 Text(
                   'Product Details',
                   style: TextStyle(

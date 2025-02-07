@@ -194,8 +194,8 @@ class _RateProductPageState extends State<RateProductPage> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Row(
-                        children: const [
+                      const Row(
+                        children: [
                           Text(
                             'Rate Product',
                             style: TextStyle(

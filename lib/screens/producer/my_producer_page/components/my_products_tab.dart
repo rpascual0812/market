@@ -171,7 +171,7 @@ class _MyProductsTabState extends State<MyProductsTab> {
                         );
                       },
                       style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
+                        padding: WidgetStateProperty.all<EdgeInsets>(
                             EdgeInsets.zero),
                       ),
                       child: const Text(
@@ -184,10 +184,10 @@ class _MyProductsTabState extends State<MyProductsTab> {
               ),
             ),
             products.isEmpty
-                ? Row(
+                ? const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       SizedBox(height: AppDefaults.margin * 2),
                       Text(
                         'No products found',

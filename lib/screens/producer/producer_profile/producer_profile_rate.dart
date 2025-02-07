@@ -117,9 +117,9 @@ class _ProducerProfileRateState extends State<ProducerProfileRate> {
                                 fontSize: 15,
                               ),
                             ),
-                            Row(
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Icon(
                                   pin,
                                   size: 12,
@@ -178,11 +178,11 @@ class _ProducerProfileRateState extends State<ProducerProfileRate> {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 15),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                       child: Row(
-                        children: const [
+                        children: [
                           Text(
                             'Add 50 characters',
                             style: TextStyle(fontSize: 10),

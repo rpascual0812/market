@@ -31,7 +31,7 @@ class ProfilePictureSection extends StatelessWidget {
                   '\$1,000,000',
                   style: Theme.of(context)
                       .textTheme
-                      .headline5
+                      .headlineSmall
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const Text('Monthly Sales'),

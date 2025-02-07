@@ -16,7 +16,7 @@ class CategorySelector extends StatelessWidget {
         children: [
           Text(
             'Category',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 16),
           SingleChildScrollView(

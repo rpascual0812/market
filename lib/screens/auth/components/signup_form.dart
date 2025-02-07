@@ -1112,7 +1112,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           'I have read and agree to the Terms',
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1
+                              .bodyLarge
                               ?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   fontSize: AppDefaults.fontSize),

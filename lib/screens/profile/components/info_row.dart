@@ -20,10 +20,10 @@ class InfoRow extends StatelessWidget {
             field,
             style: Theme.of(context)
                 .textTheme
-                .bodyText1
+                .bodyLarge
                 ?.copyWith(color: Colors.black54),
           ),
-          Text(value, style: Theme.of(context).textTheme.bodyText1),
+          Text(value, style: Theme.of(context).textTheme.bodyLarge),
         ],
       ),
     );

@@ -62,10 +62,10 @@ class ProductTileCart extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name, style: Theme.of(context).textTheme.caption),
+                    Text(name, style: Theme.of(context).textTheme.bodySmall),
                     const SizedBox(height: 5),
                     Text('\$${price.toInt()}',
-                        style: Theme.of(context).textTheme.bodyText1)
+                        style: Theme.of(context).textTheme.bodyLarge)
                   ],
                 ),
               ),

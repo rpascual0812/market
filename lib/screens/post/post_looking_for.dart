@@ -17,7 +17,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-import 'package:range_slider_dialog/range_slider_dialog.dart';
+// import 'package:range_slider_dialog/range_slider_dialog.dart';
 
 import '../../components/network_image.dart';
 
@@ -25,9 +25,9 @@ import 'package:http_parser/http_parser.dart';
 
 class PostLookingFor extends StatefulWidget {
   const PostLookingFor({
-    Key? key,
+    super.key,
     required this.token,
-  }) : super(key: key);
+  });
 
   final String token;
 
@@ -354,8 +354,8 @@ class _PostLookingForState extends State<PostLookingFor> {
                         Navigator.pop(context);
                       }),
                       const SizedBox(height: 10),
-                      Row(
-                        children: const [
+                      const Row(
+                        children: [
                           Text(
                             'Create Looking For Post',
                             style: TextStyle(
@@ -644,35 +644,35 @@ class _PostLookingForState extends State<PostLookingFor> {
                                           showCursor: true,
                                           readOnly: true,
                                           onTap: () async {
-                                            await RangeSliderDialog.display<
-                                                int>(
-                                              context,
-                                              minValue: minPrice,
-                                              maxValue: maxPrice,
-                                              acceptButtonText: 'Save',
-                                              cancelButtonText: 'Cancel',
-                                              headerText: 'Select Price Range',
-                                              selectedRangeValues: rangeValues,
-                                              onApplyButtonClick: (value) {
-                                                // print('SHOW PEOPLE DIALOG');
-                                                // print(value);
+                                            // await RangeSliderDialog.display<
+                                            //     int>(
+                                            //   context,
+                                            //   minValue: minPrice,
+                                            //   maxValue: maxPrice,
+                                            //   acceptButtonText: 'Save',
+                                            //   cancelButtonText: 'Cancel',
+                                            //   headerText: 'Select Price Range',
+                                            //   selectedRangeValues: rangeValues,
+                                            //   onApplyButtonClick: (value) {
+                                            //     // print('SHOW PEOPLE DIALOG');
+                                            //     // print(value);
 
-                                                setState(() {
-                                                  priceRangeController =
-                                                      TextEditingController(
-                                                          text:
-                                                              '${value?.start.round().toString()} - ${value?.end.round().toString()}');
-                                                });
+                                            //     setState(() {
+                                            //       priceRangeController =
+                                            //           TextEditingController(
+                                            //               text:
+                                            //                   '${value?.start.round().toString()} - ${value?.end.round().toString()}');
+                                            //     });
 
-                                                if (value != null) {
-                                                  rangeValues = RangeValues(
-                                                      value.start, value.end);
-                                                }
+                                            //     if (value != null) {
+                                            //       rangeValues = RangeValues(
+                                            //           value.start, value.end);
+                                            //     }
 
-                                                // callback(value);
-                                                Navigator.pop(context);
-                                              },
-                                            );
+                                            //     // callback(value);
+                                            //     Navigator.pop(context);
+                                            //   },
+                                            // );
                                           },
                                           validator: (value) {
                                             if (value != null &&

@@ -179,9 +179,9 @@ class _HomePageState extends State<HomePage> {
       onClickOverlay: (target) {
         print('onClickOverlay: $target');
       },
-      onSkip: () {
-        print("skip");
-      },
+      // onSkip: () {
+      //   print("skip");
+      // },
     );
   }
 
@@ -196,10 +196,10 @@ class _HomePageState extends State<HomePage> {
           TargetContent(
             align: ContentAlign.top,
             builder: (context, controller) {
-              return Column(
+              return const Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     "Titulo lorem ipsum",
                     style: TextStyle(

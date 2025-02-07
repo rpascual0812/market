@@ -205,10 +205,10 @@ class _AppRootState extends State<AppRoot> {
       onClickOverlay: (target) {
         print('onClickOverlay: $target');
       },
-      onSkip: () {
-        setMenuGuide();
-        print("skip");
-      },
+      // onSkip: () {
+      //   setMenuGuide();
+      //   print("skip");
+      // },
     );
   }
 

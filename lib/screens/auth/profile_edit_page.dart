@@ -57,9 +57,9 @@ class ProfileEditPage extends StatelessWidget {
                   color: Colors.white,
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
+                        children: [
                           HorizontalLine(width: 100),
                           Text(
                             'Or',

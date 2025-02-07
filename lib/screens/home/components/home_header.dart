@@ -11,6 +11,6 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Appbar();
+    return const Appbar();
   }
 }

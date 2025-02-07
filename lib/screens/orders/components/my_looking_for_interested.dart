@@ -172,10 +172,10 @@ class MyLookingForInterestedState extends State<MyLookingForInterested>
                   child: Column(
                     children: <Widget>[
                       interesteds.isEmpty
-                          ? Row(
+                          ? const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              children: const [
+                              children: [
                                 SizedBox(height: 100),
                                 Text(
                                   'No data found',

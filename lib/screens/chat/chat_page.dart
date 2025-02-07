@@ -312,10 +312,10 @@ class _ChatPageState extends State<ChatPage> {
                             token: token ?? '', account: account, chat: chat))
                         .toList(),
                   )
-                : Row(
+                : const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       SizedBox(height: AppDefaults.margin * 6),
                       Text(
                         'No conversations found',

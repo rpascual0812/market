@@ -13,7 +13,7 @@ class TopHeaderRow extends StatelessWidget {
         TextButton(onPressed: () {}, child: const Text('Clear')),
         Text(
           'Filters',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         Container(
           decoration: const BoxDecoration(

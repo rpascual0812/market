@@ -37,14 +37,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Stack(
         children: [
-          MobileScanner(
-            allowDuplicates: false,
-            controller: cameraController,
-            onDetect: (barcode, args) {
-              // debugPrint(barcode.rawValue);
-              showAlertDialog(context, barcode.rawValue);
-            },
-          ),
+          // MobileScanner(
+          //   allowDuplicates: false,
+          //   controller: cameraController,
+          //   onDetect: (barcode, args) {
+          //     // debugPrint(barcode.rawValue);
+          //     showAlertDialog(context, barcode.rawValue);
+          //   },
+          // ),
           QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5))
         ],
       ),

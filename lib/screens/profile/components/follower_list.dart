@@ -172,10 +172,10 @@ class FollowerListState extends State<FollowerList>
                   child: Column(
                     children: <Widget>[
                       followers.isEmpty
-                          ? Row(
+                          ? const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              children: const [
+                              children: [
                                 SizedBox(height: 100),
                                 Text(
                                   'No followers found',

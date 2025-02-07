@@ -118,14 +118,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
               // Active Page
               Text(
                 '${currentPage + 1}',
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
               // Total Pages
               Text(
                 '/${OnboardingData.boards.length}',
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
+                    .bodyLarge
                     ?.copyWith(color: Colors.grey),
               ),
             ],

@@ -15,7 +15,7 @@ class ColorPicker extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Colors', style: Theme.of(context).textTheme.bodyText2),
+          Text('Colors', style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 10),
           Row(
             children: [

@@ -229,7 +229,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
               children: [
                 Text(
                   widget.product['name'] ?? '',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Row(
                   children: [
@@ -702,10 +702,10 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10),
+          const Padding(
+            padding: EdgeInsets.all(10),
             child: Row(
-              children: const [
+              children: [
                 Text(
                   'Product Details',
                   style: TextStyle(

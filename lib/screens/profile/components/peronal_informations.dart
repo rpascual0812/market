@@ -17,7 +17,7 @@ class PeronalInformations extends StatelessWidget {
         children: [
           Text(
             'Personal Information',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           const Divider(),
           const InfoRow(field: 'Name:', value: 'Raffier Lee'),

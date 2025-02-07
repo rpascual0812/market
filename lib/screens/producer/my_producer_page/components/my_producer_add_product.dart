@@ -317,8 +317,8 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Row(
-                        children: const [
+                      const Row(
+                        children: [
                           Text(
                             'Upload Product',
                             style: TextStyle(

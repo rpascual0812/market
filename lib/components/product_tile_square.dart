@@ -57,13 +57,13 @@ class ProductTileSquare extends StatelessWidget {
                         children: [
                           Text(
                             title,
-                            style: Theme.of(context).textTheme.bodyText2,
+                            style: Theme.of(context).textTheme.bodyMedium,
                             maxLines: 2,
                           ),
                           const SizedBox(height: 8),
                           Text(
                             '\$${price.toInt()}',
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyLarge,
                             maxLines: 1,
                           )
                         ],

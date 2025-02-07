@@ -47,7 +47,7 @@ class StatusCard extends StatelessWidget {
                   statusName,
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1
+                      .bodyLarge
                       ?.copyWith(color: Colors.black54),
                   maxLines: 1,
                   textAlign: TextAlign.center,
@@ -55,7 +55,7 @@ class StatusCard extends StatelessWidget {
                 const SizedBox(height: 5),
                 Text(
                   status,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 )
               ],
             ),
