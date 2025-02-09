@@ -18,7 +18,7 @@ import '../approot/app_root.dart';
 import 'components/profile_product.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key, required this.token}) : super(key: key);
+  const ProfilePage({super.key, required this.token});
 
   final String token;
 

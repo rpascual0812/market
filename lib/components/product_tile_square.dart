@@ -6,7 +6,7 @@ import 'network_image.dart';
 
 class ProductTileSquare extends StatelessWidget {
   const ProductTileSquare({
-    Key? key,
+    super.key,
     required this.title,
     required this.price,
     required this.imageLink,
@@ -14,7 +14,7 @@ class ProductTileSquare extends StatelessWidget {
     this.hasFavourite = false,
     this.isFavourite = false,
     this.onFavouriteClicked,
-  }) : super(key: key);
+  });
 
   final String title;
   final double price;

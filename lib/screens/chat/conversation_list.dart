@@ -7,11 +7,11 @@ import 'package:time_elapsed/time_elapsed.dart';
 
 class ConversationList extends StatefulWidget {
   const ConversationList({
-    Key? key,
+    super.key,
     required this.token,
     required this.account,
     required this.chat,
-  }) : super(key: key);
+  });
 
   final String token;
   final Map<String, dynamic> account;

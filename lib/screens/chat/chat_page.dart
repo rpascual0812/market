@@ -16,7 +16,7 @@ import 'package:http/http.dart' as http;
 import '../../constants/index.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key}) : super(key: key);
+  const ChatPage({super.key});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -359,11 +359,11 @@ class ListItem extends StatelessWidget {
   final Map<String, dynamic> account;
   final Map<String, dynamic> chat;
   const ListItem({
-    Key? key,
+    super.key,
     required this.token,
     required this.account,
     required this.chat,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

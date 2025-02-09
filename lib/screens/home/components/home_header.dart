@@ -3,9 +3,9 @@ import 'package:market/components/appbar.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({
-    Key? key,
+    super.key,
     this.backButton,
-  }) : super(key: key);
+  });
 
   final Widget? backButton;
 

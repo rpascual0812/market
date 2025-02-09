@@ -7,7 +7,7 @@ import 'package:market/constants/index.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 class FaqPage extends StatefulWidget {
-  const FaqPage({Key? key}) : super(key: key);
+  const FaqPage({super.key});
 
   @override
   State<FaqPage> createState() => _FaqPageState();
@@ -231,9 +231,9 @@ class _FaqPageState extends State<FaqPage> {
 class ListItem extends StatelessWidget {
   final Map<String, dynamic> faq;
   const ListItem({
-    Key? key,
+    super.key,
     required this.faq,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -12,10 +12,10 @@ import 'my_products_tile.dart';
 
 class MyProductsTab extends StatefulWidget {
   const MyProductsTab({
-    Key? key,
+    super.key,
     required this.type,
     required this.userPk,
-  }) : super(key: key);
+  });
 
   final String type;
   final String userPk;
@@ -274,12 +274,12 @@ class ListItem extends StatelessWidget {
   final void Function() refresh;
 
   const ListItem({
-    Key? key,
+    super.key,
     required this.type,
     required this.product,
     required this.onEdit,
     required this.refresh,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

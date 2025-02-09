@@ -16,6 +16,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 
 // import 'package:range_slider_dialog/range_slider_dialog.dart';
 
@@ -52,15 +53,15 @@ class _PostLookingForState extends State<PostLookingFor> {
   // RangeValues priceRangeValuesController = const RangeValues(100, 500);
   // final priceController = TextEditingController(text: '');
 
-  final double _min = 1000;
+  final double _min = 0.0;
   final double _max = 10000;
-  final double _interval = 1500;
+  final double _interval = 100;
   SfRangeValues priceRangeValuesController =
       const SfRangeValues(1000.0, 5000.0);
 
-  final minPrice = 0;
-  final maxPrice = 10000;
-  RangeValues rangeValues = const RangeValues(100, 1000);
+  double lowerPrice = 0.0;
+  double upperPrice = 0.0;
+  RangeValues rangeValues = const RangeValues(0, 10000);
   List photos = [];
 
   var categoryValue = '1';
@@ -68,6 +69,9 @@ class _PostLookingForState extends State<PostLookingFor> {
 
   @override
   void initState() {
+    lowerPrice = _min;
+    upperPrice = _max;
+
     super.initState();
 
     getCategories();
@@ -179,13 +183,12 @@ class _PostLookingForState extends State<PostLookingFor> {
       );
       if (result != null) {
         PlatformFile file = result.files.first;
-        // print('NAME: ${file.name}');
-        // print('SIZE: ${file.size}');
-        // print('EXT: ${file.extension}');
-        // print('PATH: ${file.path}');
+        print('NAME: ${file.name}');
+        print('SIZE: ${file.size}');
+        print('EXT: ${file.extension}');
+        print('PATH: ${file.path}');
 
         final imageTemp = File(file.path!);
-
         final document = await upload(
           'display',
           imageTemp,
@@ -225,7 +228,7 @@ class _PostLookingForState extends State<PostLookingFor> {
 
       request.files.add(
         await http.MultipartFile.fromPath(
-          'image',
+          'file',
           file.path,
           contentType: MediaType('image', 'jpg'),
         ),
@@ -635,73 +638,145 @@ class _PostLookingForState extends State<PostLookingFor> {
                                       //     });
                                       //   },
                                       // ),
-                                      const SizedBox(
-                                          height: AppDefaults.margin),
-                                      SizedBox(
-                                        // padding: EdgeInsets.zero,
-                                        child: TextFormField(
-                                          controller: priceRangeController,
-                                          showCursor: true,
-                                          readOnly: true,
-                                          onTap: () async {
-                                            // await RangeSliderDialog.display<
-                                            //     int>(
-                                            //   context,
-                                            //   minValue: minPrice,
-                                            //   maxValue: maxPrice,
-                                            //   acceptButtonText: 'Save',
-                                            //   cancelButtonText: 'Cancel',
-                                            //   headerText: 'Select Price Range',
-                                            //   selectedRangeValues: rangeValues,
-                                            //   onApplyButtonClick: (value) {
-                                            //     // print('SHOW PEOPLE DIALOG');
-                                            //     // print(value);
+                                      // Container(
+                                      //   margin: EdgeInsets.only(
+                                      //       top: 20, left: 20, right: 20),
+                                      //   alignment: Alignment.centerLeft,
+                                      //   child: FlutterSlider(
+                                      //     values: [lowerPrice, upperPrice],
+                                      //     rangeSlider: true,
+                                      //     tooltip: FlutterSliderTooltip(
+                                      //       alwaysShowTooltip: true,
+                                      //     ),
+                                      //     max: _min,
+                                      //     min: _max,
+                                      //     step: FlutterSliderStep(step: 20),
+                                      //     jump: true,
+                                      //     onDragging: (handlerIndex, lowerValue,
+                                      //         upperValue) {
+                                      //       setState(() {
+                                      //         lowerPrice = lowerValue;
+                                      //         upperPrice = upperValue;
 
-                                            //     setState(() {
-                                            //       priceRangeController =
-                                            //           TextEditingController(
-                                            //               text:
-                                            //                   '${value?.start.round().toString()} - ${value?.end.round().toString()}');
-                                            //     });
-
-                                            //     if (value != null) {
-                                            //       rangeValues = RangeValues(
-                                            //           value.start, value.end);
-                                            //     }
-
-                                            //     // callback(value);
-                                            //     Navigator.pop(context);
-                                            //   },
-                                            // );
-                                          },
-                                          validator: (value) {
-                                            if (value != null &&
-                                                value.isEmpty) {
-                                              return '* required';
-                                            }
-                                            return null;
-                                          },
-                                          decoration: InputDecoration(
-                                            isDense: true,
-                                            contentPadding:
-                                                AppDefaults.edgeInset,
-                                            prefixIconConstraints:
-                                                const BoxConstraints(
-                                                    minWidth: 0, minHeight: 0),
-                                            focusedBorder: AppDefaults
-                                                .outlineInputBorderSuccess,
-                                            enabledBorder: AppDefaults
-                                                .outlineInputBorderSuccess,
-                                            focusedErrorBorder: AppDefaults
-                                                .outlineInputBorderError,
-                                            errorBorder: AppDefaults
-                                                .outlineInputBorderError,
+                                      //         rangeValues = RangeValues(
+                                      //           lowerPrice.toDouble(),
+                                      //           upperPrice.toDouble(),
+                                      //         );
+                                      //       });
+                                      //     },
+                                      //   ),
+                                      // ),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            top: 50, left: 50, right: 50),
+                                        alignment: Alignment.centerLeft,
+                                        child: FlutterSlider(
+                                          values: [lowerPrice, upperPrice],
+                                          rangeSlider: true,
+                                          max: _max,
+                                          min: _min,
+                                          step: FlutterSliderStep(
+                                              step: _interval),
+                                          visibleTouchArea: true,
+                                          trackBar: FlutterSliderTrackBar(
+                                            inactiveTrackBarHeight: 14,
+                                            activeTrackBarHeight: 10,
+                                            inactiveTrackBar: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              color: Colors.black12,
+                                              border: Border.all(
+                                                  width: 3, color: Colors.blue),
+                                            ),
+                                            activeTrackBar: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                color: Colors.blue
+                                                    .withValues(alpha: 0.5)),
                                           ),
-                                          style: const TextStyle(
-                                              fontSize: AppDefaults
-                                                  .fontSize), // <-- SEE HERE
+                                          onDragging: (handlerIndex, lowerValue,
+                                              upperValue) {
+                                            // _lowerValue = lowerValue;
+                                            // _upperValue = upperValue;
+                                            setState(() {
+                                              lowerPrice = lowerValue;
+                                              upperPrice = upperValue;
+
+                                              rangeValues = RangeValues(
+                                                lowerPrice.toDouble(),
+                                                upperPrice.toDouble(),
+                                              );
+                                            });
+                                          },
                                         ),
                                       ),
+                                      const SizedBox(
+                                          height: AppDefaults.margin),
+                                      // SizedBox(
+                                      //   // padding: EdgeInsets.zero,
+                                      //   child: TextFormField(
+                                      //     controller: priceRangeController,
+                                      //     showCursor: true,
+                                      //     readOnly: true,
+                                      //     onTap: () async {
+                                      //       // await RangeSliderDialog.display<
+                                      //       //     int>(
+                                      //       //   context,
+                                      //       //   minValue: minPrice,
+                                      //       //   maxValue: maxPrice,
+                                      //       //   acceptButtonText: 'Save',
+                                      //       //   cancelButtonText: 'Cancel',
+                                      //       //   headerText: 'Select Price Range',
+                                      //       //   selectedRangeValues: rangeValues,
+                                      //       //   onApplyButtonClick: (value) {
+                                      //       //     // print('SHOW PEOPLE DIALOG');
+                                      //       //     // print(value);
+
+                                      //       //     setState(() {
+                                      //       //       priceRangeController =
+                                      //       //           TextEditingController(
+                                      //       //               text:
+                                      //       //                   '${value?.start.round().toString()} - ${value?.end.round().toString()}');
+                                      //       //     });
+
+                                      //       //     if (value != null) {
+                                      //       //       rangeValues = RangeValues(
+                                      //       //           value.start, value.end);
+                                      //       //     }
+
+                                      //       //     // callback(value);
+                                      //       //     Navigator.pop(context);
+                                      //       //   },
+                                      //       // );
+                                      //     },
+                                      //     validator: (value) {
+                                      //       if (value != null &&
+                                      //           value.isEmpty) {
+                                      //         return '* required';
+                                      //       }
+                                      //       return null;
+                                      //     },
+                                      //     decoration: InputDecoration(
+                                      //       isDense: true,
+                                      //       contentPadding:
+                                      //           AppDefaults.edgeInset,
+                                      //       prefixIconConstraints:
+                                      //           const BoxConstraints(
+                                      //               minWidth: 0, minHeight: 0),
+                                      //       focusedBorder: AppDefaults
+                                      //           .outlineInputBorderSuccess,
+                                      //       enabledBorder: AppDefaults
+                                      //           .outlineInputBorderSuccess,
+                                      //       focusedErrorBorder: AppDefaults
+                                      //           .outlineInputBorderError,
+                                      //       errorBorder: AppDefaults
+                                      //           .outlineInputBorderError,
+                                      //     ),
+                                      //     style: const TextStyle(
+                                      //         fontSize: AppDefaults
+                                      //             .fontSize), // <-- SEE HERE
+                                      //   ),
+                                      // ),
 
                                       // RangeSlider(
                                       //   activeColor: AppColors.primary,
@@ -798,42 +873,44 @@ class _PostLookingForState extends State<PostLookingFor> {
                             child: Wrap(
                               alignment: WrapAlignment.start,
                               crossAxisAlignment: WrapCrossAlignment.start,
-                              children: List.generate(
-                                photos.length,
-                                (index) {
-                                  return InkWell(
-                                    onTap: () async {
-                                      ArtDialogResponse response =
-                                          await ArtSweetAlert.show(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        artDialogArgs: ArtDialogArgs(
-                                          showCancelBtn: true,
-                                          title:
-                                              "Do you want to remove ${photos[index]['original_name']}?",
-                                          confirmButtonText: "Remove",
-                                        ),
-                                      );
+                              children: photos.isNotEmpty
+                                  ? List.generate(
+                                      photos.length,
+                                      (index) {
+                                        return InkWell(
+                                          onTap: () async {
+                                            ArtDialogResponse response =
+                                                await ArtSweetAlert.show(
+                                              barrierDismissible: false,
+                                              context: context,
+                                              artDialogArgs: ArtDialogArgs(
+                                                showCancelBtn: true,
+                                                title:
+                                                    "Do you want to remove ${photos[index]?['original_name']}?",
+                                                confirmButtonText: "Remove",
+                                              ),
+                                            );
 
-                                      if (response.isTapConfirmButton) {
-                                        remove(index);
-                                        return;
-                                      }
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.only(
-                                          right: 5, bottom: 5),
-                                      height: 75,
-                                      child: AspectRatio(
-                                        aspectRatio: 1 / 1,
-                                        child: NetworkImageWithLoader(
-                                            '${dotenv.get('API')}/${photos[index]['path']}',
-                                            false),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                                            if (response.isTapConfirmButton) {
+                                              remove(index);
+                                              return;
+                                            }
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 5, bottom: 5),
+                                            height: 75,
+                                            child: AspectRatio(
+                                              aspectRatio: 1 / 1,
+                                              child: NetworkImageWithLoader(
+                                                  '${dotenv.get('API')}/${photos[index]?['path']}',
+                                                  false),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : [],
                             ),
                           ),
                         ),

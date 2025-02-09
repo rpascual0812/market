@@ -6,7 +6,7 @@ import 'components/category_selector.dart';
 import 'components/top_header_bottom_sheet.dart';
 
 class FilterDialog extends StatelessWidget {
-  const FilterDialog({Key? key}) : super(key: key);
+  const FilterDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

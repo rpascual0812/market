@@ -14,11 +14,11 @@ import 'package:http/http.dart' as http;
 
 class Bubble extends StatefulWidget {
   const Bubble({
-    Key? key,
+    super.key,
     required this.userPk,
     required this.token,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final String userPk;
   final String token;

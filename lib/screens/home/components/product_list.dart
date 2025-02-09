@@ -10,7 +10,7 @@ import 'package:market/screens/product/product_page.dart';
 import '../../../constants/index.dart';
 
 class ProductList extends StatefulWidget {
-  const ProductList({Key? key, required this.page}) : super(key: key);
+  const ProductList({super.key, required this.page});
 
   final int page;
 

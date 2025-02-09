@@ -7,7 +7,7 @@ import '../sliders/small_dot.dart';
 
 class ItemCard extends StatelessWidget {
   const ItemCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.image,
@@ -15,7 +15,7 @@ class ItemCard extends StatelessWidget {
     required this.price,
     required this.priceRange,
     required this.press,
-  }) : super(key: key);
+  });
 
   final String? title, description, image, marketType, priceRange;
   final double? price;
@@ -24,7 +24,7 @@ class ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle textStyle = kSecondaryBodyTextStyle.copyWith(
-      color: AppColors.primary.withOpacity(0.64),
+      color: AppColors.primary.withValues(alpha: 0.64),
       fontWeight: FontWeight.normal,
     );
     return InkWell(

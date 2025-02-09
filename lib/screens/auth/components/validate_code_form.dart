@@ -16,10 +16,10 @@ Future<void> main() async {
 
 class ValidateCodeForm extends StatefulWidget {
   const ValidateCodeForm({
-    Key? key,
+    super.key,
     required this.code,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final String code;
   final void Function(bool)? callback;

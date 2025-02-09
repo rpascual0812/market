@@ -6,8 +6,8 @@ import '../../../components/section_divider_title.dart';
 
 class NewArrivalSection extends StatelessWidget {
   const NewArrivalSection({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

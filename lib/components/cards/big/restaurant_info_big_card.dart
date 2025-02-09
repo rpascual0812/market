@@ -20,7 +20,7 @@ class RestaurantInfoBigCard extends StatelessWidget {
   final VoidCallback press;
 
   const RestaurantInfoBigCard({
-    Key? key,
+    super.key,
     required this.name,
     required this.rating,
     required this.numOfRating,
@@ -29,7 +29,7 @@ class RestaurantInfoBigCard extends StatelessWidget {
     required this.images,
     required this.marketType,
     required this.press,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -51,7 +51,7 @@ class RestaurantInfoBigCard extends StatelessWidget {
                 "assets/icons/clock.svg",
                 height: getProportionateScreenWidth(20),
                 width: getProportionateScreenWidth(20),
-                color: AppColors.primary.withOpacity(0.64),
+                color: AppColors.primary.withValues(alpha: 0.64),
               ),
               const HorizontalSpacing(of: 5),
               Text("$deliveryTime Min", style: kCaptionTextStyle),
@@ -63,7 +63,8 @@ class RestaurantInfoBigCard extends StatelessWidget {
                 "assets/icons/delivery.svg",
                 height: getProportionateScreenWidth(20),
                 width: getProportionateScreenWidth(20),
-                color: const Color(0xFF868686),
+                colorFilter:
+                    ColorFilter.mode(Color(0xFF868686), BlendMode.clear),
               ),
               const HorizontalSpacing(of: 5),
               Text(isFreeDelivery ? "Free" : "Paid", style: kCaptionTextStyle),

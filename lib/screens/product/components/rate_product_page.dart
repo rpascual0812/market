@@ -16,10 +16,10 @@ import '../../../constants/index.dart';
 
 class RateProductPage extends StatefulWidget {
   const RateProductPage({
-    Key? key,
+    super.key,
     required this.product,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> product;
   final void Function() callback;

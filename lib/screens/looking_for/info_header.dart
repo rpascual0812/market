@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class InfoHeader extends StatelessWidget {
   const InfoHeader({
-    Key? key,
+    super.key,
     required this.name,
     required this.product,
     required this.quantity,
     required this.date,
-  }) : super(key: key);
+  });
 
   final String name, product, quantity, date;
 

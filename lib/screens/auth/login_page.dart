@@ -7,7 +7,7 @@ import 'components/social_icon_button.dart';
 import 'sign_up_page.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +100,8 @@ class LoginPage extends StatelessWidget {
 
 class SocialLogins extends StatelessWidget {
   const SocialLogins({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

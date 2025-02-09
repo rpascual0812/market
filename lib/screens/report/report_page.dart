@@ -5,7 +5,7 @@ import 'components/profile_picture_section.dart';
 import 'components/statuses_row.dart';
 
 class ReportPage extends StatelessWidget {
-  const ReportPage({Key? key}) : super(key: key);
+  const ReportPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,10 +6,10 @@ import 'sliders/small_dot.dart';
 
 class PriceRangeAndFoodtype extends StatelessWidget {
   const PriceRangeAndFoodtype({
-    Key? key,
+    super.key,
     this.priceRange = "\$\$",
     required this.marketType,
-  }) : super(key: key);
+  });
 
   final String priceRange;
   final List<String> marketType;

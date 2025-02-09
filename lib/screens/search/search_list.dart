@@ -11,10 +11,10 @@ import '../../constants/index.dart';
 
 class SearchList extends StatefulWidget {
   const SearchList({
-    Key? key,
+    super.key,
     required this.token,
     required this.account,
-  }) : super(key: key);
+  });
 
   final String token;
   final Map<String, dynamic> account;
@@ -361,12 +361,12 @@ class ListItem extends StatelessWidget {
   final String filterValue;
 
   const ListItem({
-    Key? key,
+    super.key,
     required this.token,
     required this.account,
     required this.product,
     required this.filterValue,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

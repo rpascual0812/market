@@ -10,10 +10,10 @@ class NetworkImageWithLoader extends StatelessWidget {
   const NetworkImageWithLoader(
     this.src,
     this.circular, {
-    Key? key,
+    super.key,
     this.fit = BoxFit.cover,
     this.radius = AppDefaults.radius,
-  }) : super(key: key);
+  });
 
   final bool circular;
   final String src;

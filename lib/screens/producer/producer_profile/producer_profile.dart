@@ -11,10 +11,10 @@ import 'package:market/screens/producer/producer_profile/producer_rating_tile.da
 
 class ProducerProfile extends StatefulWidget {
   const ProducerProfile({
-    Key? key,
+    super.key,
     required this.token,
     required this.userPk,
-  }) : super(key: key);
+  });
 
   final String token;
   final int userPk;
@@ -145,7 +145,8 @@ class _ProducerProfileState extends State<ProducerProfile> {
                       image: DecorationImage(
                         fit: BoxFit.cover,
                         colorFilter: ColorFilter.mode(
-                            Colors.black.withOpacity(0.4), BlendMode.dstATop),
+                            Colors.black.withValues(alpha: 0.4),
+                            BlendMode.dstATop),
                         image: const NetworkImage(
                           'https://i.imgur.com/CwxDJj8.jpeg',
                         ),

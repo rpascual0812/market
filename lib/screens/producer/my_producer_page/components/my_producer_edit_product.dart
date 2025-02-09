@@ -20,10 +20,10 @@ import '../../../../constants/index.dart';
 
 class MyProducerEditProduct extends StatefulWidget {
   const MyProducerEditProduct({
-    Key? key,
+    super.key,
     required this.product,
     required this.onSave,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> product;
   final void Function() onSave;

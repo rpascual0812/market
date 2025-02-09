@@ -21,9 +21,9 @@ import '../../../../constants/index.dart';
 
 class MyProducerAddProduct extends StatefulWidget {
   const MyProducerAddProduct({
-    Key? key,
+    super.key,
     required this.type,
-  }) : super(key: key);
+  });
 
   final String type;
 

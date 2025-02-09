@@ -14,10 +14,10 @@ import 'package:http/http.dart' as http;
 
 class MyProducerPage extends StatefulWidget {
   const MyProducerPage({
-    Key? key,
+    super.key,
     required this.token,
     required this.accountPk,
-  }) : super(key: key);
+  });
 
   final String token;
   final String accountPk;

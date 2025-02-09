@@ -17,12 +17,12 @@ class SoldProductTile extends StatefulWidget {
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
   const SoldProductTile({
-    Key? key,
+    super.key,
     required this.token,
     required this.order,
     this.onTap,
     this.refresh,
-  }) : super(key: key);
+  });
 
   final String token;
   final Map<String, dynamic> order;

@@ -5,11 +5,11 @@ import '../../constants/index.dart';
 //ignore: must_be_immutable
 class SelectDropdownFull extends StatefulWidget {
   SelectDropdownFull({
-    Key? key,
+    super.key,
     required this.options,
     required this.defaultValue,
     this.onSelected,
-  }) : super(key: key);
+  });
 
   final List<String> options;
   String defaultValue;

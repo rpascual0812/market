@@ -11,9 +11,9 @@ import 'package:market/screens/profile/components/complaint_new.dart';
 
 class ComplaintList extends StatefulWidget {
   const ComplaintList({
-    Key? key,
+    super.key,
     required this.token,
-  }) : super(key: key);
+  });
 
   final String token;
 
@@ -230,10 +230,10 @@ class ListItem extends StatelessWidget {
   final String token;
   final Map<String, dynamic> complaint;
   const ListItem({
-    Key? key,
+    super.key,
     required this.token,
     required this.complaint,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

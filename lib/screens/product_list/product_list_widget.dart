@@ -12,7 +12,7 @@ import '../../constants/index.dart';
 // import '../../product/product_page.dart';
 
 class ProductListWidget extends StatefulWidget {
-  const ProductListWidget({Key? key}) : super(key: key);
+  const ProductListWidget({super.key});
 
   @override
   State<ProductListWidget> createState() => _ProductListWidgetState();

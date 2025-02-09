@@ -5,7 +5,7 @@ import '../../../constants/index.dart';
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({
-    Key? key,
+    super.key,
     required this.producerPk,
     required this.iconData,
     required this.iconBackground,
@@ -13,7 +13,7 @@ class ProfileCard extends StatelessWidget {
     required this.statusName,
     required this.status,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final String producerPk;
   final String iconData;
@@ -41,7 +41,7 @@ class ProfileCard extends StatelessWidget {
                   : Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
+                  color: Colors.grey.withValues(alpha: 0.3),
                   spreadRadius: 5,
                   blurRadius: 7,
                   offset: const Offset(0, 0), // changes position of shadow

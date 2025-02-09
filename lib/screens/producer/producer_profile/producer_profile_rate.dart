@@ -6,7 +6,7 @@ import 'package:market/constants/app_colors.dart';
 import 'package:market/models/ratings.dart';
 
 class ProducerProfileRate extends StatefulWidget {
-  const ProducerProfileRate({Key? key}) : super(key: key);
+  const ProducerProfileRate({super.key});
 
   @override
   State<ProducerProfileRate> createState() => _ProducerProfileRateState();
@@ -38,7 +38,8 @@ class _ProducerProfileRateState extends State<ProducerProfileRate> {
                       image: DecorationImage(
                         fit: BoxFit.cover,
                         colorFilter: ColorFilter.mode(
-                            Colors.black.withOpacity(0.4), BlendMode.dstATop),
+                            Colors.black.withValues(alpha: 0.4),
+                            BlendMode.dstATop),
                         image: const NetworkImage(
                           'https://i.imgur.com/CwxDJj8.jpeg',
                         ),

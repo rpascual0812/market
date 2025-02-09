@@ -5,9 +5,9 @@ import 'package:market/components/network_image.dart';
 
 class ProducerRatingTile extends StatefulWidget {
   const ProducerRatingTile({
-    Key? key,
+    super.key,
     required this.rating,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> rating;
 

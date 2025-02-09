@@ -29,7 +29,7 @@ void configLoading() {
     ..backgroundColor = Colors.green
     ..indicatorColor = Colors.yellow
     ..textColor = Colors.yellow
-    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..maskColor = Colors.blue.withValues(alpha: 0.5)
     ..userInteractions = true
     ..dismissOnTap = false
     ..customAnimation = CustomAnimation();
@@ -37,9 +37,9 @@ void configLoading() {
 
 class SendCodeForm extends StatefulWidget {
   const SendCodeForm({
-    Key? key,
+    super.key,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final void Function(Map<String, dynamic>)? callback;
 

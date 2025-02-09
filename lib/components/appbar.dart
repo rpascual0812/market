@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class Appbar extends StatefulWidget implements PreferredSizeWidget {
-  const Appbar({Key? key, this.module = 'home'}) : super(key: key);
+  const Appbar({super.key, this.module = 'home'});
 
   final String module;
 

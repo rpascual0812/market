@@ -12,10 +12,10 @@ import '../product/product_page.dart';
 
 class FutureCropsPage extends StatefulWidget {
   const FutureCropsPage({
-    Key? key,
+    super.key,
     required this.token,
     required this.account,
-  }) : super(key: key);
+  });
 
   final String token;
   final Map<String, dynamic> account;
@@ -265,7 +265,7 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
+                                    color: Colors.grey.withValues(alpha: 0.3),
                                     spreadRadius: 5,
                                     blurRadius: 7,
                                     offset: const Offset(
@@ -448,11 +448,11 @@ class ListItem extends StatelessWidget {
   final Map<String, dynamic> account;
   final Map<String, dynamic> product;
   const ListItem({
-    Key? key,
+    super.key,
     required this.token,
     required this.account,
     required this.product,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

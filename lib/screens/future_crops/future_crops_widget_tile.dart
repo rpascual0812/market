@@ -7,10 +7,10 @@ import '../../components/network_image.dart';
 
 class FutureCropsWidgetTile extends StatefulWidget {
   const FutureCropsWidgetTile({
-    Key? key,
+    super.key,
     required this.product,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> product;
   final void Function()? onTap;
@@ -113,7 +113,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
                             //     BorderRadius.circular(AppDefaults.radius),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.3),
+                                color: Colors.grey.withValues(alpha: 0.3),
                                 spreadRadius: 2,
                                 blurRadius: 10,
                                 offset: const Offset(

@@ -12,10 +12,10 @@ import 'package:http/http.dart' as http;
 
 class ModeratorBubble extends StatefulWidget {
   const ModeratorBubble({
-    Key? key,
+    super.key,
     required this.userPk,
     required this.token,
-  }) : super(key: key);
+  });
 
   final String userPk;
   final String token;
@@ -249,9 +249,9 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
             data: ablyData,
           );
 
-          ably.RealtimeChannel ModeratorbubbleChannel =
+          ably.RealtimeChannel moderatorbubbleChannel =
               realtime.channels.get(chatId);
-          await ModeratorbubbleChannel.publish(
+          await moderatorbubbleChannel.publish(
             name: chatId,
             data: ablyData,
           );

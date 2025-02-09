@@ -10,10 +10,10 @@ class FollowingListTile extends StatelessWidget {
       IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
 
   const FollowingListTile({
-    Key? key,
+    super.key,
     required this.following,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> following;
   final void Function()? onTap;

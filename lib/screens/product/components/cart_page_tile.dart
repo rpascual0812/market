@@ -11,12 +11,12 @@ import 'package:http/http.dart' as http;
 
 class CartPageTile extends StatefulWidget {
   const CartPageTile({
-    Key? key,
+    super.key,
     required this.order,
     this.onTap,
     required this.onToggle,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> order;
   final void Function()? onTap;

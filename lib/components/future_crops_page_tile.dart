@@ -15,12 +15,12 @@ class FutureCropsPageTile extends StatefulWidget {
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
   const FutureCropsPageTile({
-    Key? key,
+    super.key,
     required this.token,
     required this.account,
     required this.product,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final String token;
   final Map<String, dynamic> account;
@@ -115,7 +115,7 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
+                              color: Colors.grey.withValues(alpha: 0.3),
                               spreadRadius: 5,
                               blurRadius: 7,
                               offset: const Offset(

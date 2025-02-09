@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class HorizontalLine extends StatelessWidget {
   const HorizontalLine({
-    Key? key,
+    super.key,
     required this.width,
     this.thickness = 1,
-  }) : super(key: key);
+  });
 
   final double width;
   final double thickness;

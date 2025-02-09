@@ -11,10 +11,10 @@ class NotificationPageTile extends StatelessWidget {
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
   const NotificationPageTile({
-    Key? key,
+    super.key,
     required this.notification,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> notification;
   final void Function()? onTap;

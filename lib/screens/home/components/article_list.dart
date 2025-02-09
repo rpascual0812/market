@@ -10,8 +10,8 @@ import 'article_tile.dart';
 
 class ArticleList extends StatefulWidget {
   const ArticleList({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ArticleList> createState() => _ArticleListState();

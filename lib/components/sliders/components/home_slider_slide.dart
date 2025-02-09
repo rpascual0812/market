@@ -7,14 +7,14 @@ import 'package:market/constants/index.dart';
 
 class HomeSliderSlide extends StatelessWidget {
   const HomeSliderSlide({
-    Key? key,
+    super.key,
     required this.pk,
     required this.type,
     required this.title,
     required this.details,
     required this.userPk,
     required this.sliderDocument,
-  }) : super(key: key);
+  });
 
   final int? pk;
   final String type;

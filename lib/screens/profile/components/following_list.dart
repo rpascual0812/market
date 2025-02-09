@@ -7,8 +7,7 @@ import 'package:market/screens/profile/components/following_list_tile.dart';
 import '../../../constants/index.dart';
 
 class FollowingList extends StatefulWidget {
-  const FollowingList({Key? key, required this.userPk, required this.token})
-      : super(key: key);
+  const FollowingList({super.key, required this.userPk, required this.token});
 
   final int userPk;
   final String token;
@@ -229,10 +228,10 @@ class ListItem extends StatelessWidget {
   final void Function()? refresh;
 
   const ListItem({
-    Key? key,
+    super.key,
     required this.following,
     this.refresh,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

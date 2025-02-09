@@ -5,9 +5,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ComplaintViewImage extends StatefulWidget {
   const ComplaintViewImage({
-    Key? key,
+    super.key,
     required this.document,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> document;
 
@@ -45,9 +45,9 @@ class ComplaintViewStateImage extends State<ComplaintViewImage>
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withOpacity(0.3),
+      color: Colors.black.withValues(alpha: 0.3),
       child: Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.3),
+        backgroundColor: Colors.black.withValues(alpha: 0.3),
         body: SingleChildScrollView(
           child: Container(
             margin:

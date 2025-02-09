@@ -6,11 +6,11 @@ import '../size_config.dart';
 
 class DotIndicator extends StatelessWidget {
   const DotIndicator({
-    Key? key,
+    super.key,
     this.isActive = false,
     this.activeColor = AppColors.primary,
     this.inActiveColor = const Color(0xFF868686),
-  }) : super(key: key);
+  });
 
   final bool isActive;
   final Color activeColor, inActiveColor;
@@ -25,7 +25,7 @@ class DotIndicator extends StatelessWidget {
       height: 5,
       width: 8,
       decoration: BoxDecoration(
-        color: isActive ? activeColor : inActiveColor.withOpacity(0.25),
+        color: isActive ? activeColor : inActiveColor.withValues(alpha: 0.25),
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
     );

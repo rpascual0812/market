@@ -8,14 +8,14 @@ class IconWithBackground extends StatelessWidget {
       IconData(0xe806, fontFamily: 'Custom', fontPackage: null);
 
   const IconWithBackground({
-    Key? key,
+    super.key,
     required this.iconData,
     this.color,
     this.iconColor,
     this.onTap,
     this.size,
     this.radius,
-  }) : super(key: key);
+  });
 
   final String iconData;
   final Color? color;

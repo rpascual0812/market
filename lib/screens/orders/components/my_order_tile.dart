@@ -12,12 +12,12 @@ import 'package:http/http.dart' as http;
 
 class MyOrderTile extends StatefulWidget {
   const MyOrderTile({
-    Key? key,
+    super.key,
     required this.token,
     required this.order,
     this.onTap,
     this.refresh,
-  }) : super(key: key);
+  });
 
   final String token;
   final Map<String, dynamic> order;

@@ -26,10 +26,10 @@ class ProductPageDetails extends StatefulWidget {
       IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
 
   const ProductPageDetails({
-    Key? key,
+    super.key,
     required this.product,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> product;
   final void Function() callback;

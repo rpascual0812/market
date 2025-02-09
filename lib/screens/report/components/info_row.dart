@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class InfoRow extends StatelessWidget {
   const InfoRow({
-    Key? key,
+    super.key,
     required this.field,
     required this.value,
-  }) : super(key: key);
+  });
 
   final String field, value;
 

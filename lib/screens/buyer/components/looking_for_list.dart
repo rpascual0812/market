@@ -8,8 +8,7 @@ import '../../../../constants/index.dart';
 import 'package:http/http.dart' as http;
 
 class LookingForList extends StatefulWidget {
-  const LookingForList({Key? key, required this.type, required this.userPk})
-      : super(key: key);
+  const LookingForList({super.key, required this.type, required this.userPk});
 
   final String type;
   final int userPk;

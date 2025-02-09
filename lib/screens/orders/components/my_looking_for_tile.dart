@@ -13,12 +13,12 @@ import 'package:http/http.dart' as http;
 
 class MyLookingForTile extends StatefulWidget {
   const MyLookingForTile({
-    Key? key,
+    super.key,
     required this.token,
     required this.order,
     this.onTap,
     this.refresh,
-  }) : super(key: key);
+  });
 
   final String token;
   final Map<String, dynamic> order;

@@ -12,9 +12,9 @@ import '../../constants/index.dart';
 
 class ProductListPage extends StatefulWidget {
   const ProductListPage({
-    Key? key,
+    super.key,
     this.index = 0,
-  }) : super(key: key);
+  });
 
   final int index;
 

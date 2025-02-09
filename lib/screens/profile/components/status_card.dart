@@ -5,14 +5,14 @@ import '../../../constants/index.dart';
 
 class StatusCard extends StatelessWidget {
   const StatusCard({
-    Key? key,
+    super.key,
     required this.iconData,
     required this.iconBackground,
     required this.iconColor,
     required this.statusName,
     required this.status,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final IconData iconData;
   final Color iconBackground;

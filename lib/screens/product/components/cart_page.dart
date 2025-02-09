@@ -14,8 +14,8 @@ import 'package:http/http.dart' as http;
 
 class CartPage extends StatefulWidget {
   const CartPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<CartPage> createState() => _CartPageState();

@@ -3,10 +3,10 @@ import 'package:market/constants/index.dart';
 
 class ArticleView extends StatefulWidget {
   const ArticleView({
-    Key? key,
+    super.key,
     required this.article,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> article;
   final void Function() callback;
@@ -45,9 +45,9 @@ class ArticleViewState extends State<ArticleView>
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withOpacity(0.3),
+      color: Colors.black.withValues(alpha: 0.3),
       child: Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.3),
+        backgroundColor: Colors.black.withValues(alpha: 0.3),
         body: SingleChildScrollView(
           child: Container(
             margin:

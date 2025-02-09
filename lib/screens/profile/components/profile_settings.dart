@@ -22,9 +22,9 @@ import 'package:http/http.dart' as http;
 
 class ProfileSettings extends StatefulWidget {
   const ProfileSettings({
-    Key? key,
+    super.key,
     required this.token,
-  }) : super(key: key);
+  });
 
   final String token;
 

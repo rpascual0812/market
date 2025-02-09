@@ -7,9 +7,9 @@ import 'package:market/constants/app_colors.dart';
 
 class RatingsPage extends StatefulWidget {
   const RatingsPage({
-    Key? key,
+    super.key,
     required this.product,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> product;
 

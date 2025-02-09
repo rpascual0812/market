@@ -6,9 +6,9 @@ import 'custom_background_profile.dart';
 
 class ProfilePictureSection extends StatelessWidget {
   const ProfilePictureSection({
-    Key? key,
+    super.key,
     required this.size,
-  }) : super(key: key);
+  });
 
   final Size size;
 

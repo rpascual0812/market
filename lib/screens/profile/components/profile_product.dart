@@ -7,10 +7,10 @@ import '../../../constants/index.dart';
 
 class ProfileProduct extends StatefulWidget {
   const ProfileProduct({
-    Key? key,
+    super.key,
     required this.token,
     required this.user,
-  }) : super(key: key);
+  });
 
   final String token;
   final Map<String, dynamic> user;
@@ -54,8 +54,8 @@ class _ProfileProductState extends State<ProfileProduct> {
             producerPk: producerPk,
             iconData: 'box',
             iconBackground: producerPk == '0'
-                ? AppColors.grey1.withOpacity(0.5)
-                : AppColors.primary.withOpacity(0.5),
+                ? AppColors.grey1.withValues(alpha: 0.5)
+                : AppColors.primary.withValues(alpha: 0.5),
             iconColor: producerPk == '0' ? Colors.black12 : AppColors.primary,
             statusName: 'My Products',
             status: '10+',
@@ -77,7 +77,7 @@ class _ProfileProductState extends State<ProfileProduct> {
           ProfileCard(
             producerPk: producerPk,
             iconData: 'cart',
-            iconBackground: Colors.blue.withOpacity(0.1),
+            iconBackground: Colors.blue.withValues(alpha: 0.1),
             iconColor: Colors.blue,
             statusName: 'My Orders',
             status: '5',
@@ -94,7 +94,7 @@ class _ProfileProductState extends State<ProfileProduct> {
           ),
           // ProfileCard(
           //   iconData: Icons.star,
-          //   iconBackground: Colors.yellow.withOpacity(0.1),
+          //   iconBackground: Colors.yellow.withValues(alpha: 0.1),
           //   iconColor: Colors.yellow,
           //   statusName: 'Reviews',
           //   status: '4.5K',

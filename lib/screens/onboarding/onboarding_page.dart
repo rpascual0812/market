@@ -17,9 +17,9 @@ const storage = FlutterSecureStorage();
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({
-    Key? key,
+    super.key,
     required this.jwt,
-  }) : super(key: key);
+  });
 
   final String jwt;
 

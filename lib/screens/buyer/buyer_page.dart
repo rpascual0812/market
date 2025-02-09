@@ -10,9 +10,9 @@ import '../../constants/index.dart';
 
 class BuyerPage extends StatefulWidget {
   const BuyerPage({
-    Key? key,
+    super.key,
     required this.userPk,
-  }) : super(key: key);
+  });
 
   final int userPk;
 

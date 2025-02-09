@@ -16,8 +16,8 @@ import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SignUpForm> createState() => _SignUpFormState();

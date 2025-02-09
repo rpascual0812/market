@@ -18,7 +18,7 @@ import 'package:http_parser/http_parser.dart';
 import '../my_producer_page/my_producer_page.dart';
 
 class ProducerRegister extends StatefulWidget {
-  const ProducerRegister({Key? key}) : super(key: key);
+  const ProducerRegister({super.key});
 
   @override
   State<ProducerRegister> createState() => _ProducerRegisterState();

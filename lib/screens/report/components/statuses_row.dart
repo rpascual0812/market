@@ -5,8 +5,8 @@ import 'status_card.dart';
 
 class StatusesRow extends StatelessWidget {
   const StatusesRow({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class StatusesRow extends StatelessWidget {
         children: [
           StatusCard(
             iconData: Icons.shopping_bag_rounded,
-            iconBackground: AppColors.primary.withOpacity(0.1),
+            iconBackground: AppColors.primary.withValues(alpha: 0.1),
             iconColor: AppColors.primary,
             statusName: 'Progress order',
             status: '10+',
@@ -24,7 +24,7 @@ class StatusesRow extends StatelessWidget {
           ),
           StatusCard(
             iconData: Icons.add_shopping_cart,
-            iconBackground: Colors.blue.withOpacity(0.1),
+            iconBackground: Colors.blue.withValues(alpha: 0.1),
             iconColor: Colors.blue,
             statusName: 'Promocodes',
             status: '5',
@@ -32,7 +32,7 @@ class StatusesRow extends StatelessWidget {
           ),
           StatusCard(
             iconData: Icons.star,
-            iconBackground: Colors.yellow.withOpacity(0.1),
+            iconBackground: Colors.yellow.withValues(alpha: 0.1),
             iconColor: Colors.yellow,
             statusName: 'Reviews',
             status: '4.5K',

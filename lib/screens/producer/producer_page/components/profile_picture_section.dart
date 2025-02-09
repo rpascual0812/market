@@ -13,9 +13,9 @@ import '../../../../main.dart';
 
 class ProfilePictureSection extends StatefulWidget {
   const ProfilePictureSection({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> user;
 

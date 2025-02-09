@@ -15,12 +15,12 @@ import 'package:http/http.dart' as http;
 
 class MyProductTile extends StatefulWidget {
   const MyProductTile({
-    Key? key,
+    super.key,
     required this.type,
     required this.product,
     required this.onEdit,
     required this.refresh,
-  }) : super(key: key);
+  });
 
   final String type;
   final Map<String, dynamic> product;

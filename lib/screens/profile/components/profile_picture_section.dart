@@ -15,7 +15,7 @@ import 'following_list.dart';
 const storage = FlutterSecureStorage();
 
 class ProfilePictureSection extends StatefulWidget {
-  const ProfilePictureSection({Key? key}) : super(key: key);
+  const ProfilePictureSection({super.key});
 
   static const IconData pin =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
@@ -130,7 +130,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                               color: Colors.transparent,
                               padding:
                                   const EdgeInsets.all(AppDefaults.padding),
-                              width: MediaQuery.of(context).size.width * 0.43,
+                              width: MediaQuery.of(context).size.width * 0.40,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -202,7 +202,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                       vertical: 8,
                                     ),
                                     width: MediaQuery.of(context).size.width *
-                                        0.19,
+                                        0.20,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -251,7 +251,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                     ),
                                     margin: const EdgeInsets.all(0),
                                     width: MediaQuery.of(context).size.width *
-                                        0.19,
+                                        0.20,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [

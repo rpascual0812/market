@@ -4,11 +4,11 @@ import '../../../../constants/index.dart';
 
 class ChoiceCategory extends StatelessWidget {
   const ChoiceCategory({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.name,
     required this.isActive,
-  }) : super(key: key);
+  });
 
   final void Function() onTap;
   final String name;

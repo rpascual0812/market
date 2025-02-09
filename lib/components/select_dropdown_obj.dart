@@ -1,7 +1,6 @@
 // import 'dart:html';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:market/constants/app_colors.dart';
 import 'package:market/constants/app_defaults.dart';
 
 //ignore: must_be_immutable

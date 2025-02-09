@@ -10,10 +10,10 @@ import 'network_image.dart';
 
 class ProductListWidgetTileSquare extends StatelessWidget {
   const ProductListWidgetTileSquare({
-    Key? key,
+    super.key,
     required this.product,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> product;
   final void Function()? onTap;
@@ -54,7 +54,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
+                color: Colors.grey.withValues(alpha: 0.3),
                 spreadRadius: 5,
                 blurRadius: 7,
                 offset: const Offset(0, 0), // changes position of shadow

@@ -13,8 +13,8 @@ import '../approot/app_root.dart';
 
 class LookingForWidget extends StatefulWidget {
   const LookingForWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<LookingForWidget> createState() => _LookingForWidgetState();
@@ -93,7 +93,7 @@ class _LookingForWidgetState extends State<LookingForWidget> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.grey.withValues(alpha: 0.5),
                 spreadRadius: 5,
                 blurRadius: 7,
                 offset: const Offset(0, 3), // changes position of shadow
@@ -124,7 +124,7 @@ class _LookingForWidgetState extends State<LookingForWidget> {
                   child: DataTable(
                     showCheckboxColumn: false,
                     horizontalMargin: 0,
-                    dataRowHeight: 25,
+                    dataRowMinHeight: 25,
                     // columnSpacing: 0,
                     columns: const [
                       DataColumn(

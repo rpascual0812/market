@@ -8,9 +8,9 @@ import '../../../../constants/index.dart';
 
 class MyProducerHeader extends StatefulWidget {
   const MyProducerHeader({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> user;
 
@@ -52,7 +52,7 @@ class _MyProducerHeaderState extends State<MyProducerHeader> {
         image: DecorationImage(
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.4), BlendMode.dstATop),
+              Colors.black.withValues(alpha: 0.4), BlendMode.dstATop),
           image: NetworkImage(
             profilePhoto,
           ),

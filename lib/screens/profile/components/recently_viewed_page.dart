@@ -13,9 +13,9 @@ import 'package:market/screens/profile/components/recently_viewed_page_tile.dart
 
 class RecentlyViewedPage extends StatefulWidget {
   const RecentlyViewedPage({
-    Key? key,
+    super.key,
     required this.token,
-  }) : super(key: key);
+  });
 
   final String token;
 
@@ -226,11 +226,11 @@ class ListItem extends StatelessWidget {
   final void Function()? onTap;
 
   const ListItem({
-    Key? key,
+    super.key,
     required this.token,
     required this.product,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

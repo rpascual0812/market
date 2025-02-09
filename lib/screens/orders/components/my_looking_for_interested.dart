@@ -8,8 +8,7 @@ import '../../../constants/index.dart';
 
 class MyLookingForInterested extends StatefulWidget {
   const MyLookingForInterested(
-      {Key? key, required this.productPk, required this.token})
-      : super(key: key);
+      {super.key, required this.productPk, required this.token});
 
   final int productPk;
   final String token;
@@ -231,11 +230,11 @@ class ListItem extends StatelessWidget {
   final void Function()? refresh;
 
   const ListItem({
-    Key? key,
+    super.key,
     required this.token,
     required this.interested,
     this.refresh,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

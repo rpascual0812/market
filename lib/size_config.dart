@@ -34,9 +34,9 @@ double getProportionateScreenWidth(double inputWidth) {
 // For add free space vertically
 class VerticalSpacing extends StatelessWidget {
   const VerticalSpacing({
-    Key? key,
+    super.key,
     this.of = 20,
-  }) : super(key: key);
+  });
 
   final double of;
 
@@ -51,9 +51,9 @@ class VerticalSpacing extends StatelessWidget {
 // For add free space horizontally
 class HorizontalSpacing extends StatelessWidget {
   const HorizontalSpacing({
-    Key? key,
+    super.key,
     this.of = 20,
-  }) : super(key: key);
+  });
 
   final double of;
 

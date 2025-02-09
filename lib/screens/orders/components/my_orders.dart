@@ -15,9 +15,9 @@ import '../../product/product_page.dart';
 
 class MyOrders extends StatefulWidget {
   const MyOrders({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> user;
 
@@ -251,11 +251,11 @@ class ListItem extends StatelessWidget {
   final void Function()? refresh;
 
   const ListItem({
-    Key? key,
+    super.key,
     required this.token,
     required this.order,
     this.refresh,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

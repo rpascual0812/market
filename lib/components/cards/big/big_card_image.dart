@@ -3,9 +3,9 @@ import 'package:market/constants/index.dart';
 
 class BigCardImage extends StatelessWidget {
   const BigCardImage({
-    Key? key,
+    super.key,
     required this.image,
-  }) : super(key: key);
+  });
 
   final String image;
 

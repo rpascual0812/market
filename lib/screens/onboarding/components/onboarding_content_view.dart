@@ -7,11 +7,11 @@ import '../../../constants/app_defaults.dart';
 
 class OnboardingContentView extends StatefulWidget {
   const OnboardingContentView({
-    Key? key,
+    super.key,
     required this.board,
     required this.currentIndex,
     required this.onNext,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> board;
   final int currentIndex;

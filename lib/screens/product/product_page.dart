@@ -15,9 +15,9 @@ import 'package:http/http.dart' as http;
 
 class ProductPage extends StatefulWidget {
   const ProductPage({
-    Key? key,
+    super.key,
     required this.productPk,
-  }) : super(key: key);
+  });
 
   final int productPk;
 

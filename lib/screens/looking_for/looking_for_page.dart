@@ -12,9 +12,9 @@ import 'package:http/http.dart' as http;
 
 class LookingForPage extends StatefulWidget {
   const LookingForPage({
-    Key? key,
+    super.key,
     required this.productPk,
-  }) : super(key: key);
+  });
 
   final int productPk;
 

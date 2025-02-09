@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import '../../constants/index.dart';
 
 class TermsPage extends StatefulWidget {
-  const TermsPage({Key? key, required this.location}) : super(key: key);
+  const TermsPage({super.key, required this.location});
 
   final String location;
 

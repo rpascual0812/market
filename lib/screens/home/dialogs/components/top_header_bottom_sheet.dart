@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class TopHeaderRow extends StatelessWidget {
   const TopHeaderRow({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

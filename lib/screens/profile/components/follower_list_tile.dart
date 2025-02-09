@@ -7,10 +7,10 @@ import '../../../constants/index.dart';
 
 class FollowerListTile extends StatelessWidget {
   const FollowerListTile({
-    Key? key,
+    super.key,
     required this.follower,
     this.onTap,
-  }) : super(key: key);
+  });
 
   static const IconData chat =
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);

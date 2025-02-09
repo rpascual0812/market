@@ -6,14 +6,14 @@ import '../../../constants/index.dart';
 
 class ProductTileCart extends StatelessWidget {
   const ProductTileCart({
-    Key? key,
+    super.key,
     required this.name,
     required this.coverImage,
     required this.price,
     required this.quantity,
     this.increaseQuantity,
     this.decreaseQuantity,
-  }) : super(key: key);
+  });
 
   final String name;
   final String coverImage;

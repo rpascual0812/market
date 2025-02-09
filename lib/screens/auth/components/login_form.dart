@@ -34,14 +34,14 @@ void configLoading() {
     ..backgroundColor = Colors.green
     ..indicatorColor = Colors.yellow
     ..textColor = Colors.yellow
-    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..maskColor = Colors.blue.withValues(alpha: 0.5)
     ..userInteractions = true
     ..dismissOnTap = false
     ..customAnimation = CustomAnimation();
 }
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
+  const LoginForm({super.key});
 
   @override
   State<LoginForm> createState() => _LoginFormState();

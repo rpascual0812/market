@@ -23,10 +23,10 @@ class LookingForPageDetails extends StatefulWidget {
       IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
 
   const LookingForPageDetails({
-    Key? key,
+    super.key,
     required this.product,
     required this.account,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> product;
   final Map<String, dynamic> account;

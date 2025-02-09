@@ -10,8 +10,7 @@ import '../../../product/product_page.dart';
 import 'package:http/http.dart' as http;
 
 class ProductsTab extends StatefulWidget {
-  const ProductsTab({Key? key, required this.type, required this.userPk})
-      : super(key: key);
+  const ProductsTab({super.key, required this.type, required this.userPk});
 
   final String type;
   final int userPk;

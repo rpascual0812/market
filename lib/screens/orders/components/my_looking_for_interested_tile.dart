@@ -11,11 +11,11 @@ class MyLookingForInterestedTile extends StatelessWidget {
       IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
 
   const MyLookingForInterestedTile({
-    Key? key,
+    super.key,
     required this.token,
     required this.interested,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final String token;
   final Map<String, dynamic> interested;

@@ -6,7 +6,7 @@ import '../dot_indicators.dart';
 import 'components/product_slider_slide.dart';
 
 class ProductSlider extends StatefulWidget {
-  const ProductSlider({Key? key, required this.documents}) : super(key: key);
+  const ProductSlider({super.key, required this.documents});
 
   final List documents;
 

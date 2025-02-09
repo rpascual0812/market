@@ -12,9 +12,9 @@ import '../../../constants/remote.dart';
 
 class ProducerPage extends StatefulWidget {
   const ProducerPage({
-    Key? key,
+    super.key,
     required this.userPk,
-  }) : super(key: key);
+  });
 
   final int userPk;
 

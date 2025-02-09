@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:market/screens/approot/app_root.dart';
 import 'package:market/screens/onboarding/onboarding_page.dart';
-import 'theme.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';

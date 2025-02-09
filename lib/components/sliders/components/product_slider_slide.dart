@@ -4,9 +4,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProductSliderSlide extends StatelessWidget {
   const ProductSliderSlide({
-    Key? key,
+    super.key,
     required this.productDocuments,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> productDocuments;
 

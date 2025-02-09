@@ -5,11 +5,11 @@ import 'package:http/http.dart' as http;
 
 class ModeratorStartForm extends StatefulWidget {
   const ModeratorStartForm({
-    Key? key,
+    super.key,
     required this.userPk,
     required this.token,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final String userPk;
   final String token;

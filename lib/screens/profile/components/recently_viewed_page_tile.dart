@@ -13,11 +13,11 @@ class RecentlyViewedPageTile extends StatefulWidget {
       IconData(0xe800, fontFamily: 'Custom', fontPackage: null);
 
   const RecentlyViewedPageTile({
-    Key? key,
+    super.key,
     required this.token,
     required this.product,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final String token;
   final Map<String, dynamic> product;

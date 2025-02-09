@@ -7,9 +7,9 @@ import 'package:market/constants/app_colors.dart';
 
 class ProducerRatingsPage extends StatefulWidget {
   const ProducerRatingsPage({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> user;
 

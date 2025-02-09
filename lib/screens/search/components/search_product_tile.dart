@@ -7,10 +7,10 @@ import '../../../components/network_image.dart';
 
 class SearchProductTile extends StatefulWidget {
   const SearchProductTile({
-    Key? key,
+    super.key,
     required this.product,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> product;
   final void Function()? onTap;

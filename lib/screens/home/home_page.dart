@@ -24,9 +24,9 @@ import 'components/article_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
-    Key? key,
+    super.key,
     this.backButton,
-  }) : super(key: key);
+  });
 
   final Widget? backButton;
 
@@ -325,7 +325,7 @@ class _HomePageState extends State<HomePage> {
 
 class GridItem extends StatelessWidget {
   final Map<String, dynamic> product;
-  const GridItem({Key? key, required this.product}) : super(key: key);
+  const GridItem({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

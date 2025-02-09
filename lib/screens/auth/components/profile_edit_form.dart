@@ -15,10 +15,10 @@ import 'package:http/http.dart' as http;
 
 class ProfileEditForm extends StatefulWidget {
   const ProfileEditForm({
-    Key? key,
+    super.key,
     required this.user,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> user;
   final void Function() callback;

@@ -11,13 +11,13 @@ import '../product_page.dart';
 
 class OtherProducts extends StatefulWidget {
   const OtherProducts({
-    Key? key,
+    super.key,
     this.userPk = '',
     required this.title,
     required this.theme,
     required this.token,
     required this.accountPk,
-  }) : super(key: key);
+  });
 
   final String userPk;
   final String title;

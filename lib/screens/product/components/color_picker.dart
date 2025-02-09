@@ -5,8 +5,8 @@ import 'color_shape.dart';
 
 class ColorPicker extends StatelessWidget {
   const ColorPicker({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

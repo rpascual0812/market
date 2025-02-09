@@ -10,7 +10,7 @@ import 'package:market/screens/chat/moderator_bubble.dart';
 import 'package:market/screens/chat/moderator_start_form.dart';
 
 class Moderator extends StatefulWidget {
-  const Moderator({Key? key}) : super(key: key);
+  const Moderator({super.key});
 
   @override
   State<Moderator> createState() => _ModeratorState();

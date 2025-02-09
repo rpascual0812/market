@@ -11,8 +11,8 @@ import '../../constants/index.dart';
 
 class FutureCropsWidget extends StatefulWidget {
   const FutureCropsWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<FutureCropsWidget> createState() => _FutureCropsWidgetState();
@@ -91,7 +91,7 @@ class _FutureCropsWidgetState extends State<FutureCropsWidget> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.grey.withValues(alpha: 0.5),
                 spreadRadius: 5,
                 blurRadius: 7,
                 offset: const Offset(0, 3), // changes position of shadow

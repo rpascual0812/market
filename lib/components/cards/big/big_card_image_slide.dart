@@ -6,9 +6,9 @@ import 'big_card_image.dart';
 
 class BigCardImageSlide extends StatefulWidget {
   const BigCardImageSlide({
-    Key? key,
+    super.key,
     required this.images,
-  }) : super(key: key);
+  });
 
   final List images;
 

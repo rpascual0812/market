@@ -4,11 +4,11 @@ import '../../../constants/index.dart';
 
 class ColorChooser extends StatelessWidget {
   const ColorChooser({
-    Key? key,
+    super.key,
     required this.isSelected,
     required this.color,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final bool isSelected;
   final Color color;

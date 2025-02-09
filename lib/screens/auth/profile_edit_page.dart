@@ -7,10 +7,10 @@ import 'login_page.dart';
 
 class ProfileEditPage extends StatelessWidget {
   const ProfileEditPage({
-    Key? key,
+    super.key,
     required this.user,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> user;
   final void Function() callback;

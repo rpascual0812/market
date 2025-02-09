@@ -10,7 +10,7 @@ import 'components/product_tile_cart.dart';
 // import 'package:qr_flutter/qr_flutter.dart';
 
 class OrderListPage extends StatefulWidget {
-  const OrderListPage({Key? key}) : super(key: key);
+  const OrderListPage({super.key});
   @override
   State<OrderListPage> createState() => _OrderListPageState();
 }

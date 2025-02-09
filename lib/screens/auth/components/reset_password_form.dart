@@ -17,10 +17,10 @@ Future<void> main() async {
 
 class ResetPasswordForm extends StatefulWidget {
   const ResetPasswordForm({
-    Key? key,
+    super.key,
     required this.code,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final String code;
   final void Function(bool)? callback;

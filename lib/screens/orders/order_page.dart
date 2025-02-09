@@ -7,10 +7,10 @@ import 'package:market/screens/orders/components/sold_products.dart';
 
 class OrderPage extends StatelessWidget {
   const OrderPage({
-    Key? key,
+    super.key,
     required this.type,
     required this.user,
-  }) : super(key: key);
+  });
 
   final String type;
   final Map<String, dynamic> user;

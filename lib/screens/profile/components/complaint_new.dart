@@ -12,10 +12,10 @@ import 'package:http_parser/http_parser.dart';
 
 class ComplaintNew extends StatefulWidget {
   const ComplaintNew({
-    Key? key,
+    super.key,
     required this.token,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final String token;
   final void Function() callback;
@@ -100,6 +100,7 @@ class ComplaintNewState extends State<ComplaintNew>
       );
 
       var response = await request.send();
+      print('send $response');
       return await response.stream.bytesToString();
     } on Exception {
       AppDefaults.toast(
@@ -159,9 +160,9 @@ class ComplaintNewState extends State<ComplaintNew>
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withOpacity(0.3),
+      color: Colors.black.withValues(alpha: 0.3),
       child: Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.3),
+        backgroundColor: Colors.black.withValues(alpha: 0.3),
         body: SingleChildScrollView(
           child: Container(
             margin:
@@ -390,7 +391,7 @@ class ComplaintNewState extends State<ComplaintNew>
                                           artDialogArgs: ArtDialogArgs(
                                             showCancelBtn: true,
                                             title:
-                                                "Do you want to remove ${productPhotos[index]['original_name']}?",
+                                                "Do you want to remove ${productPhotos[index]?['original_name']}?",
                                             confirmButtonText: "Remove",
                                           ),
                                         );
@@ -407,7 +408,7 @@ class ComplaintNewState extends State<ComplaintNew>
                                         child: AspectRatio(
                                           aspectRatio: 1 / 1,
                                           child: NetworkImageWithLoader(
-                                              '${dotenv.get('API')}/${productPhotos[index]['path']}',
+                                              '${dotenv.get('API')}/${productPhotos[index]?['path']}',
                                               false),
                                         ),
                                       ),

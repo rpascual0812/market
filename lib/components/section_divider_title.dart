@@ -4,11 +4,11 @@ import '../constants/index.dart';
 
 class SectionDividerTitle extends StatelessWidget {
   const SectionDividerTitle({
-    Key? key,
+    super.key,
     required this.title,
     this.buttonTitle,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final String title;
   final String? buttonTitle;

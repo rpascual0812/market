@@ -17,7 +17,7 @@ import 'package:market/size_config.dart';
 import '../constants/index.dart';
 
 class GridExample extends StatefulWidget {
-  const GridExample({Key? key}) : super(key: key);
+  const GridExample({super.key});
 
   @override
   State<GridExample> createState() => _GridExampleState();
@@ -241,7 +241,7 @@ class _GridExampleState extends State<GridExample> {
 
 class GridItem extends StatelessWidget {
   final Map<String, dynamic> product;
-  const GridItem({Key? key, required this.product}) : super(key: key);
+  const GridItem({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

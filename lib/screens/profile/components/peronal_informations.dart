@@ -5,8 +5,8 @@ import 'info_row.dart';
 
 class PeronalInformations extends StatelessWidget {
   const PeronalInformations({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

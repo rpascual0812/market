@@ -11,8 +11,8 @@ import 'components/home_slider_slide.dart';
 
 class HomeSlider extends StatefulWidget {
   const HomeSlider({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<HomeSlider> createState() => _HomeSliderState();

@@ -7,7 +7,7 @@ void main() {
 }
 
 class QRScanPage extends StatelessWidget {
-  const QRScanPage({Key? key}) : super(key: key);
+  const QRScanPage({super.key});
 
   // This widget is the root of your application.
   @override
@@ -23,7 +23,7 @@ class QRScanPage extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //     showAlertDialog(context, barcode.rawValue);
           //   },
           // ),
-          QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5))
+          QRScannerOverlay(overlayColour: Colors.black.withValues(alpha: 0.5))
         ],
       ),
     );

@@ -7,10 +7,10 @@ import '../../../components/network_image.dart';
 
 class SearchProducerTile extends StatefulWidget {
   const SearchProducerTile({
-    Key? key,
+    super.key,
     required this.user,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> user;
   final void Function()? onTap;

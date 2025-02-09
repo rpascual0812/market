@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import '../../main.dart';
 
 class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key? key}) : super(key: key);
+  const NotificationPage({super.key});
 
   @override
   State<NotificationPage> createState() => _NotificationPageState();
@@ -156,9 +156,9 @@ class _NotificationPageState extends State<NotificationPage> {
 class ListItem extends StatelessWidget {
   final Map<String, dynamic> notification;
   const ListItem({
-    Key? key,
+    super.key,
     required this.notification,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

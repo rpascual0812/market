@@ -15,10 +15,10 @@ import 'package:market/screens/profile/components/complaint_view_image.dart';
 
 class ComplaintBubble extends StatefulWidget {
   const ComplaintBubble({
-    Key? key,
+    super.key,
     required this.complaint,
     required this.token,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> complaint;
   final String token;
@@ -230,9 +230,9 @@ class _ComplaintBubbleState extends State<ComplaintBubble> {
           //   data: ablyData,
           // );
 
-          ably.RealtimeChannel ComplaintbubbleChannel =
+          ably.RealtimeChannel complaintbubbleChannel =
               realtime.channels.get(channelId);
-          await ComplaintbubbleChannel.publish(
+          await complaintbubbleChannel.publish(
             name: channelId,
             data: ablyData,
           );

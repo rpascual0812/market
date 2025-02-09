@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class InfoRow extends StatelessWidget {
   const InfoRow({
-    Key? key,
+    super.key,
     required this.name,
     required this.product,
     required this.quantity,
     required this.date,
-  }) : super(key: key);
+  });
 
   final String name, product, quantity, date;
 

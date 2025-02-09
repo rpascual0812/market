@@ -25,12 +25,12 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class AppRoot extends StatefulWidget {
   const AppRoot({
-    Key? key,
+    super.key,
     required this.jwt,
     this.menuIndex = 0,
     this.subIndex = 0,
     // this.backButton,
-  }) : super(key: key);
+  });
 
   final String jwt;
   final int menuIndex;

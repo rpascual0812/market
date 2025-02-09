@@ -3,9 +3,9 @@ import 'package:market/screens/profile/components/complaint_list.dart';
 
 class Complaint extends StatefulWidget {
   const Complaint({
-    Key? key,
+    super.key,
     required this.token,
-  }) : super(key: key);
+  });
 
   final String token;
 

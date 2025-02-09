@@ -9,10 +9,10 @@ import '../../../constants/index.dart';
 
 class ArticleTile extends StatelessWidget {
   const ArticleTile({
-    Key? key,
+    super.key,
     required this.article,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> article;
   final void Function() onTap;

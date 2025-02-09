@@ -5,12 +5,12 @@ import 'network_image.dart';
 
 class UserCard extends StatelessWidget {
   const UserCard({
-    Key? key,
+    super.key,
     required this.userImage,
     required this.firstName,
     required this.lastName,
     required this.address,
-  }) : super(key: key);
+  });
 
   final String userImage;
   final String firstName;
@@ -37,7 +37,7 @@ class UserCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: 5),
               child: Container(
                 alignment: Alignment.centerLeft,
-                width: 200,
+                width: 300,
                 height: 20,
                 child: Text(
                   '$firstName $lastName',
@@ -52,7 +52,7 @@ class UserCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: 5),
               child: Container(
                 alignment: Alignment.centerLeft,
-                width: 200,
+                width: 300,
                 height: 20,
                 child: Row(
                   children: [

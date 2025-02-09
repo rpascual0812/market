@@ -3,10 +3,10 @@ import '../constants/index.dart';
 
 class BackSubmit extends StatelessWidget {
   const BackSubmit({
-    Key? key,
+    super.key,
     this.submit,
     this.back,
-  }) : super(key: key);
+  });
 
   final void Function()? submit;
   final void Function()? back;
