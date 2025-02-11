@@ -46,7 +46,7 @@ class _MyProducerHeaderState extends State<MyProducerHeader> {
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 150,
+      height: 155,
       decoration: BoxDecoration(
         color: Colors.black,
         image: DecorationImage(

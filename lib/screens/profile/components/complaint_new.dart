@@ -93,7 +93,7 @@ class ComplaintNewState extends State<ComplaintNew>
 
       request.files.add(
         await http.MultipartFile.fromPath(
-          'image',
+          'file',
           file.path,
           contentType: MediaType('image', 'jpg'),
         ),
@@ -181,7 +181,7 @@ class ComplaintNewState extends State<ComplaintNew>
                 Container(
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                   width: double.infinity,
-                  height: 60,
+                  height: 30,
                   decoration: const BoxDecoration(
                     color: AppColors.secondary,
                     borderRadius: BorderRadius.only(
@@ -213,7 +213,7 @@ class ComplaintNewState extends State<ComplaintNew>
                   ),
                 ),
                 SizedBox(
-                  height: 608,
+                  height: 638,
                   child: Padding(
                     // padding: const EdgeInsets.only(
                     //     top: 10, right: 10, bottom: 0, left: 10),
@@ -366,7 +366,7 @@ class ComplaintNewState extends State<ComplaintNew>
                           //           child: AspectRatio(
                           //             aspectRatio: 1 / 1,
                           //             child: NetworkImageWithLoader(
-                          //                 '${dotenv.get('API')}/${productPhoto['path']}',
+                          //                 '${dotenv.get('API')}/${productPhotos[index]?['path']}',
                           //                 false),
                           //           ),
                           //         ),

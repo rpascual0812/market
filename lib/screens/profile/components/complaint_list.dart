@@ -104,8 +104,8 @@ class _ComplaintListState extends State<ComplaintList> {
   }
 
   Future<void> loadInitialData() async {
-    complaints = await getNextPageData(page);
-    // print('load initial data $products');
+    complaints = await getNextPageData(page) ?? [];
+    print('load initial data $complaints');
     setState(() {});
   }
 

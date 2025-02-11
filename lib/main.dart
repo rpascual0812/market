@@ -4,6 +4,7 @@ import 'package:market/screens/onboarding/onboarding_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:market/theme.dart';
 
 const storage = FlutterSecureStorage();
 
@@ -45,7 +46,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       // showPerformanceOverlay: true,
       title: 'LAMBO MAG-UUMA',
-      // theme: AppTheme(context).lightTheme,
+      theme: AppTheme(context).lightTheme,
       home: welcome != ''
           ? AppRoot(jwt: jwt)
           : OnboardingPage(

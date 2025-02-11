@@ -86,7 +86,7 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
             margin:
                 const EdgeInsets.only(top: 100, right: 20, bottom: 0, left: 20),
             // padding: const EdgeInsets.all(15.0),
-            height: 360.0,
+            height: 380.0,
             decoration: ShapeDecoration(
               // color: const Color.fromRGBO(41, 167, 77, 10),
               color: Colors.white,
@@ -99,7 +99,7 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
                 Container(
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                   width: double.infinity,
-                  height: 60,
+                  height: 80,
                   decoration: const BoxDecoration(
                     color: AppColors.secondary,
                     borderRadius: BorderRadius.only(
@@ -135,7 +135,7 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
                   child: Padding(
                     // padding: const EdgeInsets.only(
                     //     top: 10, right: 10, bottom: 0, left: 10),
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: Form(
                       key: _key,
                       child: Column(
@@ -146,7 +146,7 @@ class GiveUsFeedbackState extends State<GiveUsFeedback>
                                 'Please let us know how to make Lambo Mag-uuma better for you!'),
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 0,
                           ),
                           TextFormField(
                             controller: messageController,
