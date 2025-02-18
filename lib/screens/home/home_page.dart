@@ -264,7 +264,7 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       margin: const EdgeInsets.only(right: 5),
                       child: SelectDropdownObj(
-                        width: 80,
+                        width: 100,
                         height: 55,
                         options: categories,
                         defaultValue: categoryFilterValue,
@@ -280,7 +280,7 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       margin: const EdgeInsets.only(right: 5),
                       child: SelectDropdown(
-                        width: 100,
+                        width: 120,
                         height: 55,
                         options: AppDefaults.filters,
                         defaultValue: filterValue,

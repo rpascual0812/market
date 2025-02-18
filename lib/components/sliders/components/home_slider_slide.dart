@@ -58,7 +58,7 @@ class HomeSliderSlide extends StatelessWidget {
           child: Container(
             width: MediaQuery.of(context).size.width,
             // height: 120,
-            height: 340,
+            height: 380,
             decoration: const BoxDecoration(
               color: Colors.black45,
             ),

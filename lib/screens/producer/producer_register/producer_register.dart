@@ -204,7 +204,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
 
       request.files.add(
         await http.MultipartFile.fromPath(
-          'image',
+          'file',
           file.path,
           contentType: MediaType('image', 'jpg'),
         ),

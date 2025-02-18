@@ -274,7 +274,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
       request.files.add(
         await http.MultipartFile.fromPath(
-          'image',
+          'file',
           file.path,
           contentType: MediaType('image', 'jpg'),
         ),

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:market/components/appbar.dart';
-import 'package:market/components/network_image.dart';
 import 'package:market/constants/app_colors.dart';
-import 'package:market/models/ratings.dart';
 
 class ProducerProfileRate extends StatefulWidget {
   const ProducerProfileRate({super.key});

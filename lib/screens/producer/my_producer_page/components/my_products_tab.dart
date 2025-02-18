@@ -170,13 +170,18 @@ class _MyProductsTabState extends State<MyProductsTab> {
                           ),
                         );
                       },
-                      style: ButtonStyle(
-                        padding: WidgetStateProperty.all<EdgeInsets>(
-                            EdgeInsets.zero),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(AppDefaults.radius - 10),
+                        ),
                       ),
                       child: const Text(
                         'Add Product',
-                        style: TextStyle(fontSize: AppDefaults.fontSize),
+                        style: TextStyle(
+                            fontSize: AppDefaults.fontSize,
+                            color: Color.fromARGB(255, 255, 255, 255)),
                       ),
                     ),
                   ),

@@ -291,20 +291,20 @@ class _AppbarState extends State<Appbar> {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primary,
-                                fontSize: 30,
+                                fontSize: 28,
                               ),
                             ),
                           ),
                         ),
                         const Expanded(
                           child: Text(
-                            softWrap: false,
+                            softWrap: true,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             "Always check your notifications to be notified on upcoming news and update",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: AppDefaults.fontSize + 1,
+                              fontSize: AppDefaults.fontSize,
                             ),
                           ),
                         ),

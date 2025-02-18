@@ -170,7 +170,7 @@ class _MyProducerEditProductState extends State<MyProducerEditProduct> {
 
       request.files.add(
         await http.MultipartFile.fromPath(
-          'image',
+          'file',
           file.path,
           contentType: MediaType('image', 'jpg'),
         ),

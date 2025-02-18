@@ -101,7 +101,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Future<void> loadInitialData() async {
-    notifications = await getNextPageData(page);
+    notifications = await getNextPageData(page) ?? [];
     setState(() {});
   }
 
