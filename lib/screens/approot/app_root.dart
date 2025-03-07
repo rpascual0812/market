@@ -45,10 +45,6 @@ class _AppRootState extends State<AppRoot> {
   bool menuGuide = false;
 
   late List<Widget> _allScreen = [];
-  static const IconData chat =
-      IconData(0xe804, fontFamily: 'Custom', fontPackage: null);
-  static const IconData chatBold =
-      IconData(0xe805, fontFamily: 'Custom', fontPackage: null);
   Map<String, dynamic> account = {};
 
   // Guide
@@ -519,8 +515,13 @@ class _AppRootState extends State<AppRoot> {
     // print('approot');
     // print(widget.jwt);
     // final Size size = MediaQuery.of(context).size;
-    return WillPopScope(
-      onWillPop: () => _onWillPop(context),
+    return PopScope(
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) {
+          _onWillPop(context);
+        }
+      },
+      canPop: true,
       child: Scaffold(
         // backgroundColor: Colors.black,
         resizeToAvoidBottomInset: false,
@@ -552,17 +553,27 @@ class _AppRootState extends State<AppRoot> {
               label: "",
               icon: _currentIndex == 0
                   ? SvgPicture.asset('assets/icons/home-selected.svg',
-                      color: AppColors.primary, width: 30, key: homeKey)
+                      colorFilter:
+                          ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+                      width: 30,
+                      key: homeKey)
                   : SvgPicture.asset('assets/icons/home.svg',
-                      color: AppColors.secondary, width: 30, key: homeKey),
+                      colorFilter: ColorFilter.mode(
+                          AppColors.secondary, BlendMode.srcIn),
+                      width: 30,
+                      key: homeKey),
             ),
             BottomNavigationBarItem(
               label: "",
               icon: _currentIndex == 1
                   ? SvgPicture.asset('assets/icons/newspaper-selected.svg',
-                      color: AppColors.primary, width: 30, key: productListKey)
+                      colorFilter:
+                          ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+                      width: 30,
+                      key: productListKey)
                   : SvgPicture.asset('assets/icons/newspaper.svg',
-                      color: AppColors.secondary,
+                      colorFilter: ColorFilter.mode(
+                          AppColors.secondary, BlendMode.srcIn),
                       width: 30,
                       key: productListKey),
             ),
@@ -577,13 +588,15 @@ class _AppRootState extends State<AppRoot> {
               icon: _currentIndex == 2
                   ? SvgPicture.asset(
                       'assets/icons/messenger-white.svg',
-                      color: AppColors.primary,
+                      colorFilter:
+                          ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
                       width: 30,
                       key: chatKey,
                     )
                   : SvgPicture.asset(
                       'assets/icons/messenger-white.svg',
-                      color: AppColors.secondary,
+                      colorFilter: ColorFilter.mode(
+                          AppColors.secondary, BlendMode.srcIn),
                       width: 30,
                       key: chatKey,
                     ),

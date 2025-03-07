@@ -78,7 +78,7 @@ class _HomeSliderState extends State<HomeSlider> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.21,
+      aspectRatio: 1.0,
       child: Stack(
         children: [
           PageView.builder(
