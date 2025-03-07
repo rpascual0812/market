@@ -20,7 +20,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var image = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    var image = '${dotenv.get('S3')}/images/no-image.jpg';
     if (product['product_documents'] != null) {
       var found = false;
       // if (product['pk'] == 33) {
@@ -34,13 +34,13 @@ class ProductListWidgetTileSquare extends StatelessWidget {
             product['product_documents'][i]['default'] == true) {
           found = true;
           image =
-              '${dotenv.get('API')}/${product['product_documents'][i]['document']['path']}';
+              '${dotenv.get('S3')}/${product['product_documents'][i]['document']['path']}';
         }
       }
 
       if (product['product_documents'].length > 0 && !found) {
         image =
-            '${dotenv.get('API')}/${product['product_documents'][0]['document']['path']}';
+            '${dotenv.get('S3')}/${product['product_documents'][0]['document']['path']}';
       }
     }
 

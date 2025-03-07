@@ -26,7 +26,7 @@ class _OnboardingContentViewState extends State<OnboardingContentView> {
   Widget build(BuildContext context) {
     var image = widget.board['onboarding_document'] != null
         ? '${dotenv.get('API')}/${widget.board['onboarding_document']['document']['path']}'
-        : '${dotenv.get('API')}/assets/images/no-image.jpg';
+        : '${dotenv.get('S3')}/images/no-image.jpg';
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

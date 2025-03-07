@@ -25,22 +25,21 @@ class HomeSliderSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var background = '${dotenv.get('API')}/assets/images/no-image.jpg';
-    var icon = '${dotenv.get('API')}/assets/images/user.png';
+    var background = '${dotenv.get('S3')}/images/no-image.jpg';
+    var icon = '${dotenv.get('S3')}/images/user.png';
 
     for (var i = 0; i < sliderDocument.length; i++) {
       if (sliderDocument[i]['document']['path'] != null) {
         if (sliderDocument[i]['type'] == 'icon') {
-          icon =
-              '${dotenv.get('API')}/${sliderDocument[i]['document']['path']}';
+          icon = '${dotenv.get('S3')}/${sliderDocument[i]['document']['path']}';
         } else if (sliderDocument[i]['type'] == 'background') {
           background =
-              '${dotenv.get('API')}/${sliderDocument[i]['document']['path']}';
+              '${dotenv.get('S3')}/${sliderDocument[i]['document']['path']}';
         }
       }
     }
 
-    // print('${dotenv.get('API')}/${sliderDocument[1]['path']}');
+    // print('${dotenv.get('S3')}/${sliderDocument[1]['path']}');
     return Stack(
       children: [
         Container(

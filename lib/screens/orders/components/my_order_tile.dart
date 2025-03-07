@@ -56,7 +56,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
     DateTime dateAvailable =
         DateTime.parse(widget.order['product']['date_available'].toString());
 
-    var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    var productImage = '${dotenv.get('S3')}/images/no-image.jpg';
     if (widget.order['product']['product_documents'] != null) {
       productImage = AppDefaults.productImage(
           widget.order['product']['product_documents']);

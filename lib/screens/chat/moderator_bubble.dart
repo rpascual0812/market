@@ -338,7 +338,7 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
       }
     }
 
-    image = image != '' ? image : '${dotenv.get('API')}/assets/images/user.png';
+    image = image != '' ? image : '${dotenv.get('S3')}/images/user.png';
 
     return Scaffold(
       appBar: AppBar(

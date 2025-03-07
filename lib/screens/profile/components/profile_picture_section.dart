@@ -73,7 +73,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
 
   @override
   Widget build(BuildContext context) {
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     if (user['user_document'] != null) {
       userImage = AppDefaults.userImage(user['user_document']);
     }

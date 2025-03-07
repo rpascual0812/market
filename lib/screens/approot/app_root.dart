@@ -511,7 +511,7 @@ class _AppRootState extends State<AppRoot> {
 
   @override
   Widget build(BuildContext context) {
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     if (account['user'] != null) {
       userImage = AppDefaults.userImage(account['user']['user_document']);
     }

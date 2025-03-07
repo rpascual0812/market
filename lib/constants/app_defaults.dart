@@ -101,13 +101,12 @@ class AppDefaults {
   }
 
   static userImage(List documents) {
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     if (documents.isNotEmpty) {
       for (var i = 0; i < documents.length; i++) {
         if (documents[i]['document']['path'] != null &&
             documents[i]['type'] == 'profile_photo') {
-          userImage =
-              '${dotenv.get('API')}/${documents[i]['document']['path']}';
+          userImage = '${dotenv.get('S3')}/${documents[i]['document']['path']}';
         }
       }
     }
@@ -116,11 +115,11 @@ class AppDefaults {
   }
 
   static productImage(List documents) {
-    var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    var productImage = '${dotenv.get('S3')}/images/no-image.jpg';
     for (var i = 0; i < documents.length; i++) {
       if (documents[i]['document']['path'] != null && documents[i]['default']) {
         productImage =
-            '${dotenv.get('API')}/${documents[i]['document']['path']}';
+            '${dotenv.get('S3')}/${documents[i]['document']['path']}';
       }
     }
 

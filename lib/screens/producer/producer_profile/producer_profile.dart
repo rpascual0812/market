@@ -65,7 +65,7 @@ class _ProducerProfileState extends State<ProducerProfile> {
   @override
   Widget build(BuildContext context) {
     var name = '${user['first_name']} ${user['last_name']}';
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     if (user['user_document'] != null) {
       for (var i = 0; i < user['user_document'].length; i++) {
         if (user['user_document'][i]['document']['path'] != null &&

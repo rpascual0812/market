@@ -1,0 +1,7 @@
+1. ERROR: Missing classes detected while running R8. Please add the missing classes or apply additional keep rules that are generated in /home/rafael/apps/marketv1/build/app/outputs/mapping/release/missing_rules.txt.
+ERROR: R8: Missing class com.google.firebase.messaging.TopicOperation$TopicOperations (referenced from: void com.google.firebase.messaging.TopicOperation.<init>(java.lang.String, java.lang.String))
+
+    - Open following path and copy the content
+        build\app\outputs\mapping\release\missing_rules.txt
+    - Paste content into following file
+        android/app/proguard-rules.pro

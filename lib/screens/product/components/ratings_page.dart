@@ -102,8 +102,7 @@ class _RatingsPageState extends State<RatingsPage> {
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    var image =
-                        '${dotenv.get('API')}/assets/images/no-image.jpg';
+                    var image = '${dotenv.get('S3')}/images/no-image.jpg';
 
                     for (var i = 0;
                         i <
@@ -125,7 +124,7 @@ class _RatingsPageState extends State<RatingsPage> {
                     }
 
                     if (widget.product['product_ratings'][index]['anonymous']) {
-                      image = '${dotenv.get('API')}/assets/images/user.png';
+                      image = '${dotenv.get('S3')}/images/user.png';
                     }
 
                     return Container(

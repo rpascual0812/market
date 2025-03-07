@@ -23,7 +23,7 @@ class MyLookingForInterestedTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     if (interested['user'] != null) {
       userImage = AppDefaults.userImage(interested['user']['user_document']);
     }

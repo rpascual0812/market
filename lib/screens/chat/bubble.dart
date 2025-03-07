@@ -66,6 +66,7 @@ class _BubbleState extends State<Bubble> {
 
   Future fetchAccount(int pk) async {
     try {
+      // print('fetchAccount pk $pk');
       final url = Uri.parse('${dotenv.get('API')}/accounts/$pk');
       final headers = {
         'Accept': 'application/json',
@@ -240,6 +241,7 @@ class _BubbleState extends State<Bubble> {
   }
 
   void sendChat() async {
+    // print('sending chat, ${messageController.text}');
     if (messageController.text != '') {
       try {
         // print('account pk ${chat['uuid']} ${messageController.text}');
@@ -257,6 +259,7 @@ class _BubbleState extends State<Bubble> {
         };
 
         var res = await http.post(url, headers: headers, body: body);
+        // print('post ${res.statusCode}');
         if (res.statusCode == 200) {
           var ablyData = {
             'pk': messages.length + 1,
@@ -371,7 +374,7 @@ class _BubbleState extends State<Bubble> {
       }
     }
     // print('userPK $userPk $name');
-    image = image != '' ? image : '${dotenv.get('API')}/assets/images/user.png';
+    image = image != '' ? image : '${dotenv.get('S3')}/images/user.png';
 
     return Scaffold(
       appBar: AppBar(

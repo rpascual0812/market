@@ -19,12 +19,12 @@ class ArticleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var articleImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    var articleImage = '${dotenv.get('S3')}/images/no-image.jpg';
     if (article['article_document'] != null) {
       articleImage =
-          '${dotenv.get('API')}/${article['article_document']['document']['path']}';
+          '${dotenv.get('S3')}/${article['article_document']['document']['path']}';
     }
-    // print(articleImage);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDefaults.margin / 2),
       child: Column(

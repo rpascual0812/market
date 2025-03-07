@@ -72,7 +72,7 @@ class _LookingForListTileState extends State<LookingForListTile> {
   @override
   Widget build(BuildContext context) {
     // print('product ${widget.product['pk']} ${widget.product['interested']}');
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     for (var i = 0; i < widget.product['user_document'].length; i++) {
       // print(product['product_documents'][i]['document']['path']);
       if (widget.product['user_document'][i]['document']['path'] != null &&

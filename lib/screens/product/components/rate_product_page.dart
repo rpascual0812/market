@@ -135,7 +135,7 @@ class _RateProductPageState extends State<RateProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    var image = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    var image = '${dotenv.get('S3')}/images/no-image.jpg';
     for (var i = 0; i < widget.product['product_documents'].length; i++) {
       if (widget.product['product_documents'][i]['document']['path'] != null &&
           widget.product['product_documents'][i]['default'] == true) {

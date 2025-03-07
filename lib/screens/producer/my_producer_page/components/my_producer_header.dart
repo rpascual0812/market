@@ -26,7 +26,7 @@ class _MyProducerHeaderState extends State<MyProducerHeader> {
 
   @override
   Widget build(BuildContext context) {
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     if (widget.user.isNotEmpty) {
       userImage = AppDefaults.userImage(widget.user['user_document']);
     }

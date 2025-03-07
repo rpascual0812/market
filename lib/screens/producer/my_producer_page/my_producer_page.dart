@@ -69,7 +69,7 @@ class _MyProducerPageState extends State<MyProducerPage>
 
   @override
   Widget build(BuildContext context) {
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     if (user.isNotEmpty) {
       userImage = AppDefaults.userImage(user['user_document']);
     }

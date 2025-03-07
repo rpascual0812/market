@@ -20,7 +20,7 @@ class _ProducerRatingTileState extends State<ProducerRatingTile> {
   Widget build(BuildContext context) {
     var name =
         '${widget.rating['createdBy']['first_name']} ${widget.rating['createdBy']['last_name']}';
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     if (widget.rating['createdBy']['user_document'] != null) {
       for (var i = 0;
           i < widget.rating['createdBy']['user_document'].length;

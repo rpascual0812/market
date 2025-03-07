@@ -38,7 +38,7 @@ class _RecentlyViewedPageTileState extends State<RecentlyViewedPageTile> {
     // print('product ${widget.product['user_addresses']}');
 
     DateTime date = DateTime.parse(widget.product['date_created'].toString());
-    var productImage = '${dotenv.get('API')}/assets/images/no-image.jpg';
+    var productImage = '${dotenv.get('S3')}/images/no-image.jpg';
     if (widget.product['product_documents'] != null) {
       productImage =
           AppDefaults.productImage(widget.product['product_documents']);

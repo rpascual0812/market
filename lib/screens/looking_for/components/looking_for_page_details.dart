@@ -176,7 +176,7 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
   @override
   Widget build(BuildContext context) {
     // print('produc2t ${widget.product}');
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     for (var i = 0; i < widget.product['user_document'].length; i++) {
       // print(product['product_documents'][i]['document']['path']);
       if (widget.product['user_document'][i]['document']['path'] != null &&

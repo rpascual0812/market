@@ -21,7 +21,7 @@ class NotificationPageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     var date = TimeElapsed.fromDateStr(notification['date_created']);
 
     return Material(

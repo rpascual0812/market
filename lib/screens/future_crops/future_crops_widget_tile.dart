@@ -30,7 +30,7 @@ class _FutureCropsWidgetTileState extends State<FutureCropsWidgetTile> {
     // var userImage =
     //     '${dotenv.get('API')}/${widget.product['user_document']['document']['path']}';
 
-    var userImage = '${dotenv.get('API')}/assets/images/user.png';
+    var userImage = '${dotenv.get('S3')}/images/user.png';
     for (var i = 0; i < widget.product['user_document'].length; i++) {
       if (widget.product['user_document'][i]['document']['path'] != null &&
           widget.product['user_document'][i]['type'] == 'profile_photo') {
