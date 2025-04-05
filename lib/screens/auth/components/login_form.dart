@@ -267,7 +267,11 @@ class _LoginFormState extends State<LoginForm> {
                           BorderRadius.circular(AppDefaults.radius - 10),
                     ),
                   ),
-                  child: const Text('Log In'),
+                  child: const Text(
+                    'Log In',
+                    style: TextStyle(
+                        fontSize: AppDefaults.fontSize, color: Colors.white),
+                  ),
                 ),
               ),
             ),

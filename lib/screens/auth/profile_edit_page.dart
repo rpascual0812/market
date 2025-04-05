@@ -82,8 +82,9 @@ class ProfileEditPage extends StatelessWidget {
                               },
                               child: const Text(
                                 'Login',
-                                style:
-                                    TextStyle(fontSize: AppDefaults.fontSize),
+                                style: TextStyle(
+                                    fontSize: AppDefaults.fontSize,
+                                    color: Colors.white),
                               ))
                         ],
                       ),

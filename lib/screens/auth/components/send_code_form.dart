@@ -168,7 +168,11 @@ class _SendCodeFormState extends State<SendCodeForm> {
                           BorderRadius.circular(AppDefaults.radius - 10),
                     ),
                   ),
-                  child: const Text('Send Code'),
+                  child: const Text(
+                    'Send Code',
+                    style: TextStyle(
+                        fontSize: AppDefaults.fontSize, color: Colors.white),
+                  ),
                 ),
               ),
             ),

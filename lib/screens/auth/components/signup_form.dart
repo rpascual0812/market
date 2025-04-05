@@ -933,7 +933,12 @@ class _SignUpFormState extends State<SignUpForm> {
                                       AppDefaults.radius - 10),
                                 ),
                               ),
-                              child: const Text('+ Add Photo'),
+                              child: const Text(
+                                '+ Add Photo',
+                                style: TextStyle(
+                                    fontSize: AppDefaults.fontSize,
+                                    color: Colors.white),
+                              ),
                             ),
                           ),
                         ),
@@ -982,7 +987,12 @@ class _SignUpFormState extends State<SignUpForm> {
                                       AppDefaults.radius - 10),
                                 ),
                               ),
-                              child: const Text('Scan ID'),
+                              child: const Text(
+                                'Scan ID',
+                                style: TextStyle(
+                                    fontSize: AppDefaults.fontSize,
+                                    color: Colors.white),
+                              ),
                             ),
                           ),
                         ),
@@ -1090,7 +1100,12 @@ class _SignUpFormState extends State<SignUpForm> {
                                   AppDefaults.radius - 10),
                             ),
                           ),
-                          child: const Text('Sign Up'),
+                          child: const Text(
+                            'Sign Up',
+                            style: TextStyle(
+                                fontSize: AppDefaults.fontSize,
+                                color: Colors.white),
+                          ),
                         ),
                       ),
                     ),
