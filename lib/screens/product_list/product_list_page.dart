@@ -42,8 +42,10 @@ class _ProductListPageState extends State<ProductListPage>
 
     setState(() {
       token = all ?? '';
-      var pk = AppDefaults.jwtDecode(token);
-      fetchUser(pk['sub']);
+      if (token != '') {
+        var pk = AppDefaults.jwtDecode(token);
+        fetchUser(pk['sub']);
+      }
     });
   }
 

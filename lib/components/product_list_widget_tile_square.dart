@@ -33,14 +33,12 @@ class ProductListWidgetTileSquare extends StatelessWidget {
         if (product['product_documents'][i]['document'] != null &&
             product['product_documents'][i]['default'] == true) {
           found = true;
-          image =
-              '${dotenv.get('S3')}/${product['product_documents'][i]['document']['path']}';
+          image = '${product['product_documents'][i]['document']['path']}';
         }
       }
 
       if (product['product_documents'].length > 0 && !found) {
-        image =
-            '${dotenv.get('S3')}/${product['product_documents'][0]['document']['path']}';
+        image = '${product['product_documents'][0]['document']['path']}';
       }
     }
 
@@ -70,7 +68,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.all(10),
                 width: (MediaQuery.of(context).size.width),
-                height: 140,
+                height: 135,
                 child: AspectRatio(
                   aspectRatio: 1 / 1,
                   child: NetworkImageWithLoader(image, false),

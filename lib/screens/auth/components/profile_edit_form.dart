@@ -279,11 +279,11 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
       Map<String, dynamic> json = jsonDecode(document);
       // print('document $document');
       if (type == 'display') {
-        displayPhoto = json['document'];
+        displayPhoto = json;
         // displayPhoto = imageTemp;
         // displayPhotoPk = json['document']['pk'];
       } else if (type == 'id') {
-        idPhoto = json['document'];
+        idPhoto = json;
         // idPhoto = imageTemp;
         // idPhotoPk = json['document']['pk'];
       }

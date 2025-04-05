@@ -74,7 +74,7 @@ class ComplaintNewState extends State<ComplaintNew>
       Map<String, dynamic> json = jsonDecode(document);
       // print('document $document');
 
-      productPhotos.add(json['document']);
+      productPhotos.add(json);
     } on Exception {
       AppDefaults.toast(
           context, 'error', AppMessage.getError('ERROR_IMAGE_FAILED'));

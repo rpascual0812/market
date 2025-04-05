@@ -106,7 +106,7 @@ class AppDefaults {
       for (var i = 0; i < documents.length; i++) {
         if (documents[i]['document']['path'] != null &&
             documents[i]['type'] == 'profile_photo') {
-          userImage = '${dotenv.get('S3')}/${documents[i]['document']['path']}';
+          userImage = '${documents[i]['document']['path']}';
         }
       }
     }
@@ -118,8 +118,7 @@ class AppDefaults {
     var productImage = '${dotenv.get('S3')}/images/no-image.jpg';
     for (var i = 0; i < documents.length; i++) {
       if (documents[i]['document']['path'] != null && documents[i]['default']) {
-        productImage =
-            '${dotenv.get('S3')}/${documents[i]['document']['path']}';
+        productImage = '${documents[i]['document']['path']}';
       }
     }
 

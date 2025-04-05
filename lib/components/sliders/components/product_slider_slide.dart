@@ -15,7 +15,7 @@ class ProductSliderSlide extends StatelessWidget {
     var background = '${dotenv.get('S3')}/images/no-image.jpg';
     background = productDocuments['document']['path'] == ''
         ? background
-        : '${dotenv.get('S3')}/${productDocuments['document']['path']}';
+        : '${productDocuments['document']['path']}';
 
     return Stack(
       children: [

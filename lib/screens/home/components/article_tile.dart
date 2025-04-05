@@ -21,8 +21,7 @@ class ArticleTile extends StatelessWidget {
   Widget build(BuildContext context) {
     var articleImage = '${dotenv.get('S3')}/images/no-image.jpg';
     if (article['article_document'] != null) {
-      articleImage =
-          '${dotenv.get('S3')}/${article['article_document']['document']['path']}';
+      articleImage = '${article['article_document']['document']['path']}';
     }
 
     return Padding(

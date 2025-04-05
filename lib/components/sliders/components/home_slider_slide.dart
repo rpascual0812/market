@@ -31,15 +31,13 @@ class HomeSliderSlide extends StatelessWidget {
     for (var i = 0; i < sliderDocument.length; i++) {
       if (sliderDocument[i]['document']['path'] != null) {
         if (sliderDocument[i]['type'] == 'icon') {
-          icon = '${dotenv.get('S3')}/${sliderDocument[i]['document']['path']}';
+          icon = '${sliderDocument[i]['document']['path']}';
         } else if (sliderDocument[i]['type'] == 'background') {
-          background =
-              '${dotenv.get('S3')}/${sliderDocument[i]['document']['path']}';
+          background = '${sliderDocument[i]['document']['path']}';
         }
       }
     }
 
-    // print('${dotenv.get('S3')}/${sliderDocument[1]['path']}');
     return Stack(
       children: [
         Container(

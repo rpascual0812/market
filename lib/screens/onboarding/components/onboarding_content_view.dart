@@ -25,7 +25,7 @@ class _OnboardingContentViewState extends State<OnboardingContentView> {
   @override
   Widget build(BuildContext context) {
     var image = widget.board['onboarding_document'] != null
-        ? '${dotenv.get('API')}/${widget.board['onboarding_document']['document']['path']}'
+        ? '${widget.board['onboarding_document']['document']['path']}'
         : '${dotenv.get('S3')}/images/no-image.jpg';
 
     return Column(

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:market/screens/terms/terms_page.dart';
@@ -13,6 +14,7 @@ import '../../../constants/index.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+import 'package:dio/dio.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({
@@ -24,6 +26,7 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  final dio = Dio();
   PhoneCountryData? _initialCountryData;
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   TextEditingController firstNameController = TextEditingController(text: '');
@@ -124,6 +127,7 @@ class _SignUpFormState extends State<SignUpForm> {
     try {
       cities = [];
       final params = {'province_code': provinceValue};
+
       final url = Uri.parse('${dotenv.get('API')}/cities')
           .replace(queryParameters: params);
       var res = await http.get(url);
@@ -131,6 +135,7 @@ class _SignUpFormState extends State<SignUpForm> {
       if (res.statusCode == 200) {
         final result = json.decode(res.body);
         setState(() {
+          print('result $result');
           cities = result['data'];
           cities.insert(0, {'city_code': 0, 'name': 'Select'});
           // print(cities);
@@ -171,6 +176,7 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future save() async {
+    print(_key.currentState);
     if (_key.currentState!.validate()) {
       if (displayPhoto == null || idPhoto == null) {
         AppDefaults.toast(
@@ -195,7 +201,7 @@ class _SignUpFormState extends State<SignUpForm> {
           'display_photo': displayPhoto!['pk'].toString(),
           'id_photo': idPhoto!['pk'].toString(),
         };
-
+        print(body);
         // print(Uri.parse('${dotenv.get('API')}/register'));
         var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
             body: body);
@@ -206,7 +212,7 @@ class _SignUpFormState extends State<SignUpForm> {
           // print(AppMessage.getSuccess('REGISTER_SUCCESS'));
           AppDefaults.toast(
               context, 'success', AppMessage.getSuccess('REGISTER_SUCCESS'));
-          Navigator.pop(context);
+          // Navigator.pop(context);
         }
         return null;
       } on Exception {
@@ -228,15 +234,14 @@ class _SignUpFormState extends State<SignUpForm> {
       final imageTemp = File(image.path);
 
       final document = await upload(type, imageTemp);
-      // print(document);
       Map<String, dynamic> json = jsonDecode(document);
-      // print('document $document');
+
       if (type == 'display') {
-        displayPhoto = json['document'];
+        displayPhoto = json;
         // displayPhoto = imageTemp;
         // displayPhotoPk = json['document']['pk'];
       } else if (type == 'id') {
-        idPhoto = json['document'];
+        idPhoto = json;
         // idPhoto = imageTemp;
         // idPhotoPk = json['document']['pk'];
       }
@@ -904,8 +909,7 @@ class _SignUpFormState extends State<SignUpForm> {
                               child: AspectRatio(
                                 aspectRatio: 1 / 1,
                                 child: NetworkImageWithLoader(
-                                    '${dotenv.get('API')}/${displayPhoto!['path']}',
-                                    false),
+                                    '${displayPhoto!['path']}', false),
                               ),
                             ),
                           )
@@ -954,8 +958,7 @@ class _SignUpFormState extends State<SignUpForm> {
                               child: AspectRatio(
                                 aspectRatio: 1 / 1,
                                 child: NetworkImageWithLoader(
-                                    '${dotenv.get('API')}/${idPhoto!['path']}',
-                                    false),
+                                    '${idPhoto!['path']}', false),
                               ),
                             ),
                           )
@@ -985,110 +988,6 @@ class _SignUpFormState extends State<SignUpForm> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: AppDefaults.margin),
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text(
-                    //     'Attach Document 1',
-                    //     style: TextStyle(
-                    //       fontWeight: FontWeight.bold,
-                    //       fontSize: AppDefaults.fontSize,
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: AppDefaults.margin / 2),
-                    // SizedBox(
-                    //   height: AppDefaults.height,
-                    //   // padding: EdgeInsets.zero,
-                    //   child: TextFormField(
-                    //     decoration: InputDecoration(
-                    //       // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                    //       focusedBorder: OutlineInputBorder(
-                    //         borderRadius:
-                    //             BorderRadius.circular(AppDefaults.radius),
-                    //         borderSide: const BorderSide(
-                    //             width: 1.0, color: Colors.grey),
-                    //       ),
-                    //       enabledBorder: OutlineInputBorder(
-                    //         borderRadius:
-                    //             BorderRadius.circular(AppDefaults.radius),
-                    //         borderSide: const BorderSide(
-                    //             width: 1.0, color: Colors.grey),
-                    //       ),
-                    //     ),
-                    //     style: const TextStyle(
-                    //         fontSize: AppDefaults.fontSize), // <-- SEE HERE
-                    //   ),
-                    // ),
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text(
-                    //     'Attach Document 1',
-                    //     style: TextStyle(fontWeight: FontWeight.bold),
-                    //   ),
-                    // ),
-                    // const TextField(
-                    //   keyboardType: TextInputType.emailAddress,
-                    //   decoration: InputDecoration(
-                    //     // prefixIcon: IconWithBackground(iconData: IconlyBold.message),
-                    //     // labelText: 'Email Address',
-                    //     // hintText: 'you@email.com',
-                    //     border: OutlineInputBorder(),
-                    //     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    //   ),
-                    // ),
-                    // const SizedBox(height: AppDefaults.margin),
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text(
-                    //     'Attach Document 2',
-                    //     style: TextStyle(
-                    //       fontWeight: FontWeight.bold,
-                    //       fontSize: AppDefaults.fontSize,
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: AppDefaults.margin / 2),
-                    // SizedBox(
-                    //   height: AppDefaults.height,
-                    //   // padding: EdgeInsets.zero,
-                    //   child: TextFormField(
-                    //     decoration: InputDecoration(
-                    //       // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                    //       focusedBorder: OutlineInputBorder(
-                    //         borderRadius:
-                    //             BorderRadius.circular(AppDefaults.radius),
-                    //         borderSide: const BorderSide(
-                    //             width: 1.0, color: Colors.grey),
-                    //       ),
-                    //       enabledBorder: OutlineInputBorder(
-                    //         borderRadius:
-                    //             BorderRadius.circular(AppDefaults.radius),
-                    //         borderSide: const BorderSide(
-                    //             width: 1.0, color: Colors.grey),
-                    //       ),
-                    //     ),
-                    //     style: const TextStyle(
-                    //         fontSize: AppDefaults.fontSize), // <-- SEE HERE
-                    //   ),
-                    // ),
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text(
-                    //     'Attach Document 2',
-                    //     style: TextStyle(fontWeight: FontWeight.bold),
-                    //   ),
-                    // ),
-                    // const TextField(
-                    //   keyboardType: TextInputType.emailAddress,
-                    //   decoration: InputDecoration(
-                    //     // prefixIcon: IconWithBackground(iconData: IconlyBold.message),
-                    //     // labelText: 'Email Address',
-                    //     // hintText: 'you@email.com',
-                    //     border: OutlineInputBorder(),
-                    //     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    //   ),
-                    // ),
                     const SizedBox(height: AppDefaults.margin),
                   ],
                 ), //Container
@@ -1128,19 +1027,44 @@ class _SignUpFormState extends State<SignUpForm> {
                               return null;
                             },
                             builder: (FormFieldState<bool> field) {
-                              return Switch(
+                              // return Switch(
+                              //   value: accept,
+                              //   onChanged: (value) {
+                              //     accept = !accept;
+                              //     field.didChange(value);
+                              //     if (accept) {
+                              //       Navigator.of(context).push(
+                              //         MaterialPageRoute(
+                              //           builder: (context) =>
+                              //               const TermsPage(location: 'signup'),
+                              //         ),
+                              //       );
+                              //     }
+                              //   },
+                              // );
+                              return FlutterSwitch(
+                                width: 55.0,
+                                height: 25.0,
+                                valueFontSize: 45.0,
+                                toggleSize: 15.0,
                                 value: accept,
-                                onChanged: (value) {
-                                  accept = !accept;
-                                  field.didChange(value);
-                                  if (accept) {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const TermsPage(location: 'signup'),
-                                      ),
-                                    );
-                                  }
+                                borderRadius: 30.0,
+                                padding: 4.0,
+                                showOnOff: false,
+                                onToggle: (val) {
+                                  setState(() {
+                                    accept = val;
+                                    field.didChange(val);
+
+                                    if (accept) {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => const TermsPage(
+                                              location: 'signup'),
+                                        ),
+                                      );
+                                    }
+                                  });
                                 },
                               );
                             },
