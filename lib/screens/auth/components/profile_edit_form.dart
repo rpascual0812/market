@@ -115,9 +115,13 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
     if (widget.user['user_document'].length > 0) {
       for (var i = 0; i < widget.user['user_document'].length; i++) {
         if (widget.user['user_document'][i]['type'] == 'profile_photo') {
-          displayPhoto = widget.user['user_document'][i]['document'];
+          setState(() {
+            displayPhoto = widget.user['user_document'][i]['document'];
+          });
         } else if (widget.user['user_document'][i]['type'] == 'id_photo') {
-          idPhoto = widget.user['user_document'][i]['document'];
+          setState(() {
+            idPhoto = widget.user['user_document'][i]['document'];
+          });
         }
       }
     }
@@ -279,11 +283,15 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
       Map<String, dynamic> json = jsonDecode(document);
       // print('document $document');
       if (type == 'display') {
-        displayPhoto = json;
+        setState(() {
+          displayPhoto = json;
+        });
         // displayPhoto = imageTemp;
         // displayPhotoPk = json['document']['pk'];
       } else if (type == 'id') {
-        idPhoto = json;
+        setState(() {
+          idPhoto = json;
+        });
         // idPhoto = imageTemp;
         // idPhotoPk = json['document']['pk'];
       }

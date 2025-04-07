@@ -237,11 +237,15 @@ class _SignUpFormState extends State<SignUpForm> {
       Map<String, dynamic> json = jsonDecode(document);
 
       if (type == 'display') {
-        displayPhoto = json;
+        setState(() {
+          displayPhoto = json;
+        });
         // displayPhoto = imageTemp;
         // displayPhotoPk = json['document']['pk'];
       } else if (type == 'id') {
-        idPhoto = json;
+        setState(() {
+          idPhoto = json;
+        });
         // idPhoto = imageTemp;
         // idPhotoPk = json['document']['pk'];
       }
