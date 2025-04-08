@@ -176,11 +176,22 @@ class _FaqPageState extends State<FaqPage> {
               Visibility(
                 visible: faq['answer'] != '' ? true : false,
                 child: Padding(
-                  padding: const EdgeInsets.all(0.0),
+                  padding: const EdgeInsets.fromLTRB(15, 1, 15, 1),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
                     child: Container(
                       alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: AppColors.grey1,
+                          width: 2,
+                        ),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(color: Colors.green, spreadRadius: 3),
+                        ],
+                      ),
                       child: ExpansionTileCard(
                         expandedTextColor: AppColors.primary,
                         expandedColor: Colors.white,
@@ -207,20 +218,6 @@ class _FaqPageState extends State<FaqPage> {
                   ),
                 ),
               ),
-            // GFAccordion(
-            //   title: faq['question'],
-            //   content: faq['answer'],
-            //   collapsedTitleBackgroundColor: Colors.white,
-            //   expandedTitleBackgroundColor: AppColors.primary,
-            //   titleBorder: Border.all(
-            //     color: const Color(0xFF000000),
-            //     width: 1,
-            //     style: BorderStyle.solid,
-            //   ),
-            //   titleBorderRadius: const BorderRadius.all(
-            //     Radius.circular(10),
-            //   ),
-            // ),
           ],
         ),
       ),
