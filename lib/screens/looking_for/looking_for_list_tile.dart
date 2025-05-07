@@ -73,12 +73,12 @@ class _LookingForListTileState extends State<LookingForListTile> {
   Widget build(BuildContext context) {
     // print('product ${widget.product['pk']} ${widget.product['interested']}');
     var userImage = '${dotenv.get('S3')}/images/user.png';
+    print(widget.product['user_document']);
     for (var i = 0; i < widget.product['user_document'].length; i++) {
       // print(product['product_documents'][i]['document']['path']);
       if (widget.product['user_document'][i]['document']['path'] != null &&
           widget.product['user_document'][i]['type'] == 'profile_photo') {
-        userImage =
-            '${dotenv.get('API')}/${widget.product['user_document'][i]['document']['path']}';
+        userImage = '${widget.product['user_document'][i]['document']['path']}';
       }
     }
 

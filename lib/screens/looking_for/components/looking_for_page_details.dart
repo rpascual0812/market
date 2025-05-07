@@ -181,8 +181,7 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
       // print(product['product_documents'][i]['document']['path']);
       if (widget.product['user_document'][i]['document']['path'] != null &&
           widget.product['user_document'][i]['type'] == 'profile_photo') {
-        userImage =
-            '${dotenv.get('API')}/${widget.product['user_document'][i]['document']['path']}';
+        userImage = '${widget.product['user_document'][i]['document']['path']}';
       }
     }
 
@@ -198,7 +197,9 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
       }
 
       if (!defaultFound) {
-        userAddress = widget.product['user_addresses'][0];
+        userAddress = widget.product['user_addresses'].length > 0
+            ? widget.product['user_addresses'][0]
+            : {};
       }
     } else {
       var defaultFound = false;
@@ -274,7 +275,7 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
                                   visible:
                                       userAddress.isNotEmpty ? true : false,
                                   child: Text(
-                                    '${userAddress['city']['name']}, ${userAddress['province']['name']}',
+                                    '${userAddress['city']?['name'] ?? ''}, ${userAddress['province']?['name'] ?? ''}',
                                     style: const TextStyle(
                                       fontSize: 10,
                                       color: AppColors.defaultBlack,
@@ -332,38 +333,39 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
                       ),
                     ),
                     const SizedBox(width: 5),
-                    Container(
-                      width: 70.0,
-                      height: 30.0,
-                      padding: EdgeInsets.zero,
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return ProducerPage(
-                                    userPk: widget.product['user']['pk']);
-                              },
+                    if (widget.product['user']['is_seller'])
+                      Container(
+                        width: 70.0,
+                        height: 30.0,
+                        padding: EdgeInsets.zero,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ProducerPage(
+                                      userPk: widget.product['user']['pk']);
+                                },
+                              ),
+                            );
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                              width: 1,
+                              color: AppColors.primary,
                             ),
-                          );
-                        },
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
-                            width: 1,
-                            color: AppColors.primary,
+                            padding: const EdgeInsets.all(0),
                           ),
-                          padding: const EdgeInsets.all(0),
-                        ),
-                        child: const Text(
-                          'View Shop',
-                          style: TextStyle(
-                            color: AppColors.primary,
-                            fontSize: 13,
+                          child: const Text(
+                            'View Shop',
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontSize: 13,
+                            ),
                           ),
                         ),
                       ),
-                    ),
                     const SizedBox(width: 5)
                   ],
                 ),
@@ -374,9 +376,10 @@ class _LookingForPageDetailsState extends State<LookingForPageDetails> {
           // const SizedBox(height: AppDefaults.margin * 2),
 
           Visibility(
-            visible: (widget.product['user_pk'] == widget.account['user']['pk'])
-                ? false
-                : true,
+            visible:
+                (widget.product['user_pk'] == widget.account['user']?['pk'])
+                    ? false
+                    : true,
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: 30.0,

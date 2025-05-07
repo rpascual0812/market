@@ -138,9 +138,9 @@ class _PostLookingForState extends State<PostLookingFor> {
 
       return null;
     } on Exception catch (exception) {
-      print('exception $exception');
+      // print('exception $exception');
     } catch (error) {
-      print('error $error');
+      // print('error $error');
     }
   }
 
@@ -170,7 +170,6 @@ class _PostLookingForState extends State<PostLookingFor> {
       }
       return null;
     } on Exception catch (e) {
-      print('ERROR $e');
       return null;
     }
   }
@@ -183,11 +182,6 @@ class _PostLookingForState extends State<PostLookingFor> {
       );
       if (result != null) {
         PlatformFile file = result.files.first;
-        print('NAME: ${file.name}');
-        print('SIZE: ${file.size}');
-        print('EXT: ${file.extension}');
-        print('PATH: ${file.path}');
-
         final imageTemp = File(file.path!);
         final document = await upload(
           'display',
@@ -195,11 +189,8 @@ class _PostLookingForState extends State<PostLookingFor> {
         );
 
         Map<String, dynamic> json = jsonDecode(document);
-        // print('document $document');
-        // print('JSON: $json');
         setState(() {
-          photos.add(json['document']);
-          // print(documents);
+          photos.add(json);
         });
       } else {
         // User canceled the picker
@@ -333,7 +324,10 @@ class _PostLookingForState extends State<PostLookingFor> {
       }
 
       if (!defaultFound) {
-        userAddress = account['user']['user_addresses'][0];
+        userAddress = account['user'].length > 0 &&
+                account['user']['user_addresses'].length > 0
+            ? account['user']['user_addresses'][0]
+            : {};
       }
     }
 
@@ -903,7 +897,7 @@ class _PostLookingForState extends State<PostLookingFor> {
                                             child: AspectRatio(
                                               aspectRatio: 1 / 1,
                                               child: NetworkImageWithLoader(
-                                                  '${dotenv.get('API')}/${photos[index]?['path']}',
+                                                  '${photos[index]?['path']}',
                                                   false),
                                             ),
                                           ),

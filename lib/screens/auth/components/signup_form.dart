@@ -176,7 +176,6 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future save() async {
-    print(_key.currentState);
     if (_key.currentState!.validate()) {
       if (displayPhoto == null || idPhoto == null) {
         AppDefaults.toast(
@@ -201,7 +200,7 @@ class _SignUpFormState extends State<SignUpForm> {
           'display_photo': displayPhoto!['pk'].toString(),
           'id_photo': idPhoto!['pk'].toString(),
         };
-        print(body);
+
         // print(Uri.parse('${dotenv.get('API')}/register'));
         var res = await http.post(Uri.parse('${dotenv.get('API')}/register'),
             body: body);
@@ -212,7 +211,7 @@ class _SignUpFormState extends State<SignUpForm> {
           // print(AppMessage.getSuccess('REGISTER_SUCCESS'));
           AppDefaults.toast(
               context, 'success', AppMessage.getSuccess('REGISTER_SUCCESS'));
-          // Navigator.pop(context);
+          Navigator.pop(context);
         }
         return null;
       } on Exception {

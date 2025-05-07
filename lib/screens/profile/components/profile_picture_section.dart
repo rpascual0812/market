@@ -89,7 +89,8 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
       }
 
       if (!defaultFound) {
-        userAddress = user['user_addresses'][0];
+        userAddress =
+            user['user_addresses'].length > 0 ? user['user_addresses'][0] : {};
       }
 
       // userAddress = AppDefaults.userAddress(user['user_addresses']);

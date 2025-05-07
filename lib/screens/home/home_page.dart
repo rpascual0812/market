@@ -72,7 +72,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> loadInitialData() async {
     products = await getNextPageData(page);
     // print('load initial data $products');
-    setState(() {});
   }
 
   Future getNextPageData(int page) async {
