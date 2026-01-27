@@ -123,7 +123,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
         // print('document $document');
         // print('JSON: $json');
         setState(() {
-          documents.add(json['document']);
+          documents.add(json);
           // print(documents);
         });
       } else {
@@ -757,7 +757,7 @@ class _MyProducerAddProductState extends State<MyProducerAddProduct> {
                                       child: AspectRatio(
                                         aspectRatio: 1 / 1,
                                         child: NetworkImageWithLoader(
-                                            '${dotenv.get('API')}/${documents[index]['path']}',
+                                            '${documents[index]?['path']}',
                                             false),
                                       ),
                                     ),

@@ -167,6 +167,7 @@ class _SoldProductsState extends State<SoldProducts> {
             child: Row(
               children: [
                 Switch(
+                  inactiveTrackColor: Colors.grey.shade300,
                   value: includeFutureCrops,
                   onChanged: (value) {
                     setState(() {

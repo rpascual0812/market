@@ -166,9 +166,9 @@ class _ProducerRegisterState extends State<ProducerRegister> {
         // print('JSON: $json');
         setState(() {
           if (type == 'documents') {
-            documents.add(json['document']);
+            documents.add(json);
           } else {
-            photos.add(json['document']);
+            photos.add(json);
           }
           // print(documents);
         });
@@ -639,70 +639,49 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                         const SizedBox(height: AppDefaults.margin),
                         Visibility(
                           visible: documents.isNotEmpty ? true : false,
-                          child: Column(
-                            children: List.generate(
-                              documents.length,
-                              (index) {
-                                return const Row(
-                                  children: [
-                                    // Badge(
-                                    //   toAnimate: false,
-                                    //   shape: BadgeShape.square,
-                                    //   badgeColor: Colors.grey,
-                                    //   borderRadius: BorderRadius.circular(8),
-                                    //   badgeContent: Row(
-                                    //     children: [
-                                    //       const Icon(
-                                    //         Icons.attach_file,
-                                    //         size: AppDefaults.fontSize,
-                                    //         color: Colors.white,
-                                    //       ),
-                                    //       SizedBox(
-                                    //         height: 20,
-                                    //         child: TextButton(
-                                    //           style: TextButton.styleFrom(
-                                    //             padding:
-                                    //                 const EdgeInsets.all(0),
-                                    //             textStyle: const TextStyle(
-                                    //                 fontSize:
-                                    //                     AppDefaults.fontSize),
-                                    //           ),
-                                    //           onPressed: () async {
-                                    //             ArtDialogResponse response =
-                                    //                 await ArtSweetAlert.show(
-                                    //               barrierDismissible: false,
-                                    //               context: context,
-                                    //               artDialogArgs: ArtDialogArgs(
-                                    //                 showCancelBtn: true,
-                                    //                 title:
-                                    //                     "Do you want to remove ${documents[index]['original_name']}?",
-                                    //                 confirmButtonText: "Remove",
-                                    //               ),
-                                    //             );
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Wrap(
+                              alignment: WrapAlignment.start,
+                              crossAxisAlignment: WrapCrossAlignment.start,
+                              children: documents.isNotEmpty
+                                  ? List.generate(
+                                      documents.length,
+                                      (index) {
+                                        return InkWell(
+                                          onTap: () async {
+                                            ArtDialogResponse response =
+                                                await ArtSweetAlert.show(
+                                              barrierDismissible: false,
+                                              context: context,
+                                              artDialogArgs: ArtDialogArgs(
+                                                showCancelBtn: true,
+                                                title:
+                                                    "Do you want to remove ${documents[index]?['original_name']}?",
+                                                confirmButtonText: "Remove",
+                                              ),
+                                            );
 
-                                    //             if (response
-                                    //                 .isTapConfirmButton) {
-                                    //               remove('documents', index);
-                                    //               return;
-                                    //             }
-                                    //           },
-                                    //           child: Text(
-                                    //             documents[index]
-                                    //                     ['original_name'] ??
-                                    //                 '',
-                                    //             style: const TextStyle(
-                                    //               color: Colors.white,
-                                    //             ),
-                                    //           ),
-                                    //         ),
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                    SizedBox(height: 35),
-                                  ],
-                                );
-                              },
+                                            if (response.isTapConfirmButton) {
+                                              remove('documents', index);
+                                              return;
+                                            }
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 5, bottom: 5),
+                                            height: 75,
+                                            child: AspectRatio(
+                                              aspectRatio: 1 / 1,
+                                              child: NetworkImageWithLoader(
+                                                  '${documents[index]?['path']}',
+                                                  false),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : [],
                             ),
                           ),
                         ),
@@ -770,8 +749,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                                       child: AspectRatio(
                                         aspectRatio: 1 / 1,
                                         child: NetworkImageWithLoader(
-                                            '${dotenv.get('API')}/${photos[index]['path']}',
-                                            false),
+                                            '${photos[index]?['path']}', false),
                                       ),
                                     ),
                                   );

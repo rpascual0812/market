@@ -112,7 +112,8 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
       aboutMeController.text = widget.user['about'] ?? '';
     }
 
-    if (widget.user['user_document'].length > 0) {
+    if (widget.user['user_document'] != null &&
+        widget.user['user_document'].length > 0) {
       for (var i = 0; i < widget.user['user_document'].length; i++) {
         if (widget.user['user_document'][i]['type'] == 'profile_photo') {
           setState(() {
@@ -1240,6 +1241,7 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
                               },
                               builder: (FormFieldState<bool> field) {
                                 return Switch(
+                                  inactiveTrackColor: Colors.grey.shade300,
                                   value: accept,
                                   onChanged: (value) {
                                     accept = !accept;

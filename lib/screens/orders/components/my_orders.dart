@@ -168,6 +168,7 @@ class _MyOrdersState extends State<MyOrders> {
             child: Row(
               children: [
                 Switch(
+                  inactiveTrackColor: Colors.grey.shade300,
                   value: includeFutureCrops,
                   onChanged: (value) {
                     setState(() {

@@ -170,6 +170,7 @@ class _MyLookingForState extends State<MyLookingFor> {
               child: Row(
                 children: [
                   Switch(
+                    inactiveTrackColor: Colors.grey.shade300,
                     value: includeFutureCrops,
                     onChanged: (value) {
                       setState(() {
