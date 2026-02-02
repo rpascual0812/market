@@ -5,23 +5,24 @@ import 'package:market/screens/orders/components/my_looking_for.dart';
 import 'package:market/screens/orders/components/my_orders.dart';
 import 'package:market/screens/orders/components/sold_products.dart';
 
-class OrderPage extends StatelessWidget {
-  const OrderPage({
-    super.key,
-    required this.type,
-    required this.user,
-  });
+class OrderPage extends StatefulWidget {
+  const OrderPage({super.key, required this.type, required this.user});
 
   final String type;
   final Map<String, dynamic> user;
 
+  @override
+  State<OrderPage> createState() => _OrderPageState();
+}
+
+class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.fourth,
       appBar: const Appbar(module: 'orders'),
       body: DefaultTabController(
-        initialIndex: type == 'products' ? 0 : 1,
+        initialIndex: widget.type == 'products' ? 0 : 1,
         length: 3,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -38,7 +39,7 @@ class OrderPage extends StatelessWidget {
                 ),
               ),
             ),
-            const TabBar(
+            TabBar(
               labelColor: AppColors.primary,
               indicatorColor: AppColors.primary,
               unselectedLabelColor: Colors.grey,
@@ -55,13 +56,11 @@ class OrderPage extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: TabBarView(
-                children: [
-                  SoldProducts(user: user),
-                  MyOrders(user: user),
-                  MyLookingFor(user: user),
-                ],
-              ),
+              child: TabBarView(children: [
+                SoldProducts(user: widget.user),
+                MyOrders(user: widget.user),
+                MyLookingFor(user: widget.user),
+              ]),
             )
           ],
         ),

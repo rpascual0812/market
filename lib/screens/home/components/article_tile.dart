@@ -19,7 +19,7 @@ class ArticleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var articleImage = '${dotenv.get('S3')}/images/no-image.jpg';
+    var articleImage = '${dotenv.get('S3')}/images/no-image.png';
     if (article['article_document'] != null) {
       articleImage = '${article['article_document']['document']['path']}';
     }

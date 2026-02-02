@@ -81,256 +81,258 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(AppDefaults.padding),
-      child: Form(
-        key: _key,
-        child: Column(
-          children: [
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Email Address',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: AppDefaults.fontSize,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Form(
+          key: _key,
+          child: Column(
+            children: [
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Email Address',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: AppDefaults.fontSize,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: AppDefaults.margin / 2),
-            SizedBox(
-              height: AppDefaults.height,
-              // padding: EdgeInsets.zero,
-              child: TextFormField(
-                controller: usernameController,
-                validator: validateEmail,
-                decoration: InputDecoration(
-                  // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                  focusedBorder: AppDefaults.outlineInputBorderSuccess,
-                  enabledBorder: AppDefaults.outlineInputBorderSuccess,
-                ),
-                style: const TextStyle(
-                    fontSize: AppDefaults.fontSize), // <-- SEE HERE
-              ),
-            ),
-            // TextFormField(
-            //   controller: usernameController,
-            //   validator: validateEmail,
-            //   decoration: const InputDecoration(
-            //     prefixIcon: IconWithBackground(iconData: IconlyBold.message),
-            //     labelText: 'Email',
-            //     hintText: 'email@gmail.com',
-            //   ),
-            // ),
-            const SizedBox(height: AppDefaults.margin),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Password',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: AppDefaults.fontSize,
+              const SizedBox(height: AppDefaults.margin / 2),
+              SizedBox(
+                height: AppDefaults.height,
+                // padding: EdgeInsets.zero,
+                child: TextFormField(
+                  controller: usernameController,
+                  validator: validateEmail,
+                  decoration: InputDecoration(
+                    // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                    focusedBorder: AppDefaults.outlineInputBorderSuccess,
+                    enabledBorder: AppDefaults.outlineInputBorderSuccess,
+                  ),
+                  style: const TextStyle(
+                      fontSize: AppDefaults.fontSize), // <-- SEE HERE
                 ),
               ),
-            ),
-            const SizedBox(height: AppDefaults.margin / 2),
-            SizedBox(
-              height: AppDefaults.height,
-              // padding: EdgeInsets.zero,
-              child: TextFormField(
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                controller: passwordController,
-                validator: validatePassword,
-                decoration: InputDecoration(
-                  // contentPadding: const EdgeInsets.only(left: 10, right: 10),
-                  focusedBorder: AppDefaults.outlineInputBorderSuccess,
-                  enabledBorder: AppDefaults.outlineInputBorderSuccess,
+              // TextFormField(
+              //   controller: usernameController,
+              //   validator: validateEmail,
+              //   decoration: const InputDecoration(
+              //     prefixIcon: IconWithBackground(iconData: IconlyBold.message),
+              //     labelText: 'Email',
+              //     hintText: 'email@gmail.com',
+              //   ),
+              // ),
+              const SizedBox(height: AppDefaults.margin),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Password',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: AppDefaults.fontSize,
+                  ),
                 ),
-                style: const TextStyle(fontSize: 14), // <-- SEE HERE
               ),
-            ),
-            // TextFormField(
-            //   controller: passwordController,
-            //   // validator: validatePassword,
-            //   decoration: const InputDecoration(
-            //     prefixIcon: IconWithBackground(iconData: IconlyBold.lock),
-            //     labelText: 'Password',
-            //     hintText: '*********',
-            //   ),
-            // ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const ForgotPasswordPage(),
+              const SizedBox(height: AppDefaults.margin / 2),
+              SizedBox(
+                height: AppDefaults.height,
+                // padding: EdgeInsets.zero,
+                child: TextFormField(
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  controller: passwordController,
+                  validator: validatePassword,
+                  decoration: InputDecoration(
+                    // contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                    focusedBorder: AppDefaults.outlineInputBorderSuccess,
+                    enabledBorder: AppDefaults.outlineInputBorderSuccess,
+                  ),
+                  style: const TextStyle(fontSize: 14), // <-- SEE HERE
+                ),
+              ),
+              // TextFormField(
+              //   controller: passwordController,
+              //   // validator: validatePassword,
+              //   decoration: const InputDecoration(
+              //     prefixIcon: IconWithBackground(iconData: IconlyBold.lock),
+              //     labelText: 'Password',
+              //     hintText: '*********',
+              //   ),
+              // ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ForgotPasswordPage(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        fontSize: AppDefaults.fontSize,
                       ),
-                    );
-                  },
-                  child: const Text(
-                    'Forgot Password?',
-                    style: TextStyle(
-                      fontSize: AppDefaults.fontSize,
-                    ),
-                  )),
-            ),
+                    )),
+              ),
 
-            /// Login Button
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.4,
-              height: AppDefaults.height,
-              child: Padding(
-                padding: const EdgeInsets.all(1),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await EasyLoading.show(
-                      status: 'loading...',
-                      maskType: EasyLoadingMaskType.clear,
-                    );
+              /// Login Button
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: AppDefaults.height,
+                child: Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await EasyLoading.show(
+                        status: 'loading...',
+                        maskType: EasyLoadingMaskType.clear,
+                      );
 
-                    var username = usernameController.text;
-                    var password = passwordController.text;
-                    var result = await submit(username, password);
-                    // print(result);
-                    if (result != null) {
-                      var jwtJson = jsonDecode(result);
-                      var jwt = jwtJson['user']['access_token'];
+                      var username = usernameController.text;
+                      var password = passwordController.text;
+                      var result = await submit(username, password);
+                      // print(result);
+                      if (result != null) {
+                        var jwtJson = jsonDecode(result);
+                        var jwt = jwtJson['user']['access_token'];
 
-                      await MarketDatabase.instance
-                          .create(Config(key: 'jwt', value: jwt));
+                        await MarketDatabase.instance
+                            .create(Config(key: 'jwt', value: jwt));
 
-                      storage.write(key: "jwt", value: jwt);
-                      if (jwtJson['user']['seller_pk'] != '0') {
-                        storage.write(
-                          key: "producer",
-                          value: jwtJson['user']['seller_pk'].toString(),
-                        );
+                        storage.write(key: "jwt", value: jwt);
+                        if (jwtJson['user']['seller_pk'] != '0') {
+                          storage.write(
+                            key: "producer",
+                            value: jwtJson['user']['seller_pk'].toString(),
+                          );
+                        }
+                        if (!mounted) return;
+
+                        // AppDefaults.toast(context, 'success',
+                        //     AppMessage.getSuccess('LOGIN_SUCCESS'));
+
+                        // Fluttertoast.showToast(
+                        //   msg: "Please wait while we are fetching your account.",
+                        //   toastLength: Toast.LENGTH_SHORT,
+                        //   gravity: ToastGravity.BOTTOM,
+                        //   timeInSecForIosWeb: 1,
+                        //   backgroundColor: AppColors.primary,
+                        //   textColor: Colors.white,
+                        //   fontSize: 12.0,
+                        // );
+                        EasyLoading.dismiss();
+                        AppDefaults.navigate(context, AppRoot(jwt: jwt ?? ''));
+                        // Timer(
+                        //   const Duration(seconds: 1),
+                        //   () => {
+                        //     AppDefaults.navigate(context, AppRoot(jwt: jwt))
+                        //     // Navigator.push(
+                        //     //   context,
+                        //     //   MaterialPageRoute(
+                        //     //     builder: (context) => AppRoot(jwt: jwt),
+                        //     //   ),
+                        //     // )
+                        //   },
+                        // );
+                      } else {
+                        if (!mounted) return;
+                        // AppDefaults.displayDialog(context, "An Error Occurred",
+                        //     "No account was found matching that username and password");
+                        EasyLoading.dismiss();
+                        AppDefaults.toast(context, 'error',
+                            AppMessage.getError('ERROR_USER_NOT_FOUND'));
+
+                        // var jwt =
+                        //     '{"status":"success","user":{"username":"email@gmail.com","access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZW1haWxAZ21haWwuY29tIiwic3ViIjoxMTMsImlhdCI6MTY2NDAwNDA4MCwiZXhwIjoxNjY0MDQ3MjgwfQ.c8oXPKGkFgKJn_ljz1vdrIQ-lOe2SnFZFiA6mmEVdpI","expiration":"2023-09-25 03:21:20"}}';
+                        // Timer(
+                        //   const Duration(seconds: 1),
+                        //   () => {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) => AppRoot(jwt: jwt),
+                        //       ),
+                        //     )
+                        //   },
+                        // );
                       }
-                      if (!mounted) return;
-
-                      // AppDefaults.toast(context, 'success',
-                      //     AppMessage.getSuccess('LOGIN_SUCCESS'));
-
-                      // Fluttertoast.showToast(
-                      //   msg: "Please wait while we are fetching your account.",
-                      //   toastLength: Toast.LENGTH_SHORT,
-                      //   gravity: ToastGravity.BOTTOM,
-                      //   timeInSecForIosWeb: 1,
-                      //   backgroundColor: AppColors.primary,
-                      //   textColor: Colors.white,
-                      //   fontSize: 12.0,
-                      // );
-                      EasyLoading.dismiss();
-                      AppDefaults.navigate(context, AppRoot(jwt: jwt ?? ''));
-                      // Timer(
-                      //   const Duration(seconds: 1),
-                      //   () => {
-                      //     AppDefaults.navigate(context, AppRoot(jwt: jwt))
-                      //     // Navigator.push(
-                      //     //   context,
-                      //     //   MaterialPageRoute(
-                      //     //     builder: (context) => AppRoot(jwt: jwt),
-                      //     //   ),
-                      //     // )
-                      //   },
-                      // );
-                    } else {
-                      if (!mounted) return;
-                      // AppDefaults.displayDialog(context, "An Error Occurred",
-                      //     "No account was found matching that username and password");
-                      EasyLoading.dismiss();
-                      AppDefaults.toast(context, 'error',
-                          AppMessage.getError('ERROR_USER_NOT_FOUND'));
-
-                      // var jwt =
-                      //     '{"status":"success","user":{"username":"email@gmail.com","access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZW1haWxAZ21haWwuY29tIiwic3ViIjoxMTMsImlhdCI6MTY2NDAwNDA4MCwiZXhwIjoxNjY0MDQ3MjgwfQ.c8oXPKGkFgKJn_ljz1vdrIQ-lOe2SnFZFiA6mmEVdpI","expiration":"2023-09-25 03:21:20"}}';
-                      // Timer(
-                      //   const Duration(seconds: 1),
-                      //   () => {
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => AppRoot(jwt: jwt),
-                      //       ),
-                      //     )
-                      //   },
-                      // );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(AppDefaults.radius - 10),
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(AppDefaults.radius - 10),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    'Log In',
-                    style: TextStyle(
-                        fontSize: AppDefaults.fontSize, color: Colors.white),
+                    child: const Text(
+                      'Log In',
+                      style: TextStyle(
+                          fontSize: AppDefaults.fontSize, color: Colors.white),
+                    ),
                   ),
                 ),
               ),
-            ),
-            // SizedBox(
-            //   height: AppDefaults.height,
-            //   width: MediaQuery.of(context).size.width * 0.4,
-            //   child: ElevatedButton(
-            //     onPressed: () async {
-            //       var username = usernameController.text;
-            //       var password = passwordController.text;
-            //       var jwt = await submit(username, password);
-            //       if (jwt != null) {
-            //         storage.write(key: "jwt", value: jwt);
-            //         Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //             builder: (context) => AppRoot(jwt: jwt),
-            //           ),
-            //         );
-            //       } else {
-            //         AppDefaults.displayDialog(context, "An Error Occurred",
-            //             "No account was found matching that username and password");
-            //       }
+              // SizedBox(
+              //   height: AppDefaults.height,
+              //   width: MediaQuery.of(context).size.width * 0.4,
+              //   child: ElevatedButton(
+              //     onPressed: () async {
+              //       var username = usernameController.text;
+              //       var password = passwordController.text;
+              //       var jwt = await submit(username, password);
+              //       if (jwt != null) {
+              //         storage.write(key: "jwt", value: jwt);
+              //         Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //             builder: (context) => AppRoot(jwt: jwt),
+              //           ),
+              //         );
+              //       } else {
+              //         AppDefaults.displayDialog(context, "An Error Occurred",
+              //             "No account was found matching that username and password");
+              //       }
 
-            //       // Navigator.of(context).push(
-            //       //   MaterialPageRoute(
-            //       //     builder: (context) => const AppRoot(),
-            //       //   ),
-            //       // );
-            //     },
-            //     style: ButtonStyle(
-            //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            //         RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(AppDefaults.radius),
-            //         ),
-            //       ),
-            //     ),
-            //     child: const Padding(
-            //       padding: EdgeInsets.only(left: 10, right: 10),
-            //       child: Text(
-            //         'Log In',
-            //         style: TextStyle(fontSize: AppDefaults.fontSize),
-            //       ),
-            //     ),
-            //     // child: const Text(
-            //     //   'Log In',
-            //     //   style: TextStyle(fontSize: AppDefaults.fontSize),
-            //     // ),
-            //   ),
-            // ),
+              //       // Navigator.of(context).push(
+              //       //   MaterialPageRoute(
+              //       //     builder: (context) => const AppRoot(),
+              //       //   ),
+              //       // );
+              //     },
+              //     style: ButtonStyle(
+              //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              //         RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(AppDefaults.radius),
+              //         ),
+              //       ),
+              //     ),
+              //     child: const Padding(
+              //       padding: EdgeInsets.only(left: 10, right: 10),
+              //       child: Text(
+              //         'Log In',
+              //         style: TextStyle(fontSize: AppDefaults.fontSize),
+              //       ),
+              //     ),
+              //     // child: const Text(
+              //     //   'Log In',
+              //     //   style: TextStyle(fontSize: AppDefaults.fontSize),
+              //     // ),
+              //   ),
+              // ),
 
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Center(
-                child: Text(errorMessage,
-                    style: const TextStyle(color: Colors.red)),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Center(
+                  child: Text(errorMessage,
+                      style: const TextStyle(color: Colors.red)),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

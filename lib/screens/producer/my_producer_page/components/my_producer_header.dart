@@ -39,7 +39,7 @@ class _MyProducerHeaderState extends State<MyProducerHeader> {
         if (widget.user['seller']['seller_document'][i]['type'] ==
             'profile_photo') {
           profilePhoto =
-              '${dotenv.get('API')}/${widget.user['seller']['seller_document'][i]['document']['path']}';
+              '${dotenv.get('S3')}/${widget.user['seller']['seller_document'][i]['document']['path']}';
         }
       }
     }

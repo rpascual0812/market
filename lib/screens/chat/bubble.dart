@@ -350,7 +350,7 @@ class _BubbleState extends State<Bubble> {
             account['user']['pk']) {
           found = true;
           image = chat['chat_participants'] != null
-              ? '${dotenv.get('API')}/${chat['chat_participants'][i]['user']['user_document']['document']['path']}'
+              ? '${chat['chat_participants'][i]['user']['user_document']['document']['path']}'
               : '';
           userPk = chat['chat_participants'] != null
               ? chat['chat_participants'][i]['user']['pk']
@@ -363,7 +363,7 @@ class _BubbleState extends State<Bubble> {
 
       if (!found) {
         image = chat['chat_participants'] != null
-            ? '${dotenv.get('API')}/${chat['chat_participants'][0]['user']['user_document']['document']['path']}'
+            ? '${chat['chat_participants'][0]['user']['user_document']['document']['path']}'
             : '';
         userPk = chat['chat_participants'] != null
             ? chat['chat_participants'][0]['user']['first_name']
@@ -377,228 +377,229 @@ class _BubbleState extends State<Bubble> {
     image = image != '' ? image : '${dotenv.get('S3')}/images/user.png';
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        flexibleSpace: SafeArea(
-          child: Container(
-            color: AppColors.third,
-            padding: const EdgeInsets.only(right: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
+        appBar: AppBar(
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          flexibleSpace: SafeArea(
+            child: Container(
+              color: AppColors.third,
+              padding: const EdgeInsets.only(right: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                Text(
-                  name,
-                  style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.storefront,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return ProducerPage(
-                                userPk: userPk,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                    // const VerticalDivider(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return ProducerProfile(
-                                token: widget.token,
-                                userPk: userPk,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(image),
-                        maxRadius: 20,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: ListView.builder(
-                controller: _scrollController,
-                itemCount: messages.length,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
-                // physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: const EdgeInsets.only(
-                      left: 14,
-                      right: 14,
-                      top: 10,
-                      bottom: 10,
-                    ),
-                    child: Align(
-                      alignment: (messages[index]['user_pk'].toString() ==
-                              account['user']['pk'].toString()
-                          ? Alignment.topRight
-                          : Alignment.topLeft),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: (messages[index]['user_pk'].toString() ==
-                                  account['user']['pk'].toString()
-                              ? Colors.grey.shade200
-                              : AppColors.third),
+                  Text(
+                    name,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.storefront,
+                          color: Colors.white,
                         ),
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          messages[index]['message'] ?? '',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: messages[index]['user_pk'].toString() ==
-                                    account['user']['pk'].toString()
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: AppDefaults.margin),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // Container(
-                  //   // decoration: const BoxDecoration(
-                  //   //   color: Color(0xFF0E3311),
-                  //   // ),
-                  //   padding: const EdgeInsets.all(0),
-                  //   margin: const EdgeInsets.all(0),
-                  //   // padding: const EdgeInsets.only(
-                  //   //     left: 100, top: 0, right: 100, bottom: 0),
-                  //   // color: Colors.transparent,
-                  //   width: 150,
-                  //   height: 40,
-                  //   child: ElevatedButton(
-                  //     onPressed: () {
-                  //       Navigator.of(context).push(
-                  //         MaterialPageRoute(
-                  //           builder: (context) => const ProducerProfileRate(),
-                  //         ),
-                  //       );
-                  //     },
-                  //     style: ButtonStyle(
-                  //       padding: MaterialStateProperty.all<EdgeInsets>(
-                  //           EdgeInsets.zero),
-                  //     ),
-                  //     child: const Text(
-                  //       'Rate Producer',
-                  //       style: TextStyle(fontSize: 12),
-                  //     ),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 5),
-                  Container(
-                    padding:
-                        const EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                    height: 60,
-                    width: double.infinity,
-                    color: Colors.white,
-                    child: Row(
-                      children: <Widget>[
-                        // GestureDetector(
-                        //   onTap: () {},
-                        //   child: Container(
-                        //     height: 30,
-                        //     width: 30,
-                        //     decoration: BoxDecoration(
-                        //       color: Colors.lightBlue,
-                        //       borderRadius: BorderRadius.circular(30),
-                        //     ),
-                        //     child: const Icon(
-                        //       Icons.add,
-                        //       color: Colors.white,
-                        //       size: 20,
-                        //     ),
-                        //   ),
-                        // ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Expanded(
-                          child: TextField(
-                            controller: messageController,
-                            decoration: const InputDecoration(
-                              hintText: "Write message...",
-                              hintStyle: TextStyle(color: Colors.black54),
-                              border: InputBorder.none,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ProducerPage(
+                                  userPk: userPk,
+                                );
+                              },
                             ),
-                          ),
+                          );
+                        },
+                      ),
+                      // const VerticalDivider(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ProducerProfile(
+                                  token: widget.token,
+                                  userPk: userPk,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(image),
+                          maxRadius: 20,
                         ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        FloatingActionButton(
-                          heroTag: null,
-                          onPressed: () {
-                            sendChat();
-                          },
-                          backgroundColor: Colors.blue,
-                          elevation: 0,
-                          child: const Icon(
-                            Icons.send,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
-      ),
-    );
+        body: SafeArea(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: messages.length,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    // physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Container(
+                        padding: const EdgeInsets.only(
+                          left: 14,
+                          right: 14,
+                          top: 10,
+                          bottom: 10,
+                        ),
+                        child: Align(
+                          alignment: (messages[index]['user_pk'].toString() ==
+                                  account['user']['pk'].toString()
+                              ? Alignment.topRight
+                              : Alignment.topLeft),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: (messages[index]['user_pk'].toString() ==
+                                      account['user']['pk'].toString()
+                                  ? Colors.grey.shade200
+                                  : AppColors.third),
+                            ),
+                            padding: const EdgeInsets.all(16),
+                            child: Text(
+                              messages[index]['message'] ?? '',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: messages[index]['user_pk'].toString() ==
+                                        account['user']['pk'].toString()
+                                    ? Colors.black
+                                    : Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: AppDefaults.margin),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Container(
+                      //   // decoration: const BoxDecoration(
+                      //   //   color: Color(0xFF0E3311),
+                      //   // ),
+                      //   padding: const EdgeInsets.all(0),
+                      //   margin: const EdgeInsets.all(0),
+                      //   // padding: const EdgeInsets.only(
+                      //   //     left: 100, top: 0, right: 100, bottom: 0),
+                      //   // color: Colors.transparent,
+                      //   width: 150,
+                      //   height: 40,
+                      //   child: ElevatedButton(
+                      //     onPressed: () {
+                      //       Navigator.of(context).push(
+                      //         MaterialPageRoute(
+                      //           builder: (context) => const ProducerProfileRate(),
+                      //         ),
+                      //       );
+                      //     },
+                      //     style: ButtonStyle(
+                      //       padding: MaterialStateProperty.all<EdgeInsets>(
+                      //           EdgeInsets.zero),
+                      //     ),
+                      //     child: const Text(
+                      //       'Rate Producer',
+                      //       style: TextStyle(fontSize: 12),
+                      //     ),
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 5),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 10, bottom: 10, top: 10),
+                        height: 60,
+                        width: double.infinity,
+                        color: Colors.white,
+                        child: Row(
+                          children: <Widget>[
+                            // GestureDetector(
+                            //   onTap: () {},
+                            //   child: Container(
+                            //     height: 30,
+                            //     width: 30,
+                            //     decoration: BoxDecoration(
+                            //       color: Colors.lightBlue,
+                            //       borderRadius: BorderRadius.circular(30),
+                            //     ),
+                            //     child: const Icon(
+                            //       Icons.add,
+                            //       color: Colors.white,
+                            //       size: 20,
+                            //     ),
+                            //   ),
+                            // ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Expanded(
+                              child: TextField(
+                                controller: messageController,
+                                decoration: const InputDecoration(
+                                  hintText: "Write message...",
+                                  hintStyle: TextStyle(color: Colors.black54),
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            FloatingActionButton(
+                              heroTag: null,
+                              onPressed: () {
+                                sendChat();
+                              },
+                              backgroundColor: Colors.blue,
+                              elevation: 0,
+                              child: const Icon(
+                                Icons.send,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }

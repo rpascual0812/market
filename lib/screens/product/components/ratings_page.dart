@@ -102,7 +102,7 @@ class _RatingsPageState extends State<RatingsPage> {
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    var image = '${dotenv.get('S3')}/images/no-image.jpg';
+                    var image = '${dotenv.get('S3')}/images/no-image.png';
 
                     for (var i = 0;
                         i <
@@ -119,14 +119,14 @@ class _RatingsPageState extends State<RatingsPage> {
                                   ['user_document'][i]['type'] ==
                               'profile_photo') {
                         image =
-                            '${dotenv.get('API')}/${widget.product['product_ratings'][index]['user']['user_document'][i]['document']['path']}';
+                            '${widget.product['product_ratings'][index]['user']['user_document'][i]['document']['path']}';
                       }
                     }
 
                     if (widget.product['product_ratings'][index]['anonymous']) {
                       image = '${dotenv.get('S3')}/images/user.png';
                     }
-
+                    print(image);
                     return Container(
                       padding: const EdgeInsets.all(10),
                       color: Colors.white,

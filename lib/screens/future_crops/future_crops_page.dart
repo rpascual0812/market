@@ -115,6 +115,8 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
       if (res.statusCode == 200) {
         dataJson = jsonDecode(res.body);
         for (var i = 0; i < dataJson['data'].length; i++) {
+          print(
+              'dataJson month ${dataJson['data'][i]['date_available_formatted']}');
           var month = dataJson['data'][i]['date_available_formatted'];
           months[month]['count']++;
         }
@@ -134,26 +136,25 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
 
   Future fetch() async {
     try {
+      print('1');
       // products = [];
 
       var monthsArr = [];
 
       for (var month in months) {
         if (month['selected']) {
-          monthsArr.add(jsonEncode(<String, String>{
-            'name': month['name'],
-          }));
+          monthsArr.add(month['name']);
         }
       }
       // products = [];
       var res = await Remote.get('products', {
         'type': 'future_crop',
         'year': yearController.text,
-        'months': monthsArr.toString(),
+        'months': monthsArr.join(','),
         'skip': skip.toString(),
         'take': take.toString()
       });
-      // print('res $res');
+
       if (res.statusCode == 200) {
         dataJson = jsonDecode(res.body);
         var data = [];

@@ -47,7 +47,7 @@ class _ConversationListState extends State<ConversationList> {
     // print(widget.chat['chat_participants']);
     var image = widget.chat.isNotEmpty &&
             widget.chat['chat_participants'].length > 0
-        ? '${dotenv.get('API')}/${widget.chat['chat_participants'][0]['user']['user_document']['document']['path']}'
+        ? '${widget.chat['chat_participants'][0]['user']['user_document']['document']['path']}'
         : '';
     var name = widget.chat.isNotEmpty &&
             widget.chat['chat_participants'].length > 0

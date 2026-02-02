@@ -12,7 +12,7 @@ class ProductSliderSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var background = '${dotenv.get('S3')}/images/no-image.jpg';
+    var background = '${dotenv.get('S3')}/images/no-image.png';
     background = productDocuments['document']['path'] == ''
         ? background
         : '${productDocuments['document']['path']}';

@@ -320,7 +320,7 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
             account['user']['pk']) {
           found = true;
           image = chat['chat_participants'] != null
-              ? '${dotenv.get('API')}/${chat['chat_participants'][i]['user']['user_document']['document']['path']}'
+              ? '${chat['chat_participants'][i]['user']['user_document']['document']['path']}'
               : '';
           name = chat['chat_participants'] != null
               ? '${chat['chat_participants'][i]['user']['first_name']} ${chat['chat_participants'][i]['user']['last_name']}'
@@ -330,7 +330,7 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
 
       if (!found) {
         image = chat['chat_participants'] != null
-            ? '${dotenv.get('API')}/${chat['chat_participants'][0]['user']['user_document']['document']['path']}'
+            ? '${chat['chat_participants'][0]['user']['user_document']['document']['path']}'
             : '';
         name = chat['chat_participants'] != null
             ? '${chat['chat_participants'][0]['user']['first_name']} ${chat['chat_participants'][0]['user']['last_name']}'

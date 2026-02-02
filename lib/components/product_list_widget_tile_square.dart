@@ -20,7 +20,7 @@ class ProductListWidgetTileSquare extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var image = '${dotenv.get('S3')}/images/no-image.jpg';
+    var image = '${dotenv.get('S3')}/images/no-image.png';
     if (product['product_documents'] != null) {
       var found = false;
       // if (product['pk'] == 33) {

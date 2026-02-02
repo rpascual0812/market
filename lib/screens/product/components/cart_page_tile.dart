@@ -70,7 +70,7 @@ class _CartPageTileState extends State<CartPageTile> {
 
   @override
   Widget build(BuildContext context) {
-    var productImage = '${dotenv.get('S3')}/images/no-image.jpg';
+    var productImage = 'images/no-image.png';
     if (widget.order['product']['product_documents'] != null) {
       productImage = AppDefaults.productImage(
           widget.order['product']['product_documents']);

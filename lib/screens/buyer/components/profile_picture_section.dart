@@ -170,21 +170,29 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                               follow();
                                             },
                                             style: OutlinedButton.styleFrom(
+                                              backgroundColor:
+                                                  isFollowed.isNotEmpty
+                                                      ? Colors.white
+                                                      : Colors.transparent,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                         AppDefaults.radius),
                                               ),
-                                              side: const BorderSide(
+                                              side: BorderSide(
                                                   width: 1,
-                                                  color: Colors.white),
+                                                  color: isFollowed.isNotEmpty
+                                                      ? Colors.black
+                                                      : Colors.white),
                                             ),
                                             child: Text(
                                               isFollowed.isNotEmpty
                                                   ? 'Following'
                                                   : '+ Follow',
-                                              style: const TextStyle(
-                                                  color: Colors.white,
+                                              style: TextStyle(
+                                                  color: isFollowed.isNotEmpty
+                                                      ? Colors.black
+                                                      : Colors.white,
                                                   fontSize:
                                                       AppDefaults.fontSize + 2),
                                             ),

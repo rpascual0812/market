@@ -577,7 +577,7 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                         ),
                         const SizedBox(height: AppDefaults.margin + 30),
                         const Text(
-                          'Submit any of the following documents as proof of ownership:',
+                          'Required IDs and Certificates for Proof of Ownership:',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary),
@@ -586,45 +586,60 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                         Container(
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.only(
-                              left: 10, top: 5, right: 10, bottom: 5),
+                              left: 20, top: 10, right: 20, bottom: 10),
                           decoration: BoxDecoration(
                             color: AppColors.grey2,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Text('1. Barangay certification'),
+                          child: const Text(
+                              'A. Any government-issued IDs, such as: National ID, Unified ID (SSS+ Pag-ibig), voter’s ID, passport, driver’s license. If there are no government-issued ID, may use secondary ID and provide the attachments'),
                         ),
                         const SizedBox(height: 5),
                         Container(
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.only(
-                              left: 10, top: 5, right: 10, bottom: 5),
+                              left: 20, top: 10, right: 20, bottom: 10),
                           decoration: BoxDecoration(
                             color: AppColors.grey2,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Text('2. DTI certificate'),
+                          child: const Text(
+                              'B. Secondary ID’s: Senior Citizen ID, PWD ID, Employment ID; School ID for currently enrolled school year;'),
                         ),
                         const SizedBox(height: 5),
                         Container(
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.only(
-                              left: 10, top: 5, right: 10, bottom: 5),
+                              left: 20, top: 10, right: 20, bottom: 10),
                           decoration: BoxDecoration(
                             color: AppColors.grey2,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Text('3. Contract of lease'),
+                          child: const Text(
+                              'B.1. Attachment to secondary IDs: \n - Employment ID: Certificate of Employment'),
                         ),
                         const SizedBox(height: 5),
                         Container(
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.only(
-                              left: 10, top: 5, right: 10, bottom: 5),
+                              left: 20, top: 10, right: 20, bottom: 10),
                           decoration: BoxDecoration(
                             color: AppColors.grey2,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Text('4. etc.'),
+                          child: const Text(
+                              'C. Business registration at any of the following: barangay certificate/ city level/ DTI/ BIR'),
+                        ),
+                        const SizedBox(height: 5),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.only(
+                              left: 20, top: 10, right: 20, bottom: 10),
+                          decoration: BoxDecoration(
+                            color: AppColors.grey2,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Text('D. Tax Identification Number'),
                         ),
                         const SizedBox(height: AppDefaults.margin * 2),
                         const Align(

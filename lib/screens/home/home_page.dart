@@ -5,6 +5,7 @@ import 'package:infinite_scroll/infinite_scroll_grid.dart';
 import 'package:market/components/product_list_widget_tile_square.dart';
 import 'package:market/components/select_dropdown.dart';
 import 'package:market/components/select_dropdown_obj.dart';
+import 'package:market/components/shimmer_loading.dart';
 // import 'package:flutter/rendering.dart';
 // import 'package:market/components/cards/big/big_card_image.dart';
 import 'package:market/components/sliders/home_slider.dart';
@@ -21,6 +22,7 @@ import 'package:market/size_config.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import 'components/article_list.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -52,6 +54,8 @@ class _HomePageState extends State<HomePage> {
 
   int skip = 0;
   int take = 6;
+
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -123,6 +127,7 @@ class _HomePageState extends State<HomePage> {
 
   Future fetch() async {
     try {
+      _isLoading = true;
       var res = await Remote.get('products', {
         'type': 'product,all',
         'orderBy': filterValue,
@@ -140,6 +145,10 @@ class _HomePageState extends State<HomePage> {
         for (var i = 0; i < dataJson['data'].length; i++) {
           data.add(dataJson['data'][i]);
         }
+
+        setState(() {
+          _isLoading = false;
+        });
         return data;
         // });
       } else if (res.statusCode == 401) {
@@ -220,6 +229,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
+    const shimmerGradient = LinearGradient(
+      colors: [Color(0xFFEBEBF4), Color(0xFFF4F4F4), Color(0xFFEBEBF4)],
+      stops: [0.1, 0.3, 0.4],
+      begin: Alignment(-1.0, -0.3),
+      end: Alignment(1.0, 0.3),
+      tileMode: TileMode.clamp,
+    );
+
     return SingleChildScrollView(
       controller: _scrollController,
       child: Padding(
@@ -296,24 +313,28 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            InfiniteScrollGrid(
-              shrinkWrap: true,
-              childAspectRatio: (1 / 1.3),
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.all(5),
-              crossAxisSpacing: 0,
-              mainAxisSpacing: 0,
-              onLoadingStart: (page) async {
-                // print(page);
-                // _next();
-              },
-              everythingLoaded: everyThingLoaded,
-              crossAxisCount: 2,
-              children: products
-                  .map(
-                    (e) => GridItem(product: e),
-                  )
-                  .toList(),
+
+            ShimmerLoading(
+              isLoading: _isLoading,
+              child: InfiniteScrollGrid(
+                shrinkWrap: true,
+                childAspectRatio: (1 / 1.3),
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.all(5),
+                crossAxisSpacing: 0,
+                mainAxisSpacing: 0,
+                onLoadingStart: (page) async {
+                  // print(page);
+                  // _next();
+                },
+                everythingLoaded: everyThingLoaded,
+                crossAxisCount: 2,
+                children: products
+                    .map(
+                      (e) => GridItem(product: e),
+                    )
+                    .toList(),
+              ),
             ),
           ],
         ),
@@ -341,6 +362,34 @@ class GridItem extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class ShimmerItem extends StatelessWidget {
+  const ShimmerItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 600,
+      child: Center(
+        child: Center(
+          child: Shimmer.fromColors(
+            baseColor:
+                Colors.grey.shade300, // The main color of the loading view
+            highlightColor:
+                Colors.grey.shade100, // The color used for the moving highlight
+            child: Container(
+              height: 150,
+              width: double.infinity,
+              color:
+                  Colors.white, // The color of the actual placeholder content
+              margin: EdgeInsets.symmetric(horizontal: 20),
+            ),
+          ),
+        ),
       ),
     );
   }

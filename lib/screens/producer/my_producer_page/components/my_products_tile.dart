@@ -68,7 +68,7 @@ class _MyProductTileState extends State<MyProductTile> {
 
   @override
   Widget build(BuildContext context) {
-    var productImage = '${dotenv.get('S3')}/images/no-image.jpg';
+    var productImage = '${dotenv.get('S3')}/images/no-image.png';
     if (widget.product['product_documents'] != null) {
       productImage =
           AppDefaults.productImage(widget.product['product_documents']);

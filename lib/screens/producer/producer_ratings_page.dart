@@ -108,7 +108,7 @@ class _ProducerRatingsPageState extends State<ProducerRatingsPage> {
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    var image = '${dotenv.get('S3')}/images/no-image.jpg';
+                    var image = '${dotenv.get('S3')}/images/no-image.png';
 
                     for (var i = 0;
                         i <

@@ -54,7 +54,7 @@ class _MyLookingForTileState extends State<MyLookingForTile> {
   @override
   Widget build(BuildContext context) {
     DateTime date = DateTime.parse(widget.order['date_created'].toString());
-    var productImage = '${dotenv.get('S3')}/images/no-image.jpg';
+    var productImage = '${dotenv.get('S3')}/images/no-image.png';
     if (widget.order['product']['product_documents'] != null) {
       productImage = AppDefaults.productImage(
           widget.order['product']['product_documents']);

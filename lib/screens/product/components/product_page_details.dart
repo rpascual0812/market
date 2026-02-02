@@ -168,8 +168,7 @@ class _ProductPageDetailsState extends State<ProductPageDetails> {
       // print(product['product_documents'][i]['document']['path']);
       if (widget.product['user_document'][i]['document']['path'] != null &&
           widget.product['user_document'][i]['type'] == 'profile_photo') {
-        userImage =
-            '${dotenv.get('API')}/${widget.product['user_document'][i]['document']['path']}';
+        userImage = '${widget.product['user_document'][i]['document']['path']}';
       }
     }
 

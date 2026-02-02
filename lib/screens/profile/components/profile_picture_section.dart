@@ -131,7 +131,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                               color: Colors.transparent,
                               padding:
                                   const EdgeInsets.all(AppDefaults.padding),
-                              width: MediaQuery.of(context).size.width * 0.40,
+                              width: MediaQuery.of(context).size.width * 0.33,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [

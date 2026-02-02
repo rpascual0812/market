@@ -1014,8 +1014,7 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
                               child: AspectRatio(
                                 aspectRatio: 1 / 1,
                                 child: NetworkImageWithLoader(
-                                    '${dotenv.get('API')}/${displayPhoto!['path']}',
-                                    false),
+                                    '${displayPhoto!['path']}', false),
                               ),
                             ),
                           )
@@ -1064,8 +1063,7 @@ class _ProfileEditFormState extends State<ProfileEditForm> {
                               child: AspectRatio(
                                 aspectRatio: 1 / 1,
                                 child: NetworkImageWithLoader(
-                                    '${dotenv.get('API')}/${idPhoto!['path']}',
-                                    false),
+                                    '${idPhoto!['path']}', false),
                               ),
                             ),
                           )

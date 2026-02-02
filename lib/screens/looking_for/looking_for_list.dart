@@ -102,7 +102,7 @@ class _LookingForListState extends State<LookingForList> {
   Future<void> loadInitialData() async {
     products = await getNextPageData(page);
     // print('load initial data $products');
-    setState(() {});
+    // setState(() {});
   }
 
   Future getNextPageData(int page) async {

@@ -163,136 +163,159 @@ class ComplaintNewState extends State<ComplaintNew>
       color: Colors.black.withValues(alpha: 0.3),
       child: Scaffold(
         backgroundColor: Colors.black.withValues(alpha: 0.3),
-        body: SingleChildScrollView(
-          child: Container(
-            margin:
-                const EdgeInsets.only(top: 100, right: 20, bottom: 0, left: 20),
-            // padding: const EdgeInsets.all(15.0),
-            height: 730.0,
-            decoration: ShapeDecoration(
-              // color: const Color.fromRGBO(41, 167, 77, 10),
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.only(
+                  top: 100, right: 20, bottom: 0, left: 20),
+              // padding: const EdgeInsets.all(15.0),
+              height: 730.0,
+              decoration: ShapeDecoration(
+                // color: const Color.fromRGBO(41, 167, 77, 10),
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
               ),
-            ),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                  width: double.infinity,
-                  height: 30,
-                  decoration: const BoxDecoration(
-                    color: AppColors.secondary,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12.0),
-                      topRight: Radius.circular(12.0),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                    width: double.infinity,
+                    height: 30,
+                    decoration: const BoxDecoration(
+                      color: AppColors.secondary,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12.0),
+                        topRight: Radius.circular(12.0),
+                      ),
+                    ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      fit: StackFit.loose,
+                      clipBehavior: Clip.hardEdge,
+                      children: <Widget>[
+                        const Text(
+                          'File a Complaint',
+                          style: TextStyle(fontSize: 17, color: Colors.white),
+                        ),
+                        Positioned(
+                          right: 0,
+                          child: IconButton(
+                            icon: const Icon(close),
+                            color: Colors.white,
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .pop('dialog');
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    fit: StackFit.loose,
-                    clipBehavior: Clip.hardEdge,
-                    children: <Widget>[
-                      const Text(
-                        'File a Complaint',
-                        style: TextStyle(fontSize: 17, color: Colors.white),
-                      ),
-                      Positioned(
-                        right: 0,
-                        child: IconButton(
-                          icon: const Icon(close),
-                          color: Colors.white,
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true)
-                                .pop('dialog');
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 638,
-                  child: Padding(
-                    // padding: const EdgeInsets.only(
-                    //     top: 10, right: 10, bottom: 0, left: 10),
-                    padding: const EdgeInsets.all(10),
-                    child: Form(
-                      key: _key,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: AppDefaults.margin),
-                          const Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Choose type of complain',
-                              style: TextStyle(
-                                fontSize: AppDefaults.fontSize + 3,
-                                color: Colors.black54,
+                  SizedBox(
+                    height: 638,
+                    child: Padding(
+                      // padding: const EdgeInsets.only(
+                      //     top: 10, right: 10, bottom: 0, left: 10),
+                      padding: const EdgeInsets.all(10),
+                      child: Form(
+                        key: _key,
+                        child: Column(
+                          children: [
+                            const SizedBox(height: AppDefaults.margin),
+                            const Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'Choose type of complain',
+                                style: TextStyle(
+                                  fontSize: AppDefaults.fontSize + 3,
+                                  color: Colors.black54,
+                                ),
                               ),
                             ),
-                          ),
-                          Wrap(
-                            runSpacing: -20,
-                            children: [
-                              RadioListTile(
-                                title: const Text("Product Concerns"),
-                                value: "product",
-                                groupValue: type,
-                                onChanged: (value) {
-                                  setState(() {
-                                    type = value.toString();
-                                  });
-                                },
-                              ),
-                              RadioListTile(
-                                title: const Text("Transaction Concerns"),
-                                value: "transaction",
-                                groupValue: type,
-                                onChanged: (value) {
-                                  setState(() {
-                                    type = value.toString();
-                                  });
-                                },
-                              ),
-                              RadioListTile(
-                                title: const Text("Producer Concerns"),
-                                value: "producer",
-                                groupValue: type,
-                                onChanged: (value) {
-                                  setState(() {
-                                    type = value.toString();
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: AppDefaults.margin),
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'What\'s your complaint?',
-                              style: TextStyle(
-                                fontSize: AppDefaults.fontSize + 3,
-                                color: Colors.black54,
+                            Wrap(
+                              runSpacing: -20,
+                              children: [
+                                RadioListTile(
+                                  title: const Text("Product Concerns"),
+                                  value: "product",
+                                  groupValue: type,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      type = value.toString();
+                                    });
+                                  },
+                                ),
+                                RadioListTile(
+                                  title: const Text("Transaction Concerns"),
+                                  value: "transaction",
+                                  groupValue: type,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      type = value.toString();
+                                    });
+                                  },
+                                ),
+                                RadioListTile(
+                                  title: const Text("Producer Concerns"),
+                                  value: "producer",
+                                  groupValue: type,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      type = value.toString();
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: AppDefaults.margin),
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'What\'s your complaint?',
+                                style: TextStyle(
+                                  fontSize: AppDefaults.fontSize + 3,
+                                  color: Colors.black54,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: AppDefaults.margin),
-                          SizedBox(
-                            height: AppDefaults.height,
-                            // padding: EdgeInsets.zero,
-                            child: TextFormField(
-                              controller: subjectController,
+                            const SizedBox(height: AppDefaults.margin),
+                            SizedBox(
+                              height: AppDefaults.height,
+                              // padding: EdgeInsets.zero,
+                              child: TextFormField(
+                                controller: subjectController,
+                                validator: (value) {
+                                  if (value != null && value.isEmpty) {
+                                    return '* Subject is required';
+                                  }
+                                  return null;
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: 'Subject',
+                                  border: InputBorder.none,
+                                  filled: true,
+                                  fillColor: Color(0xfff5f5f5),
+                                ),
+                                style: const TextStyle(
+                                  fontSize: AppDefaults.fontSize,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: AppDefaults.margin),
+                            TextFormField(
+                              controller: messageController,
                               validator: (value) {
                                 if (value != null && value.isEmpty) {
-                                  return '* Subject is required';
+                                  return '* Message is required';
                                 }
                                 return null;
                               },
+                              onTap: () async {},
+                              maxLines: 6,
                               decoration: const InputDecoration(
-                                hintText: 'Subject',
+                                hintText: 'Type a message...',
                                 border: InputBorder.none,
                                 filled: true,
                                 fillColor: Color(0xfff5f5f5),
@@ -301,216 +324,196 @@ class ComplaintNewState extends State<ComplaintNew>
                                 fontSize: AppDefaults.fontSize,
                               ),
                             ),
-                          ),
-                          const SizedBox(height: AppDefaults.margin),
-                          TextFormField(
-                            controller: messageController,
-                            validator: (value) {
-                              if (value != null && value.isEmpty) {
-                                return '* Message is required';
-                              }
-                              return null;
-                            },
-                            onTap: () async {},
-                            maxLines: 6,
-                            decoration: const InputDecoration(
-                              hintText: 'Type a message...',
-                              border: InputBorder.none,
-                              filled: true,
-                              fillColor: Color(0xfff5f5f5),
-                            ),
-                            style: const TextStyle(
-                              fontSize: AppDefaults.fontSize,
-                            ),
-                          ),
-                          const SizedBox(height: AppDefaults.margin),
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Attach Product Photo',
-                              style: TextStyle(
-                                fontSize: AppDefaults.fontSize + 3,
-                                color: Colors.black54,
+                            const SizedBox(height: AppDefaults.margin),
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Attach Product Photo',
+                                style: TextStyle(
+                                  fontSize: AppDefaults.fontSize + 3,
+                                  color: Colors.black54,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: AppDefaults.margin),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            height: AppDefaults.height - 5,
-                            child: Padding(
-                              padding: const EdgeInsets.all(1),
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  pickImage('display', ImageSource.gallery);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        AppDefaults.radius - 10),
+                            const SizedBox(height: AppDefaults.margin),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              height: AppDefaults.height - 5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(1),
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    pickImage('display', ImageSource.gallery);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.all(0),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          AppDefaults.radius - 10),
+                                    ),
+                                  ),
+                                  child: const Text('+ Add Photo'),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: AppDefaults.margin),
+                            // productPhotos.isNotEmpty
+                            //     ? Align(
+                            //         alignment: Alignment.center,
+                            //         child: Container(
+                            //           margin: const EdgeInsets.only(
+                            //               right: 5, bottom: 5),
+                            //           height: 75,
+                            //           child: AspectRatio(
+                            //             aspectRatio: 1 / 1,
+                            //             child: NetworkImageWithLoader(
+                            //                 '${dotenv.get('API')}/${productPhotos[index]?['path']}',
+                            //                 false),
+                            //           ),
+                            //         ),
+                            //       )
+                            //     : const SizedBox(),
+                            Visibility(
+                              visible: productPhotos.isNotEmpty ? true : false,
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: Wrap(
+                                  alignment: WrapAlignment.start,
+                                  crossAxisAlignment: WrapCrossAlignment.start,
+                                  children: List.generate(
+                                    productPhotos.length,
+                                    (index) {
+                                      return InkWell(
+                                        onTap: () async {
+                                          ArtDialogResponse response =
+                                              await ArtSweetAlert.show(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            artDialogArgs: ArtDialogArgs(
+                                              showCancelBtn: true,
+                                              title:
+                                                  "Do you want to remove ${productPhotos[index]?['original_name']}?",
+                                              confirmButtonText: "Remove",
+                                            ),
+                                          );
+
+                                          if (response.isTapConfirmButton) {
+                                            remove(index);
+                                            return;
+                                          }
+                                        },
+                                        child: Container(
+                                          margin: const EdgeInsets.only(
+                                              right: 5, bottom: 5),
+                                          height: 75,
+                                          child: AspectRatio(
+                                            aspectRatio: 1 / 1,
+                                            child: NetworkImageWithLoader(
+                                                '${productPhotos[index]?['path']}',
+                                                false),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
-                                child: const Text('+ Add Photo'),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: AppDefaults.margin),
-                          // productPhotos.isNotEmpty
-                          //     ? Align(
-                          //         alignment: Alignment.center,
-                          //         child: Container(
-                          //           margin: const EdgeInsets.only(
-                          //               right: 5, bottom: 5),
-                          //           height: 75,
-                          //           child: AspectRatio(
-                          //             aspectRatio: 1 / 1,
-                          //             child: NetworkImageWithLoader(
-                          //                 '${dotenv.get('API')}/${productPhotos[index]?['path']}',
-                          //                 false),
-                          //           ),
-                          //         ),
-                          //       )
-                          //     : const SizedBox(),
-                          Visibility(
-                            visible: productPhotos.isNotEmpty ? true : false,
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Wrap(
-                                alignment: WrapAlignment.start,
-                                crossAxisAlignment: WrapCrossAlignment.start,
-                                children: List.generate(
-                                  productPhotos.length,
-                                  (index) {
-                                    return InkWell(
-                                      onTap: () async {
-                                        ArtDialogResponse response =
-                                            await ArtSweetAlert.show(
-                                          barrierDismissible: false,
-                                          context: context,
-                                          artDialogArgs: ArtDialogArgs(
-                                            showCancelBtn: true,
-                                            title:
-                                                "Do you want to remove ${productPhotos[index]?['original_name']}?",
-                                            confirmButtonText: "Remove",
-                                          ),
-                                        );
-
-                                        if (response.isTapConfirmButton) {
-                                          remove(index);
-                                          return;
-                                        }
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.only(
-                                            right: 5, bottom: 5),
-                                        height: 75,
-                                        child: AspectRatio(
-                                          aspectRatio: 1 / 1,
-                                          child: NetworkImageWithLoader(
-                                              '${dotenv.get('API')}/${productPhotos[index]?['path']}',
-                                              false),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                  width: double.infinity,
-                  height: 62,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffeaeaea),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    ),
-                    border: Border.all(
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                    width: double.infinity,
+                    height: 62,
+                    decoration: BoxDecoration(
                       color: const Color(0xffeaeaea),
-                      width: 1,
-                      style: BorderStyle.solid,
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                      border: Border.all(
+                        color: const Color(0xffeaeaea),
+                        width: 1,
+                        style: BorderStyle.solid,
+                      ),
                     ),
-                  ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    fit: StackFit.loose,
-                    clipBehavior: Clip.hardEdge,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Container(
-                          alignment: Alignment.topCenter,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      fit: StackFit.loose,
+                      clipBehavior: Clip.hardEdge,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(0),
                           child: Container(
-                            height: 60,
-                            padding: const EdgeInsets.all(0),
-                            width: MediaQuery.of(context).size.width,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(12),
-                                bottomRight: Radius.circular(12),
-                              ),
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.of(context, rootNavigator: true)
-                                          .pop('dialog');
-                                    },
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      decoration: const BoxDecoration(
-                                        // color: Colors.white,
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(12),
-                                          topLeft: Radius.circular(12),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        "Cancel",
-                                        style: TextStyle(
-                                          color: AppColors.secondary,
-                                          fontSize: AppDefaults.fontSize + 5,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                            alignment: Alignment.topCenter,
+                            child: Container(
+                              height: 60,
+                              padding: const EdgeInsets.all(0),
+                              width: MediaQuery.of(context).size.width,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12),
                                 ),
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () async {
-                                      await save();
-                                    },
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: const Text(
-                                        "Send",
-                                        style: TextStyle(
-                                          color: Colors.black54,
-                                          fontSize: AppDefaults.fontSize + 5,
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop('dialog');
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        decoration: const BoxDecoration(
+                                          // color: Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(12),
+                                            topLeft: Radius.circular(12),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          "Cancel",
+                                          style: TextStyle(
+                                            color: AppColors.secondary,
+                                            fontSize: AppDefaults.fontSize + 5,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                )
-                              ],
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () async {
+                                        await save();
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          "Send",
+                                          style: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: AppDefaults.fontSize + 5,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

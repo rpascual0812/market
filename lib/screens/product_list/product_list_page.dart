@@ -89,7 +89,7 @@ class _ProductListPageState extends State<ProductListPage>
                   text: 'Future Crops',
                 ),
                 Tab(
-                  text: 'Looking for',
+                  text: 'Looking For',
                 ),
               ],
             ),

@@ -70,7 +70,6 @@ class _ProductPageState extends State<ProductPage> {
         setState(() {
           var productJson = jsonDecode(res.body);
           product = productJson['data'];
-          print(product['product_rating_total']);
         });
       }
     } on Exception catch (exception) {

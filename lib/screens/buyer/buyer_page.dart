@@ -77,7 +77,7 @@ class _BuyerPageState extends State<BuyerPage> {
                       unselectedLabelColor: Colors.grey,
                       tabs: [
                         Tab(
-                          text: 'Looking For',
+                          text: 'Looking Foraaaaaaaaa',
                         ),
                       ],
                     ),

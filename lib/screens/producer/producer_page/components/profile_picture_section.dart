@@ -145,7 +145,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
       children: [
         Container(
           width: size.width,
-          height: 340,
+          height: 350,
           color: AppColors.secondary,
           child: Column(
             children: [
@@ -171,7 +171,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                               color: Colors.transparent,
                               padding:
                                   const EdgeInsets.all(AppDefaults.padding),
-                              width: MediaQuery.of(context).size.width * 0.43,
+                              width: MediaQuery.of(context).size.width * 0.40,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -190,7 +190,7 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                     maintainAnimation: true, //NEW
                                     maintainState: true, //NEW
                                     child: Container(
-                                      width: 90.0,
+                                      width: 130.0,
                                       height: 25.0,
                                       padding: EdgeInsets.zero,
                                       child: OutlinedButton(
@@ -198,21 +198,28 @@ class _ProfilePictureSectionState extends State<ProfilePictureSection> {
                                           follow();
                                         },
                                         style: OutlinedButton.styleFrom(
+                                          backgroundColor: isFollowed.isNotEmpty
+                                              ? Colors.white
+                                              : Colors.transparent,
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
                                                 AppDefaults.radius),
                                           ),
-                                          side: const BorderSide(
-                                              width: 1, color: Colors.white),
+                                          side: BorderSide(
+                                              width: 1,
+                                              color: isFollowed.isNotEmpty
+                                                  ? Colors.black
+                                                  : Colors.white),
                                         ),
                                         child: Text(
                                           isFollowed.isNotEmpty
                                               ? 'Following'
                                               : '+ Follow',
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  AppDefaults.fontSize + 2),
+                                          style: TextStyle(
+                                              color: isFollowed.isNotEmpty
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              fontSize: AppDefaults.fontSize),
                                         ),
                                       ),
                                     ),

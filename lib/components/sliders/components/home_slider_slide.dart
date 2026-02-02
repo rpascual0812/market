@@ -25,7 +25,7 @@ class HomeSliderSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var background = '${dotenv.get('S3')}/images/no-image.jpg';
+    var background = '${dotenv.get('S3')}/images/no-image.png';
     var icon = '${dotenv.get('S3')}/images/user.png';
 
     for (var i = 0; i < sliderDocument.length; i++) {

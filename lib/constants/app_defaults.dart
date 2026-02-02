@@ -115,7 +115,7 @@ class AppDefaults {
   }
 
   static productImage(List documents) {
-    var productImage = '${dotenv.get('S3')}/images/no-image.jpg';
+    var productImage = '${dotenv.get('S3')}/images/no-image.png';
     for (var i = 0; i < documents.length; i++) {
       if (documents[i]['document']['path'] != null && documents[i]['default']) {
         productImage = '${documents[i]['document']['path']}';

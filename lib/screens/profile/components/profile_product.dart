@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:market/screens/orders/order_page.dart';
+import 'package:market/screens/orders/order_page_buyer.dart';
 import 'package:market/screens/profile/components/profile_card.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -86,7 +87,9 @@ class _ProfileProductState extends State<ProfileProduct> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return OrderPage(type: 'orders', user: widget.user);
+                    return widget.user['is_seller']
+                        ? OrderPage(type: 'orders', user: widget.user)
+                        : OrderPageBuyer(type: 'orders', user: widget.user);
                   },
                 ),
               );

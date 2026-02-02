@@ -75,7 +75,7 @@ class _RateProductPageState extends State<RateProductPage> {
         message.text = ratingJson['message'] ?? '';
         ratingVal = double.parse(ratingJson['rating']);
         rating.text = ratingJson['rating'];
-        anonymous.text = 'true';
+        anonymous.text = ratingJson['anonymous'] ? 'true' : 'false';
       });
     } on Exception catch (exception) {
       log('exception $exception');
@@ -135,12 +135,11 @@ class _RateProductPageState extends State<RateProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    var image = '${dotenv.get('S3')}/images/no-image.jpg';
+    var image = '${dotenv.get('S3')}/images/no-image.png';
     for (var i = 0; i < widget.product['product_documents'].length; i++) {
       if (widget.product['product_documents'][i]['document']['path'] != null &&
           widget.product['product_documents'][i]['default'] == true) {
-        image =
-            '${dotenv.get('API')}/${widget.product['product_documents'][i]['document']['path']}';
+        image = '${widget.product['product_documents'][i]['document']['path']}';
       }
     }
 

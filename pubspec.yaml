@@ -88,6 +88,7 @@ dependencies:
   expansion_tile_card: ^3.0.0
   flutter_multi_formatter: ^2.2.1
   tutorial_coach_mark: ^1.2.6
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
