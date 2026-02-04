@@ -104,7 +104,7 @@ class ComplaintViewStateImage extends State<ComplaintViewImage>
                         child: AspectRatio(
                           aspectRatio: 1 / 1,
                           child: NetworkImageWithLoader(
-                            '${dotenv.get('API')}/${widget.document['path']}',
+                            '${widget.document['path']}',
                             true,
                             fit: BoxFit.fill,
                             radius: 0,

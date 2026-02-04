@@ -21,7 +21,7 @@ class NotificationPageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userImage = '${dotenv.get('S3')}/images/user.png';
+    var userImage = notification['user']['user_document']['document']['path'];
     var date = TimeElapsed.fromDateStr(notification['date_created']);
 
     return Material(
@@ -43,7 +43,7 @@ class NotificationPageTile extends StatelessWidget {
                     // mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        height: 70,
+                        height: 80,
                         margin: const EdgeInsets.only(bottom: 2),
                         decoration: const BoxDecoration(
                           color: Colors.white,

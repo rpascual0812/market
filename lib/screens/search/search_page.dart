@@ -34,7 +34,9 @@ class _SearchPageState extends State<SearchPage>
     setState(() {
       token = all ?? '';
       var pk = AppDefaults.jwtDecode(token);
-      fetchUser(pk['sub']);
+      if (pk != null) {
+        fetchUser(pk['sub']);
+      }
     });
   }
 

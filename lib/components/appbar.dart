@@ -365,7 +365,7 @@ class _AppbarState extends State<Appbar> {
         Row(
           children: [
             Visibility(
-              visible: showHide(),
+              visible: true,
               child: IconButton(
                 key: searchKey,
                 padding: const EdgeInsets.only(left: 10),
@@ -433,16 +433,9 @@ class _AppbarState extends State<Appbar> {
   }
 
   showHide() {
-    switch (widget.module) {
-      case 'signin':
-        {
-          return false;
-        }
-      default:
-        {
-          return true;
-        }
-    }
+    print('widget module ${widget.module}');
+    print('token $token');
+    return token == null ? false : true;
   }
 
   @override

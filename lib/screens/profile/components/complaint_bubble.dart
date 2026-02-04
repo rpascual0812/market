@@ -142,7 +142,6 @@ class _ComplaintBubbleState extends State<ComplaintBubble> {
 
   void initAbly() {
     final channelId = 'complaint-${widget.complaint['pk'].toString()}';
-    print('channelId $channelId');
     // Create an instance of ClientOptions with Ably key
     // final clientOptions = ably.ClientOptions(key: dotenv.get('ABLY_KEY'));
 
@@ -167,9 +166,7 @@ class _ComplaintBubbleState extends State<ComplaintBubble> {
     StreamSubscription<ably.Message> subscription =
         channel.subscribe(name: channelId).listen((ably.Message message) {
       // Handle channel messages with name 'event1'
-      print('StreamSubscription');
       print(message.data);
-      print(account['user']['pk']);
 
       final player = AudioPlayer();
       if (message.data != null) {
@@ -300,7 +297,7 @@ class _ComplaintBubbleState extends State<ComplaintBubble> {
             account['user']['pk']) {
           found = true;
           image = chat['chat_participants'] != null
-              ? '${dotenv.get('API')}/${chat['chat_participants'][i]['user']['user_document']['document']['path']}'
+              ? '${chat['chat_participants'][i]['user']['user_document']['document']['path']}'
               : '';
           name = chat['chat_participants'] != null
               ? '${chat['chat_participants'][i]['user']['first_name']} ${chat['chat_participants'][i]['user']['last_name']}'
@@ -310,7 +307,7 @@ class _ComplaintBubbleState extends State<ComplaintBubble> {
 
       if (!found) {
         image = chat['chat_participants'] != null
-            ? '${dotenv.get('API')}/${chat['chat_participants'][0]['user']['user_document']['document']['path']}'
+            ? '${chat['chat_participants'][0]['user']['user_document']['document']['path']}'
             : '';
         name = chat['chat_participants'] != null
             ? '${chat['chat_participants'][0]['user']['first_name']} ${chat['chat_participants'][0]['user']['last_name']}'
@@ -390,7 +387,7 @@ class _ComplaintBubbleState extends State<ComplaintBubble> {
                             child: AspectRatio(
                               aspectRatio: 1 / 1,
                               child: NetworkImageWithLoader(
-                                  '${dotenv.get('API')}/${widget.complaint['complaint_document'][index]['document']['path']}',
+                                  '${widget.complaint['complaint_document'][index]['document']['path']}',
                                   false),
                             ),
                           ),
