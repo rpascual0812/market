@@ -103,7 +103,7 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
           borderRadius: AppDefaults.borderRadius,
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 370,
+            height: 390,
             padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
             child: Center(
               child: Stack(
@@ -158,7 +158,7 @@ class _FutureCropsPageTileState extends State<FutureCropsPageTile> {
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   width: 200,
-                                                  height: 15,
+                                                  height: 20,
                                                   child: Text(
                                                     '${widget.product['user']['first_name']} ${widget.product['user']['last_name']}',
                                                     style: const TextStyle(

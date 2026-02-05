@@ -36,6 +36,7 @@ class _LookingForListState extends State<LookingForList> {
 
   @override
   void initState() {
+    isLoading = true;
     super.initState();
 
     _scrollController.addListener(() {
@@ -48,8 +49,11 @@ class _LookingForListState extends State<LookingForList> {
     });
 
     loadInitialData();
+  }
 
-    // getProducts();
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Future fetch() async {
@@ -70,26 +74,19 @@ class _LookingForListState extends State<LookingForList> {
           data.add(dataJson['data'][i]);
         }
 
-        if (data.length <= take) {
-          everyThingLoaded = true;
-        }
-
         return data;
       } else if (res.statusCode == 401) {
         if (!mounted) return;
         AppDefaults.logout(context);
       }
+      isLoading = false;
+      // if (res.statusCode == 200) return res.body;
       return;
     } on Exception catch (exception) {
       print('exception $exception');
     } catch (error) {
       print('error $error');
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   Future refreshOrders() async {
@@ -100,9 +97,8 @@ class _LookingForListState extends State<LookingForList> {
   }
 
   Future<void> loadInitialData() async {
-    products = await getNextPageData(page);
-    // print('load initial data $products');
-    // setState(() {});
+    products = await getNextPageData(page) ?? [];
+    setState(() {});
   }
 
   Future getNextPageData(int page) async {
@@ -124,64 +120,50 @@ class _LookingForListState extends State<LookingForList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Visibility(
-              visible: products.isNotEmpty ? true : false,
-              child: InfiniteScrollList(
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                onLoadingStart: (page) async {},
-                everythingLoaded: everyThingLoaded,
-                children: products
-                    .map(
-                      (product) => ListItem(
-                        token: widget.token,
-                        account: widget.account,
-                        product: product,
-                      ),
-                    )
-                    .toList(),
-              ),
-              // child: ListView.builder(
-              //   itemCount: products.length,
-              //   shrinkWrap: true,
-              //   padding: const EdgeInsets.only(top: 16),
-              //   physics: const NeverScrollableScrollPhysics(),
-              //   itemBuilder: (context, index) {
-              //     return LookingForListTile(
-              //       token: widget.token,
-              //       account: widget.account,
-              //       product: products[index],
-              //       onTap: () {
-              //         Navigator.of(context).push(
-              //           // MaterialPageRoute(
-              //           //   builder: (context) => ProductPage(
-              //           //     productPk: products[index]['pk'],
-              //           //   ),
-              //           // ),
-              //           MaterialPageRoute(
-              //             builder: (context) {
-              //               return LookingForPage(
-              //                   productPk: products[index]['pk']);
-              //             },
-              //           ),
-              //         );
-              //       },
-              //     );
-              //   },
-              // ),
-            ),
-          ],
+    return Column(
+      children: [
+        Expanded(
+          child: Center(
+            child: buildOrders(),
+          ),
         ),
-      ),
+      ],
     );
   }
+
+  Widget buildOrders() => ListView(
+        controller: _scrollController,
+        // shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        children: [
+          products.isEmpty
+              ? const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'No products found',
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    )
+                  ],
+                )
+              : InfiniteScrollList(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  onLoadingStart: (page) async {},
+                  everythingLoaded: everyThingLoaded,
+                  children: products
+                      .map(
+                        (product) => ListItem(
+                          token: widget.token,
+                          account: widget.account,
+                          product: product,
+                        ),
+                      )
+                      .toList(),
+                )
+        ],
+      );
 }
 
 class ListItem extends StatelessWidget {
@@ -203,11 +185,6 @@ class ListItem extends StatelessWidget {
       product: product,
       onTap: () {
         Navigator.of(context).push(
-          // MaterialPageRoute(
-          //   builder: (context) => ProductPage(
-          //     productPk: products[index]['pk'],
-          //   ),
-          // ),
           MaterialPageRoute(
             builder: (context) {
               return LookingForPage(productPk: product['pk']);

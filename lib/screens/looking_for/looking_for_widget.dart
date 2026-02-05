@@ -105,7 +105,7 @@ class _LookingForWidgetState extends State<LookingForWidget> {
           child: Column(
             children: [
               SectionDividerTitle(
-                title: 'Looking Forbbbbbbbbbb',
+                title: 'Looking For',
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(

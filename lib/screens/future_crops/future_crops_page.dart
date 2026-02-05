@@ -136,9 +136,6 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
 
   Future fetch() async {
     try {
-      print('1');
-      // products = [];
-
       var monthsArr = [];
 
       for (var month in months) {
@@ -192,9 +189,8 @@ class _FutureCropsPageState extends State<FutureCropsPage> {
   }
 
   Future<void> loadInitialData() async {
-    products = await getNextPageData(page);
+    products = await getNextPageData(page) ?? [];
     // print('load initial data $products');
-    setState(() {});
   }
 
   Future getNextPageData(int page) async {
