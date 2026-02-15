@@ -54,14 +54,15 @@ class _ProfileProductState extends State<ProfileProduct> {
           ProfileCard(
             producerPk: producerPk,
             iconData: 'box',
-            iconBackground: producerPk == '0'
+            iconBackground: !widget.user['is_seller']
                 ? AppColors.grey1.withValues(alpha: 0.5)
                 : AppColors.primary.withValues(alpha: 0.5),
-            iconColor: producerPk == '0' ? Colors.black12 : AppColors.primary,
+            iconColor:
+                !widget.user['is_seller'] ? Colors.black12 : AppColors.primary,
             statusName: 'My Products',
             status: '10+',
             onTap: () {
-              if (producerPk == '0') {
+              if (!widget.user['is_seller']) {
                 //dont do anything for now
               } else {
                 Navigator.push(

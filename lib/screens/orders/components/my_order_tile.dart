@@ -165,7 +165,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                             ),
                                           ),
                                           Positioned(
-                                            top: 5,
+                                            top: 0,
                                             left: 85,
                                             child: Column(
                                               mainAxisAlignment:
@@ -247,7 +247,7 @@ class _MyOrderTileState extends State<MyOrderTile> {
                                             right: 0,
                                             child: Container(
                                                 width: 120.0,
-                                                height: 70.0,
+                                                height: 75.0,
                                                 padding: EdgeInsets.zero,
                                                 child: Column(
                                                   mainAxisAlignment:
