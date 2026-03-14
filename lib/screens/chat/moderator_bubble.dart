@@ -242,6 +242,7 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
           };
 
           ably.Realtime realtime = ably.Realtime(options: clientOptions);
+          // send to sender in mobile app
           ably.RealtimeChannel conversationChannel =
               realtime.channels.get('user-${widget.userPk.toString()}');
           await conversationChannel.publish(
@@ -249,9 +250,18 @@ class _ModeratorBubbleState extends State<ModeratorBubble> {
             data: ablyData,
           );
 
+          // send to admin in web app when user is active in chat
           ably.RealtimeChannel moderatorbubbleChannel =
               realtime.channels.get(chatId);
           await moderatorbubbleChannel.publish(
+            name: chatId,
+            data: ablyData,
+          );
+
+          // send to admin in web app regardless who is active in chat
+          ably.RealtimeChannel moderatorChannel =
+              realtime.channels.get('moderator-web-app');
+          await moderatorChannel.publish(
             name: chatId,
             data: ablyData,
           );

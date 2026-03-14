@@ -266,7 +266,8 @@ class _BubbleState extends State<Bubble> {
             'message': messageController.text,
             'user_pk': account['user']['pk'].toString(),
           };
-
+          // print('user-${userPk.toString()}');
+          // set to actual user
           ably.Realtime realtime = ably.Realtime(options: clientOptions);
           ably.RealtimeChannel conversationChannel =
               realtime.channels.get('user-${userPk.toString()}');

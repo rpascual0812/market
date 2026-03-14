@@ -267,7 +267,7 @@ class ListItem extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => ProductPage(
-              productPk: order['pk'],
+              productPk: order['product_pk'],
             ),
           ),
         );
