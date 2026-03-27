@@ -125,7 +125,7 @@ class _SoldProductTileState extends State<SoldProductTile> {
                                               child: Container(
                                                 alignment: Alignment.centerLeft,
                                                 width: 200,
-                                                height: 25,
+                                                height: 30,
                                                 child: Text(
                                                   widget.order['product']
                                                           ['name'] ??

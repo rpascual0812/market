@@ -43,7 +43,7 @@ class NotificationPageTile extends StatelessWidget {
                     // mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        height: 80,
+                        height: 100,
                         margin: const EdgeInsets.only(bottom: 2),
                         decoration: const BoxDecoration(
                           color: Colors.white,

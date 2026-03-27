@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:market/components/appbar.dart';
+import 'package:market/screens/approot/app_root.dart';
 
 import '../../../components/network_image.dart';
 import '../../../constants/index.dart';
@@ -270,17 +271,19 @@ class _ProducerRegisterState extends State<ProducerRegister> {
                 type: ArtSweetAlertType.success,
                 title: "Success!",
                 text:
-                    "You are now a producer. You will be redirected to the producer's page."),
+                    "Thank you for registering as a producer. We have received your information and are currently reviewing it. You will receive a notification once the review process is complete."),
           );
 
           if (response.isTapConfirmButton) {
             if (!mounted) return;
-            var jwt = AppDefaults.jwtDecode(token);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => MyProducerPage(
-                    accountPk: jwt['sub'].toString(), token: token),
+                builder: (context) => AppRoot(
+                  jwt: token,
+                  menuIndex: 3,
+                  subIndex: 0,
+                ),
               ),
             );
             return;
